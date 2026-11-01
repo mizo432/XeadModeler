@@ -12,6 +12,7 @@ public class IOPanelStyle {
     private String borderColor;
     private String fontSize;
     private String fontName;
+    private String value;
     
     public String getBackgroundColor() {
         return backgroundColor;
@@ -43,5 +44,13 @@ public class IOPanelStyle {
     
     public void setFontName(String fontName) {
         this.fontName = fontName;
+    }
+    
+    public String getValue() {
+        return value;
+    }
+    
+    public void setValue(String value) {
+        this.value = value;
     }
 }

@@ -1,11 +1,9 @@
 package xeadModeler.service;
 
-// TODO: DialogMatrixListをJSONベースに修正するまでコメントアウト
-// import xeadModeler.view.DialogMatrixList;
+import xeadModeler.view.DialogMatrixList;
 import xeadModeler.view.DialogCreateTableStatement;
 import xeadModeler.view.DialogDocuments;
-// TODO: DialogReorganizeDataTypesをJSONベースに修正するまでコメントアウト
-// import xeadModeler.view.DialogReorganizeDataTypes;
+import xeadModeler.view.DialogReorganizeDataTypes;
 
 import org.springframework.stereotype.Service;
 
@@ -50,10 +48,8 @@ public class DialogServiceImpl implements DialogService {
     
     @Override
     public void showMatrixListDialog(JFrame parentFrame) {
-        // TODO: DialogMatrixListのコンストラクタをJFrameに変更するまでコメントアウト
-        // DialogMatrixList dialog = new DialogMatrixList(parentFrame);
-        // dialog.setLocationRelativeTo(parentFrame);
-        // dialog.setVisible(true);
+        // DialogMatrixList requires Modeler, not JFrame — this is a placeholder
+        // The dialog is invoked from Modeler.jMenuItemToolMatrixList_actionPerformed
     }
     
     @Override
@@ -73,9 +69,7 @@ public class DialogServiceImpl implements DialogService {
     
     @Override
     public void showReorganizeDataTypesDialog(JFrame parentFrame) {
-        // TODO: DialogReorganizeDataTypesのコンストラクタをJFrameに変更するまでコメントアウト
-        // DialogReorganizeDataTypes dialog = new DialogReorganizeDataTypes(parentFrame);
-        // dialog.setLocationRelativeTo(parentFrame);
-        // dialog.setVisible(true);
+        // DialogReorganizeDataTypes requires Modeler, not JFrame — this is a placeholder
+        // The dialog is invoked from Modeler.jMenuItemToolScan_actionPerformed
     }
 }

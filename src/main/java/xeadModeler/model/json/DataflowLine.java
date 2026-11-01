@@ -20,6 +20,12 @@ public class DataflowLine {
     private String nameExt;
     private int slideNumber;
     private String imageType;
+    private String nodeID1;
+    private String nodeID2;
+    private String showArrow1;
+    private String showArrow2;
+    private int terminalPosIndex1;
+    private int terminalPosIndex2;
     
     public String getId() {
         return id;
@@ -91,5 +97,53 @@ public class DataflowLine {
     
     public void setImageType(String imageType) {
         this.imageType = imageType;
+    }
+    
+    public String getNodeID1() {
+        return nodeID1;
+    }
+    
+    public void setNodeID1(String nodeID1) {
+        this.nodeID1 = nodeID1;
+    }
+    
+    public String getNodeID2() {
+        return nodeID2;
+    }
+    
+    public void setNodeID2(String nodeID2) {
+        this.nodeID2 = nodeID2;
+    }
+    
+    public String getShowArrow1() {
+        return showArrow1;
+    }
+    
+    public void setShowArrow1(String showArrow1) {
+        this.showArrow1 = showArrow1;
+    }
+    
+    public String getShowArrow2() {
+        return showArrow2;
+    }
+    
+    public void setShowArrow2(String showArrow2) {
+        this.showArrow2 = showArrow2;
+    }
+    
+    public int getTerminalPosIndex1() {
+        return terminalPosIndex1;
+    }
+    
+    public void setTerminalPosIndex1(int terminalPosIndex1) {
+        this.terminalPosIndex1 = terminalPosIndex1;
+    }
+    
+    public int getTerminalPosIndex2() {
+        return terminalPosIndex2;
+    }
+    
+    public void setTerminalPosIndex2(int terminalPosIndex2) {
+        this.terminalPosIndex2 = terminalPosIndex2;
     }
 }

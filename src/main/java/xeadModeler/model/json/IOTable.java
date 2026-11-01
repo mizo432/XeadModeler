@@ -21,6 +21,7 @@ public class IOTable {
     private String opR;
     private String opU;
     private String opD;
+    private String position;
     
     private List<IOTableField> iotableFields = new ArrayList<>();
     
@@ -110,5 +111,13 @@ public class IOTable {
 
     public void setOpD(String opD) {
         this.opD = opD;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

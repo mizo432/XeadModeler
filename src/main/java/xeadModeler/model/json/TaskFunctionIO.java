@@ -13,6 +13,8 @@ public class TaskFunctionIO {
     private String functionId;
     private String ioId;
     private String ioType;
+    private String ioIdSeq;
+    private String operations;
     
     public String getId() {
         return id;
@@ -52,5 +54,21 @@ public class TaskFunctionIO {
     
     public void setIoType(String ioType) {
         this.ioType = ioType;
+    }
+    
+    public String getIoIdSeq() {
+        return ioIdSeq;
+    }
+    
+    public void setIoIdSeq(String ioIdSeq) {
+        this.ioIdSeq = ioIdSeq;
+    }
+    
+    public String getOperations() {
+        return operations;
+    }
+    
+    public void setOperations(String operations) {
+        this.operations = operations;
     }
 }
