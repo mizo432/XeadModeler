@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class Table {
     
+    private String alias;
     private String descriptions;
     private String id;
     private String name;
@@ -108,5 +109,13 @@ public class Table {
     
     public void setSubsystemTable(SubsystemTable subsystemTable) {
         this.subsystemTable = subsystemTable;
+    }
+    
+    public String getAlias() {
+        return alias;
+    }
+    
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }

@@ -107,8 +107,7 @@ import xeadModeler.view.DialogConfigColors;
 import xeadModeler.view.DialogCreateTableStatement;
 import xeadModeler.view.DialogDataflowLine;
 import xeadModeler.view.DialogDataflowNode;
-// TODO: DialogDocumentsをJSONベースに修正するまでコメントアウト
-// import xeadModeler.view.DialogDocuments;
+import xeadModeler.view.DialogDocuments;
 import xeadModeler.view.DialogEditInstanceOnDatamodel;
 import xeadModeler.view.DialogImportSQL;
 import xeadModeler.view.SortableDomElementListModel;
@@ -332,8 +331,7 @@ public class Modeler extends JFrame {
   public boolean isToConvertCamel = true;
   // TODO: DialogMatrixListをJSONベースに修正するまでコメントアウト
   // private DialogMatrixList dialogMatrixList;
-  // TODO: DialogDocumentsをJSONベースに修正するまでコメントアウト
-  // private DialogDocuments dialogDocuments;
+  private DialogDocuments dialogDocuments;
   // TODO: DialogImportXEADをJSONベースに修正するまでコメントアウト
   // private DialogImportXEAD dialogImportXEAD;
   // TODO: DialogImportXEAFをJSONベースに修正するまでコメントアウト
@@ -1766,8 +1764,7 @@ public class Modeler extends JFrame {
     dialogCreateTableStatement = new DialogCreateTableStatement(this);
     // TODO: DialogMatrixListをJSONベースに修正するまでコメントアウト
     // dialogMatrixList = new DialogMatrixList(this);
-    // TODO: DialogDocumentsをJSONベースに修正するまでコメントアウト
-    // dialogDocuments = new DialogDocuments(this);
+    dialogDocuments = new DialogDocuments(this);
     // TODO: DialogImportXEADをJSONベースに修正するまでコメントアウト
     // dialogImportXEAD = new DialogImportXEAD(this);
     // TODO: DialogImportXEAFをJSONベースに修正するまでコメントアウト
@@ -11545,8 +11542,7 @@ public class Modeler extends JFrame {
    */
   void jMenuItemToolDocuments_actionPerformed(ActionEvent e) {
     currentMainTreeNode.updateFields();
-    // TODO: DialogDocumentsをJSONベースに修正するまでコメントアウト
-    // dialogDocuments.request(currentFileName);
+    dialogDocuments.request(currentFileName);
   }
 
   /**

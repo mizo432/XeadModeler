@@ -3,8 +3,7 @@ package xeadModeler.service;
 // TODO: DialogMatrixListをJSONベースに修正するまでコメントアウト
 // import xeadModeler.view.DialogMatrixList;
 import xeadModeler.view.DialogCreateTableStatement;
-// TODO: DialogDocumentsをJSONベースに修正するまでコメントアウト
-// import xeadModeler.view.DialogDocuments;
+import xeadModeler.view.DialogDocuments;
 // TODO: DialogReorganizeDataTypesをJSONベースに修正するまでコメントアウト
 // import xeadModeler.view.DialogReorganizeDataTypes;
 
@@ -67,10 +66,9 @@ public class DialogServiceImpl implements DialogService {
     
     @Override
     public void showDocumentsDialog(JFrame parentFrame) {
-        // TODO: DialogDocumentsのコンストラクタをJFrameに変更するまでコメントアウト
-        // DialogDocuments dialog = new DialogDocuments(parentFrame);
-        // dialog.setLocationRelativeTo(parentFrame);
-        // dialog.setVisible(true);
+        DialogDocuments dialog = new DialogDocuments(parentFrame);
+        dialog.setLocationRelativeTo(parentFrame);
+        dialog.setVisible(true);
     }
     
     @Override

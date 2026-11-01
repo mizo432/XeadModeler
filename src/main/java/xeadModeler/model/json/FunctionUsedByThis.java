@@ -10,6 +10,7 @@ public class FunctionUsedByThis {
     
     private String functionId;
     private String sortKey;
+    private String launchEvent;
     
     public String getFunctionId() {
         return functionId;
@@ -25,5 +26,13 @@ public class FunctionUsedByThis {
     
     public void setSortKey(String sortKey) {
         this.sortKey = sortKey;
+    }
+    
+    public String getLaunchEvent() {
+        return launchEvent;
+    }
+    
+    public void setLaunchEvent(String launchEvent) {
+        this.launchEvent = launchEvent;
     }
 }

@@ -16,6 +16,11 @@ public class IOTable {
     private String name;
     private String sortKey;
     private String tableId;
+    private String nameExtension;
+    private String opC;
+    private String opR;
+    private String opU;
+    private String opD;
     
     private List<IOTableField> iotableFields = new ArrayList<>();
     
@@ -65,5 +70,45 @@ public class IOTable {
     
     public void setIotableFields(List<IOTableField> iotableFields) {
         this.iotableFields = iotableFields;
+    }
+
+    public String getNameExtension() {
+        return nameExtension;
+    }
+
+    public void setNameExtension(String nameExtension) {
+        this.nameExtension = nameExtension;
+    }
+
+    public String getOpC() {
+        return opC;
+    }
+
+    public void setOpC(String opC) {
+        this.opC = opC;
+    }
+
+    public String getOpR() {
+        return opR;
+    }
+
+    public void setOpR(String opR) {
+        this.opR = opR;
+    }
+
+    public String getOpU() {
+        return opU;
+    }
+
+    public void setOpU(String opU) {
+        this.opU = opU;
+    }
+
+    public String getOpD() {
+        return opD;
+    }
+
+    public void setOpD(String opD) {
+        this.opD = opD;
     }
 }

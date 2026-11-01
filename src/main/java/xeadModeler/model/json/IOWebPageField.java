@@ -15,6 +15,7 @@ public class IOWebPageField {
     private String label;
     private String name;
     private String ioType;
+    private String descriptions;
     
     public String getId() {
         return id;
@@ -70,5 +71,13 @@ public class IOWebPageField {
     
     public void setIoType(String ioType) {
         this.ioType = ioType;
+    }
+    
+    public String getDescriptions() {
+        return descriptions;
+    }
+    
+    public void setDescriptions(String descriptions) {
+        this.descriptions = descriptions;
     }
 }

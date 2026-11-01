@@ -17,6 +17,7 @@ public class IOSpoolField {
     private String fieldType;
     private String label;
     private String name;
+    private String descriptions;
     
     public String getId() {
         return id;
@@ -64,5 +65,13 @@ public class IOSpoolField {
     
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public String getDescriptions() {
+        return descriptions;
+    }
+    
+    public void setDescriptions(String descriptions) {
+        this.descriptions = descriptions;
     }
 }
