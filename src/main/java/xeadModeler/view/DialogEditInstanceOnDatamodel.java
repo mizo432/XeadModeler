@@ -35,14 +35,16 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import org.w3c.dom.NodeList;
-
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import xeadModeler.Modeler;
 import xeadModeler.Modeler.*;
+import xeadModeler.model.json.SubsystemTable;
+import xeadModeler.model.json.Instance;
 
 public class DialogEditInstanceOnDatamodel extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -51,7 +53,7 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 	private SpinnerNumberModel sModel = new SpinnerNumberModel(0, 0, 30, 1);
 	private JSpinner spinner = new JSpinner(sModel);
 	private Modeler frame_;
-	private org.w3c.dom.Element subsystemTableElement_;
+	private SubsystemTable subsystemTable_;
 	private JPopupMenu jPopupMenu = new JPopupMenu();
 	private JMenuItem jMenuItemSetSequence = new JMenuItem(res.getString("DialogEditInstanceOnDatamodel2"));
 	private JMenuItem jMenuItemAddSlide = new JMenuItem(res.getString("DialogEditInstanceOnDatamodel3"));
@@ -84,25 +86,37 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 	}
 
 	public boolean request(DatamodelEntityBox entityBox) {
-		subsystemTableElement_ = entityBox.getSubsystemTableElement();
+		subsystemTable_ = entityBox.getSubsystemTable();
 		jTabbedPane.removeAll();
 		textAreaList.clear();
 		sortKeyList.clear();
 		isEdited = false;
 
 		int maxRows = 0;
-		NodeList nodeList = subsystemTableElement_.getElementsByTagName("Instance");
-		if (nodeList.getLength() == 0) {
-			maxRows = setupTextAreaForInstance(subsystemTableElement_.getAttribute("Instance"), "0");
-		} else {
-			SortableDomElementListModel sortableDomElementListModel = new SortableDomElementListModel();
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				sortableDomElementListModel.addElementFromDom((org.w3c.dom.Element)nodeList.item(i));
+		List<Instance> instances = null;
+		if (subsystemTable_ != null) {
+			instances = subsystemTable_.getInstances();
+		}
+		
+		if (instances == null || instances.isEmpty()) {
+			// インスタンスがない場合は、後方互換性のためにinstanceフィールドを使用
+			String instanceText = "";
+			if (subsystemTable_ != null) {
+				instanceText = subsystemTable_.getInstance();
 			}
-			sortableDomElementListModel.sortElements();
-			for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
-				org.w3c.dom.Element element = (org.w3c.dom.Element)sortableDomElementListModel.getElementAt(i);
-				int rows = setupTextAreaForInstance(element.getAttribute("Text"), element.getAttribute("SortKey"));
+			maxRows = setupTextAreaForInstance(instanceText, "0");
+		} else {
+			// SortKeyでソート
+			List<Instance> sortedInstances = instances.stream()
+				.sorted((a, b) -> {
+					String sortKeyA = a.getSortKey() != null ? a.getSortKey() : "";
+					String sortKeyB = b.getSortKey() != null ? b.getSortKey() : "";
+					return sortKeyA.compareTo(sortKeyB);
+				})
+				.collect(Collectors.toList());
+			
+			for (Instance instance : sortedInstances) {
+				int rows = setupTextAreaForInstance(instance.getText(), instance.getSortKey());
 				if (rows > maxRows) {
 					maxRows = rows;
 				}
@@ -110,7 +124,7 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 		}
 
 		textAreaList.get(0).requestFocus();
-		this.setTitle("Instance - " + entityBox.getTableNode().getElement().getAttribute("Name"));
+		this.setTitle("Instance - " + entityBox.getTableNode().getName());
 		if (frame_.modelSize.equals("S")) {
 			this.setPreferredSize(new Dimension(entityBox.getWidth()-58, 150));
 			this.setLocation((int)entityBox.getLocationOnScreen().getX()+83, (int)(entityBox.getLocationOnScreen().getY() + entityBox.getHeight() - 4));
@@ -202,17 +216,16 @@ public class DialogEditInstanceOnDatamodel extends JDialog {
 	}
 	
 	public boolean updateAndClose() {
-		if (isEdited) {
-			NodeList nodeList = subsystemTableElement_.getElementsByTagName("Instance");
-			int count = nodeList.getLength();
-			for (int i = 0; i < count; i++) {
-				subsystemTableElement_.removeChild(nodeList.item(0));
-			}
+		if (isEdited && subsystemTable_ != null) {
+			// 既存のインスタンスリストをクリア
+			subsystemTable_.getInstances().clear();
+			
+			// 新しいインスタンスを追加
 			for (int i = 0; i < textAreaList.size(); i++) {
-				org.w3c.dom.Element newElement = frame_.getDomDocument().createElement("Instance");
-				newElement.setAttribute("Text", Modeler.concatLinesWithTokenOfEOL(textAreaList.get(i).getText()));
-				newElement.setAttribute("SortKey", sortKeyList.get(i));
-				subsystemTableElement_.appendChild(newElement);
+				Instance newInstance = new Instance();
+				newInstance.setText(Modeler.concatLinesWithTokenOfEOL(textAreaList.get(i).getText()));
+				newInstance.setSortKey(sortKeyList.get(i));
+				subsystemTable_.getInstances().add(newInstance);
 			}
 		}
 		this.setVisible(false);

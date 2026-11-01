@@ -1,5 +1,8 @@
 package xeadModeler.model.json;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * サブシステムテーブルのJSONモデルクラス
  *
@@ -13,7 +16,8 @@ public class SubsystemTable {
     private String intDivLoc;
     private String showOnModel;
     private String showInstance;
-    private String instance;
+    private String instance; // 後方互換性のために残す
+    private List<Instance> instances = new ArrayList<>();
     private String tableId;
     
     public String getBoxPosition() {
@@ -70,5 +74,13 @@ public class SubsystemTable {
     
     public void setTableId(String tableId) {
         this.tableId = tableId;
+    }
+    
+    public List<Instance> getInstances() {
+        return instances;
+    }
+    
+    public void setInstances(List<Instance> instances) {
+        this.instances = instances;
     }
 }
