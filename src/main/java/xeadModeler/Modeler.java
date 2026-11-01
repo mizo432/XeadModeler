@@ -19177,6 +19177,134 @@ public class Modeler extends JFrame {
   }
 
   /**
+   * Wrapper class for JSON POJO lists to mimic NodeList behavior
+   */
+  class JsonNodeList implements NodeList {
+    private java.util.List<?> list;
+
+    public JsonNodeList(java.util.List<?> list) {
+      this.list = list;
+    }
+
+    public int getLength() {
+      return list.size();
+    }
+
+    public org.w3c.dom.Node item(int index) {
+      if (index >= 0 && index < list.size()) {
+        Object obj = list.get(index);
+        // Return a wrapper that implements org.w3c.dom.Node
+        return new JsonNodeWrapper(obj);
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Wrapper class for JSON POJO objects to mimic org.w3c.dom.Node behavior
+   */
+  class JsonNodeWrapper implements org.w3c.dom.Node {
+    private Object jsonNode;
+
+    public JsonNodeWrapper(Object jsonNode) {
+      this.jsonNode = jsonNode;
+    }
+
+    public String getAttribute(String name) {
+      try {
+        String getter = "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
+        java.lang.reflect.Method method = jsonNode.getClass().getMethod(getter);
+        Object result = method.invoke(jsonNode);
+        return result != null ? result.toString() : "";
+      } catch (Exception e) {
+        try {
+          String isGetter = "is" + name.substring(0, 1).toUpperCase() + name.substring(1);
+          java.lang.reflect.Method method = jsonNode.getClass().getMethod(isGetter);
+          Object result = method.invoke(jsonNode);
+          return result != null ? result.toString() : "";
+        } catch (Exception e2) {
+          return "";
+        }
+      }
+    }
+
+    public void setAttribute(String name, String value) {
+      try {
+        String setter = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+        java.lang.reflect.Method method = jsonNode.getClass().getMethod(setter, String.class);
+        method.invoke(jsonNode, value);
+      } catch (Exception e) {
+        // Ignore
+      }
+    }
+
+    public NodeList getElementsByTagName(String tagName) {
+      try {
+        String pluralTagName = tagName + "s";
+        String getter = "get" + pluralTagName;
+        java.lang.reflect.Method method = jsonNode.getClass().getMethod(getter);
+        java.util.List<?> list = (java.util.List<?>) method.invoke(jsonNode);
+        if (list != null) {
+          return new JsonNodeList(list);
+        }
+      } catch (Exception e) {
+        try {
+          String getter = "get" + tagName;
+          java.lang.reflect.Method method = jsonNode.getClass().getMethod(getter);
+          java.util.List<?> list = (java.util.List<?>) method.invoke(jsonNode);
+          if (list != null) {
+            return new JsonNodeList(list);
+          }
+        } catch (Exception e2) {
+          // Ignore
+        }
+      }
+      return null;
+    }
+
+    // Stub implementations for other NodeList methods
+    public short getNodeType() { return ELEMENT_NODE; }
+    public short compareDocumentPosition(org.w3c.dom.Node other) { return 0; }
+    public String getNodeName() { return ""; }
+    public String getNodeValue() { return null; }
+    public void setNodeValue(String value) throws DOMException {}
+    public org.w3c.dom.Node getParentNode() { return null; }
+    public NodeList getChildNodes() { return null; }
+    public org.w3c.dom.Node getFirstChild() { return null; }
+    public org.w3c.dom.Node getLastChild() { return null; }
+    public org.w3c.dom.Node getPreviousSibling() { return null; }
+    public org.w3c.dom.Node getNextSibling() { return null; }
+    public org.w3c.dom.NamedNodeMap getAttributes() { return null; }
+    public org.w3c.dom.Document getOwnerDocument() { return null; }
+    public org.w3c.dom.Node importNode(org.w3c.dom.Node importedNode, boolean deep) throws DOMException { return null; }
+    public org.w3c.dom.Node cloneNode(boolean deep) { return null; }
+    public org.w3c.dom.Node appendChild(org.w3c.dom.Node newChild) throws DOMException { return null; }
+    public org.w3c.dom.Node insertBefore(org.w3c.dom.Node newChild, org.w3c.dom.Node refChild) throws DOMException { return null; }
+    public org.w3c.dom.Node removeChild(org.w3c.dom.Node oldChild) throws DOMException { return null; }
+    public org.w3c.dom.Node replaceChild(org.w3c.dom.Node newChild, org.w3c.dom.Node oldChild) throws DOMException { return null; }
+    public boolean hasChildNodes() { return false; }
+    public void normalize() {}
+    public boolean hasAttributes() { return false; }
+    public boolean supports(String feature, String version) { return false; }
+    public boolean isSupported(String feature, String version) { return false; }
+    public Object getFeature(String feature, String version) { return null; }
+    public String getPrefix() { return null; }
+    public void setPrefix(String prefix) throws DOMException {}
+    public String getLocalName() { return null; }
+    public String getNamespaceURI() { return null; }
+    public String lookupNamespaceURI(String prefix) { return null; }
+    public boolean isDefaultNamespace(String namespaceURI) { return false; }
+    public String lookupPrefix(String namespaceURI) { return null; }
+    public String getTextContent() throws DOMException { return null; }
+    public void setTextContent(String value) throws DOMException {}
+    public boolean isSameNode(org.w3c.dom.Node arg) { return false; }
+    public boolean isEqualNode(org.w3c.dom.Node arg) { return false; }
+    public String getBaseURI() throws DOMException { return null; }
+    public Object setUserData(String key, Object data, org.w3c.dom.UserDataHandler handler) { return null; }
+    public Object getUserData(String key) { return null; }
+  }
+
+  /**
    * Class of XEAD Tree Node
    */
   public class XeadTreeNode extends DefaultMutableTreeNode implements Comparable {
@@ -19254,7 +19382,33 @@ public class Modeler extends JFrame {
       if (domNode_ != null) {
         return domNode_.getElementsByTagName(tagName);
       }
-      // For JSON POJO, return empty NodeList (should not be used in JSON mode)
+      // For JSON POJO, use reflection to get the list of child elements
+      if (jsonNode_ != null) {
+        try {
+          // Convert tagName to plural form for the getter method
+          // e.g., "TaskFunctionIO" -> "TaskFunctionIOs", "TableField" -> "TableFields"
+          String pluralTagName = tagName + "s";
+          String getter = "get" + pluralTagName;
+          java.lang.reflect.Method method = jsonNode_.getClass().getMethod(getter);
+          java.util.List<?> list = (java.util.List<?>) method.invoke(jsonNode_);
+          if (list != null) {
+            // Create a NodeList-like wrapper for the JSON POJO list
+            return new JsonNodeList(list);
+          }
+        } catch (Exception e) {
+          // Try without 's' suffix
+          try {
+            String getter = "get" + tagName;
+            java.lang.reflect.Method method = jsonNode_.getClass().getMethod(getter);
+            java.util.List<?> list = (java.util.List<?>) method.invoke(jsonNode_);
+            if (list != null) {
+              return new JsonNodeList(list);
+            }
+          } catch (Exception e2) {
+            // Ignore
+          }
+        }
+      }
       return null;
     }
 

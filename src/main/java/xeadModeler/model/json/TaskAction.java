@@ -1,5 +1,8 @@
 package xeadModeler.model.json;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * タスクアクションのJSONモデルクラス
  *
@@ -12,6 +15,7 @@ public class TaskAction {
     private String sortKey;
     private String actionType;
     private String descriptions;
+    private List<TaskFunctionIO> taskFunctionIOs = new ArrayList<>();
     
     public String getId() {
         return id;
@@ -43,5 +47,13 @@ public class TaskAction {
     
     public void setDescriptions(String descriptions) {
         this.descriptions = descriptions;
+    }
+    
+    public List<TaskFunctionIO> getTaskFunctionIOs() {
+        return taskFunctionIOs;
+    }
+    
+    public void setTaskFunctionIOs(List<TaskFunctionIO> taskFunctionIOs) {
+        this.taskFunctionIOs = taskFunctionIOs;
     }
 }
