@@ -155,17 +155,8 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 		keyFieldAliasList.clear();
 		//
 		// Retrieve key fields information of source key //
-		// JSON-based implementation
-		// Find the source table JSON object
-		xeadModeler.model.json.Table sourceTable = null;
-		if (frame_.getSystemElement().getTables() != null) {
-			for (xeadModeler.model.json.Table table : frame_.getSystemElement().getTables()) {
-				if (table.getId() != null && table.getId().equals(sourceTableNode_.getElement().getAttribute("ID"))) {
-					sourceTable = table;
-					break;
-				}
-			}
-		}
+		// Get source table directly from JSON node
+		xeadModeler.model.json.Table sourceTable = (xeadModeler.model.json.Table) sourceTableNode_.getJsonNode();
 		
 		if (sourceTable != null && sourceKey_.getTableKeyFields() != null) {
 			// Sort key fields by sortKey
@@ -219,16 +210,8 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
  	// JSON-based implementation
  	int statusOfTarget = 0;
 	
- 	// Find the target table JSON object
- 	xeadModeler.model.json.Table targetTable = null;
- 	if (frame_.getSystemElement().getTables() != null) {
- 		for (xeadModeler.model.json.Table table : frame_.getSystemElement().getTables()) {
- 			if (table.getId() != null && table.getId().equals(targetTableNode_.getElement().getAttribute("ID"))) {
- 				targetTable = table;
- 				break;
- 			}
- 		}
- 	}
+ 	// Get target table directly from JSON node
+ 	xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getJsonNode();
 	
  	if (targetTable != null) {
  		if (targetTable.getId().equals(sourceTable.getId())) {
@@ -341,16 +324,8 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 				//
 				// JSON-based implementation
 				boolean noError = true;
-				// Find the target table JSON object
-				xeadModeler.model.json.Table targetTable = null;
-				if (frame_.getSystemElement().getTables() != null) {
-					for (xeadModeler.model.json.Table table : frame_.getSystemElement().getTables()) {
-						if (table.getId() != null && table.getId().equals(targetTableNode_.getElement().getAttribute("ID"))) {
-							targetTable = table;
-							break;
-						}
-					}
-				}
+				// Get target table directly from JSON node
+				xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getJsonNode();
 				
 				if (targetTable != null && targetTable.getTableFields() != null) {
 					for (TableField field : targetTable.getTableFields()) {
@@ -387,23 +362,15 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 	}
 	
 	public void pasteKeyFieldsIntoTargetTable() {
-		// JSON-based implementation
-		frame_.getCurrentMainTreenode().updateFields();
-		
-		// Find the target table JSON object
-		xeadModeler.model.json.Table targetTable = null;
-		if (frame_.getSystemElement().getTables() != null) {
-			for (xeadModeler.model.json.Table table : frame_.getSystemElement().getTables()) {
-				if (table.getId() != null && table.getId().equals(targetTableNode_.getElement().getAttribute("ID"))) {
-					targetTable = table;
-					break;
-				}
-			}
-		}
-		
-		if (targetTable == null) {
-			return;
-		}
+ 	// JSON-based implementation
+ 	frame_.getCurrentMainTreenode().updateFields();
+	
+ 	// Get target table directly from JSON node
+ 	xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getJsonNode();
+	
+ 	if (targetTable == null) {
+ 		return;
+ 	}
 		
 		// Get the last field ID
 		int lastID = 0;
@@ -520,9 +487,10 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 		frame_.getXeadUndoManager().saveNodeBeforeModified(newTableKeyNode);
 		xeadModeler.model.json.Relationship relationship = new xeadModeler.model.json.Relationship();
 		relationship.setId(Integer.toString(frame_.incrementLastIDOfRelationship()));
-		relationship.setTable1Id(sourceTableNode_.getElement().getAttribute("ID"));
+		xeadModeler.model.json.Table sourceTable = (xeadModeler.model.json.Table) sourceTableNode_.getJsonNode();
+		relationship.setTable1Id(sourceTable.getId());
 		relationship.setTableKey1Id(sourceKey_.getId());
-		relationship.setTable2Id(targetTableNode_.getElement().getAttribute("ID"));
+		relationship.setTable2Id(targetTable.getId());
 		relationship.setTableKey2Id(newKeyId);
 		relationship.setType("REFFER");
 		relationship.setExistWhen1("");
@@ -548,23 +516,15 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 		ArrayList<String> keyFieldIDList = new ArrayList<String>();
 		XeadTreeNode availableTableKeyNode = null;
 		
-		frame_.getCurrentMainTreenode().updateFields();
-		
-		// Find the target table JSON object
-		xeadModeler.model.json.Table targetTable = null;
-		if (frame_.getSystemElement().getTables() != null) {
-			for (xeadModeler.model.json.Table table : frame_.getSystemElement().getTables()) {
-				if (table.getId() != null && table.getId().equals(targetTableNode_.getElement().getAttribute("ID"))) {
-					targetTable = table;
-					break;
-				}
-			}
-		}
-		
-		if (targetTable == null) {
-			JOptionPane.showMessageDialog(this, res.getString("DialogAddRelationshipOnDatamodel9"));
-			return;
-		}
+ 	frame_.getCurrentMainTreenode().updateFields();
+	
+ 	// Get target table directly from JSON node
+ 	xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getJsonNode();
+	
+ 	if (targetTable == null) {
+ 		JOptionPane.showMessageDialog(this, res.getString("DialogAddRelationshipOnDatamodel9"));
+ 		return;
+ 	}
 		
 		// Search and specify corresponding field
 		keyFieldIDList.clear();
@@ -654,10 +614,10 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 									relationshipType = "SUBTYPE";
 								}
 							}
-							if (!relationshipType.equals("")) {
-								availableTableKeyNode = frame_.getSpecificXeadTreeNode("TableKey", targetTableNode_.getElement().getAttribute("ID"), key.getId());
-								break;
-							}
+ 						if (!relationshipType.equals("")) {
+ 							availableTableKeyNode = frame_.getSpecificXeadTreeNode("TableKey", targetTable.getId(), key.getId());
+ 							break;
+ 						}
 						}
 					}
 				}
@@ -716,14 +676,16 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 			//
 			if (!relationshipType.equals("")) {
 				//
-				// Add a relationship
+ 			// Add a relationship
 				frame_.getXeadUndoManager().saveNodeBeforeModified(availableTableKeyNode);
 				xeadModeler.model.json.Relationship relationship = new xeadModeler.model.json.Relationship();
 				relationship.setId(Integer.toString(frame_.incrementLastIDOfRelationship()));
-				relationship.setTable1Id(sourceTableNode_.getElement().getAttribute("ID"));
+				xeadModeler.model.json.Table sourceTable = (xeadModeler.model.json.Table) sourceTableNode_.getJsonNode();
+				relationship.setTable1Id(sourceTable.getId());
 				relationship.setTableKey1Id(sourceKey_.getId());
-				relationship.setTable2Id(targetTableNode_.getElement().getAttribute("ID"));
-				relationship.setTableKey2Id(availableTableKeyNode.getElement().getAttribute("ID"));
+				relationship.setTable2Id(targetTable.getId());
+				xeadModeler.model.json.TableKey availableKey = (xeadModeler.model.json.TableKey) availableTableKeyNode.getJsonNode();
+				relationship.setTableKey2Id(availableKey.getId());
 				relationship.setType(relationshipType);
 				relationship.setExistWhen1("");
 				relationship.setExistWhen2("");

@@ -2,6 +2,7 @@ package xeadModeler.view;
 
 import xeadModeler.Modeler;
 import xeadModeler.Modeler.XeadTreeNode;
+import xeadModeler.model.json.SubjectArea;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,20 +17,20 @@ import java.util.StringTokenizer;
 public class DataflowBoundary extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private org.w3c.dom.Element dataflowBoundaryElement_;
+    private SubjectArea subjectArea_;
     private JLabel jLabelName = new JLabel();
     public int boundaryPosX, boundaryPosY, boundaryWidth, boundaryHeight;
     private Modeler modeler;
 
-    public DataflowBoundary(Modeler modeler, org.w3c.dom.Element element) {
+    public DataflowBoundary(Modeler modeler, SubjectArea subjectArea) {
         super();
         this.modeler = modeler;
-        dataflowBoundaryElement_ = element;
+        subjectArea_ = subjectArea;
         StringTokenizer workTokenizer = new StringTokenizer(
-            dataflowBoundaryElement_.getAttribute("BoundaryPosition"), ",");
+            subjectArea_.getBoundaryPosition(), ",");
         boundaryPosX = Integer.parseInt(workTokenizer.nextToken());
         boundaryPosY = Integer.parseInt(workTokenizer.nextToken());
-        workTokenizer = new StringTokenizer(dataflowBoundaryElement_.getAttribute("BoundarySize"),
+        workTokenizer = new StringTokenizer(subjectArea_.getBoundarySize(),
             ",");
         boundaryWidth = Integer.parseInt(workTokenizer.nextToken());
         boundaryHeight = Integer.parseInt(workTokenizer.nextToken());
@@ -42,7 +43,8 @@ public class DataflowBoundary extends JPanel {
         jLabelName.setText(modeler.currentMainTreeNode.getRoot().toString().replace("*", ""));
         setSystemName();
         updateColors();
-        if (!dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("0")) {
+        String boundarySetting = subjectArea_.getBoundarySetting();
+        if (boundarySetting == null || !boundarySetting.equals("0")) {
             this.add(jLabelName, null);
         }
     }
@@ -53,19 +55,20 @@ public class DataflowBoundary extends JPanel {
     }
 
     private void setSystemName() {
-        if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("1")) {
+        String boundarySetting = subjectArea_.getBoundarySetting();
+        if (boundarySetting != null && boundarySetting.equals("1")) {
             jLabelName.setBounds(new Rectangle(15, 12, 300, 20));
         }
-        if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("2")) {
+        if (boundarySetting != null && boundarySetting.equals("2")) {
             jLabelName.setBounds(new Rectangle(boundaryWidth - 315, 12, 300, 20));
             jLabelName.setHorizontalAlignment(SwingConstants.RIGHT);
             jLabelName.setHorizontalTextPosition(SwingConstants.LEADING);
         }
-        if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("")
-            || dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("3")) {
+        if (boundarySetting == null || boundarySetting.equals("")
+            || boundarySetting.equals("3")) {
             jLabelName.setBounds(new Rectangle(15, boundaryHeight - 32, 300, 20));
         }
-        if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("4")) {
+        if (boundarySetting != null && boundarySetting.equals("4")) {
             jLabelName.setBounds(new Rectangle(boundaryWidth - 315, boundaryHeight - 32, 300, 20));
             jLabelName.setHorizontalAlignment(SwingConstants.RIGHT);
             jLabelName.setHorizontalTextPosition(SwingConstants.LEADING);
@@ -94,9 +97,9 @@ public class DataflowBoundary extends JPanel {
             boundaryHeight = 50;
         }
         jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 300, 20));
-        dataflowBoundaryElement_.setAttribute("BoundaryPosition",
+        subjectArea_.setBoundaryPosition(
             Integer.toString(boundaryPosX) + "," + Integer.toString(boundaryPosY));
-        dataflowBoundaryElement_.setAttribute("BoundarySize",
+        subjectArea_.setBoundarySize(
             Integer.toString(boundaryWidth) + "," + Integer.toString(boundaryHeight));
         super.setBounds(boundaryPosX, boundaryPosY, boundaryWidth + 1, boundaryHeight + 1);
     }
@@ -123,9 +126,9 @@ public class DataflowBoundary extends JPanel {
             boundaryHeight = 50;
         }
         jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 300, 20));
-        dataflowBoundaryElement_.setAttribute("BoundaryPosition",
+        subjectArea_.setBoundaryPosition(
             Integer.toString(boundaryPosX) + "," + Integer.toString(boundaryPosY));
-        dataflowBoundaryElement_.setAttribute("BoundarySize",
+        subjectArea_.setBoundarySize(
             Integer.toString(boundaryWidth) + "," + Integer.toString(boundaryHeight));
         super.setBounds(boundaryPosX, boundaryPosY, boundaryWidth + 1, boundaryHeight + 1);
     }

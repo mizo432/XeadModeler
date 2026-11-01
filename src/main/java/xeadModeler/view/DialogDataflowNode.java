@@ -152,13 +152,13 @@ public class DialogDataflowNode extends JDialog {
 		getContentPane().add(panelMain);
 	}
 
-	public boolean request(String action, org.w3c.dom.Element element, ArrayList<DataflowNode> nodeArray, ArrayList<DataflowLine> lineArray) {
+	public boolean request(String action, xeadModeler.model.json.DataflowNode dataflowNode, ArrayList<DataflowNode> nodeArray, ArrayList<DataflowLine> lineArray) {
 		buttonOKIsPressed = false;
 		//
 		jComboBoxEventPos.setEnabled(false);
 		jComboBoxEventPos.removeAllItems();
 		//
-		if (element.getAttribute("Type").equals("Process")) {
+		if (dataflowNode.getType().equals("Process")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode14"));
 			jLabel6.setEnabled(true);
 			jComboBoxEventPos.setEnabled(true);
@@ -167,37 +167,37 @@ public class DialogDataflowNode extends JDialog {
 		} else {
 			jLabel6.setEnabled(false);
 		}
-		if (element.getAttribute("Type").equals("Ledger")) {
+		if (dataflowNode.getType().equals("Ledger")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode03"));
 		}
-		if (element.getAttribute("Type").equals("Drum")) {
+		if (dataflowNode.getType().equals("Drum")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode19"));
 		}
-		if (element.getAttribute("Type").equals("Store1")) {
+		if (dataflowNode.getType().equals("Store1")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode04"));
 		}
-		if (element.getAttribute("Type").equals("Store2")) {
+		if (dataflowNode.getType().equals("Store2")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode05"));
 		}
-		if (element.getAttribute("Type").equals("Tray")) {
+		if (dataflowNode.getType().equals("Tray")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode06"));
 		}
-		if (element.getAttribute("Type").equals("Folder")) {
+		if (dataflowNode.getType().equals("Folder")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode07"));
 		}
-		if (element.getAttribute("Type").equals("Subject")) {
+		if (dataflowNode.getType().equals("Subject")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode08"));
 		}
-		if (element.getAttribute("Type").equals("Casher")) {
+		if (dataflowNode.getType().equals("Casher")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode09"));
 		}
-		if (element.getAttribute("Type").equals("Safe")) {
+		if (dataflowNode.getType().equals("Safe")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode10"));
 		}
-		if (element.getAttribute("Type").equals("Sofa")) {
+		if (dataflowNode.getType().equals("Sofa")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode11"));
 		}
-		if (element.getAttribute("Type").equals("Basket")) {
+		if (dataflowNode.getType().equals("Basket")) {
 			jTextFieldType.setText(res.getString("DialogDataflowNode18"));
 		}
 		//
@@ -219,7 +219,7 @@ public class DialogDataflowNode extends JDialog {
 		//Setup components according to action and type//
 		if (action.equals("Add")) {
 			this.setTitle(res.getString("DialogDataflowNode15"));
-			jTextFieldLabel.setText(element.getAttribute("Name"));
+			jTextFieldLabel.setText(dataflowNode.getName());
 			jTextFieldLabel.setBackground(Color.white);
 			jTextFieldLabel.setEditable(true);
 			jLabel1Ext.setEnabled(true);
@@ -233,45 +233,49 @@ public class DialogDataflowNode extends JDialog {
 		} else {
 			this.setTitle(res.getString("DialogDataflowNode16"));
 			panelMain.add(jTextFieldType, null);
-			if (element.getAttribute("Type").equals("Process")) {
+			if (dataflowNode.getType().equals("Process")) {
 				this.setTitle(res.getString("DialogDataflowNode17"));
-				Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", element.getAttribute("TaskID"), null);
-				jTextFieldLabel.setText(node.getElement().getAttribute("Name"));
+				Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", dataflowNode.getTaskID(), null);
+				xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) node.getJsonNode();
+				jTextFieldLabel.setText(task.getName());
 				jTextFieldLabel.setBackground(SystemColor.control);
 				jTextFieldLabel.setEditable(false);
 				jLabel1Ext.setEnabled(false);
 				jTextFieldLabelExt.setText("");
 				jTextFieldLabelExt.setBackground(SystemColor.control);
 				jTextFieldLabelExt.setEditable(false);
-				jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(node.getElement().getAttribute("Descriptions"), "\n"));
+				jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(task.getDescriptions(), "\n"));
 				jTextAreaDescriptions.setBackground(SystemColor.control);
 				jTextAreaDescriptions.setEditable(false);
-				if (element.getAttribute("EventPos").equals("") || node.getElement().getAttribute("EventPos").equals("L")) {
+				String eventPos = dataflowNode.getEventPos();
+				if (eventPos == null || eventPos.equals("")) {
 					jComboBoxEventPos.setSelectedIndex(0);
 				} else {
 					jComboBoxEventPos.setSelectedIndex(1);
 				}
 			} else {
-				if (element.getAttribute("RoleID").equals("")) {
-					jTextFieldLabel.setText(element.getAttribute("Name"));
+				String roleID = dataflowNode.getRoleID();
+				if (roleID == null || roleID.equals("")) {
+					jTextFieldLabel.setText(dataflowNode.getName());
 					jTextFieldLabel.setBackground(Color.white);
 					jTextFieldLabel.setEditable(true);
 					jLabel1Ext.setEnabled(true);
-					jTextFieldLabelExt.setText(element.getAttribute("NameExt"));
+					jTextFieldLabelExt.setText(dataflowNode.getNameExt());
 					jTextFieldLabelExt.setBackground(Color.white);
 					jTextFieldLabelExt.setEditable(true);
-					jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(element.getAttribute("Descriptions"), "\n"));
+					jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(dataflowNode.getDescriptions(), "\n"));
 					jTextAreaDescriptions.setBackground(Color.white);
 					jTextAreaDescriptions.setEditable(true);
 				} else {
-					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", element.getAttribute("RoleID"), null);
-					jTextFieldLabel.setText(node.getElement().getAttribute("Name"));
+					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", roleID, null);
+					xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) node.getJsonNode();
+					jTextFieldLabel.setText(role.getName());
 					jTextFieldLabel.setBackground(SystemColor.control);
 					jTextFieldLabel.setEditable(false);
 					jLabel1Ext.setEnabled(false);
 					jTextFieldLabelExt.setBackground(SystemColor.control);
 					jTextFieldLabelExt.setEditable(false);
-					jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(node.getElement().getAttribute("Descriptions"), "\n"));
+					jTextAreaDescriptions.setText(Modeler.substringLinesWithTokenOfEOL(role.getDescriptions(), "\n"));
 					jTextAreaDescriptions.setBackground(SystemColor.control);
 					jTextAreaDescriptions.setEditable(false);
 				}
@@ -280,7 +284,7 @@ public class DialogDataflowNode extends JDialog {
 		jTextAreaDescriptions.setCaretPosition(0);
 		//
 		//Create spinner with specified default//
-		int defaultValue = Integer.parseInt(element.getAttribute("SlideNumber"));
+		int defaultValue = dataflowNode.getSlideNumber();
 		SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(defaultValue, 1, 30, 1);
 		jSpinnerSlideNumber.setModel(spinnerNumberModel);
 		JSpinner.NumberEditor spinnerEditor = new JSpinner.NumberEditor(jSpinnerSlideNumber, "00");
@@ -299,68 +303,67 @@ public class DialogDataflowNode extends JDialog {
 		//
 		//Update and return parameter value//
 		if (buttonOKIsPressed) {
-			if (element.getAttribute("Type").equals("Process")) {
+			if (dataflowNode.getType().equals("Process")) {
 				if (jComboBoxEventPos.getSelectedIndex() == 0) {
-					element.setAttribute("EventPos", "L");
+					dataflowNode.setEventPos("L");
 				}
 				if (jComboBoxEventPos.getSelectedIndex() == 1) {
-					element.setAttribute("EventPos", "R");
+					dataflowNode.setEventPos("R");
 				}
 			} else {
 				//
-				//Update DOM element//
-				element.setAttribute("Name", jTextFieldLabel.getText());
-				element.setAttribute("NameExt", jTextFieldLabelExt.getText());
-				element.setAttribute("Descriptions", Modeler.concatLinesWithTokenOfEOL(jTextAreaDescriptions.getText()));
+				//Update JSON node//
+				dataflowNode.setName(jTextFieldLabel.getText());
+				dataflowNode.setNameExt(jTextFieldLabelExt.getText());
+				dataflowNode.setDescriptions(Modeler.concatLinesWithTokenOfEOL(jTextAreaDescriptions.getText()));
 				//
 				if (action.equals("Add")) {
 					if (jComboBoxType.getSelectedIndex() == 0) {
-						element.setAttribute("Type", "Ledger");
+						dataflowNode.setType("Ledger");
 					}
 					if (jComboBoxType.getSelectedIndex() == 1) {
-						element.setAttribute("Type", "Drum");
+						dataflowNode.setType("Drum");
 					}
 					if (jComboBoxType.getSelectedIndex() == 2) {
-						element.setAttribute("Type", "Store1");
+						dataflowNode.setType("Store1");
 					}
 					if (jComboBoxType.getSelectedIndex() == 3) {
-						element.setAttribute("Type", "Store2");
+						dataflowNode.setType("Store2");
 					}
 					if (jComboBoxType.getSelectedIndex() == 4) {
-						element.setAttribute("Type", "Tray");
+						dataflowNode.setType("Tray");
 					}
 					if (jComboBoxType.getSelectedIndex() == 5) {
-						element.setAttribute("Type", "Folder");
+						dataflowNode.setType("Folder");
 					}
 					if (jComboBoxType.getSelectedIndex() == 6) {
-						element.setAttribute("Type", "Subject");
+						dataflowNode.setType("Subject");
 					}
 					if (jComboBoxType.getSelectedIndex() == 7) {
-						element.setAttribute("Type", "Casher");
+						dataflowNode.setType("Casher");
 					}
 					if (jComboBoxType.getSelectedIndex() == 8) {
-						element.setAttribute("Type", "Safe");
+						dataflowNode.setType("Safe");
 					}
 					if (jComboBoxType.getSelectedIndex() == 9) {
-						element.setAttribute("Type", "Sofa");
+						dataflowNode.setType("Sofa");
 					}
 					if (jComboBoxType.getSelectedIndex() == 10) {
-						element.setAttribute("Type", "Basket");
+						dataflowNode.setType("Basket");
 					}
 				}
 			}
 			//
-			//element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
 			int newSlideNumber = Integer.parseInt(jSpinnerSlideNumber.getValue().toString());
-			int oldSlideNumber = Integer.parseInt(element.getAttribute("SlideNumber"));
+			int oldSlideNumber = dataflowNode.getSlideNumber();
 			if (newSlideNumber != oldSlideNumber) {
 				int diff = newSlideNumber - oldSlideNumber;
 				int wrkInt;
 				boolean isToCheck = false;
 				for (int i = 0; i < nodeArray.size(); i++) {
-					if (nodeArray.get(i).getElement() != null
-							&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
-						wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
+					xeadModeler.model.json.DataflowNode jsonNode = nodeArray.get(i).getPojo();
+					if (jsonNode != null) {
+						wrkInt = jsonNode.getSlideNumber();
 						if (wrkInt > oldSlideNumber) {
 							isToCheck = true;
 							break;
@@ -369,10 +372,13 @@ public class DialogDataflowNode extends JDialog {
 				}
 				if (!isToCheck) {
 					for (int i = 0; i < lineArray.size(); i++) {
-						wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
-						if (wrkInt > oldSlideNumber) {
-							isToCheck = true;
-							break;
+						xeadModeler.model.json.DataflowLine jsonLine = lineArray.get(i).getPojo();
+						if (jsonLine != null) {
+							wrkInt = jsonLine.getSlideNumber();
+							if (wrkInt > oldSlideNumber) {
+								isToCheck = true;
+								break;
+							}
 						}
 					}
 				}
@@ -381,29 +387,34 @@ public class DialogDataflowNode extends JDialog {
 							res.getString("DialogDataflowLine35"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, JOptionPane.YES_OPTION);
 					if (rtn == JOptionPane.YES_OPTION) {
 						for (int i = 0; i < nodeArray.size(); i++) {
-							if (nodeArray.get(i).getElement() != null
-									&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
-								wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
+							xeadModeler.model.json.DataflowNode jsonNode = nodeArray.get(i).getPojo();
+							if (jsonNode != null) {
+								wrkInt = jsonNode.getSlideNumber();
 								if (wrkInt > oldSlideNumber) {
 									wrkInt = wrkInt + diff;
-									nodeArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
+									jsonNode.setSlideNumber(wrkInt);
 								}
 							}
 						}
 						for (int i = 0; i < lineArray.size(); i++) {
-							wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
-							if (wrkInt > oldSlideNumber) {
-								wrkInt = wrkInt + diff;
-								lineArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
+							xeadModeler.model.json.DataflowLine jsonLine = lineArray.get(i).getPojo();
+							if (jsonLine != null) {
+								wrkInt = jsonLine.getSlideNumber();
+								if (wrkInt > oldSlideNumber) {
+									wrkInt = wrkInt + diff;
+									jsonLine.setSlideNumber(wrkInt);
+								}
 							}
 						}
 					}
 				}
-				element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
+				dataflowNode.setSlideNumber(newSlideNumber);
 			}
 			//
 			if (action.equals("Add")) {
-				frame_.currentMainTreeNode.getElement().appendChild(element);
+				// Add to the current subject area's dataflow nodes list
+				xeadModeler.model.json.SubjectArea subjectArea = (xeadModeler.model.json.SubjectArea) frame_.currentMainTreeNode.getJsonNode();
+				subjectArea.getDataflowNodes().add(dataflowNode);
 			}
 		}
 		return buttonOKIsPressed;

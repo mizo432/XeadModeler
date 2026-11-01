@@ -703,8 +703,8 @@ public class Modeler extends JFrame {
       }
     }
   };
-  private DataflowBoundary dataflowBoundaryEditor = new DataflowBoundary();
-  private DataflowBoundary dataflowBoundarySlideShow = new DataflowBoundary();
+  private xeadModeler.view.DataflowBoundary dataflowBoundaryEditor = new xeadModeler.view.DataflowBoundary(this);
+  private xeadModeler.view.DataflowBoundary dataflowBoundarySlideShow = new xeadModeler.view.DataflowBoundary(this);
   private ArrayList<DataflowLine> dataflowLineEditorArray = new ArrayList<DataflowLine>();
   private ArrayList<DataflowLine> dataflowLineSlideShowArray = new ArrayList<DataflowLine>();
   private ArrayList<DataflowNode> dataflowNodeEditorArray = new ArrayList<DataflowNode>();
@@ -9839,7 +9839,6 @@ public class Modeler extends JFrame {
    * @param e :Action Event
    */
   void jMenuItemToolTaskList_actionPerformed(ActionEvent e) {
-    org.w3c.dom.Element element1, element2;
     XeadTreeNode node1, node2;
     String headingLine, dataLine;
     int seqNumber = 1;
@@ -9861,27 +9860,28 @@ public class Modeler extends JFrame {
       //Set dataLine and output//
       for (int i = 0; i < roleListNode.getChildCount(); i++) {
         node1 = (XeadTreeNode) roleListNode.getChildAt(i);
-        element1 = (org.w3c.dom.Element) node1.getElement();
+        xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) node1.getJsonNode();
         dataLine = Integer.toString(seqNumber);
-        dataLine = dataLine + "," + element1.getAttribute("SortKey");
-        dataLine = dataLine + "," + element1.getAttribute("Name");
-        departmentNode = getSpecificXeadTreeNode("Department",
-            node1.getElement().getAttribute("DepartmentID"), null);
-        dataLine = dataLine + "," + departmentNode.getElement().getAttribute("Name");
+        dataLine = dataLine + "," + role.getSortKey();
+        dataLine = dataLine + "," + role.getName();
+        departmentNode = getSpecificXeadTreeNode("Department", role.getDepartmentId(), null);
+        xeadModeler.model.json.Department department = (xeadModeler.model.json.Department) departmentNode.getJsonNode();
+        dataLine = dataLine + "," + department.getName();
         //
         for (int j = 0; j < node1.getChildCount(); j++) {
           node2 = (XeadTreeNode) node1.getChildAt(j);
-          element2 = (org.w3c.dom.Element) node2.getElement();
-          dataLine = dataLine + "," + element2.getAttribute("SortKey");
-          dataLine = dataLine + "," + element2.getAttribute("Name");
-          dataLine = dataLine + "," + element2.getAttribute("Event");
-          taskTypeNode = getSpecificXeadTreeNode("TaskType", element2.getAttribute("TaskTypeID"),
+          xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) node2.getJsonNode();
+          dataLine = dataLine + "," + task.getSortKey();
+          dataLine = dataLine + "," + task.getName();
+          dataLine = dataLine + "," + task.getEvent();
+          taskTypeNode = getSpecificXeadTreeNode("TaskType", task.getTaskTypeId(),
               null);
           if (taskTypeNode == null) {
             dataLine = dataLine + ",,\n";
           } else {
-            dataLine = dataLine + "," + taskTypeNode.getElement().getAttribute("SortKey") + ","
-                + taskTypeNode.getElement().getAttribute("Name") + "\n";
+            xeadModeler.model.json.TaskType taskType = (xeadModeler.model.json.TaskType) taskTypeNode.getJsonNode();
+            dataLine = dataLine + "," + taskType.getSortKey() + ","
+                + taskType.getName() + "\n";
           }
           //
           if (noDataFoundToWrite) {
@@ -9898,9 +9898,8 @@ public class Modeler extends JFrame {
           //
           seqNumber = seqNumber + 1;
           //dataLine = Integer.toString(seqNumber) + ",,,";
-          dataLine = Integer.toString(seqNumber) + "," + element1.getAttribute("SortKey") + ","
-              + element1.getAttribute("Name") + "," + departmentNode.getElement()
-              .getAttribute("Name");
+          dataLine = Integer.toString(seqNumber) + "," + role.getSortKey() + ","
+              + role.getName() + "," + department.getName();
         }
       }
     } catch (Exception ex1) {
@@ -10550,9 +10549,10 @@ public class Modeler extends JFrame {
         if (getAttributeFromObject(element, "Descriptions").contains("@NOTE@")) {
           seqNumber++;
           roleNode = getSpecificXeadTreeNode("Role", getAttributeFromObject(element, "RoleID"), null);
+          xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) roleNode.getJsonNode();
           dataLine = Integer.toString(seqNumber);
           dataLine = dataLine + "," + res.getString("DialogScan14");
-          dataLine = dataLine + "," + roleNode.getElement().getAttribute("SortKey") + "-"
+          dataLine = dataLine + "," + role.getSortKey() + "-"
               + getAttributeFromObject(element, "SortKey") + " " + getAttributeFromObject(element, "Name");
           stringBuffer.append(dataLine + "\n");
         }
@@ -10587,13 +10587,13 @@ public class Modeler extends JFrame {
         nodeList = getElementsByTagNameFromPojo(element, "TableField");
         for (int j = 0; j < nodeList.getLength(); j++) {
           element2 = (org.w3c.dom.Element) nodeList.item(j);
-          if (element2.getAttribute("Descriptions").contains("@NOTE@")) {
+          xeadModeler.model.json.TableField tableField = (xeadModeler.model.json.TableField) element2;
+          if (tableField.getDescriptions().contains("@NOTE@")) {
             seqNumber++;
             dataLine = Integer.toString(seqNumber);
             dataLine = dataLine + "," + res.getString("DialogScan51");
             dataLine =
-                dataLine + "," + getAttributeFromObject(element, "SortKey") + "-" + element2.getAttribute(
-                    "Alias") + " " + element2.getAttribute("Name");
+                dataLine + "," + getAttributeFromObject(element, "SortKey") + "-" + tableField.getAlias() + " " + tableField.getName();
             stringBuffer.append(dataLine + "\n");
           }
         }
@@ -10614,53 +10614,54 @@ public class Modeler extends JFrame {
         nodeList = getElementsByTagNameFromPojo(element, "IOPanel");
         for (int j = 0; j < nodeList.getLength(); j++) {
           element2 = (org.w3c.dom.Element) nodeList.item(j);
-          if (element2.getAttribute("Descriptions").contains("@NOTE@")) {
+          xeadModeler.model.json.IOPanel ioPanel = (xeadModeler.model.json.IOPanel) element2;
+          if (ioPanel.getDescriptions().contains("@NOTE@")) {
             seqNumber++;
             dataLine = Integer.toString(seqNumber);
             dataLine = dataLine + "," + res.getString("DialogScan54");
             dataLine =
-                dataLine + "," + getAttributeFromObject(element, "SortKey") + "-" + element2.getAttribute(
-                    "SortKey") + " " + element2.getAttribute("Name");
+                dataLine + "," + getAttributeFromObject(element, "SortKey") + "-" + ioPanel.getSortKey() + " " + ioPanel.getName();
             stringBuffer.append(dataLine + "\n");
           }
         }
         nodeList = getElementsByTagNameFromPojo(element, "IOSpool");
         for (int j = 0; j < nodeList.getLength(); j++) {
           element2 = (org.w3c.dom.Element) nodeList.item(j);
-          if (element2.getAttribute("Descriptions").contains("@NOTE@")) {
+          xeadModeler.model.json.IOSpool ioSpool = (xeadModeler.model.json.IOSpool) element2;
+          if (ioSpool.getDescriptions().contains("@NOTE@")) {
             seqNumber++;
             dataLine = Integer.toString(seqNumber);
             dataLine = dataLine + "," + res.getString("DialogScan58");
             dataLine =
-                dataLine + "," + getAttributeFromObject(element, "SortKey") + "-" + element2.getAttribute(
-                    "SortKey") + " " + element2.getAttribute("Name");
+                dataLine + "," + getAttributeFromObject(element, "SortKey") + "-" + ioSpool.getSortKey() + " " + ioSpool.getName();
             stringBuffer.append(dataLine + "\n");
           }
         }
         nodeList = getElementsByTagNameFromPojo(element, "IOWebPage");
         for (int j = 0; j < nodeList.getLength(); j++) {
           element2 = (org.w3c.dom.Element) nodeList.item(j);
-          if (element2.getAttribute("Descriptions").contains("@NOTE@")) {
+          xeadModeler.model.json.IOWebPage ioWebPage = (xeadModeler.model.json.IOWebPage) element2;
+          if (ioWebPage.getDescriptions().contains("@NOTE@")) {
             seqNumber++;
             dataLine = Integer.toString(seqNumber);
             dataLine = dataLine + "," + res.getString("DialogScan56");
             dataLine =
-                dataLine + "," + getAttributeFromObject(element, "SortKey") + "-" + element2.getAttribute(
-                    "SortKey") + " " + element2.getAttribute("Name");
+                dataLine + "," + getAttributeFromObject(element, "SortKey") + "-" + ioWebPage.getSortKey() + " " + ioWebPage.getName();
             stringBuffer.append(dataLine + "\n");
           }
         }
         nodeList = getElementsByTagNameFromPojo(element, "IOTable");
         for (int j = 0; j < nodeList.getLength(); j++) {
           element2 = (org.w3c.dom.Element) nodeList.item(j);
-          if (element2.getAttribute("Descriptions").contains("@NOTE@")) {
+          xeadModeler.model.json.IOTable ioTable = (xeadModeler.model.json.IOTable) element2;
+          if (ioTable.getDescriptions().contains("@NOTE@")) {
             seqNumber++;
-            tableNode = getSpecificXeadTreeNode("Table", element2.getAttribute("TableID"), null);
+            tableNode = getSpecificXeadTreeNode("Table", ioTable.getTableId(), null);
+            xeadModeler.model.json.Table table = (xeadModeler.model.json.Table) tableNode.getJsonNode();
             dataLine = Integer.toString(seqNumber);
             dataLine = dataLine + "," + res.getString("DialogScan60");
             dataLine =
-                dataLine + "," + getAttributeFromObject(element, "SortKey") + "-" + tableNode.getElement()
-                    .getAttribute("SortKey") + " " + tableNode.getElement().getAttribute("Name");
+                dataLine + "," + getAttributeFromObject(element, "SortKey") + "-" + table.getSortKey() + " " + table.getName();
             stringBuffer.append(dataLine + "\n");
           }
         }
@@ -12595,8 +12596,8 @@ public class Modeler extends JFrame {
         this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
         taskID = (dataflowNodePojo_ != null) ? dataflowNodePojo_.getTaskID() : "";
         XeadTreeNode taskNode = getSpecificXeadTreeNode("Task", taskID, null);
-        XeadTreeNode roleNode = getSpecificXeadTreeNode("Role",
-            taskNode.getElement().getAttribute("RoleID"), null);
+        xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) taskNode.getJsonNode();
+        XeadTreeNode roleNode = getSpecificXeadTreeNode("Role", task.getRoleId(), null);
         eventPos = (dataflowNodePojo_ != null) ? dataflowNodePojo_.getEventPos() : "";
         if (eventPos.equals("")) {
           eventPos = "L";
@@ -12604,7 +12605,7 @@ public class Modeler extends JFrame {
 
         jLabelID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE - 2));
         jLabelID.setForeground(Color.lightGray);
-        jLabelID.setText(taskNode.getElement().getAttribute("SortKey"));
+        jLabelID.setText(task.getSortKey());
         if (eventPos.equals("L")) {
           jLabelID.setHorizontalAlignment(SwingConstants.RIGHT);
           jLabelID.setBounds(new Rectangle(63, 44, 50, 15));
@@ -12615,7 +12616,7 @@ public class Modeler extends JFrame {
         }
         this.add(jLabelID, null);
 
-        jTextFieldNodeName.setText(taskNode.getElement().getAttribute("Name"));
+        jTextFieldNodeName.setText(task.getName());
         jTextFieldNodeName.setBounds(new Rectangle(8, 78, 135, 19));
         adjustFontSizeOfTextField(jTextFieldNodeName);
         this.add(jTextFieldNodeName, null);
@@ -12623,7 +12624,8 @@ public class Modeler extends JFrame {
         jLabelRole.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
         jLabelRole.setHorizontalAlignment(SwingConstants.CENTER);
         jLabelRole.setForeground(Color.lightGray);
-        jLabelRole.setText(roleNode.getElement().getAttribute("Name"));
+        xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) roleNode.getJsonNode();
+        jLabelRole.setText(role.getName());
         jLabelRole.setBounds(new Rectangle(8, 59, 135, 19));
         adjustFontSizeOfTextField(jLabelRole);
         this.add(jLabelRole, null);
@@ -12650,7 +12652,7 @@ public class Modeler extends JFrame {
         jLabelEvent[2].setHorizontalAlignment(SwingConstants.CENTER);
         jLabelEvent[2].setOpaque(false);
         FontMetrics metrics = jLabelEvent[0].getFontMetrics(jLabelEvent[0].getFont());
-        String event = taskNode.getElement().getAttribute("Event");
+        String event = task.getEvent();
         int textWidth;
         String wrkStr1 = "";
         String wrkStr2 = "";
@@ -12722,7 +12724,7 @@ public class Modeler extends JFrame {
         jSpinnerSlideNumber.setBounds(new Rectangle(55, 37, 40, 16));
         jPanelMouseActionSensor.setBounds(new Rectangle(25, 53, 100, 50));
 
-        strwork = taskNode.getElement().getAttribute("Descriptions");
+        strwork = task.getDescriptions();
         if (strwork.equals("")) {
           jPanelMouseActionSensor.setToolTipText("<html>" + event + "<br>" + res.getString("S586"));
         } else {
@@ -12740,12 +12742,13 @@ public class Modeler extends JFrame {
         NODE_WIDTH = 171;
         NODE_HEIGHT = 41;
         this.setBounds(new Rectangle(nodePosX, nodePosY, NODE_WIDTH, NODE_HEIGHT));
-        if (!dataflowNodeElement_.getAttribute("RoleID").equals("")) {
-          XeadTreeNode roleNode = getSpecificXeadTreeNode("Role",
-              dataflowNodeElement_.getAttribute("RoleID"), null);
+        String roleId = (dataflowNodePojo_ != null) ? dataflowNodePojo_.getRoleID() : "";
+        if (!roleId.equals("")) {
+          XeadTreeNode roleNode = getSpecificXeadTreeNode("Role", roleId, null);
           if (roleNode != null) {
-            jTextFieldNodeName.setText(roleNode.getElement().getAttribute("Name"));
-            strwork = roleNode.getElement().getAttribute("Descriptions");
+            xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) roleNode.getJsonNode();
+            jTextFieldNodeName.setText(role.getName());
+            strwork = role.getDescriptions();
             if (strwork.equals("")) {
               jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
             } else {
@@ -14176,7 +14179,7 @@ public class Modeler extends JFrame {
     }
 
     void jMenuItemDataflowNodeChange_actionPerformed(ActionEvent e) {
-      boolean executed = dialogDataflowNode.request("Modify", dataflowNodeElement_,
+      boolean executed = dialogDataflowNode.request("Modify", dataflowNodePojo_,
           dataflowNodeEditorArray, dataflowLineEditorArray);
       if (executed) {
         informationOnThisPageChanged = true;
@@ -14249,8 +14252,8 @@ public class Modeler extends JFrame {
       setAttributeOnJsonPojo(newElement, "ShowArrow2", "false");
       setAttributeOnJsonPojo(newElement, "TerminalPosIndex1", "0");
       setAttributeOnJsonPojo(newElement, "TerminalPosIndex2", "0");
-      setAttributeOnJsonPojo(newElement, "SlideNumber", dataflowNodeElement_.getAttribute("SlideNumber"));
-      boolean executed = dialogDataflowLine.request("Add", (org.w3c.dom.Element) newElement, dataflowNodeEditorArray,
+      setAttributeOnJsonPojo(newElement, "SlideNumber", Integer.toString(dataflowNodePojo_.getSlideNumber()));
+      boolean executed = dialogDataflowLine.request("Add", (xeadModeler.model.json.DataflowLine) newElement, dataflowNodeEditorArray,
           dataflowLineEditorArray);
       if (executed) {
         informationOnThisPageChanged = true;
@@ -14583,264 +14586,6 @@ public class Modeler extends JFrame {
       }
     }
   }//End of Class DataflowNode//
-
-  /**
-   * Class of Data-flow boundary
-   */
-  class DataflowBoundary extends JPanel {
-
-    private static final long serialVersionUID = 1L;
-    private org.w3c.dom.Element dataflowBoundaryElement_;
-    private JLabel jLabelName = new JLabel();
-    public int boundaryPosX, boundaryPosY, boundaryWidth, boundaryHeight;
-
-    public DataflowBoundary(org.w3c.dom.Element element) {
-      super();
-      dataflowBoundaryElement_ = element;
-      StringTokenizer workTokenizer = new StringTokenizer(
-          dataflowBoundaryElement_.getAttribute("BoundaryPosition"), ",");
-      boundaryPosX = Integer.parseInt(workTokenizer.nextToken());
-      boundaryPosY = Integer.parseInt(workTokenizer.nextToken());
-      workTokenizer = new StringTokenizer(dataflowBoundaryElement_.getAttribute("BoundarySize"),
-          ",");
-      boundaryWidth = Integer.parseInt(workTokenizer.nextToken());
-      boundaryHeight = Integer.parseInt(workTokenizer.nextToken());
-      this.setLayout(null);
-      this.setBounds(
-          new Rectangle(boundaryPosX, boundaryPosY, boundaryWidth + 1, boundaryHeight + 1));
-      this.setBorder(null);
-      this.setOpaque(false);
-      jLabelName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE - 2));
-      jLabelName.setText(currentMainTreeNode.getRoot().toString().replace("*", ""));
-      setSystemName();
-      updateColors();
-      if (!dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("0")) {
-        this.add(jLabelName, null);
-      }
-    }
-
-    public DataflowBoundary() {
-      super();
-    }
-
-    private void setSystemName() {
-      if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("1")) {
-        jLabelName.setBounds(new Rectangle(15, 12, 300, 20));
-      }
-      if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("2")) {
-        jLabelName.setBounds(new Rectangle(boundaryWidth - 315, 12, 300, 20));
-        jLabelName.setHorizontalAlignment(SwingConstants.RIGHT);
-        jLabelName.setHorizontalTextPosition(SwingConstants.LEADING);
-      }
-      if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("")
-          || dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("3")) {
-        jLabelName.setBounds(new Rectangle(15, boundaryHeight - 32, 300, 20));
-      }
-      if (dataflowBoundaryElement_.getAttribute("BoundarySetting").equals("4")) {
-        jLabelName.setBounds(new Rectangle(boundaryWidth - 315, boundaryHeight - 32, 300, 20));
-        jLabelName.setHorizontalAlignment(SwingConstants.RIGHT);
-        jLabelName.setHorizontalTextPosition(SwingConstants.LEADING);
-      }
-    }
-
-    public void setBounds(int x, int y, int w, int h) {
-      if (x > 0) {
-        boundaryPosX = x;
-      } else {
-        boundaryPosX = 0;
-      }
-      if (y > 0) {
-        boundaryPosY = y;
-      } else {
-        boundaryPosY = 0;
-      }
-      if (w > 51) {
-        boundaryWidth = w - 1;
-      } else {
-        boundaryWidth = 50;
-      }
-      if (h > 51) {
-        boundaryHeight = h - 1;
-      } else {
-        boundaryHeight = 50;
-      }
-      jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 300, 20));
-      dataflowBoundaryElement_.setAttribute("BoundaryPosition",
-          Integer.toString(boundaryPosX) + "," + Integer.toString(boundaryPosY));
-      dataflowBoundaryElement_.setAttribute("BoundarySize",
-          Integer.toString(boundaryWidth) + "," + Integer.toString(boundaryHeight));
-      super.setBounds(boundaryPosX, boundaryPosY, boundaryWidth + 1, boundaryHeight + 1);
-    }
-
-    public void setBounds(Rectangle rect) {
-      if (rect.x > 0) {
-        boundaryPosX = rect.x;
-      } else {
-        boundaryPosX = 0;
-      }
-      if (rect.y > 0) {
-        boundaryPosY = rect.y;
-      } else {
-        boundaryPosY = 0;
-      }
-      if (rect.width > 51) {
-        boundaryWidth = rect.width - 1;
-      } else {
-        boundaryWidth = 50;
-      }
-      if (rect.height > 51) {
-        boundaryHeight = rect.height - 1;
-      } else {
-        boundaryHeight = 50;
-      }
-      jLabelName.setBounds(new Rectangle(15, boundaryHeight - 30, 300, 20));
-      dataflowBoundaryElement_.setAttribute("BoundaryPosition",
-          Integer.toString(boundaryPosX) + "," + Integer.toString(boundaryPosY));
-      dataflowBoundaryElement_.setAttribute("BoundarySize",
-          Integer.toString(boundaryWidth) + "," + Integer.toString(boundaryHeight));
-      super.setBounds(boundaryPosX, boundaryPosY, boundaryWidth + 1, boundaryHeight + 1);
-    }
-
-    public Dimension getPreferredSizeOfParentPanel() {
-      return new Dimension(boundaryPosX + boundaryWidth + 5, boundaryPosY + boundaryHeight + 5);
-    }
-
-    public void updateColors() {
-      if (isNormalColorConfigOnSubjectArea) {
-        jLabelName.setForeground(Color.LIGHT_GRAY);
-      } else {
-        jLabelName.setForeground(Color.DARK_GRAY);
-      }
-    }
-
-    public void paintComponent(Graphics g) {
-      super.paintComponent(g);
-      Graphics2D g2 = (Graphics2D) g;
-      g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-      if (isNormalColorConfigOnSubjectArea) {
-        g2.setPaint(new GradientPaint(5, 5, Color.WHITE, 10, 10, Color.LIGHT_GRAY));
-        g2.fillArc(0, 1, 40, 40, 90, 90);
-        g2.setPaint(new GradientPaint(5, boundaryHeight - 5, Color.WHITE, 10, boundaryHeight - 10,
-            Color.LIGHT_GRAY));
-        g2.fillArc(0, boundaryHeight - 40, 40, 40, 180, 90);
-        g2.setPaint(new GradientPaint(boundaryWidth - 5, 5, Color.WHITE, boundaryWidth - 10, 10,
-            Color.LIGHT_GRAY));
-        g2.fillArc(boundaryWidth - 40, 1, 40, 40, 0, 90);
-        g2.setPaint(new GradientPaint(boundaryWidth - 5, boundaryHeight - 5, Color.WHITE,
-            boundaryWidth - 10, boundaryHeight - 10, Color.LIGHT_GRAY));
-        g2.fillArc(boundaryWidth - 40, boundaryHeight - 40, 40, 40, 270, 90);
-
-        g2.setPaint(new GradientPaint(10, 10, Color.LIGHT_GRAY, 20, 20, DESKTOP_COLOR));
-        int[] x1 = {0, 20, 20};
-        int[] y1 = {20, 20, 0};
-        g2.fillPolygon(x1, y1, 3);
-        g2.setPaint(
-            new GradientPaint(0, boundaryHeight / 2, Color.LIGHT_GRAY, 20, boundaryHeight / 2,
-                DESKTOP_COLOR));
-        g2.fillRect(0, 20, 20, boundaryHeight - 40);
-
-        g2.setPaint(new GradientPaint(boundaryWidth / 2, 0, Color.LIGHT_GRAY, boundaryWidth / 2, 20,
-            DESKTOP_COLOR));
-        g2.fillRect(20, 0, boundaryWidth - 40, 20);
-
-        g2.setPaint(
-            new GradientPaint(10, boundaryHeight - 10, Color.LIGHT_GRAY, 20, boundaryHeight - 20,
-                DESKTOP_COLOR));
-        int[] x2 = {0, 20, 20};
-        int[] y2 = {boundaryHeight - 20, boundaryHeight, boundaryHeight - 20};
-        g2.fillPolygon(x2, y2, 3);
-
-        g2.setPaint(new GradientPaint(boundaryWidth / 2, boundaryHeight, Color.LIGHT_GRAY,
-            boundaryWidth / 2, boundaryHeight - 20, DESKTOP_COLOR));
-        g2.fillRect(20, boundaryHeight - 20, boundaryWidth - 40, 20);
-
-        g2.setPaint(
-            new GradientPaint(boundaryWidth - 10, 10, Color.LIGHT_GRAY, boundaryWidth - 20, 20,
-                DESKTOP_COLOR));
-        int[] x3 = {boundaryWidth - 20, boundaryWidth, boundaryWidth - 20};
-        int[] y3 = {0, 20, 20};
-        g2.fillPolygon(x3, y3, 3);
-
-        g2.setPaint(new GradientPaint(boundaryWidth, boundaryHeight / 2, Color.LIGHT_GRAY,
-            boundaryWidth - 20, boundaryHeight / 2, DESKTOP_COLOR));
-        g2.fillRect(boundaryWidth - 20, 20, 20, boundaryHeight - 40);
-
-        g2.setPaint(new GradientPaint(boundaryWidth - 10, boundaryHeight - 10, Color.LIGHT_GRAY,
-            boundaryWidth - 20, boundaryHeight - 20, DESKTOP_COLOR));
-        int[] x4 = {boundaryWidth - 20, boundaryWidth - 20, boundaryWidth};
-        int[] y4 = {boundaryHeight - 20, boundaryHeight, boundaryHeight - 20};
-        g2.fillPolygon(x4, y4, 3);
-
-        g2.setColor(Color.darkGray);
-        g2.drawArc(0, 0, 40, 40, 90, 90);
-        g2.drawArc(0, boundaryHeight - 40, 40, 40, 180, 90);
-        g2.drawArc(boundaryWidth - 40, 0, 40, 40, 0, 90);
-        g2.drawArc(boundaryWidth - 40, boundaryHeight - 40, 40, 40, 270, 90);
-        g2.drawLine(20, 0, boundaryWidth - 20, 0);
-        g2.drawLine(20, boundaryHeight, boundaryWidth - 20, boundaryHeight);
-        g2.drawLine(0, 20, 0, boundaryHeight - 20);
-        g2.drawLine(boundaryWidth, 20, boundaryWidth, boundaryHeight - 20);
-
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-
-      } else {
-        g2.setPaint(new GradientPaint(5, 5, Color.GRAY, 10, 10, Color.LIGHT_GRAY));
-        g2.fillArc(0, 1, 40, 40, 90, 90);
-        g2.setPaint(new GradientPaint(5, boundaryHeight - 5, Color.GRAY, 10, boundaryHeight - 10,
-            Color.LIGHT_GRAY));
-        g2.fillArc(0, boundaryHeight - 40, 40, 40, 180, 90);
-        g2.setPaint(new GradientPaint(boundaryWidth - 5, 5, Color.GRAY, boundaryWidth - 10, 10,
-            Color.LIGHT_GRAY));
-        g2.fillArc(boundaryWidth - 40, 1, 40, 40, 0, 90);
-        g2.setPaint(
-            new GradientPaint(boundaryWidth - 5, boundaryHeight - 5, Color.GRAY, boundaryWidth - 10,
-                boundaryHeight - 10, Color.LIGHT_GRAY));
-        g2.fillArc(boundaryWidth - 40, boundaryHeight - 40, 40, 40, 270, 90);
-
-        g2.setPaint(new GradientPaint(10, 10, Color.LIGHT_GRAY, 20, 20, Color.WHITE));
-        int[] x1 = {0, 20, 20};
-        int[] y1 = {20, 20, 0};
-        g2.fillPolygon(x1, y1, 3);
-        g2.setPaint(
-            new GradientPaint(0, boundaryHeight / 2, Color.LIGHT_GRAY, 20, boundaryHeight / 2,
-                Color.WHITE));
-        g2.fillRect(0, 20, 20, boundaryHeight - 40);
-
-        g2.setPaint(new GradientPaint(boundaryWidth / 2, 0, Color.LIGHT_GRAY, boundaryWidth / 2, 20,
-            Color.WHITE));
-        g2.fillRect(20, 0, boundaryWidth - 40, 20);
-
-        g2.setPaint(
-            new GradientPaint(10, boundaryHeight - 10, Color.LIGHT_GRAY, 20, boundaryHeight - 20,
-                Color.WHITE));
-        int[] x2 = {0, 20, 20};
-        int[] y2 = {boundaryHeight - 20, boundaryHeight, boundaryHeight - 20};
-        g2.fillPolygon(x2, y2, 3);
-
-        g2.setPaint(new GradientPaint(boundaryWidth / 2, boundaryHeight, Color.LIGHT_GRAY,
-            boundaryWidth / 2, boundaryHeight - 20, Color.WHITE));
-        g2.fillRect(20, boundaryHeight - 20, boundaryWidth - 40, 20);
-
-        g2.setPaint(
-            new GradientPaint(boundaryWidth - 10, 10, Color.LIGHT_GRAY, boundaryWidth - 20, 20,
-                Color.WHITE));
-        int[] x3 = {boundaryWidth - 20, boundaryWidth, boundaryWidth - 20};
-        int[] y3 = {0, 20, 20};
-        g2.fillPolygon(x3, y3, 3);
-
-        g2.setPaint(new GradientPaint(boundaryWidth, boundaryHeight / 2, Color.LIGHT_GRAY,
-            boundaryWidth - 20, boundaryHeight / 2, Color.WHITE));
-        g2.fillRect(boundaryWidth - 20, 20, 20, boundaryHeight - 40);
-
-        g2.setPaint(new GradientPaint(boundaryWidth - 10, boundaryHeight - 10, Color.LIGHT_GRAY,
-            boundaryWidth - 20, boundaryHeight - 20, Color.WHITE));
-        int[] x4 = {boundaryWidth - 20, boundaryWidth - 20, boundaryWidth};
-        int[] y4 = {boundaryHeight - 20, boundaryHeight, boundaryHeight - 20};
-        g2.fillPolygon(x4, y4, 3);
-      }
-      setSystemName();
-    }
-  } //End of DataflowBoundary//
 
   /**
    * Class of Data-flow line
@@ -15819,7 +15564,7 @@ public class Modeler extends JFrame {
     }
 
     void jMenuItemDataflowLineChange_actionPerformed(ActionEvent e) {
-      boolean executed = dialogDataflowLine.request("Modify", dataflowLineElement_,
+      boolean executed = dialogDataflowLine.request("Modify", dataflowLinePojo_,
           dataflowNodeEditorArray, dataflowLineEditorArray);
       if (executed) {
         informationOnThisPageChanged = true;
@@ -22766,7 +22511,7 @@ public class Modeler extends JFrame {
       //Setup SystemBoundary//
       jPanelSubjectAreaDataflowEditor1.remove(dataflowBoundaryEditor);
       if (!domNode_.getAttribute("BoundarySetting").equals("H")) {
-        dataflowBoundaryEditor = new DataflowBoundary(domNode_);
+        dataflowBoundaryEditor = new xeadModeler.view.DataflowBoundary(Modeler.this, (SubjectArea) jsonNode_);
         jPanelSubjectAreaDataflowEditor1.setPreferredSize(
             dataflowBoundaryEditor.getPreferredSizeOfParentPanel());
         jPanelSubjectAreaDataflowEditor1.add(dataflowBoundaryEditor);
@@ -36097,7 +35842,7 @@ public class Modeler extends JFrame {
       setAttributeOnJsonPojo(newElement, "Name", res.getString("S2274"));
       setAttributeOnJsonPojo(newElement, "Position", dataflowNodePosition.x + "," + dataflowNodePosition.y);
       setAttributeOnJsonPojo(newElement, "SlideNumber", "01");
-      boolean executed = dialogDataflowNode.request("Add", (org.w3c.dom.Element)newElement, dataflowNodeEditorArray,
+      boolean executed = dialogDataflowNode.request("Add", (xeadModeler.model.json.DataflowNode)newElement, dataflowNodeEditorArray,
           dataflowLineEditorArray);
       if (executed) {
         informationOnThisPageChanged = true;
@@ -37556,7 +37301,7 @@ public class Modeler extends JFrame {
     //Setup System Boundary//
     jPanelSubjectAreaDataflowSlideShow1.remove(dataflowBoundarySlideShow);
     if (!currentMainTreeNode.getElement().getAttribute("BoundarySetting").equals("H")) {
-      dataflowBoundarySlideShow = new DataflowBoundary(currentMainTreeNode.getElement());
+      dataflowBoundarySlideShow = new xeadModeler.view.DataflowBoundary(this, (SubjectArea) currentMainTreeNode.getJsonNode());
       jPanelSubjectAreaDataflowSlideShow1.add(dataflowBoundarySlideShow);
     }
 

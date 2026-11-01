@@ -17,6 +17,7 @@ public class SubjectArea {
     private String sortKey;
     private String boundaryPosition;
     private String boundarySize;
+    private String boundarySetting;
     
     private List<DataflowNode> dataflowNodes = new ArrayList<>();
     private List<DataflowLine> dataflowLines = new ArrayList<>();
@@ -67,6 +68,14 @@ public class SubjectArea {
     
     public void setBoundarySize(String boundarySize) {
         this.boundarySize = boundarySize;
+    }
+    
+    public String getBoundarySetting() {
+        return boundarySetting;
+    }
+    
+    public void setBoundarySetting(String boundarySetting) {
+        this.boundarySetting = boundarySetting;
     }
     
     public List<DataflowNode> getDataflowNodes() {

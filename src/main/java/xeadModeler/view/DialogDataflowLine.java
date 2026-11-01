@@ -278,7 +278,7 @@ public class DialogDataflowLine extends JDialog {
 		getContentPane().add(panelMain);
 	}
 
-	public boolean request(String action, org.w3c.dom.Element element, ArrayList<DataflowNode> nodeArray, ArrayList<DataflowLine> lineArray) {
+	public boolean request(String action, xeadModeler.model.json.DataflowLine dataflowLine, ArrayList<DataflowNode> nodeArray, ArrayList<DataflowLine> lineArray) {
 		buttonOKIsPressed = false;
 
 		panelMain.removeAll();
@@ -306,68 +306,71 @@ public class DialogDataflowLine extends JDialog {
 			this.setTitle(res.getString("DialogDataflowLine33"));
 		}
 		jRadioButtonIcon1.setSelected(true);
-		if (element.getAttribute("ImageType").equals("1")) {
-			jRadioButtonIcon1.setSelected(true);
+		String imageType = dataflowLine.getImageType();
+		if (imageType != null) {
+			if (imageType.equals("1")) {
+				jRadioButtonIcon1.setSelected(true);
+			}
+			if (imageType.equals("2")) {
+				jRadioButtonIcon2.setSelected(true);
+			}
+			if (imageType.equals("3")) {
+				jRadioButtonIcon3.setSelected(true);
+			}
+			if (imageType.equals("4")) {
+				jRadioButtonIcon4.setSelected(true);
+			}
+			if (imageType.equals("5")) {
+				jRadioButtonIcon5.setSelected(true);
+			}
+			if (imageType.equals("6")) {
+				jRadioButtonIcon6.setSelected(true);
+			}
+			if (imageType.equals("7")) {
+				jRadioButtonIcon7.setSelected(true);
+			}
+			if (imageType.equals("8")) {
+				jRadioButtonIcon8.setSelected(true);
+			}
+			if (imageType.equals("9")) {
+				jRadioButtonIcon9.setSelected(true);
+			}
+			if (imageType.equals("10")) {
+				jRadioButtonIcon10.setSelected(true);
+			}
+			if (imageType.equals("11")) {
+				jRadioButtonIcon11.setSelected(true);
+			}
+			if (imageType.equals("12")) {
+				jRadioButtonIcon12.setSelected(true);
+			}
+			if (imageType.equals("13")) {
+				jRadioButtonIcon13.setSelected(true);
+			}
+			if (imageType.equals("14")) {
+				jRadioButtonIcon14.setSelected(true);
+			}
+			if (imageType.equals("15")) {
+				jRadioButtonIcon15.setSelected(true);
+			}
+			if (imageType.equals("16")) {
+				jRadioButtonIcon16.setSelected(true);
+			}
+			if (imageType.equals("17")) {
+				jRadioButtonIcon17.setSelected(true);
+			}
+			if (imageType.equals("18")) {
+				jRadioButtonIcon18.setSelected(true);
+			}
+			if (imageType.equals("19")) {
+				jRadioButtonIcon19.setSelected(true);
+			}
+			if (imageType.equals("20")) {
+				jRadioButtonIcon20.setSelected(true);
+			}
 		}
-		if (element.getAttribute("ImageType").equals("2")) {
-			jRadioButtonIcon2.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("3")) {
-			jRadioButtonIcon3.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("4")) {
-			jRadioButtonIcon4.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("5")) {
-			jRadioButtonIcon5.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("6")) {
-			jRadioButtonIcon6.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("7")) {
-			jRadioButtonIcon7.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("8")) {
-			jRadioButtonIcon8.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("9")) {
-			jRadioButtonIcon9.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("10")) {
-			jRadioButtonIcon10.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("11")) {
-			jRadioButtonIcon11.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("12")) {
-			jRadioButtonIcon12.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("13")) {
-			jRadioButtonIcon13.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("14")) {
-			jRadioButtonIcon14.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("15")) {
-			jRadioButtonIcon15.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("16")) {
-			jRadioButtonIcon16.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("17")) {
-			jRadioButtonIcon17.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("18")) {
-			jRadioButtonIcon18.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("19")) {
-			jRadioButtonIcon19.setSelected(true);
-		}
-		if (element.getAttribute("ImageType").equals("20")) {
-			jRadioButtonIcon20.setSelected(true);
-		}
-		jTextFieldName.setText(element.getAttribute("Name"));
-		jTextFieldNameExt.setText(element.getAttribute("NameExt"));
+		jTextFieldName.setText(dataflowLine.getName());
+		jTextFieldNameExt.setText(dataflowLine.getNameExt());
 
 		/////////////////////////////////////////
 		//Setup ComboBox1 of nodes to be linked//
@@ -376,28 +379,38 @@ public class DialogDataflowLine extends JDialog {
 		int selectedIndex1 = 0;
 		String selectedItemName1 = "";
 		jComboBoxNode1.removeAllItems();
+		String nodeID2 = dataflowLine.getNodeID2();
 		for (int i = 0; i < nodeArray.size(); i++) {
-			if (!nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID2"))) {
-				if (nodeArray.get(i).getElement().getAttribute("Type").equals("Process")) {
-					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", nodeArray.get(i).getElement().getAttribute("TaskID"), null);
-					jComboBoxNode1.addItem(node.getElement().getAttribute("Name"));
-					numberOfStorageArray1 = numberOfStorageArray1 + 1;
-					storageArray1[numberOfStorageArray1] = nodeArray.get(i);
-					if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
-						selectedIndex1 = numberOfStorageArray1;
-					}
-				} else {
-					if (nodeArray.get(i).getElement().getAttribute("Type").equals("Subject")) {
-						if (nodeArray.get(i).getElement().getAttribute("RoleID").equals("")) {
-							jComboBoxNode1.addItem(nodeArray.get(i).getElement().getAttribute("Name") + nodeArray.get(i).getElement().getAttribute("NameExt"));
-						} else {
-							Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", nodeArray.get(i).getElement().getAttribute("RoleID"), null);
-							jComboBoxNode1.addItem(node.getElement().getAttribute("Name"));
-						}
+			Modeler.DataflowNode node = nodeArray.get(i);
+			xeadModeler.model.json.DataflowNode jsonNode = node.getPojo();
+			if (jsonNode != null) {
+				String nodeId = jsonNode.getId();
+				if (nodeId != null && !nodeId.equals(nodeID2)) {
+					String type = jsonNode.getType();
+					if (type != null && type.equals("Process")) {
+						Modeler.XeadTreeNode taskNode = frame_.getSpecificXeadTreeNode("Task", jsonNode.getTaskID(), null);
+						xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) taskNode.getJsonNode();
+						jComboBoxNode1.addItem(task.getName());
 						numberOfStorageArray1 = numberOfStorageArray1 + 1;
 						storageArray1[numberOfStorageArray1] = nodeArray.get(i);
-						if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
+						if (nodeId.equals(dataflowLine.getNodeID1())) {
 							selectedIndex1 = numberOfStorageArray1;
+						}
+					} else {
+						if (type != null && type.equals("Subject")) {
+							String roleID = jsonNode.getRoleID();
+							if (roleID == null || roleID.equals("")) {
+								jComboBoxNode1.addItem(jsonNode.getName() + jsonNode.getNameExt());
+							} else {
+								Modeler.XeadTreeNode roleNode = frame_.getSpecificXeadTreeNode("Role", roleID, null);
+								xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) roleNode.getJsonNode();
+								jComboBoxNode1.addItem(role.getName());
+							}
+							numberOfStorageArray1 = numberOfStorageArray1 + 1;
+							storageArray1[numberOfStorageArray1] = nodeArray.get(i);
+							if (nodeId.equals(dataflowLine.getNodeID1())) {
+								selectedIndex1 = numberOfStorageArray1;
+							}
 						}
 					}
 				}
@@ -409,8 +422,10 @@ public class DialogDataflowLine extends JDialog {
 		/////////////////////
 		//Setup arrow style//
 		/////////////////////
-		if (element.getAttribute("ShowArrow1").equals("true")) {
-			if (element.getAttribute("ShowArrow2").equals("true")) {
+		String showArrow1 = dataflowLine.getShowArrow1();
+		String showArrow2 = dataflowLine.getShowArrow2();
+		if ("true".equals(showArrow1)) {
+			if ("true".equals(showArrow2)) {
 				jRadioButtonArrowStyle3.setSelected(true);
 			} else {
 				jRadioButtonArrowStyle2.setSelected(true);
@@ -426,23 +441,33 @@ public class DialogDataflowLine extends JDialog {
 		int selectedIndex2 = 0;
 		String selectedItemName2 = "";
 		jComboBoxNode2.removeAllItems();
+		String nodeID1 = dataflowLine.getNodeID1();
 		for (int i = 0; i < nodeArray.size(); i++) {
-			if (!nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID1"))) {
-				if (nodeArray.get(i).getElement().getAttribute("Type").equals("Process")) {
-					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", nodeArray.get(i).getElement().getAttribute("TaskID"), null);
-					jComboBoxNode2.addItem(node.getElement().getAttribute("Name"));
-				} else {
-					if (nodeArray.get(i).getElement().getAttribute("Type").equals("Subject") && !nodeArray.get(i).getElement().getAttribute("RoleID").equals("")) {
-						Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", nodeArray.get(i).getElement().getAttribute("RoleID"), null);
-						jComboBoxNode2.addItem(node.getElement().getAttribute("Name"));
+			Modeler.DataflowNode node = nodeArray.get(i);
+			xeadModeler.model.json.DataflowNode jsonNode = node.getPojo();
+			if (jsonNode != null) {
+				String nodeId = jsonNode.getId();
+				if (nodeId != null && !nodeId.equals(nodeID1)) {
+					String type = jsonNode.getType();
+					if (type != null && type.equals("Process")) {
+						Modeler.XeadTreeNode taskNode = frame_.getSpecificXeadTreeNode("Task", jsonNode.getTaskID(), null);
+						xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) taskNode.getJsonNode();
+						jComboBoxNode2.addItem(task.getName());
 					} else {
-						jComboBoxNode2.addItem(nodeArray.get(i).getElement().getAttribute("Name") + " "+ nodeArray.get(i).getElement().getAttribute("NameExt"));
+						String roleID = jsonNode.getRoleID();
+						if (type != null && type.equals("Subject") && roleID != null && !roleID.equals("")) {
+							Modeler.XeadTreeNode roleNode = frame_.getSpecificXeadTreeNode("Role", roleID, null);
+							xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) roleNode.getJsonNode();
+							jComboBoxNode2.addItem(role.getName());
+						} else {
+							jComboBoxNode2.addItem(jsonNode.getName() + " "+ jsonNode.getNameExt());
+						}
 					}
-				}
-				numberOfStorageArray2 = numberOfStorageArray2 + 1;
-				storageArray2[numberOfStorageArray2] = nodeArray.get(i);
-				if (nodeArray.get(i).getElement().getAttribute("ID").equals(element.getAttribute("NodeID2")) && !action.equals("Add")) {
-					selectedIndex2 = numberOfStorageArray2;
+					numberOfStorageArray2 = numberOfStorageArray2 + 1;
+					storageArray2[numberOfStorageArray2] = nodeArray.get(i);
+					if (nodeId.equals(dataflowLine.getNodeID2()) && !action.equals("Add")) {
+						selectedIndex2 = numberOfStorageArray2;
+					}
 				}
 			}
 		}
@@ -452,7 +477,7 @@ public class DialogDataflowLine extends JDialog {
 		/////////////////////////////////////////
 		//Create spinner with specified default//
 		/////////////////////////////////////////
-		int defaultValue = Integer.parseInt(element.getAttribute("SlideNumber"));
+		int defaultValue = dataflowLine.getSlideNumber();
 		SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(defaultValue, 1, 30, 1);
 		JSpinner jSpinnerSlideNumber = new JSpinner(spinnerNumberModel);
 		JSpinner.NumberEditor spinnerEditor = new JSpinner.NumberEditor(jSpinnerSlideNumber, "00");
@@ -478,20 +503,20 @@ public class DialogDataflowLine extends JDialog {
 		if (buttonOKIsPressed) {
 
 			//////////////////////
-			//Update DOM element//
+			//Update JSON node//
 			//////////////////////
-			element.setAttribute("Name", jTextFieldName.getText());
-			element.setAttribute("NameExt", jTextFieldNameExt.getText());
+			dataflowLine.setName(jTextFieldName.getText());
+			dataflowLine.setNameExt(jTextFieldNameExt.getText());
 			int newSlideNumber = Integer.parseInt(jSpinnerSlideNumber.getValue().toString());
-			int oldSlideNumber = Integer.parseInt(element.getAttribute("SlideNumber"));
+			int oldSlideNumber = dataflowLine.getSlideNumber();
 			if (newSlideNumber != oldSlideNumber) {
 				int diff = newSlideNumber - oldSlideNumber;
 				int wrkInt;
 				boolean isToCheck = false;
 				for (int i = 0; i < nodeArray.size(); i++) {
-					if (nodeArray.get(i).getElement() != null
-							&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
-						wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
+					xeadModeler.model.json.DataflowNode jsonNode = nodeArray.get(i).getPojo();
+					if (jsonNode != null) {
+						wrkInt = jsonNode.getSlideNumber();
 						if (wrkInt > oldSlideNumber) {
 							isToCheck = true;
 							break;
@@ -500,10 +525,13 @@ public class DialogDataflowLine extends JDialog {
 				}
 				if (!isToCheck) {
 					for (int i = 0; i < lineArray.size(); i++) {
-						wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
-						if (wrkInt > oldSlideNumber) {
-							isToCheck = true;
-							break;
+						xeadModeler.model.json.DataflowLine jsonLine = lineArray.get(i).getPojo();
+						if (jsonLine != null) {
+							wrkInt = jsonLine.getSlideNumber();
+							if (wrkInt > oldSlideNumber) {
+								isToCheck = true;
+								break;
+							}
 						}
 					}
 				}
@@ -512,25 +540,28 @@ public class DialogDataflowLine extends JDialog {
 							res.getString("DialogDataflowLine35"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, JOptionPane.YES_OPTION);
 					if (rtn == JOptionPane.YES_OPTION) {
 						for (int i = 0; i < nodeArray.size(); i++) {
-							if (nodeArray.get(i).getElement() != null
-									&& !nodeArray.get(i).getElement().getAttribute("SlideNumber").equals("")) {
-								wrkInt = Integer.parseInt(nodeArray.get(i).getElement().getAttribute("SlideNumber"));
+							xeadModeler.model.json.DataflowNode jsonNode = nodeArray.get(i).getPojo();
+							if (jsonNode != null) {
+								wrkInt = jsonNode.getSlideNumber();
 								if (wrkInt > oldSlideNumber) {
 									wrkInt = wrkInt + diff;
-									nodeArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
+									jsonNode.setSlideNumber(wrkInt);
 								}
 							}
 						}
 						for (int i = 0; i < lineArray.size(); i++) {
-							wrkInt = Integer.parseInt(lineArray.get(i).getElement().getAttribute("SlideNumber"));
-							if (wrkInt > oldSlideNumber) {
-								wrkInt = wrkInt + diff;
-								lineArray.get(i).getElement().setAttribute("SlideNumber", Integer.toString(wrkInt));
+							xeadModeler.model.json.DataflowLine jsonLine = lineArray.get(i).getPojo();
+							if (jsonLine != null) {
+								wrkInt = jsonLine.getSlideNumber();
+								if (wrkInt > oldSlideNumber) {
+									wrkInt = wrkInt + diff;
+									jsonLine.setSlideNumber(wrkInt);
+								}
 							}
 						}
 					}
 				}
-				element.setAttribute("SlideNumber", jSpinnerSlideNumber.getValue().toString());
+				dataflowLine.setSlideNumber(newSlideNumber);
 			}
 //			String workName = jComboBoxNode2.getSelectedItem().toString();
 //			if (!workName.equals(selectedItemName) || action.equals("Add")) {
@@ -565,85 +596,87 @@ public class DialogDataflowLine extends JDialog {
 						}
 					}
 				}
-				element.setAttribute("NodeID1", node1.getElement().getAttribute("ID"));
-				element.setAttribute("NodeID2", node2.getElement().getAttribute("ID"));
-				element.setAttribute("TerminalPosIndex1", Integer.toString(shortestDistanceIndex1));
-				element.setAttribute("TerminalPosIndex2", Integer.toString(shortestDistanceIndex2));
+				dataflowLine.setNodeID1(node1.getPojo().getId());
+				dataflowLine.setNodeID2(node2.getPojo().getId());
+				dataflowLine.setTerminalPosIndex1(shortestDistanceIndex1);
+				dataflowLine.setTerminalPosIndex2(shortestDistanceIndex2);
 			}
 			if (jRadioButtonArrowStyle1.isSelected()) {
-				element.setAttribute("ShowArrow1", "false");
-				element.setAttribute("ShowArrow2", "true");
+				dataflowLine.setShowArrow1("false");
+				dataflowLine.setShowArrow2("true");
 			}
 			if (jRadioButtonArrowStyle2.isSelected()) {
-				element.setAttribute("ShowArrow1", "true");
-				element.setAttribute("ShowArrow2", "false");
+				dataflowLine.setShowArrow1("true");
+				dataflowLine.setShowArrow2("false");
 			}
 			if (jRadioButtonArrowStyle3.isSelected()) {
-				element.setAttribute("ShowArrow1", "true");
-				element.setAttribute("ShowArrow2", "true");
+				dataflowLine.setShowArrow1("true");
+				dataflowLine.setShowArrow2("true");
 			}
 			if (jRadioButtonIcon1.isSelected()) {
-				element.setAttribute("ImageType", "1");
+				dataflowLine.setImageType("1");
 			}
 			if (jRadioButtonIcon2.isSelected()) {
-				element.setAttribute("ImageType", "2");
+				dataflowLine.setImageType("2");
 			}
 			if (jRadioButtonIcon3.isSelected()) {
-				element.setAttribute("ImageType", "3");
+				dataflowLine.setImageType("3");
 			}
 			if (jRadioButtonIcon4.isSelected()) {
-				element.setAttribute("ImageType", "4");
+				dataflowLine.setImageType("4");
 			}
 			if (jRadioButtonIcon5.isSelected()) {
-				element.setAttribute("ImageType", "5");
+				dataflowLine.setImageType("5");
 			}
 			if (jRadioButtonIcon6.isSelected()) {
-				element.setAttribute("ImageType", "6");
+				dataflowLine.setImageType("6");
 			}
 			if (jRadioButtonIcon7.isSelected()) {
-				element.setAttribute("ImageType", "7");
+				dataflowLine.setImageType("7");
 			}
 			if (jRadioButtonIcon8.isSelected()) {
-				element.setAttribute("ImageType", "8");
+				dataflowLine.setImageType("8");
 			}
 			if (jRadioButtonIcon9.isSelected()) {
-				element.setAttribute("ImageType", "9");
+				dataflowLine.setImageType("9");
 			}
 			if (jRadioButtonIcon10.isSelected()) {
-				element.setAttribute("ImageType", "10");
+				dataflowLine.setImageType("10");
 			}
 			if (jRadioButtonIcon11.isSelected()) {
-				element.setAttribute("ImageType", "11");
+				dataflowLine.setImageType("11");
 			}
 			if (jRadioButtonIcon12.isSelected()) {
-				element.setAttribute("ImageType", "12");
+				dataflowLine.setImageType("12");
 			}
 			if (jRadioButtonIcon13.isSelected()) {
-				element.setAttribute("ImageType", "13");
+				dataflowLine.setImageType("13");
 			}
 			if (jRadioButtonIcon14.isSelected()) {
-				element.setAttribute("ImageType", "14");
+				dataflowLine.setImageType("14");
 			}
 			if (jRadioButtonIcon15.isSelected()) {
-				element.setAttribute("ImageType", "15");
+				dataflowLine.setImageType("15");
 			}
 			if (jRadioButtonIcon16.isSelected()) {
-				element.setAttribute("ImageType", "16");
+				dataflowLine.setImageType("16");
 			}
 			if (jRadioButtonIcon17.isSelected()) {
-				element.setAttribute("ImageType", "17");
+				dataflowLine.setImageType("17");
 			}
 			if (jRadioButtonIcon18.isSelected()) {
-				element.setAttribute("ImageType", "18");
+				dataflowLine.setImageType("18");
 			}
 			if (jRadioButtonIcon19.isSelected()) {
-				element.setAttribute("ImageType", "19");
+				dataflowLine.setImageType("19");
 			}
 			if (jRadioButtonIcon20.isSelected()) {
-				element.setAttribute("ImageType", "20");
+				dataflowLine.setImageType("20");
 			}
 			if (action.equals("Add")) {
-				frame_.currentMainTreeNode.getElement().appendChild(element);
+				// Add to the current subject area's dataflow lines list
+				xeadModeler.model.json.SubjectArea subjectArea = (xeadModeler.model.json.SubjectArea) frame_.currentMainTreeNode.getJsonNode();
+				subjectArea.getDataflowLines().add(dataflowLine);
 			}
 		}
 		return buttonOKIsPressed;
