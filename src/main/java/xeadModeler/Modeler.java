@@ -588,7 +588,7 @@ public class Modeler extends JFrame {
   private TableModelReadOnlyList tableModelSystemDataTypeWhereUsedList = new TableModelReadOnlyList();
   private JTable jTableSystemDataTypeWhereUsedList = new JTable(
       tableModelSystemDataTypeWhereUsedList);
-  private HashMap<String, org.w3c.dom.Element> dataTypeElementMap = new HashMap<String, org.w3c.dom.Element>();
+  private HashMap<String, Object> dataTypeElementMap = new HashMap<String, Object>();
   //(SystemFunctionTypeList)//
   private boolean tableSystemFunctionTypeListSelectChangeActivated = false;
   private int selectedRow_jTableSystemFunctionTypeList;
@@ -9908,7 +9908,7 @@ public class Modeler extends JFrame {
    * @param e :Action Event
    */
   void jMenuItemToolTableList_actionPerformed(ActionEvent e) {
-    org.w3c.dom.Element element1, element2;
+    Object element1, element2;
     XeadTreeNode node1, node2;
     String headingLine, dataLine;
     int seqNumber = 1;
@@ -9924,7 +9924,7 @@ public class Modeler extends JFrame {
       //
       NodeList functionList = getElementsByTagNameFromPojo(currentMainTreeNode.getJsonNode(), "Function");
       NodeList ioTableList;
-      org.w3c.dom.Element functionElement, ioTableElement;
+      Object functionElement, ioTableElement;
       String opC, opR, opU, opD, opExC, opExR, opExU, opExD;
       //
       //Set headingLine and output//
@@ -9933,21 +9933,21 @@ public class Modeler extends JFrame {
       //Set dataLine and output//
       for (int i = 0; i < subsystemListNode.getChildCount(); i++) {
         node1 = (XeadTreeNode) subsystemListNode.getChildAt(i);
-        element1 = (org.w3c.dom.Element) node1.getElement();
+        element1 = node1.getJsonNode();
         dataLine = Integer.toString(seqNumber);
-        dataLine = dataLine + "," + element1.getAttribute("SortKey");
-        dataLine = dataLine + "," + element1.getAttribute("Name");
+        dataLine = dataLine + "," + getAttributeFromObject(element1, "SortKey");
+        dataLine = dataLine + "," + getAttributeFromObject(element1, "Name");
         //
         for (int j = 0; j < node1.getChildAt(0).getChildCount(); j++) {
           node2 = (XeadTreeNode) node1.getChildAt(0).getChildAt(j);
-          element2 = (org.w3c.dom.Element) node2.getElement();
-          dataLine = dataLine + "," + element2.getAttribute("SynchFile");
-          dataLine = dataLine + "," + element2.getAttribute("SortKey");
-          if (element2.getAttribute("Alias").equals("")) {
-            dataLine = dataLine + "," + element2.getAttribute("Name");
+          element2 = node2.getJsonNode();
+          dataLine = dataLine + "," + getAttributeFromObject(element2, "SynchFile");
+          dataLine = dataLine + "," + getAttributeFromObject(element2, "SortKey");
+          if (getAttributeFromObject(element2, "Alias").equals("")) {
+            dataLine = dataLine + "," + getAttributeFromObject(element2, "Name");
           } else {
-            dataLine = dataLine + "," + element2.getAttribute("Name") + "(" + element2.getAttribute(
-                "Alias") + ")";
+            dataLine = dataLine + "," + getAttributeFromObject(element2, "Name") + "(" + getAttributeFromObject(
+                element2, "Alias") + ")";
           }
           //
           opC = "";
@@ -9959,38 +9959,38 @@ public class Modeler extends JFrame {
           opExU = "";
           opExD = "";
           for (int m = 0; m < functionList.getLength(); m++) {
-            functionElement = (org.w3c.dom.Element) functionList.item(m);
+            functionElement = functionList.item(m);
             ioTableList = getElementsByTagNameFromPojo(functionElement, "IOTable");
             for (int n = 0; n < ioTableList.getLength(); n++) {
-              ioTableElement = (org.w3c.dom.Element) ioTableList.item(n);
-              if (ioTableElement.getAttribute("TableID").equals(element2.getAttribute("ID"))) {
-                if (ioTableElement.getAttribute("OpC").equals("+")) {
-                  if (functionElement.getAttribute("SubsystemID")
-                      .equals(element1.getAttribute("ID"))) {
+              ioTableElement = ioTableList.item(n);
+              if (getAttributeFromObject(ioTableElement, "TableID").equals(getAttributeFromObject(element2, "ID"))) {
+                if (getAttributeFromObject(ioTableElement, "OpC").equals("+")) {
+                  if (getAttributeFromObject(functionElement, "SubsystemID")
+                      .equals(getAttributeFromObject(element1, "ID"))) {
                     opC = "+";
                   } else {
                     opExC = "+";
                   }
                 }
-                if (ioTableElement.getAttribute("OpR").equals("+")) {
-                  if (functionElement.getAttribute("SubsystemID")
-                      .equals(element1.getAttribute("ID"))) {
+                if (getAttributeFromObject(ioTableElement, "OpR").equals("+")) {
+                  if (getAttributeFromObject(functionElement, "SubsystemID")
+                      .equals(getAttributeFromObject(element1, "ID"))) {
                     opR = "+";
                   } else {
                     opExR = "+";
                   }
                 }
-                if (ioTableElement.getAttribute("OpU").equals("+")) {
-                  if (functionElement.getAttribute("SubsystemID")
-                      .equals(element1.getAttribute("ID"))) {
+                if (getAttributeFromObject(ioTableElement, "OpU").equals("+")) {
+                  if (getAttributeFromObject(functionElement, "SubsystemID")
+                      .equals(getAttributeFromObject(element1, "ID"))) {
                     opU = "+";
                   } else {
                     opExU = "+";
                   }
                 }
-                if (ioTableElement.getAttribute("OpD").equals("+")) {
-                  if (functionElement.getAttribute("SubsystemID")
-                      .equals(element1.getAttribute("ID"))) {
+                if (getAttributeFromObject(ioTableElement, "OpD").equals("+")) {
+                  if (getAttributeFromObject(functionElement, "SubsystemID")
+                      .equals(getAttributeFromObject(element1, "ID"))) {
                     opD = "+";
                   } else {
                     opExD = "+";
@@ -10001,9 +10001,9 @@ public class Modeler extends JFrame {
           }
           dataLine = dataLine + "," + opC + "," + opR + "," + opU + "," + opD;
           XeadTreeNode tableTypeNode = getSpecificXeadTreeNode("TableType",
-              element2.getAttribute("TableTypeID"), null);
-          org.w3c.dom.Element tableTypeElement = tableTypeNode.getElement();
-          dataLine = dataLine + "," + tableTypeElement.getAttribute("Name");
+              getAttributeFromObject(element2, "TableTypeID"), null);
+          Object tableTypeElement = tableTypeNode.getJsonNode();
+          dataLine = dataLine + "," + getAttributeFromObject(tableTypeElement, "Name");
           XeadTreeNode keyListNode = (XeadTreeNode) node2.getChildAt(1);
           XeadTreeNode primaryKeyNode = (XeadTreeNode) keyListNode.getChildAt(0);
           dataLine = dataLine + "," + primaryKeyNode.getNameOfTableKey() + ","
@@ -10766,12 +10766,12 @@ public class Modeler extends JFrame {
    * @return CreateStatement :CreateStatement object
    */
   public CreateStatement getCreateStatementByTable(XeadTreeNode node1, XeadTreeNode node2,
-      org.w3c.dom.NodeList relationshipList) {
-    org.w3c.dom.Element keyFieldElement, keyFieldElement2, relationshipElement, dataTypeElement;
+      NodeList relationshipList) {
+    Object keyFieldElement, keyFieldElement2, relationshipElement, dataTypeElement;
     XeadTreeNode node3, node4, node5;
     XeadTreeNode tableKeyNode, objectTableNode, objectTableKeyNode;
-    org.w3c.dom.Element tableKeyElement, objectTableElement, objectTableKeyElement;
-    org.w3c.dom.NodeList keyFieldList, keyFieldList2;
+    Object tableKeyElement, objectTableElement, objectTableKeyElement;
+    NodeList keyFieldList, keyFieldList2;
     boolean firstFieldStatement = true;
     boolean firstKeyStatement = true;
     int numberOfCandidateFields;
@@ -10786,29 +10786,29 @@ public class Modeler extends JFrame {
     NodeList dataTypeList = getElementsByTagNameFromPojo(currentMainTreeNode.getJsonNode(), "DataType");
     dataTypeElementMap.clear();
     for (int i = 0; i < dataTypeList.getLength(); i++) {
-      dataTypeElement = (org.w3c.dom.Element) dataTypeList.item(i);
-      dataTypeElementMap.put(dataTypeElement.getAttribute("ID"), dataTypeElement);
+      dataTypeElement = dataTypeList.item(i);
+      dataTypeElementMap.put(getAttributeFromObject(dataTypeElement, "ID"), dataTypeElement);
     }
     //
     //Header Comments with table Name//
     if (useTableNameAsTableNameInCreateTableStatement) {
-      tableName = node2.getElement().getAttribute("Name");
+      tableName = getAttributeFromObject(node2.getJsonNode(), "Name");
       statement =
-          ddlCommentMark + node1.getElement().getAttribute("Name") + "(" + node1.getElement()
-              .getAttribute("SortKey") + ") - " + node2.getElement().getAttribute("Name") + "\n";
+          ddlCommentMark + getAttributeFromObject(node1.getJsonNode(), "Name") + "(" + getAttributeFromObject(node1.getJsonNode(), "SortKey")
+              + ") - " + getAttributeFromObject(node2.getJsonNode(), "Name") + "\n";
     } else {
-      if (node2.getElement().getAttribute("Alias").equals("")) {
-        if (node2.getElement().getAttribute("SortKey").equals("")) {
-          tableName = node2.getElement().getAttribute("Name");
+      if (getAttributeFromObject(node2.getJsonNode(), "Alias").equals("")) {
+        if (getAttributeFromObject(node2.getJsonNode(), "SortKey").equals("")) {
+          tableName = getAttributeFromObject(node2.getJsonNode(), "Name");
         } else {
-          tableName = node2.getElement().getAttribute("SortKey");
+          tableName = getAttributeFromObject(node2.getJsonNode(), "SortKey");
         }
       } else {
-        tableName = node2.getElement().getAttribute("Alias");
+        tableName = getAttributeFromObject(node2.getJsonNode(), "Alias");
       }
       statement =
-          ddlCommentMark + node1.getElement().getAttribute("Name") + "(" + node1.getElement()
-              .getAttribute("SortKey") + ") - " + node2.getElement().getAttribute("Name") + "("
+          ddlCommentMark + getAttributeFromObject(node1.getJsonNode(), "Name") + "(" + getAttributeFromObject(node1.getJsonNode(), "SortKey")
+              + ") - " + getAttributeFromObject(node2.getJsonNode(), "Name") + "("
               + tableName + ")\n";
     }
     //
@@ -10824,44 +10824,43 @@ public class Modeler extends JFrame {
         statement = statement + "," + "\n";
       }
       //
-      if (node3.getElement().getAttribute("Alias").equals("")) {
+      if (getAttributeFromObject(node3.getJsonNode(), "Alias").equals("")) {
         statement =
-            statement + "     " + convertCamelNotation(node3.getElement().getAttribute("Name"));
+            statement + "     " + convertCamelNotation(getAttributeFromObject(node3.getJsonNode(), "Name"));
       } else {
         statement =
-            statement + "     " + convertCamelNotation(node3.getElement().getAttribute("Alias"));
+            statement + "     " + convertCamelNotation(getAttributeFromObject(node3.getJsonNode(), "Alias"));
       }
-      dataTypeElement = dataTypeElementMap.get(node3.getElement().getAttribute("DataTypeID"));
+      dataTypeElement = dataTypeElementMap.get(getAttributeFromObject(node3.getJsonNode(), "DataTypeID"));
       if (dataTypeElement == null) {
         statement = statement + " Invalid data type";
       } else {
-        if (dataTypeElement.getAttribute("SQLExpression").equals("")) {
+        if (getAttributeFromObject(dataTypeElement, "SQLExpression").equals("")) {
           statement = statement + " Invalid data type";
         } else {
-          statement = statement + " " + dataTypeElement.getAttribute("SQLExpression");
+          statement = statement + " " + getAttributeFromObject(dataTypeElement, "SQLExpression");
         }
       }
-      if (!node3.getElement().getAttribute("Default").equals("")) {
-        statement = statement + " DEFAULT " + node3.getElement().getAttribute("Default");
+      if (!getAttributeFromObject(node3.getJsonNode(), "Default").equals("")) {
+        statement = statement + " DEFAULT " + getAttributeFromObject(node3.getJsonNode(), "Default");
       }
-      if (node3.getElement().getAttribute("NotNull").equals("true")) {
+      if (getAttributeFromObject(node3.getJsonNode(), "NotNull").equals("true")) {
         statement = statement + " NOT NULL";
       }
-      if (!node3.getElement().getAttribute("Alias").equals("")
-          && !node3.getElement().getAttribute("Alias")
-          .equals(node3.getElement().getAttribute("Name"))
+      if (!getAttributeFromObject(node3.getJsonNode(), "Alias").equals("")
+          && !getAttributeFromObject(node3.getJsonNode(), "Alias")
+          .equals(getAttributeFromObject(node3.getJsonNode(), "Name"))
           && ddlFieldCommentType.equals("1")) {
-        statement = statement + " COMMENT '" + node3.getElement().getAttribute("Name") + "'";
+        statement = statement + " COMMENT '" + getAttributeFromObject(node3.getJsonNode(), "Name") + "'";
       }
     }
     //
     //Primary/Unique Keys//
     for (int k = 0; k < node2.getChildAt(1).getChildCount(); k++) {
       node3 = (XeadTreeNode) node2.getChildAt(1).getChildAt(k);
-      if (node3.getElement().getAttribute("Type").equals("PK") || node3.getElement()
-          .getAttribute("Type").equals("SK")) {
+      if (getAttributeFromObject(node3.getJsonNode(), "Type").equals("PK") || getAttributeFromObject(node3.getJsonNode(), "Type").equals("SK")) {
         //
-        keyFieldList = node3.getElement().getElementsByTagName("TableKeyField");
+        keyFieldList = getElementsByTagNameFromPojo(node3.getJsonNode(), "TableKeyField");
         sortableDomElementListModel.removeAllElements();
         for (int m = 0; m < keyFieldList.getLength(); m++) {
           sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
@@ -10875,11 +10874,11 @@ public class Modeler extends JFrame {
             statement = statement + ")," + "\n";
           }
           //
-          if (node3.getElement().getAttribute("Type").equals("PK")) {
+          if (getAttributeFromObject(node3.getJsonNode(), "Type").equals("PK")) {
             statement =
                 statement + "CONSTRAINT " + convertCamelNotation(tableName) + "_PK PRIMARY KEY (";
           }
-          if (node3.getElement().getAttribute("Type").equals("SK")) {
+          if (getAttributeFromObject(node3.getJsonNode(), "Type").equals("SK")) {
             indexOfSK++;
             statement = statement + "CONSTRAINT " + convertCamelNotation(tableName) + "_SK"
                 + Integer.toString(indexOfSK) + " UNIQUE (";
@@ -10887,17 +10886,17 @@ public class Modeler extends JFrame {
           //
           sortableDomElementListModel.sortElements();
           for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
-            keyFieldElement = (org.w3c.dom.Element) sortableDomElementListModel.getElementAt(m);
-            node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"),
-                keyFieldElement.getAttribute("FieldID"));
+            keyFieldElement = sortableDomElementListModel.getElementAt(m);
+            node4 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(node2.getJsonNode(), "ID"),
+                getAttributeFromObject(keyFieldElement, "FieldID"));
             if (m > 0) {
               statement = statement + ", ";
             }
-            if (node4.getElement().getAttribute("Alias").equals("")) {
-              statement = statement + convertCamelNotation(node4.getElement().getAttribute("Name"));
+            if (getAttributeFromObject(node4.getJsonNode(), "Alias").equals("")) {
+              statement = statement + convertCamelNotation(getAttributeFromObject(node4.getJsonNode(), "Name"));
             } else {
               statement =
-                  statement + convertCamelNotation(node4.getElement().getAttribute("Alias"));
+                  statement + convertCamelNotation(getAttributeFromObject(node4.getJsonNode(), "Alias"));
             }
           }
         }
@@ -10907,24 +10906,24 @@ public class Modeler extends JFrame {
     //Foreign Keys//
     if (!ignoreForeignKeyConstraints) {
       for (int n = 0; n < relationshipList.getLength(); n++) {
-        relationshipElement = (org.w3c.dom.Element) relationshipList.item(n);
+        relationshipElement = relationshipList.item(n);
         //
-        if (node2.getElement().getAttribute("ID")
-            .equals(relationshipElement.getAttribute("Table2ID"))) {
+        if (getAttributeFromObject(node2.getJsonNode(), "ID")
+            .equals(getAttributeFromObject(relationshipElement, "Table2ID"))) {
           tableKeyNode = getSpecificXeadTreeNode("TableKey",
-              relationshipElement.getAttribute("Table2ID"),
-              relationshipElement.getAttribute("TableKey2ID"));
-          tableKeyElement = tableKeyNode.getElement();
+              getAttributeFromObject(relationshipElement, "Table2ID"),
+              getAttributeFromObject(relationshipElement, "TableKey2ID"));
+          tableKeyElement = tableKeyNode.getJsonNode();
           objectTableNode = getSpecificXeadTreeNode("Table",
-              relationshipElement.getAttribute("Table1ID"), null);
-          objectTableElement = objectTableNode.getElement();
+              getAttributeFromObject(relationshipElement, "Table1ID"), null);
+          objectTableElement = objectTableNode.getJsonNode();
           objectTableKeyNode = getSpecificXeadTreeNode("TableKey",
-              relationshipElement.getAttribute("Table1ID"),
-              relationshipElement.getAttribute("TableKey1ID"));
-          objectTableKeyElement = objectTableKeyNode.getElement();
+              getAttributeFromObject(relationshipElement, "Table1ID"),
+              getAttributeFromObject(relationshipElement, "TableKey1ID"));
+          objectTableKeyElement = objectTableKeyNode.getJsonNode();
           //
-          if (relationshipElement.getAttribute("Type").equals("FAMILY")
-              && relationshipElement.getAttribute("ExistWhen1").equals("")) {
+          if (getAttributeFromObject(relationshipElement, "Type").equals("FAMILY")
+              && getAttributeFromObject(relationshipElement, "ExistWhen1").equals("")) {
             //
             if (firstKeyStatement) {
               statement = statement + "," + "\n";
@@ -10946,9 +10945,9 @@ public class Modeler extends JFrame {
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
-              keyFieldElement = (org.w3c.dom.Element) sortableDomElementListModel.getElementAt(m);
-              node3 = getSpecificXeadTreeNode("TableField", objectTableElement.getAttribute("ID"),
-                  keyFieldElement.getAttribute("FieldID"));
+              keyFieldElement = sortableDomElementListModel.getElementAt(m);
+              node3 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(objectTableElement, "ID"),
+                  getAttributeFromObject(keyFieldElement, "FieldID"));
               if (m > 0) {
                 statement = statement + ", ";
               }
@@ -10956,22 +10955,22 @@ public class Modeler extends JFrame {
               node5 = null;
               numberOfCandidateFields = 0;
               for (int p = 0; p < keyFieldList2.getLength(); p++) {
-                keyFieldElement2 = (org.w3c.dom.Element) keyFieldList2.item(p);
-                node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"),
-                    keyFieldElement2.getAttribute("FieldID"));
-                if (node4.getElement().getAttribute("DataTypeID")
-                    .equals(node3.getElement().getAttribute("DataTypeID"))) {
+                keyFieldElement2 = keyFieldList2.item(p);
+                node4 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(node2.getJsonNode(), "ID"),
+                    getAttributeFromObject(keyFieldElement2, "FieldID"));
+                if (getAttributeFromObject(node4.getJsonNode(), "DataTypeID")
+                    .equals(getAttributeFromObject(node3.getJsonNode(), "DataTypeID"))) {
                   numberOfCandidateFields++;
                   node5 = node4;
                 }
               }
               if (numberOfCandidateFields == 1) {
-                if (node5.getElement().getAttribute("Alias").equals("")) {
+                if (getAttributeFromObject(node5.getJsonNode(), "Alias").equals("")) {
                   statement =
-                      statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
+                      statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Name"));
                 } else {
                   statement =
-                      statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
+                      statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Alias"));
                 }
               } else {
                 //statement = statement + "(?)";
@@ -10980,23 +10979,23 @@ public class Modeler extends JFrame {
                 node5 = null;
                 numberOfCandidateFields = 0;
                 for (int p = 0; p < keyFieldList2.getLength(); p++) {
-                  keyFieldElement2 = (org.w3c.dom.Element) keyFieldList2.item(p);
+                  keyFieldElement2 = keyFieldList2.item(p);
                   node4 = getSpecificXeadTreeNode("TableField",
-                      node2.getElement().getAttribute("ID"),
-                      keyFieldElement2.getAttribute("FieldID"));
-                  if (node4.getElement().getAttribute("Name")
-                      .equals(node3.getElement().getAttribute("Name"))) {
+                      getAttributeFromObject(node2.getJsonNode(), "ID"),
+                      getAttributeFromObject(keyFieldElement2, "FieldID"));
+                  if (getAttributeFromObject(node4.getJsonNode(), "Name")
+                      .equals(getAttributeFromObject(node3.getJsonNode(), "Name"))) {
                     numberOfCandidateFields++;
                     node5 = node4;
                   }
                 }
                 if (numberOfCandidateFields == 1) {
-                  if (node5.getElement().getAttribute("Alias").equals("")) {
+                  if (getAttributeFromObject(node5.getJsonNode(), "Alias").equals("")) {
                     statement =
-                        statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
+                        statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Name"));
                   } else {
                     statement =
-                        statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
+                        statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Alias"));
                   }
                 } else {
                   statement = statement + "(?)";
@@ -11006,42 +11005,42 @@ public class Modeler extends JFrame {
             }
             //
             if (useTableNameAsTableNameInCreateTableStatement) {
-              refferencingTableName = objectTableElement.getAttribute("Name");
+              refferencingTableName = getAttributeFromObject(objectTableElement, "Name");
             } else {
-              if (objectTableElement.getAttribute("Alias").equals("")) {
-                if (objectTableElement.getAttribute("SortKey").equals("")) {
-                  refferencingTableName = objectTableElement.getAttribute("Name");
+              if (getAttributeFromObject(objectTableElement, "Alias").equals("")) {
+                if (getAttributeFromObject(objectTableElement, "SortKey").equals("")) {
+                  refferencingTableName = getAttributeFromObject(objectTableElement, "Name");
                 } else {
-                  refferencingTableName = objectTableElement.getAttribute("SortKey");
+                  refferencingTableName = getAttributeFromObject(objectTableElement, "SortKey");
                 }
               } else {
-                refferencingTableName = objectTableElement.getAttribute("Alias");
+                refferencingTableName = getAttributeFromObject(objectTableElement, "Alias");
               }
             }
             statement =
                 statement + ") REFERENCES " + convertCamelNotation(refferencingTableName) + " (";
             //
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
-              keyFieldElement = (org.w3c.dom.Element) sortableDomElementListModel.getElementAt(m);
-              node4 = getSpecificXeadTreeNode("TableField", objectTableElement.getAttribute("ID"),
-                  keyFieldElement.getAttribute("FieldID"));
+              keyFieldElement = sortableDomElementListModel.getElementAt(m);
+              node4 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(objectTableElement, "ID"),
+                  getAttributeFromObject(keyFieldElement, "FieldID"));
               if (m > 0) {
                 statement = statement + ", ";
               }
-              if (node4.getElement().getAttribute("Alias").equals("")) {
+              if (getAttributeFromObject(node4.getJsonNode(), "Alias").equals("")) {
                 statement =
-                    statement + convertCamelNotation(node4.getElement().getAttribute("Name"));
+                    statement + convertCamelNotation(getAttributeFromObject(node4.getJsonNode(), "Name"));
               } else {
                 statement =
-                    statement + convertCamelNotation(node4.getElement().getAttribute("Alias"));
+                    statement + convertCamelNotation(getAttributeFromObject(node4.getJsonNode(), "Alias"));
               }
             }
           }
           //
-          if ((relationshipElement.getAttribute("Type").equals("REFFER")
-              && relationshipElement.getAttribute("ExistWhen1").equals("")) ||
-              (relationshipElement.getAttribute("Type").equals("SUBTYPE")
-                  && relationshipElement.getAttribute("ExistWhen1").equals(""))) {
+          if ((getAttributeFromObject(relationshipElement, "Type").equals("REFFER")
+              && getAttributeFromObject(relationshipElement, "ExistWhen1").equals("")) ||
+              (getAttributeFromObject(relationshipElement, "Type").equals("SUBTYPE")
+                  && getAttributeFromObject(relationshipElement, "ExistWhen1").equals(""))) {
             //
             if (firstKeyStatement) {
               statement = statement + "," + "\n";
@@ -11063,9 +11062,9 @@ public class Modeler extends JFrame {
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
-              keyFieldElement = (org.w3c.dom.Element) sortableDomElementListModel.getElementAt(m);
-              node3 = getSpecificXeadTreeNode("TableField", objectTableElement.getAttribute("ID"),
-                  keyFieldElement.getAttribute("FieldID"));
+              keyFieldElement = sortableDomElementListModel.getElementAt(m);
+              node3 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(objectTableElement, "ID"),
+                  getAttributeFromObject(keyFieldElement, "FieldID"));
               if (m > 0) {
                 statement = statement + ", ";
               }
@@ -11073,45 +11072,45 @@ public class Modeler extends JFrame {
               node5 = null;
               numberOfCandidateFields = 0;
               for (int p = 0; p < keyFieldList2.getLength(); p++) {
-                keyFieldElement2 = (org.w3c.dom.Element) keyFieldList2.item(p);
-                node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"),
-                    keyFieldElement2.getAttribute("FieldID"));
-                if (node4.getElement().getAttribute("DataTypeID")
-                    .equals(node3.getElement().getAttribute("DataTypeID"))) {
+                keyFieldElement2 = keyFieldList2.item(p);
+                node4 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(node2.getJsonNode(), "ID"),
+                    getAttributeFromObject(keyFieldElement2, "FieldID"));
+                if (getAttributeFromObject(node4.getJsonNode(), "DataTypeID")
+                    .equals(getAttributeFromObject(node3.getJsonNode(), "DataTypeID"))) {
                   numberOfCandidateFields++;
                   node5 = node4;
                 }
               }
               if (numberOfCandidateFields == 1) {
-                if (node5.getElement().getAttribute("Alias").equals("")) {
+                if (getAttributeFromObject(node5.getJsonNode(), "Alias").equals("")) {
                   statement =
-                      statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
+                      statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Name"));
                 } else {
                   statement =
-                      statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
+                      statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Alias"));
                 }
               } else {
                 node4 = null;
                 node5 = null;
                 numberOfCandidateFields = 0;
                 for (int p = 0; p < keyFieldList2.getLength(); p++) {
-                  keyFieldElement2 = (org.w3c.dom.Element) keyFieldList2.item(p);
+                  keyFieldElement2 = keyFieldList2.item(p);
                   node4 = getSpecificXeadTreeNode("TableField",
-                      node2.getElement().getAttribute("ID"),
-                      keyFieldElement2.getAttribute("FieldID"));
-                  if (node4.getElement().getAttribute("Name")
-                      .equals(node3.getElement().getAttribute("Name"))) {
+                      getAttributeFromObject(node2.getJsonNode(), "ID"),
+                      getAttributeFromObject(keyFieldElement2, "FieldID"));
+                  if (getAttributeFromObject(node4.getJsonNode(), "Name")
+                      .equals(getAttributeFromObject(node3.getJsonNode(), "Name"))) {
                     numberOfCandidateFields++;
                     node5 = node4;
                   }
                 }
                 if (numberOfCandidateFields == 1) {
-                  if (node5.getElement().getAttribute("Alias").equals("")) {
+                  if (getAttributeFromObject(node5.getJsonNode(), "Alias").equals("")) {
                     statement =
-                        statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
+                        statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Name"));
                   } else {
                     statement =
-                        statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
+                        statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Alias"));
                   }
                 } else {
                   statement = statement + "(?)";
@@ -11121,16 +11120,16 @@ public class Modeler extends JFrame {
             }
             //
             if (useTableNameAsTableNameInCreateTableStatement) {
-              refferencingTableName = objectTableElement.getAttribute("Name");
+              refferencingTableName = getAttributeFromObject(objectTableElement, "Name");
             } else {
-              if (objectTableElement.getAttribute("Alias").equals("")) {
-                if (objectTableElement.getAttribute("SortKey").equals("")) {
-                  refferencingTableName = objectTableElement.getAttribute("Name");
+              if (getAttributeFromObject(objectTableElement, "Alias").equals("")) {
+                if (getAttributeFromObject(objectTableElement, "SortKey").equals("")) {
+                  refferencingTableName = getAttributeFromObject(objectTableElement, "Name");
                 } else {
-                  refferencingTableName = objectTableElement.getAttribute("SortKey");
+                  refferencingTableName = getAttributeFromObject(objectTableElement, "SortKey");
                 }
               } else {
-                refferencingTableName = objectTableElement.getAttribute("Alias");
+                refferencingTableName = getAttributeFromObject(objectTableElement, "Alias");
               }
             }
             statement =
@@ -11143,39 +11142,39 @@ public class Modeler extends JFrame {
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
-              keyFieldElement = (org.w3c.dom.Element) sortableDomElementListModel.getElementAt(m);
-              node4 = getSpecificXeadTreeNode("TableField", objectTableElement.getAttribute("ID"),
-                  keyFieldElement.getAttribute("FieldID"));
+              keyFieldElement = sortableDomElementListModel.getElementAt(m);
+              node4 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(objectTableElement, "ID"),
+                  getAttributeFromObject(keyFieldElement, "FieldID"));
               if (m > 0) {
                 statement = statement + ", ";
               }
-              if (node4.getElement().getAttribute("Alias").equals("")) {
+              if (getAttributeFromObject(node4.getJsonNode(), "Alias").equals("")) {
                 statement =
-                    statement + convertCamelNotation(node4.getElement().getAttribute("Name"));
+                    statement + convertCamelNotation(getAttributeFromObject(node4.getJsonNode(), "Name"));
               } else {
                 statement =
-                    statement + convertCamelNotation(node4.getElement().getAttribute("Alias"));
+                    statement + convertCamelNotation(getAttributeFromObject(node4.getJsonNode(), "Alias"));
               }
             }
           }
         }
         //
-        if (node2.getElement().getAttribute("ID")
-            .equals(relationshipElement.getAttribute("Table1ID"))) {
-          if (relationshipElement.getAttribute("Type").equals("SUBTYPE")
-              && relationshipElement.getAttribute("ExistWhen2").equals("")) {
+        if (getAttributeFromObject(node2.getJsonNode(), "ID")
+            .equals(getAttributeFromObject(relationshipElement, "Table1ID"))) {
+          if (getAttributeFromObject(relationshipElement, "Type").equals("SUBTYPE")
+              && getAttributeFromObject(relationshipElement, "ExistWhen2").equals("")) {
             //
             tableKeyNode = getSpecificXeadTreeNode("TableKey",
-                relationshipElement.getAttribute("Table1ID"),
-                relationshipElement.getAttribute("TableKey1ID"));
-            tableKeyElement = tableKeyNode.getElement();
+                getAttributeFromObject(relationshipElement, "Table1ID"),
+                getAttributeFromObject(relationshipElement, "TableKey1ID"));
+            tableKeyElement = tableKeyNode.getJsonNode();
             objectTableNode = getSpecificXeadTreeNode("Table",
-                relationshipElement.getAttribute("Table2ID"), null);
-            objectTableElement = objectTableNode.getElement();
+                getAttributeFromObject(relationshipElement, "Table2ID"), null);
+            objectTableElement = objectTableNode.getJsonNode();
             objectTableKeyNode = getSpecificXeadTreeNode("TableKey",
-                relationshipElement.getAttribute("Table2ID"),
-                relationshipElement.getAttribute("TableKey2ID"));
-            objectTableKeyElement = objectTableKeyNode.getElement();
+                getAttributeFromObject(relationshipElement, "Table2ID"),
+                getAttributeFromObject(relationshipElement, "TableKey2ID"));
+            objectTableKeyElement = objectTableKeyNode.getJsonNode();
             //
             if (firstKeyStatement) {
               statement = statement + "," + "\n";
@@ -11197,9 +11196,9 @@ public class Modeler extends JFrame {
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
-              keyFieldElement = (org.w3c.dom.Element) sortableDomElementListModel.getElementAt(m);
-              node3 = getSpecificXeadTreeNode("TableField", objectTableElement.getAttribute("ID"),
-                  keyFieldElement.getAttribute("FieldID"));
+              keyFieldElement = sortableDomElementListModel.getElementAt(m);
+              node3 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(objectTableElement, "ID"),
+                  getAttributeFromObject(keyFieldElement, "FieldID"));
               if (m > 0) {
                 statement = statement + ", ";
               }
@@ -11207,11 +11206,11 @@ public class Modeler extends JFrame {
               node5 = null;
               numberOfCandidateFields = 0;
               for (int p = 0; p < keyFieldList2.getLength(); p++) {
-                keyFieldElement2 = (org.w3c.dom.Element) keyFieldList2.item(p);
-                node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"),
-                    keyFieldElement2.getAttribute("FieldID"));
-                if (node4.getElement().getAttribute("DataTypeID")
-                    .equals(node3.getElement().getAttribute("DataTypeID"))) {
+                keyFieldElement2 = keyFieldList2.item(p);
+                node4 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(node2.getJsonNode(), "ID"),
+                    getAttributeFromObject(keyFieldElement2, "FieldID"));
+                if (getAttributeFromObject(node4.getJsonNode(), "DataTypeID")
+                    .equals(getAttributeFromObject(node3.getJsonNode(), "DataTypeID"))) {
                   numberOfCandidateFields++;
                   node5 = node4;
                 }
@@ -11222,12 +11221,12 @@ public class Modeler extends JFrame {
                   warningHasOccured = true;
                   ignoreKeyDefinitionWarnings = false;
                 } else {
-                  if (node5.getElement().getAttribute("Alias").equals("")) {
+                  if (getAttributeFromObject(node5.getJsonNode(), "Alias").equals("")) {
                     statement =
-                        statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
+                        statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Name"));
                   } else {
                     statement =
-                        statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
+                        statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Alias"));
                   }
                 }
               } else {
@@ -11235,23 +11234,23 @@ public class Modeler extends JFrame {
                 node5 = null;
                 numberOfCandidateFields = 0;
                 for (int p = 0; p < keyFieldList2.getLength(); p++) {
-                  keyFieldElement2 = (org.w3c.dom.Element) keyFieldList2.item(p);
+                  keyFieldElement2 = keyFieldList2.item(p);
                   node4 = getSpecificXeadTreeNode("TableField",
-                      node2.getElement().getAttribute("ID"),
-                      keyFieldElement2.getAttribute("FieldID"));
-                  if (node4.getElement().getAttribute("Name")
-                      .equals(node3.getElement().getAttribute("Name"))) {
+                      getAttributeFromObject(node2.getJsonNode(), "ID"),
+                      getAttributeFromObject(keyFieldElement2, "FieldID"));
+                  if (getAttributeFromObject(node4.getJsonNode(), "Name")
+                      .equals(getAttributeFromObject(node3.getJsonNode(), "Name"))) {
                     numberOfCandidateFields++;
                     node5 = node4;
                   }
                 }
                 if (numberOfCandidateFields == 1) {
-                  if (node5.getElement().getAttribute("Alias").equals("")) {
+                  if (getAttributeFromObject(node5.getJsonNode(), "Alias").equals("")) {
                     statement =
-                        statement + convertCamelNotation(node5.getElement().getAttribute("Name"));
+                        statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Name"));
                   } else {
                     statement =
-                        statement + convertCamelNotation(node5.getElement().getAttribute("Alias"));
+                        statement + convertCamelNotation(getAttributeFromObject(node5.getJsonNode(), "Alias"));
                   }
                 } else {
                   statement = statement + "(?)";
@@ -11261,16 +11260,16 @@ public class Modeler extends JFrame {
             }
             //
             if (useTableNameAsTableNameInCreateTableStatement) {
-              refferencingTableName = objectTableElement.getAttribute("Name");
+              refferencingTableName = getAttributeFromObject(objectTableElement, "Name");
             } else {
-              if (objectTableElement.getAttribute("Alias").equals("")) {
-                if (objectTableElement.getAttribute("SortKey").equals("")) {
-                  refferencingTableName = objectTableElement.getAttribute("Name");
+              if (getAttributeFromObject(objectTableElement, "Alias").equals("")) {
+                if (getAttributeFromObject(objectTableElement, "SortKey").equals("")) {
+                  refferencingTableName = getAttributeFromObject(objectTableElement, "Name");
                 } else {
-                  refferencingTableName = objectTableElement.getAttribute("SortKey");
+                  refferencingTableName = getAttributeFromObject(objectTableElement, "SortKey");
                 }
               } else {
-                refferencingTableName = objectTableElement.getAttribute("Alias");
+                refferencingTableName = getAttributeFromObject(objectTableElement, "Alias");
               }
             }
             statement =
@@ -11283,18 +11282,18 @@ public class Modeler extends JFrame {
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
-              keyFieldElement = (org.w3c.dom.Element) sortableDomElementListModel.getElementAt(m);
-              node4 = getSpecificXeadTreeNode("TableField", objectTableElement.getAttribute("ID"),
-                  keyFieldElement.getAttribute("FieldID"));
+              keyFieldElement = sortableDomElementListModel.getElementAt(m);
+              node4 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(objectTableElement, "ID"),
+                  getAttributeFromObject(keyFieldElement, "FieldID"));
               if (m > 0) {
                 statement = statement + ", ";
               }
-              if (node4.getElement().getAttribute("Alias").equals("")) {
+              if (getAttributeFromObject(node4.getJsonNode(), "Alias").equals("")) {
                 statement =
-                    statement + convertCamelNotation(node4.getElement().getAttribute("Name"));
+                    statement + convertCamelNotation(getAttributeFromObject(node4.getJsonNode(), "Name"));
               } else {
                 statement =
-                    statement + convertCamelNotation(node4.getElement().getAttribute("Alias"));
+                    statement + convertCamelNotation(getAttributeFromObject(node4.getJsonNode(), "Alias"));
               }
             }
           }
@@ -11324,13 +11323,13 @@ public class Modeler extends JFrame {
     int indexCount = 0;
     for (int k = 0; k < node2.getChildAt(1).getChildCount(); k++) {
       node3 = (XeadTreeNode) node2.getChildAt(1).getChildAt(k);
-      if (node3.getElement().getAttribute("Type").equals("XK")) {
+      if (getAttributeFromObject(node3.getJsonNode(), "Type").equals("XK")) {
 
         indexCount++;
         statement =
             statement + "CREATE INDEX " + tableName + "_XK" + indexCount + " ON " + tableName + "(";
 
-        keyFieldList = node3.getElement().getElementsByTagName("TableKeyField");
+        keyFieldList = getElementsByTagNameFromPojo(node3.getJsonNode(), "TableKeyField");
         sortableDomElementListModel.removeAllElements();
         for (int m = 0; m < keyFieldList.getLength(); m++) {
           sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
@@ -11338,19 +11337,19 @@ public class Modeler extends JFrame {
         if (sortableDomElementListModel.getSize() > 0) {
           sortableDomElementListModel.sortElements();
           for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
-            keyFieldElement = (org.w3c.dom.Element) sortableDomElementListModel.getElementAt(m);
-            node4 = getSpecificXeadTreeNode("TableField", node2.getElement().getAttribute("ID"),
-                keyFieldElement.getAttribute("FieldID"));
+            keyFieldElement = sortableDomElementListModel.getElementAt(m);
+            node4 = getSpecificXeadTreeNode("TableField", getAttributeFromObject(node2.getJsonNode(), "ID"),
+                getAttributeFromObject(keyFieldElement, "FieldID"));
             if (m > 0) {
               statement = statement + ", ";
             }
-            if (node4.getElement().getAttribute("Alias").equals("")) {
-              statement = statement + convertCamelNotation(node4.getElement().getAttribute("Name"));
+            if (getAttributeFromObject(node4.getJsonNode(), "Alias").equals("")) {
+              statement = statement + convertCamelNotation(getAttributeFromObject(node4.getJsonNode(), "Name"));
             } else {
               statement =
-                  statement + convertCamelNotation(node4.getElement().getAttribute("Alias"));
+                  statement + convertCamelNotation(getAttributeFromObject(node4.getJsonNode(), "Alias"));
             }
-            if (keyFieldElement.getAttribute("AscDesc").equals("D")) {
+            if (getAttributeFromObject(keyFieldElement, "AscDesc").equals("D")) {
               statement = statement + " DESC ";
             }
           }
@@ -11361,14 +11360,14 @@ public class Modeler extends JFrame {
     //
     if (ddlFieldCommentType.equals("2")) {
       statement = statement + "\nCOMMENT ON TABLE "
-          + convertCamelNotation(node2.getElement().getAttribute("SortKey")) + " is '"
-          + convertCamelNotation(node2.getElement().getAttribute("Name")) + "';\n";
+          + convertCamelNotation(getAttributeFromObject(node2.getJsonNode(), "SortKey")) + " is '"
+          + convertCamelNotation(getAttributeFromObject(node2.getJsonNode(), "Name")) + "';\n";
       for (int k = 0; k < node2.getChildAt(0).getChildCount(); k++) {
         node3 = (XeadTreeNode) node2.getChildAt(0).getChildAt(k);
         statement = statement + "COMMENT ON COLUMN "
-            + convertCamelNotation(node2.getElement().getAttribute("SortKey"))
-            + "." + convertCamelNotation(node3.getElement().getAttribute("Alias"))
-            + " is '" + convertCamelNotation(node3.getElement().getAttribute("Name")) + "';\n";
+            + convertCamelNotation(getAttributeFromObject(node2.getJsonNode(), "SortKey"))
+            + "." + convertCamelNotation(getAttributeFromObject(node3.getJsonNode(), "Alias"))
+            + " is '" + convertCamelNotation(getAttributeFromObject(node3.getJsonNode(), "Name")) + "';\n";
       }
     }
     //
