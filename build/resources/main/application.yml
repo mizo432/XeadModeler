@@ -1,8 +1,0 @@
-# XEAD Modeler - Spring Boot Configuration
-# ロギングは SLF4J + Logback を使用 (logback-spring.xml 参照)
-
-spring:
-  application:
-    name: XeadModeler
-  main:
-    web-application-type: none
