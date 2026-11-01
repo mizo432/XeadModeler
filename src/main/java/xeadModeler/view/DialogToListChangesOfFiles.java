@@ -946,7 +946,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 					frame_.sortableDomElementListModel.removeAllElements();
 					keyFieldList = keyNode.getElement().getElementsByTagName("TableKeyField");
 					for (int m = 0; m < keyFieldList.getLength(); m++) {
-						frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+						frame_.sortableDomElementListModel.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)keyFieldList.item(m)).getJsonNode());
 					}
 					if (frame_.sortableDomElementListModel.getSize() > 0) {
 						frame_.sortableDomElementListModel.sortElements();
@@ -1223,7 +1223,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 		NodeList keyFieldList = keyElement.getElementsByTagName("TableKeyField");
 		frame_.sortableDomElementListModel.removeAllElements();
 		for (int m = 0; m < keyFieldList.getLength(); m++) {
-			frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+			frame_.sortableDomElementListModel.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)keyFieldList.item(m)).getJsonNode());
 		}
 		if (frame_.sortableDomElementListModel.getSize() > 0) {
 			frame_.sortableDomElementListModel.sortElements();
@@ -1330,7 +1330,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 				NodeList keyFieldList = workElement.getElementsByTagName("TableKeyField");
 				frame_.sortableDomElementListModel.removeAllElements();
 				for (int m = 0; m < keyFieldList.getLength(); m++) {
-					frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+					frame_.sortableDomElementListModel.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)keyFieldList.item(m)).getJsonNode());
 				}
 				if (frame_.sortableDomElementListModel.getSize() > 0) {
 					frame_.sortableDomElementListModel.sortElements();
@@ -1388,7 +1388,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 						NodeList keyFieldList = workElement.getElementsByTagName("TableKeyField");
 						frame_.sortableDomElementListModel.removeAllElements();
 						for (int m = 0; m < keyFieldList.getLength(); m++) {
-							frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+							frame_.sortableDomElementListModel.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)keyFieldList.item(m)).getJsonNode());
 						}
 						if (frame_.sortableDomElementListModel.getSize() > 0) {
 							frame_.sortableDomElementListModel.sortElements();
@@ -1434,7 +1434,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 				NodeList keyFieldList = workElement.getElementsByTagName("TableKeyField");
 				frame_.sortableDomElementListModel.removeAllElements();
 				for (int m = 0; m < keyFieldList.getLength(); m++) {
-					frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+					frame_.sortableDomElementListModel.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)keyFieldList.item(m)).getJsonNode());
 				}
 				if (frame_.sortableDomElementListModel.getSize() > 0) {
 					frame_.sortableDomElementListModel.sortElements();
@@ -1492,7 +1492,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 						NodeList keyFieldList = workElement.getElementsByTagName("TableKeyField");
 						frame_.sortableDomElementListModel.removeAllElements();
 						for (int m = 0; m < keyFieldList.getLength(); m++) {
-							frame_.sortableDomElementListModel.addElement((Object)keyFieldList.item(m));
+							frame_.sortableDomElementListModel.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)keyFieldList.item(m)).getJsonNode());
 						}
 						if (frame_.sortableDomElementListModel.getSize() > 0) {
 							frame_.sortableDomElementListModel.sortElements();

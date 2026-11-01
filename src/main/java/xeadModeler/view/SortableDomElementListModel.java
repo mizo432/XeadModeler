@@ -27,6 +27,11 @@ public class SortableDomElementListModel extends DefaultListModel<XeadElement> {
         super.addElement(xeadElement);
     }
 
+    public void addElementFromPojo(Object pojo) {
+        XeadElement xeadElement = new XeadElement(pojo);
+        super.addElement(xeadElement);
+    }
+
     public void sortElements() {
         ArrayList<XeadElement> list = new ArrayList<>();
         for (int i = 0; i < this.getSize(); i++) {

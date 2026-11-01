@@ -67,6 +67,7 @@ import org.w3c.dom.NodeList;
 import xeadModeler.controller.FileController;
 import xeadModeler.controller.TreeController;
 import xeadModeler.model.XeadDocumentModel;
+import xeadModeler.model.XeadElement;
 import xeadModeler.model.json.DataType;
 import xeadModeler.model.json.Department;
 import xeadModeler.model.json.FunctionType;
@@ -109,6 +110,8 @@ import xeadModeler.view.DialogDataflowNode;
 import xeadModeler.view.DialogDocuments;
 import xeadModeler.view.DialogEditInstanceOnDatamodel;
 import xeadModeler.view.DialogImportSQL;
+import xeadModeler.view.SortableDomElementListModel;
+import xeadModeler.view.SortableDomElementFieldListModel;
 import xeadModeler.view.DialogImportXEAD;
 import xeadModeler.view.DialogImportXEAF;
 import xeadModeler.view.DialogMatrixList;
@@ -6607,7 +6610,7 @@ public class Modeler extends JFrame {
         for (xeadModeler.model.json.Table table : xeadSystem.getTables()) {
           if (table.getTableFields() != null) {
             for (xeadModeler.model.json.TableField tableField : table.getTableFields()) {
-              sortableDomElementFieldListModel.addElement((Object) tableField);
+              sortableDomElementFieldListModel.addElementFromPojo(tableField);
               if (this.isVisible()) {
                 jProgressBar.setValue(jProgressBar.getValue() + 1);
                 jProgressBar.paintImmediately(0, 0, jProgressBar.getWidth(), jProgressBar.getHeight());
@@ -6880,7 +6883,7 @@ public class Modeler extends JFrame {
         .getElementsByTagName("TaskFunctionIO");
     sortableDomElementListModel.removeAllElements();
     for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-      sortableDomElementListModel.addElement((Object) taskFunctionIOList.item(i));
+      sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
     }
     sortableDomElementListModel.sortElements();
     for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -9054,7 +9057,7 @@ public class Modeler extends JFrame {
               .getElementsByTagName("IOPanelField");
           sortableDomElementListModel.removeAllElements();
           for (int j = 0; j < fieldList.getLength(); j++) {
-            sortableDomElementListModel.addElement((Object) fieldList.item(j));
+            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(j)).getJsonNode());
           }
           sortableDomElementListModel.sortElements();
           for (int j = 0; j < sortableDomElementListModel.getSize(); j++) {
@@ -9074,7 +9077,7 @@ public class Modeler extends JFrame {
               .getElementsByTagName("IOSpoolField");
           sortableDomElementListModel.removeAllElements();
           for (int j = 0; j < fieldList.getLength(); j++) {
-            sortableDomElementListModel.addElement((Object) fieldList.item(j));
+            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(j)).getJsonNode());
           }
           sortableDomElementListModel.sortElements();
           for (int j = 0; j < sortableDomElementListModel.getSize(); j++) {
@@ -9094,7 +9097,7 @@ public class Modeler extends JFrame {
               .getElementsByTagName("IOWebPageField");
           sortableDomElementListModel.removeAllElements();
           for (int j = 0; j < fieldList.getLength(); j++) {
-            sortableDomElementListModel.addElement((Object) fieldList.item(j));
+            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(j)).getJsonNode());
           }
           sortableDomElementListModel.sortElements();
           for (int j = 0; j < sortableDomElementListModel.getSize(); j++) {
@@ -10525,7 +10528,7 @@ public class Modeler extends JFrame {
         keyFieldList = node3.getElement().getElementsByTagName("TableKeyField");
         sortableDomElementListModel.removeAllElements();
         for (int m = 0; m < keyFieldList.getLength(); m++) {
-          sortableDomElementListModel.addElement((Object) keyFieldList.item(m));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
         }
         if (sortableDomElementListModel.getSize() > 0) {
           //
@@ -10603,7 +10606,7 @@ public class Modeler extends JFrame {
             //
             sortableDomElementListModel.removeAllElements();
             for (int m = 0; m < keyFieldList.getLength(); m++) {
-              sortableDomElementListModel.addElement((Object) keyFieldList.item(m));
+              sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
@@ -10720,7 +10723,7 @@ public class Modeler extends JFrame {
             //
             sortableDomElementListModel.removeAllElements();
             for (int m = 0; m < keyFieldList.getLength(); m++) {
-              sortableDomElementListModel.addElement((Object) keyFieldList.item(m));
+              sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
@@ -10800,7 +10803,7 @@ public class Modeler extends JFrame {
             keyFieldList = objectTableKeyElement.getElementsByTagName("TableKeyField");
             sortableDomElementListModel.removeAllElements();
             for (int m = 0; m < keyFieldList.getLength(); m++) {
-              sortableDomElementListModel.addElement((Object) keyFieldList.item(m));
+              sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
@@ -10854,7 +10857,7 @@ public class Modeler extends JFrame {
             //
             sortableDomElementListModel.removeAllElements();
             for (int m = 0; m < keyFieldList.getLength(); m++) {
-              sortableDomElementListModel.addElement((Object) keyFieldList.item(m));
+              sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
@@ -10940,7 +10943,7 @@ public class Modeler extends JFrame {
             keyFieldList = objectTableKeyElement.getElementsByTagName("TableKeyField");
             sortableDomElementListModel.removeAllElements();
             for (int m = 0; m < keyFieldList.getLength(); m++) {
-              sortableDomElementListModel.addElement((Object) keyFieldList.item(m));
+              sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
@@ -10994,7 +10997,7 @@ public class Modeler extends JFrame {
         keyFieldList = node3.getElement().getElementsByTagName("TableKeyField");
         sortableDomElementListModel.removeAllElements();
         for (int m = 0; m < keyFieldList.getLength(); m++) {
-          sortableDomElementListModel.addElement((Object) keyFieldList.item(m));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
         }
         if (sortableDomElementListModel.getSize() > 0) {
           sortableDomElementListModel.sortElements();
@@ -11935,94 +11938,6 @@ public class Modeler extends JFrame {
       while (it.hasNext()) {
         this.addElement(it.next());
       }
-    }
-  }
-
-  /**
-   * Class of DOM-element-model to sort elements by its "SortKey"
-   */
-  public class SortableDomElementListModel extends DefaultListModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public void addElement(Object object) {
-      XeadElement element = new XeadElement((org.w3c.dom.Element) object);
-      super.addElement(element);
-    }
-
-    public void sortElements() {
-//			TreeSet<org.w3c.dom.Element> treeSet = new TreeSet<org.w3c.dom.Element>(new ElementComparator());
-//			int elementCount = this.getSize();
-//			org.w3c.dom.Element domElement;
-//			for (int i = 0; i < elementCount; i++) {
-//				domElement = (org.w3c.dom.Element)this.getElementAt(i);
-//				treeSet.add(domElement);
-//			}
-//			this.removeAllElements();
-//			Iterator<org.w3c.dom.Element> it = treeSet.iterator();
-//			while( it.hasNext() ){
-//				domElement = (org.w3c.dom.Element)it.next();
-//				this.addElement(domElement);
-//			}
-      ArrayList<XeadElement> list = new ArrayList<XeadElement>();
-      for (int i = 0; i < this.getSize(); i++) {
-        list.add((XeadElement) super.getElementAt(i));
-      }
-      this.removeAllElements();
-      Collections.sort(list);
-      Iterator<XeadElement> it = list.iterator();
-      while (it.hasNext()) {
-        super.addElement(it.next());
-      }
-    }
-
-    public Object getElementAt(int index) {
-      XeadElement element = (XeadElement) super.getElementAt(index);
-      return element.getElement();
-    }
-  }
-
-  /**
-   * Class of DOM-element-model to sort field elements by its "Alias"
-   */
-  public class SortableDomElementFieldListModel extends DefaultListModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public void addElement(Object object) {
-      XeadFieldElement element = new XeadFieldElement((org.w3c.dom.Element) object);
-      super.addElement((Object) element);
-    }
-
-    public void sortElements() {
-//			TreeSet<org.w3c.dom.Element> treeSet = new TreeSet<org.w3c.dom.Element>(new ElementFieldComparator());
-//			int elementCount = this.getSize();
-//			org.w3c.dom.Element domElement;
-//			for (int i = 0; i < elementCount; i++) {
-//				domElement = (org.w3c.dom.Element)this.getElementAt(i);
-//				treeSet.add(domElement);
-//			}
-//			this.removeAllElements();
-//			Iterator<org.w3c.dom.Element> it = treeSet.iterator();
-//			while( it.hasNext() ){
-//				domElement = (org.w3c.dom.Element)it.next();
-//				this.addElement(domElement);
-//			}
-      ArrayList<XeadFieldElement> list = new ArrayList<XeadFieldElement>();
-      for (int i = 0; i < this.getSize(); i++) {
-        list.add((XeadFieldElement) super.getElementAt(i));
-      }
-      this.removeAllElements();
-      Collections.sort(list);
-      Iterator<XeadFieldElement> it = list.iterator();
-      while (it.hasNext()) {
-        super.addElement(it.next());
-      }
-    }
-
-    public Object getElementAt(int index) {
-      XeadFieldElement element = (XeadFieldElement) super.getElementAt(index);
-      return element.getElement();
     }
   }
 
@@ -17789,7 +17704,7 @@ public class Modeler extends JFrame {
       } else {
         SortableDomElementListModel sortableDomElementListModel = new SortableDomElementListModel();
         for (int i = 0; i < nodeList.getLength(); i++) {
-          sortableDomElementListModel.addElement((Object) nodeList.item(i));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList.item(i)).getJsonNode());
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -19167,51 +19082,6 @@ public class Modeler extends JFrame {
   } //End of Class XeadPagePrinter//
 
   /**
-   * Class of Comparable Element (sorted by "SortKey")
-   */
-  class XeadElement implements Comparable {
-
-    private org.w3c.dom.Element domNode_;
-
-    public XeadElement(org.w3c.dom.Element node) {
-      super();
-      domNode_ = node;
-    }
-
-    public org.w3c.dom.Element getElement() {
-      return domNode_;
-    }
-
-    public int compareTo(Object other) {
-      XeadElement otherNode = (XeadElement) other;
-      return domNode_.getAttribute("SortKey")
-          .compareTo(otherNode.getElement().getAttribute("SortKey"));
-    }
-  }
-
-  /**
-   * Class of Comparable Field Element (sorted by "Alias")
-   */
-  class XeadFieldElement implements Comparable {
-
-    private org.w3c.dom.Element domNode_;
-
-    public XeadFieldElement(org.w3c.dom.Element node) {
-      super();
-      domNode_ = node;
-    }
-
-    public org.w3c.dom.Element getElement() {
-      return domNode_;
-    }
-
-    public int compareTo(Object other) {
-      XeadFieldElement otherNode = (XeadFieldElement) other;
-      return domNode_.getAttribute("Alias").compareTo(otherNode.getElement().getAttribute("Alias"));
-    }
-  }
-
-  /**
    * Wrapper class for JSON POJO lists to mimic NodeList behavior
    */
   class JsonNodeList implements NodeList {
@@ -19243,7 +19113,7 @@ public class Modeler extends JFrame {
   /**
    * Wrapper class for JSON POJO objects to mimic Node behavior
    */
-  class JsonNodeWrapper implements Node {
+  public class JsonNodeWrapper implements Node {
     private Object jsonNode;
 
     public JsonNodeWrapper(Object jsonNode) {
@@ -20150,10 +20020,11 @@ public class Modeler extends JFrame {
           //Get Default DataTypeID//
           sortableDomElementListModel.removeAllElements();
           for (DataType dataType : xeadSystem.getDataTypes()) {
-            sortableDomElementListModel.addElement((Object) dataType);
+            sortableDomElementListModel.addElementFromPojo(dataType);
           }
           sortableDomElementListModel.sortElements();
-          DataType defaultDataType = (DataType) sortableDomElementListModel.getElementAt(0);
+          XeadElement xeadElement = sortableDomElementListModel.getElementAt(0);
+          DataType defaultDataType = (DataType) xeadElement.getPojo();
           String defaultDataTypeID = defaultDataType.getId();
 
           //Get biggest values of field ID and SortKey in the Table//
@@ -21999,7 +21870,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("Department");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElement((Object) nodeList1.item(i));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22054,7 +21925,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("TaskType");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElement((Object) nodeList1.item(i));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22109,7 +21980,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("TableType");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElement((Object) nodeList1.item(i));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22164,7 +22035,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("DataType");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElement((Object) nodeList1.item(i));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22207,7 +22078,7 @@ public class Modeler extends JFrame {
             NodeList fieldList = domDocument.getElementsByTagName("TableField");
             sortableDomElementFieldListModel.removeAllElements();
             for (int j = 0; j < fieldList.getLength(); j++) {
-              sortableDomElementFieldListModel.addElement((Object) fieldList.item(j));
+              sortableDomElementFieldListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(j)).getJsonNode());
             }
             sortableDomElementFieldListModel.sortElements();
           } finally {
@@ -22246,7 +22117,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("FunctionType");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElement((Object) nodeList1.item(i));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22301,7 +22172,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("Terms");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElement((Object) nodeList1.item(i));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22354,7 +22225,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("MaintenanceLog");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElement((Object) nodeList1.item(i));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22831,7 +22702,7 @@ public class Modeler extends JFrame {
           .getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) taskFunctionIOList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -23201,7 +23072,7 @@ public class Modeler extends JFrame {
             }
           }
           if (!usedByAnyFunction) {
-            sortableDomElementListModel.addElement((Object) elementFunction);
+            sortableDomElementListModel.addElementFromPojo(elementFunction);
           }
         }
         //
@@ -24284,7 +24155,7 @@ public class Modeler extends JFrame {
       NodeList keyFieldList = this.getElement().getElementsByTagName("TableKeyField");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < keyFieldList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) keyFieldList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -24532,7 +24403,7 @@ public class Modeler extends JFrame {
           if (!nodeFunctionUsedByThis.getElement().getAttribute("SubsystemID").equals(subsystemID)
               &&
               !sortableDomElementListModel.contains((Object) nodeFunctionUsedByThis.getElement())) {
-            sortableDomElementListModel.addElement((Object) nodeFunctionUsedByThis.getElement());
+            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeFunctionUsedByThis.getElement()).getJsonNode());
           }
         }
         //
@@ -24759,7 +24630,7 @@ public class Modeler extends JFrame {
       //
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < functionUsedByThis.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) functionUsedByThis.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) functionUsedByThis.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -25016,7 +24887,7 @@ public class Modeler extends JFrame {
       NodeList fieldList = this.getElement().getElementsByTagName("IOPanelField");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < fieldList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) fieldList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -25164,7 +25035,7 @@ public class Modeler extends JFrame {
       NodeList fieldList = this.getElement().getElementsByTagName("IOSpoolField");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < fieldList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) fieldList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       org.w3c.dom.Element fieldElement;
@@ -25458,7 +25329,7 @@ public class Modeler extends JFrame {
       NodeList fieldList = this.getElement().getElementsByTagName("IOWebPageField");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < fieldList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) fieldList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -25576,7 +25447,7 @@ public class Modeler extends JFrame {
           NodeList keyFieldList = this.getElement().getElementsByTagName("TableKeyField");
           sortableDomElementListModel.removeAllElements();
           for (int i = 0; i < keyFieldList.getLength(); i++) {
-            sortableDomElementListModel.addElement((Object) keyFieldList.item(i));
+            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(i)).getJsonNode());
           }
           sortableDomElementListModel.sortElements();
           for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -28551,7 +28422,7 @@ public class Modeler extends JFrame {
       //Update DOM element of those children node//
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < k; i++) {
-        sortableDomElementListModel.addElement((Object) nodeArray[i].getElement());
+        sortableDomElementListModel.addElementFromPojo(nodeArray[i].jsonNode_);
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -28651,7 +28522,7 @@ public class Modeler extends JFrame {
       NodeList taskFunctionIOList = domNode_.getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) taskFunctionIOList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -33493,7 +33364,7 @@ public class Modeler extends JFrame {
         NodeList nodeList = node.getElement().getElementsByTagName("FunctionUsedByThis");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList.getLength(); i++) {
-          sortableDomElementListModel.addElement((Object) nodeList.item(i));
+          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList.item(i)).getJsonNode());
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -34122,7 +33993,7 @@ public class Modeler extends JFrame {
           element = (org.w3c.dom.Element) nodeList.item(j);
           if (element.getAttribute("DepartmentID")
               .equals(tableRowNumber.getAttribute("ID"))) {
-            sortableDomElementListModel.addElement((Object) element);
+            sortableDomElementListModel.addElementFromPojo(element);
           }
         }
         sortableDomElementListModel.sortElements();
@@ -34215,7 +34086,7 @@ public class Modeler extends JFrame {
           element = (org.w3c.dom.Element) nodeList.item(j);
           if (element.getAttribute("TaskTypeID")
               .equals(tableRowNumber.getAttribute("ID"))) {
-            sortableDomElementListModel.addElement((Object) element);
+            sortableDomElementListModel.addElementFromPojo(element);
           }
         }
         sortableDomElementListModel.sortElements();
@@ -34308,7 +34179,7 @@ public class Modeler extends JFrame {
           element = (org.w3c.dom.Element) nodeList.item(j);
           if (element.getAttribute("TableTypeID")
               .equals(tableRowNumber.getAttribute("ID"))) {
-            sortableDomElementListModel.addElement((Object) element);
+            sortableDomElementListModel.addElementFromPojo(element);
           }
         }
         sortableDomElementListModel.sortElements();
@@ -34558,7 +34429,7 @@ public class Modeler extends JFrame {
           element = (org.w3c.dom.Element) nodeList.item(j);
           if (element.getAttribute("FunctionTypeID")
               .equals(tableRowNumber.getAttribute("ID"))) {
-            sortableDomElementListModel.addElement((Object) element);
+            sortableDomElementListModel.addElementFromPojo(element);
           }
         }
         sortableDomElementListModel.sortElements();
@@ -37955,7 +37826,7 @@ public class Modeler extends JFrame {
           .getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) taskFunctionIOList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       int lastSortKey = 0;
@@ -37976,7 +37847,7 @@ public class Modeler extends JFrame {
           .getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) taskFunctionIOList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       int workSortKey = 0;
@@ -38053,7 +37924,7 @@ public class Modeler extends JFrame {
           .getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) taskFunctionIOList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -38070,7 +37941,7 @@ public class Modeler extends JFrame {
       taskFunctionIOList = currentMainTreeNode.getElement().getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) taskFunctionIOList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       int workSortKey = 0;
@@ -39728,7 +39599,7 @@ public class Modeler extends JFrame {
               .getElementsByTagName("TableKeyField");
           sortableDomElementListModel.removeAllElements();
           for (int i = 0; i < keyFieldList.getLength(); i++) {
-            sortableDomElementListModel.addElement((Object) keyFieldList.item(i));
+            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(i)).getJsonNode());
           }
           //
           sortableDomElementListModel.sortElements();
@@ -39968,7 +39839,7 @@ public class Modeler extends JFrame {
               .getElementsByTagName("FunctionUsedByThis");
           sortableDomElementListModel.removeAllElements();
           for (int i = 0; i < functionsUsedByThis.getLength(); i++) {
-            sortableDomElementListModel.addElement((Object) functionsUsedByThis.item(i));
+            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) functionsUsedByThis.item(i)).getJsonNode());
           }
           //
           sortableDomElementListModel.sortElements();
@@ -40635,7 +40506,7 @@ public class Modeler extends JFrame {
       this.removeAll();
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < nodeList.getLength(); i++) {
-        sortableDomElementListModel.addElement((Object) nodeList.item(i));
+        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList.item(i)).getJsonNode());
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {

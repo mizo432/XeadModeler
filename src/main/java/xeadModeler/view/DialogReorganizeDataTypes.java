@@ -49,7 +49,7 @@ import xeadModeler.Modeler;
 import xeadModeler.Modeler.XeadTreeNode;
 import xeadModeler.Modeler.TableModelReadOnlyList;
 import xeadModeler.Modeler.CheckBoxHeaderRenderer;
-import xeadModeler.Modeler.SortableDomElementFieldListModel;
+import xeadModeler.view.SortableDomElementFieldListModel;
 import xeadModeler.Modeler.DataTypePopupMenu;
 import xeadModeler.Modeler_FocusListener;
 
@@ -328,7 +328,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 			dataTypePopupMenu.initializeMenuItem(dataTypeList);
 			frame_.sortableDomElementListModel.removeAllElements();
 			for (int i = 0; i < dataTypeList.getLength(); i++) {
-				frame_.sortableDomElementListModel.addElement((Object)dataTypeList.item(i));
+				frame_.sortableDomElementListModel.addElementFromPojo(((Modeler.JsonNodeWrapper)dataTypeList.item(i)).getJsonNode());
 			}
 			frame_.sortableDomElementListModel.sortElements();
 			for (int i = 0; i < frame_.sortableDomElementListModel.getSize(); i++) {
@@ -798,7 +798,7 @@ public class DialogReorganizeDataTypes extends JDialog {
 			this.removeAll();
 			frame_.sortableDomElementListModel.removeAllElements();
 			for (int i = 0; i < nodeList.getLength(); i++) {
-				frame_.sortableDomElementListModel.addElement((Object)nodeList.item(i));
+				frame_.sortableDomElementListModel.addElementFromPojo(((Modeler.JsonNodeWrapper)nodeList.item(i)).getJsonNode());
 			}
 			frame_.sortableDomElementListModel.sortElements();
 			for (int i = 0; i < frame_.sortableDomElementListModel.getSize(); i++) {

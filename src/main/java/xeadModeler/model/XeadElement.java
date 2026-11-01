@@ -14,6 +14,7 @@ import tools.jackson.databind.JsonNode;
 public class XeadElement implements Comparable<XeadElement> {
     private final Element domNode;
     private final JsonNode jsonNode;
+    private final Object pojo; // JSON POJO (Table, Function, etc.)
     
     /**
      * XeadElementを作成します (XML DOM用)
@@ -22,6 +23,7 @@ public class XeadElement implements Comparable<XeadElement> {
     public XeadElement(Element node) {
         this.domNode = node;
         this.jsonNode = null;
+        this.pojo = null;
     }
     
     /**
@@ -31,6 +33,17 @@ public class XeadElement implements Comparable<XeadElement> {
     public XeadElement(JsonNode node) {
         this.domNode = null;
         this.jsonNode = node;
+        this.pojo = null;
+    }
+    
+    /**
+     * XeadElementを作成します (JSON POJO用)
+     * @param pojo ラップするJSON POJO
+     */
+    public XeadElement(Object pojo) {
+        this.domNode = null;
+        this.jsonNode = null;
+        this.pojo = pojo;
     }
     
     /**
@@ -50,6 +63,14 @@ public class XeadElement implements Comparable<XeadElement> {
     }
     
     /**
+     * ラップされているJSON POJOを返します
+     * @return JSON POJO (XMLまたはJsonNodeの場合はnull)
+     */
+    public Object getPojo() {
+        return pojo;
+    }
+    
+    /**
      * SortKey属性の値を取得します
      * @return SortKeyの値
      */
@@ -58,6 +79,14 @@ public class XeadElement implements Comparable<XeadElement> {
             return domNode.getAttribute("SortKey");
         } else if (jsonNode != null && jsonNode.has("sortKey")) {
             return jsonNode.get("sortKey").asText();
+        } else if (pojo != null) {
+            try {
+                java.lang.reflect.Method method = pojo.getClass().getMethod("getSortKey");
+                Object result = method.invoke(pojo);
+                return result != null ? result.toString() : "";
+            } catch (Exception e) {
+                return "";
+            }
         }
         return "";
     }

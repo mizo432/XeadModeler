@@ -27,6 +27,11 @@ public class SortableDomElementFieldListModel extends DefaultListModel<XeadField
         super.addElement(xeadFieldElement);
     }
 
+    public void addElementFromPojo(Object pojo) {
+        XeadFieldElement xeadFieldElement = new XeadFieldElement(pojo);
+        super.addElement(xeadFieldElement);
+    }
+
     public void sortElements() {
         ArrayList<XeadFieldElement> list = new ArrayList<>();
         for (int i = 0; i < this.getSize(); i++) {

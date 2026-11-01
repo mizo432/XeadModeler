@@ -78,10 +78,10 @@ public class DialogMatrixList extends JDialog {
 	private NodeList functionTypeList = null;
 	private int currentRowNumber = 0;
 	private int countOfErrors = 0;
-	private xeadModeler.Modeler.SortableDomElementListModel sortableDomElementListModel0 = null;
-	private xeadModeler.Modeler.SortableDomElementListModel sortableDomElementListModel1 = null;
-	private xeadModeler.Modeler.SortableDomElementListModel sortableDomElementListModel2 = null;
-	private xeadModeler.Modeler.SortableDomElementListModel sortableDomElementListModel3 = null;
+	private SortableDomElementListModel sortableDomElementListModel0 = null;
+	private SortableDomElementListModel sortableDomElementListModel1 = null;
+	private SortableDomElementListModel sortableDomElementListModel2 = null;
+	private SortableDomElementListModel sortableDomElementListModel3 = null;
 	private ArrayList<String> keyList = new ArrayList<String>();
 	private HashMap<String, String> hashKeyList = new HashMap<String, String>();
 
@@ -164,10 +164,10 @@ public class DialogMatrixList extends JDialog {
 		jPanelSouth.add(jButtonCloseDialog, null);
 		jPanelSouth.add(jButtonStart, null);
 		jPanelSouth.add(jProgressBar, null);
-		sortableDomElementListModel0 = frame_.new SortableDomElementListModel();
-		sortableDomElementListModel1 = frame_.new SortableDomElementListModel();
-		sortableDomElementListModel2 = frame_.new SortableDomElementListModel();
-		sortableDomElementListModel3 = frame_.new SortableDomElementListModel();
+		sortableDomElementListModel0 = new SortableDomElementListModel();
+		sortableDomElementListModel1 = new SortableDomElementListModel();
+		sortableDomElementListModel2 = new SortableDomElementListModel();
+		sortableDomElementListModel3 = new SortableDomElementListModel();
 
 		this.setResizable(false);
 		this.setTitle(res.getString("S74"));
@@ -466,7 +466,7 @@ public class DialogMatrixList extends JDialog {
 
 		sortableDomElementListModel0.removeAllElements();
 		for (int i = 0; i < subjectAreaList.getLength(); i++) {
-			sortableDomElementListModel0.addElement((Object)subjectAreaList.item(i));
+			sortableDomElementListModel0.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)subjectAreaList.item(i)).getJsonNode());
 		}
 		sortableDomElementListModel0.sortElements();
 		for (int i = 0; i < sortableDomElementListModel0.getSize(); i++) {
@@ -492,7 +492,7 @@ public class DialogMatrixList extends JDialog {
 		keyList.clear();
 		sortableDomElementListModel0.removeAllElements();
 		for (int i = 0; i < subjectAreaList.getLength(); i++) {
-			sortableDomElementListModel0.addElement((Object)subjectAreaList.item(i));
+			sortableDomElementListModel0.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)subjectAreaList.item(i)).getJsonNode());
 		}
 		sortableDomElementListModel0.sortElements();
 		for (int i = 0; i < sortableDomElementListModel0.getSize(); i++) {
@@ -542,7 +542,7 @@ public class DialogMatrixList extends JDialog {
 		keyList.clear();
 		sortableDomElementListModel0.removeAllElements();
 		for (int i = 0; i < taskList.getLength(); i++) {
-			sortableDomElementListModel0.addElement((Object)taskList.item(i));
+			sortableDomElementListModel0.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)taskList.item(i)).getJsonNode());
 		}
 		sortableDomElementListModel0.sortElements();
 		for (int i = 0; i < sortableDomElementListModel0.getSize(); i++) {
@@ -581,7 +581,7 @@ public class DialogMatrixList extends JDialog {
 		hashKeyList.clear();
 		sortableDomElementListModel0.removeAllElements();
 		for (int i = 0; i < taskList.getLength(); i++) {
-			sortableDomElementListModel0.addElement((Object)taskList.item(i));
+			sortableDomElementListModel0.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)taskList.item(i)).getJsonNode());
 		}
 		sortableDomElementListModel0.sortElements();
 		for (int i = 0; i < sortableDomElementListModel0.getSize(); i++) {
@@ -642,7 +642,7 @@ public class DialogMatrixList extends JDialog {
 		hashKeyList.clear();
 		sortableDomElementListModel0.removeAllElements();
 		for (int i = 0; i < tableList.getLength(); i++) {
-			sortableDomElementListModel0.addElement((Object)tableList.item(i));
+			sortableDomElementListModel0.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)tableList.item(i)).getJsonNode());
 		}
 		sortableDomElementListModel0.sortElements();
 		
@@ -674,13 +674,13 @@ public class DialogMatrixList extends JDialog {
 		sortableDomElementListModel2.removeAllElements();
 		sortableDomElementListModel3.removeAllElements();
 		for (int i = 0; i < taskTypeList.getLength(); i++) {
-			sortableDomElementListModel1.addElement((Object)taskTypeList.item(i));
+			sortableDomElementListModel1.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)taskTypeList.item(i)).getJsonNode());
 		}
 		for (int i = 0; i < roleList.getLength(); i++) {
-			sortableDomElementListModel2.addElement((Object)roleList.item(i));
+			sortableDomElementListModel2.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)roleList.item(i)).getJsonNode());
 		}
 		for (int i = 0; i < taskList.getLength(); i++) {
-			sortableDomElementListModel3.addElement((Object)taskList.item(i));
+			sortableDomElementListModel3.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)taskList.item(i)).getJsonNode());
 		}
 		sortableDomElementListModel1.sortElements();
 		sortableDomElementListModel2.sortElements();
@@ -797,10 +797,10 @@ public class DialogMatrixList extends JDialog {
 		sortableDomElementListModel1.removeAllElements();
 		sortableDomElementListModel2.removeAllElements();
 		for (int i = 0; i < subsystemList.getLength(); i++) {
-			sortableDomElementListModel1.addElement((Object)subsystemList.item(i));
+			sortableDomElementListModel1.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)subsystemList.item(i)).getJsonNode());
 		}
 		for (int i = 0; i < functionList.getLength(); i++) {
-			sortableDomElementListModel2.addElement((Object)functionList.item(i));
+			sortableDomElementListModel2.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)functionList.item(i)).getJsonNode());
 		}
 		sortableDomElementListModel1.sortElements();
 		sortableDomElementListModel2.sortElements();
@@ -862,10 +862,10 @@ public class DialogMatrixList extends JDialog {
 		sortableDomElementListModel1.removeAllElements();
 		sortableDomElementListModel2.removeAllElements();
 		for (int i = 0; i < subsystemList.getLength(); i++) {
-			sortableDomElementListModel1.addElement((Object)subsystemList.item(i));
+			sortableDomElementListModel1.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)subsystemList.item(i)).getJsonNode());
 		}
 		for (int i = 0; i < functionList.getLength(); i++) {
-			sortableDomElementListModel2.addElement((Object)functionList.item(i));
+			sortableDomElementListModel2.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)functionList.item(i)).getJsonNode());
 		}
 		sortableDomElementListModel1.sortElements();
 		sortableDomElementListModel2.sortElements();
@@ -929,10 +929,10 @@ public class DialogMatrixList extends JDialog {
 		sortableDomElementListModel1.removeAllElements();
 		sortableDomElementListModel2.removeAllElements();
 		for (int i = 0; i < subsystemList.getLength(); i++) {
-			sortableDomElementListModel1.addElement((Object)subsystemList.item(i));
+			sortableDomElementListModel1.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)subsystemList.item(i)).getJsonNode());
 		}
 		for (int i = 0; i < tableList.getLength(); i++) {
-			sortableDomElementListModel2.addElement((Object)tableList.item(i));
+			sortableDomElementListModel2.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)tableList.item(i)).getJsonNode());
 		}
 		sortableDomElementListModel1.sortElements();
 		sortableDomElementListModel2.sortElements();
@@ -1011,10 +1011,10 @@ public class DialogMatrixList extends JDialog {
 		sortableDomElementListModel1.removeAllElements();
 		sortableDomElementListModel2.removeAllElements();
 		for (int i = 0; i < subsystemList.getLength(); i++) {
-			sortableDomElementListModel1.addElement((Object)subsystemList.item(i));
+			sortableDomElementListModel1.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)subsystemList.item(i)).getJsonNode());
 		}
 		for (int i = 0; i < functionList.getLength(); i++) {
-			sortableDomElementListModel2.addElement((Object)functionList.item(i));
+			sortableDomElementListModel2.addElementFromPojo(((xeadModeler.Modeler.JsonNodeWrapper)functionList.item(i)).getJsonNode());
 		}
 		sortableDomElementListModel1.sortElements();
 		sortableDomElementListModel2.sortElements();
