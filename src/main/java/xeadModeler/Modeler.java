@@ -112,8 +112,7 @@ import xeadModeler.view.DialogEditInstanceOnDatamodel;
 import xeadModeler.view.DialogImportSQL;
 import xeadModeler.view.SortableDomElementListModel;
 import xeadModeler.view.SortableDomElementFieldListModel;
-// TODO: DialogImportXEADをJSONベースに修正するまでコメントアウト
-// import xeadModeler.view.DialogImportXEAD;
+import xeadModeler.view.DialogImportXEAD;
 import xeadModeler.view.DialogImportXEAF;
 import xeadModeler.view.DialogMatrixList;
 import xeadModeler.view.DialogReorganizeDataTypes;
@@ -325,8 +324,7 @@ public class Modeler extends JFrame {
   public boolean isToConvertCamel = true;
   private DialogMatrixList dialogMatrixList;
   private DialogDocuments dialogDocuments;
-  // TODO: DialogImportXEADをJSONベースに修正するまでコメントアウト
-  // private DialogImportXEAD dialogImportXEAD;
+  private DialogImportXEAD dialogImportXEAD;
   private DialogImportXEAF dialogImportXEAF;
   private DialogImportSQL dialogImportSQL;
   private DialogConfigColors dialogConfigColors;
@@ -1753,8 +1751,7 @@ public class Modeler extends JFrame {
     dialogCreateTableStatement = new DialogCreateTableStatement(this);
     dialogMatrixList = new DialogMatrixList(this);
     dialogDocuments = new DialogDocuments(this);
-    // TODO: DialogImportXEADをJSONベースに修正するまでコメントアウト
-    // dialogImportXEAD = new DialogImportXEAD(this);
+    dialogImportXEAD = new DialogImportXEAD(this);
     dialogImportXEAF = new DialogImportXEAF(this);
     dialogImportSQL = new DialogImportSQL(this);
     dialogConfigColors = new DialogConfigColors(this);
@@ -8798,39 +8795,38 @@ public class Modeler extends JFrame {
     if (rtn1 == 0) {
       String name = specifyNameOfExistingFile(res.getString("S1120"), "xead");
       if (!name.equals("")) {
-        // TODO: DialogImportXEADをJSONベースに修正するまでコメントアウト
-        // String importResult = dialogImportXEAD.request(name);
-        // if (!importResult.equals("")) {
-        //   Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")};
-        //   rtn2 = JOptionPane.showOptionDialog(this, importResult + res.getString("S1110"),
-        //       res.getString("S1108"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
-        //       null, bts, bts[0]);
-        //   try {
-        //     setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        //     if (rtn2 == 0) {
-        //       saveFileWithCurrentFileName(true);
-        //       application.getXeadUndoManager().resetLog();
-        //       changeState.setChanged(false);
-        //     }
-        //     if (rtn2 == 1) {
-        //       name = specifyNameOfNewFile(res.getString("S788"), res.getString("S1125"),
-        //           currentFileName);
-        //       if (!name.equals("")) {
-        //         currentFileName = name;
-        //         this.setTitle(
-        //             DialogAbout.APPLICATION_NAME + " - [" + currentFileName + "] - " + systemName);
-        //         saveFileWithCurrentFileName(false);
-        //         changeState.setChanged(false);
-        //         application.getXeadUndoManager().resetLog();
-        //       }
-        //     }
-        //     setupMainTreeModelWithCurrentFileName();
-        //   } catch (Exception exception) {
-        //     exception.printStackTrace();
-        //   } finally {
-        //     setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        //   }
-        // }
+        String importResult = dialogImportXEAD.request(name);
+        if (!importResult.equals("")) {
+          Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")};
+          rtn2 = JOptionPane.showOptionDialog(this, importResult + res.getString("S1110"),
+              res.getString("S1108"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+              null, bts, bts[0]);
+          try {
+            setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            if (rtn2 == 0) {
+              saveFileWithCurrentFileName(true);
+              application.getXeadUndoManager().resetLog();
+              changeState.setChanged(false);
+            }
+            if (rtn2 == 1) {
+              name = specifyNameOfNewFile(res.getString("S788"), res.getString("S1125"),
+                  currentFileName);
+              if (!name.equals("")) {
+                currentFileName = name;
+                this.setTitle(
+                    DialogAbout.APPLICATION_NAME + " - [" + currentFileName + "] - " + systemName);
+                saveFileWithCurrentFileName(false);
+                changeState.setChanged(false);
+                application.getXeadUndoManager().resetLog();
+              }
+            }
+            setupMainTreeModelWithCurrentFileName();
+          } catch (Exception exception) {
+            exception.printStackTrace();
+          } finally {
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+          }
+        }
       }
     }
   }
@@ -40688,7 +40684,14 @@ public class Modeler extends JFrame {
 
     boolean isSynchError = dialogTableSynchronize.request(currentMainTreeNode);
     if (dialogTableSynchronize.isImported()) {
-      // TODO: 保存処理をJSONベースに修正
+      try {
+        saveFileWithCurrentFileName(true);
+        application.getXeadUndoManager().resetLog();
+        changeState.setChanged(false);
+        setupMainTreeModelWithCurrentFileName();
+      } catch (Exception exception) {
+        exception.printStackTrace();
+      }
     }
   }
 
