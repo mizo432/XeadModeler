@@ -37,11 +37,20 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import org.w3c.dom.*;
 
 import xeadModeler.Modeler;
 import xeadModeler.model.XeadDocumentModel;
 import xeadModeler.model.json.XeadSystem;
+import xeadModeler.model.json.Table;
+import xeadModeler.model.json.TableField;
+import xeadModeler.model.json.TableKey;
+import xeadModeler.model.json.TableKeyField;
+import xeadModeler.model.json.DataType;
+import xeadModeler.model.json.Subsystem;
+import xeadModeler.model.json.SubsystemTable;
+import xeadModeler.model.json.SubsystemRelationship;
+import xeadModeler.model.json.Relationship;
+import xeadModeler.model.json.TableType;
 
 public class DialogImportSQL extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -68,8 +77,8 @@ public class DialogImportSQL extends JDialog {
 	private String textFileName = "";
 	private String importResult = "";
 	private Modeler frame_;
-	private org.w3c.dom.Element systemElement;
-	private org.w3c.dom.Element subsystemElement;
+	private XeadSystem xeadSystem;
+	private Subsystem subsystem;
 	private String subsystemID;
 	private int numberOfTablesCreated = 0;
 	private int numberOfTableRelationshipsCreated = 0;
@@ -81,7 +90,7 @@ public class DialogImportSQL extends JDialog {
 	private String[] sqlDataTypeArray2 = new String[40];
 	private String[] nameArray = new String[1000];
 	private String[] attrArray = new String[1000];
-	private org.w3c.dom.Element[] tableElementArray = new org.w3c.dom.Element[1000];
+	private Table[] tableArray = new Table[1000];
 	private int itemsOfArray = -1;
 	private String[] hideFieldArray = new String[50];
 	private int itemsOfHideFieldArray = -1;
@@ -319,7 +328,6 @@ public class DialogImportSQL extends JDialog {
 
 	public String request(String name) {
 		XeadNode node;
-		NodeList elementList;
 		importResult = "";
 
 		textFileName = name;
@@ -331,9 +339,9 @@ public class DialogImportSQL extends JDialog {
 		}
 
 		comboBoxModelSubsystem.removeAllElements();
-		elementList = frame_.domDocument.getElementsByTagName("Subsystem");
-		for (int i = 0; i < elementList.getLength(); i++) {
-			node = new XeadNode("Subsystem",(org.w3c.dom.Element)elementList.item(i));
+		xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
+		for (Subsystem sub : xeadSystem.getSubsystems()) {
+			node = new XeadNode(sub);
 			comboBoxModelSubsystem.addElement((Object)node);
 		}
 		comboBoxModelSubsystem.sortElements();
@@ -357,8 +365,6 @@ public class DialogImportSQL extends JDialog {
 
 	void jButtonStart_actionPerformed(ActionEvent e) {
 		XeadNode workNode;
-		org.w3c.dom.Element workElement;
-		NodeList elementList;
 		StringBuffer buffer = new StringBuffer();
 		String wrkStr = "";
 
@@ -373,30 +379,28 @@ public class DialogImportSQL extends JDialog {
 			jButtonStart.setVisible(false);
 			jProgressBar.setVisible(true);
 
-			elementList = frame_.domDocument.getElementsByTagName("System");
-			systemElement = (org.w3c.dom.Element)elementList.item(0);
+			// Get the XeadSystem instance
+			xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
 
 			///////////////////////////////////////////
 			// get ID of the subsystem imported into //
 			///////////////////////////////////////////
 			workNode = (XeadNode)comboBoxModelSubsystem.getSelectedItem();
-			subsystemElement = workNode.getElement();
-			subsystemID = subsystemElement.getAttribute("ID");
+			subsystem = workNode.getSubsystem();
+			subsystemID = subsystem.getId();
 
 			////////////////////////////////////////////////////////////////
 			// get ID of the TableType with the smallest value of SortKey //
 			////////////////////////////////////////////////////////////////
 			wrkStr = "";
-			elementList = frame_.domDocument.getElementsByTagName("TableType");
-			for (int i = 0; i < elementList.getLength(); i++) {
-				workElement = (org.w3c.dom.Element)elementList.item(i);
+			for (TableType tableType : xeadSystem.getTableTypes()) {
 				if (wrkStr.equals("")) {
-					wrkStr = workElement.getAttribute("SortKey");
-					defaultTableTypeID = workElement.getAttribute("ID");
+					wrkStr = tableType.getSortKey();
+					defaultTableTypeID = tableType.getId();
 				} else {
-					if (workElement.getAttribute("SortKey").compareTo(wrkStr) < 0) {
-						wrkStr = workElement.getAttribute("SortKey");
-						defaultTableTypeID = workElement.getAttribute("ID");
+					if (tableType.getSortKey().compareTo(wrkStr) < 0) {
+						wrkStr = tableType.getSortKey();
+						defaultTableTypeID = tableType.getId();
 					}
 				}
 			}
@@ -405,16 +409,14 @@ public class DialogImportSQL extends JDialog {
 			// get ID of the DataType with the smallest value of SortKey //
 			///////////////////////////////////////////////////////////////
 			wrkStr = "";
-			elementList = frame_.domDocument.getElementsByTagName("DataType");
-			for (int i = 0; i < elementList.getLength(); i++) {
-				workElement = (org.w3c.dom.Element)elementList.item(i);
+			for (DataType dataType : xeadSystem.getDataTypes()) {
 				if (wrkStr.equals("")) {
-					wrkStr = workElement.getAttribute("SortKey");
-					defaultDataTypeID = workElement.getAttribute("ID");
+					wrkStr = dataType.getSortKey();
+					defaultDataTypeID = dataType.getId();
 				} else {
-					if (workElement.getAttribute("SortKey").compareTo(wrkStr) < 0) {
-						wrkStr = workElement.getAttribute("SortKey");
-						defaultDataTypeID = workElement.getAttribute("ID");
+					if (dataType.getSortKey().compareTo(wrkStr) < 0) {
+						wrkStr = dataType.getSortKey();
+						defaultDataTypeID = dataType.getId();
 					}
 				}
 			}
@@ -480,13 +482,13 @@ public class DialogImportSQL extends JDialog {
 			for (int p = 0; p <= itemsOfArray; p++) {
 				jProgressBar.setValue(jProgressBar.getValue() + 1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-				tableElementArray[p] = createTableDefinition(nameArray[p], attrArray[p]);
+				tableArray[p] = createTableDefinition(nameArray[p], attrArray[p]);
 			}
 
 			for (int p = 0; p <= itemsOfArray; p++) {
 				jProgressBar.setValue(jProgressBar.getValue() + 1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-				createTableRelationship(tableElementArray[p], attrArray[p]);
+				createTableRelationship(tableArray[p], attrArray[p]);
 			}
 
 			importResult = numberOfTablesCreated + res.getString("DialogImportSQL08") +  numberOfTableRelationshipsCreated + res.getString("DialogImportSQL09") +"\n" + "\n";
@@ -528,7 +530,7 @@ public class DialogImportSQL extends JDialog {
 		}
 	}
 
-	org.w3c.dom.Element createTableDefinition(String tableName, String tableAttributes) {
+	Table createTableDefinition(String tableName, String tableAttributes) {
 		Object lastElement;
 		int lastID = 0;
 		String[] fieldArray = new String[1000];
@@ -536,51 +538,51 @@ public class DialogImportSQL extends JDialog {
 		///////////////////////////
 		//Create Table Definition//
 		///////////////////////////
-		org.w3c.dom.Element tableElement = frame_.domDocument.createElement("Table");
+		Table table = new Table();
 		lastElement = getLastDomElementOfTheType("Table");
 		if (lastElement == null) {
 			lastID = 0;
 		} else {
 			lastID = Integer.parseInt(getIdFromObject(lastElement));
 		}
-		tableElement.setAttribute("ID", Integer.toString(lastID + 1));
-		tableElement.setAttribute("Name", tableName);
+		table.setId(Integer.toString(lastID + 1));
+		table.setName(tableName);
 
 		if (jCheckBoxTableNameControl.isSelected()) {
 			tableIDCounter++;
-			tableElement.setAttribute("SortKey", "T" + getFormatted3ByteString(tableIDCounter) + "0");
+			table.setSortKey("T" + getFormatted3ByteString(tableIDCounter) + "0");
 		} else {
-			tableElement.setAttribute("SortKey", tableName);
+			table.setSortKey(tableName);
 		}
-		tableElement.setAttribute("SubsystemID", subsystemID);
-		tableElement.setAttribute("Descriptions", "");
-		tableElement.setAttribute("TableTypeID", defaultTableTypeID);
-		systemElement.appendChild(tableElement);
+		table.setSubsystemId(subsystemID);
+		table.setDescriptions("");
+		table.setTableTypeId(defaultTableTypeID);
+		xeadSystem.getTables().add(table);
 
 		//////////////////////
 		//Create Primary Key//
 		//////////////////////
-		org.w3c.dom.Element primaryKeyElement = frame_.domDocument.createElement("TableKey");
-		primaryKeyElement.setAttribute("ID", "1");
-		primaryKeyElement.setAttribute("SortKey", "000");
-		primaryKeyElement.setAttribute("Type", "PK");
-		tableElement.appendChild(primaryKeyElement);
+		TableKey primaryKey = new TableKey();
+		primaryKey.setId("1");
+		primaryKey.setSortKey("000");
+		primaryKey.setType("PK");
+		table.getTableKeys().add(primaryKey);
 		primaryKeyFieldID = "";
 
 		/////////////////////////////////////
 		//Create Subsystem Table attributes//
 		/////////////////////////////////////
-		org.w3c.dom.Element subsystemTableElement = frame_.domDocument.createElement("SubsystemTable");
-		subsystemTableElement.setAttribute("TableID", tableElement.getAttribute("ID"));
+		SubsystemTable subsystemTable = new SubsystemTable();
+		subsystemTable.setTableId(table.getId());
 		int work = lastID % 10;
 		work = 50 + work * 10;
-		subsystemTableElement.setAttribute("BoxPosition", work + "," + work);
-		subsystemTableElement.setAttribute("ExtDivLoc", "600");
-		subsystemTableElement.setAttribute("IntDivLoc", "300");
-		subsystemTableElement.setAttribute("ShowOnModel", "true");
-		subsystemTableElement.setAttribute("ShowInstance", "false");
-		subsystemTableElement.setAttribute("Instance", "");
-		subsystemElement.appendChild(subsystemTableElement);
+		subsystemTable.setBoxPosition(work + "," + work);
+		subsystemTable.setExtDivLoc("600");
+		subsystemTable.setIntDivLoc("300");
+		subsystemTable.setShowOnModel("true");
+		subsystemTable.setShowInstance("false");
+		subsystemTable.setInstance("");
+		subsystem.getSubsystemTables().add(subsystemTable);
 
 		///////////////////////////////////
 		//Substring attributes into array//
@@ -620,7 +622,7 @@ public class DialogImportSQL extends JDialog {
 			for (j = 0; j < sqlDataTypeArray.length; j++) {
 				if (fieldArray[i].indexOf(sqlDataTypeArray[j], 0) > 0) {
 					sortKey++;
-					createFieldDefinition(tableElement, sortKey, fieldArray[i]);
+					createFieldDefinition(table, sortKey, fieldArray[i]);
 					break;
 				}
 			}
@@ -632,15 +634,15 @@ public class DialogImportSQL extends JDialog {
 		if (primaryKeyFieldID.equals("")) {
 			for (i = 0; i <= itemsOfArray; i++) {
 				if (fieldArray[i].indexOf("PRIMARY KEY", 0) >= 0) {
-					setKeyFieldOfTheKey(primaryKeyElement, tableElement, fieldArray[i]);
+					setKeyFieldOfTheKey(primaryKey, table, fieldArray[i]);
 					break;
 				}
 			}
 		} else {
-			org.w3c.dom.Element keyFieldElement = frame_.domDocument.createElement("TableKeyField");
-			keyFieldElement.setAttribute("FieldID", primaryKeyFieldID);
-			keyFieldElement.setAttribute("SortKey", "0010");
-			primaryKeyElement.appendChild(keyFieldElement);
+			TableKeyField keyField = new TableKeyField();
+			keyField.setFieldId(primaryKeyFieldID);
+			keyField.setSortKey("0010");
+			primaryKey.getTableKeyFields().add(keyField);
 		}
 
 		/////////////////////
@@ -648,16 +650,16 @@ public class DialogImportSQL extends JDialog {
 		/////////////////////
 		for (i = 0; i <= itemsOfArray; i++) {
 			if (fieldArray[i].indexOf("UNIQUE", 0) >= 0 && fieldArray[i].indexOf("PRIMARY KEY", 0) == -1) {
-				createSecondaryKeyDefinition(tableElement, fieldArray[i]);
+				createSecondaryKeyDefinition(table, fieldArray[i]);
 			}
 		}
 
 		numberOfTablesCreated++;
 
-		return tableElement;
+		return table;
 	}
 
-	void createFieldDefinition(org.w3c.dom.Element tableElement, int sortKey, String fieldAttrString) {
+	void createFieldDefinition(Table table, int sortKey, String fieldAttrString) {
 		String fieldNameValue = "";
 		String notNullValue = "false";
 		String defaultValue = "";
@@ -724,52 +726,49 @@ public class DialogImportSQL extends JDialog {
 		////////////////////////
 		//Set field attributes//
 		////////////////////////
-		org.w3c.dom.Element fieldElement = frame_.domDocument.createElement("TableField");
+		TableField field = new TableField();
 		lastElement = getLastDomElementOfTheType("TableField");
 		if (lastElement == null) {
 			lastID = 0;
 		} else {
 			lastID = Integer.parseInt(getIdFromObject(lastElement));
 		}
-		fieldElement.setAttribute("ID", Integer.toString(lastID + 1));
+		field.setId(Integer.toString(lastID + 1));
 		if (jCheckBoxCommentControl.isSelected()) {
-			fieldElement.setAttribute("Name", commentValue);
-			fieldElement.setAttribute("Descriptions", "");
+			field.setName(commentValue);
+			field.setDescriptions("");
 		} else {
-			fieldElement.setAttribute("Name", fieldNameValue);
-			fieldElement.setAttribute("Descriptions", commentValue);
+			field.setName(fieldNameValue);
+			field.setDescriptions(commentValue);
 		}
-		fieldElement.setAttribute("SortKey", getFormatted3ByteString(sortKey) + "0");
+		field.setSortKey(getFormatted3ByteString(sortKey) + "0");
 		if (jCheckBoxFieldNameControl.isSelected()) {
-			fieldElement.setAttribute("Alias", fieldNameValue);
+			field.setAlias(fieldNameValue);
 		} else {
-			fieldElement.setAttribute("Alias", "");
+			field.setAlias("");
 		}
-		fieldElement.setAttribute("AttributeType", "NATIVE");
-		fieldElement.setAttribute("DataTypeID", getDataTypeID(fieldAttrString));
-		fieldElement.setAttribute("ShowOnModel", "true");
+		field.setAttributeType("NATIVE");
+		field.setDataTypeId(getDataTypeID(fieldAttrString));
+		field.setShowOnModel("true");
 		if (jCheckBoxShowControl.isSelected()) {
 			for (i = 0; i < itemsOfHideFieldArray; i++) {
 				if (hideFieldArray[i].equals(fieldNameValue)) {
-					fieldElement.setAttribute("ShowOnModel", "false");
+					field.setShowOnModel("false");
 					break;
 				}
 			}
 		}
-		fieldElement.setAttribute("NotNull", notNullValue);
-		fieldElement.setAttribute("Default", defaultValue);
-		tableElement.appendChild(fieldElement);
+		field.setNotNull(notNullValue);
+		field.setDefault(defaultValue);
+		table.getTableFields().add(field);
 
 		if (fieldAttrString.indexOf("PRIMARY KEY", 0) > 0) {
-			primaryKeyFieldID = fieldElement.getAttribute("ID");
+			primaryKeyFieldID = field.getId();
 		}
 	}
 
 	String getDataTypeID(String fieldAttrString) {
-		org.w3c.dom.Element workElement;
 		Object lastElement;
-		org.w3c.dom.Node nextSiblingNode;
-		NodeList elementList;
 		int lastID = 0;
 		String wrkStr;
 		String sqlExpression = "";
@@ -811,12 +810,10 @@ public class DialogImportSQL extends JDialog {
 					//
 					if (validPosFrom < validPosThru) {
 						sqlExpression = fieldAttrString.substring(validPosFrom, validPosThru).replaceAll(" ", "");
-						elementList = frame_.domDocument.getElementsByTagName("DataType");
 						checkCounter = 0;
-						for (int k = 0; k < elementList.getLength(); k++) {
-							workElement = (org.w3c.dom.Element)elementList.item(k);
-							if (workElement.getAttribute("SortKey").equals(sqlExpression)) {
-								dataTypeID = workElement.getAttribute("ID");
+						for (DataType dataType : xeadSystem.getDataTypes()) {
+							if (dataType.getSortKey().equals(sqlExpression)) {
+								dataTypeID = dataType.getId();
 								checkCounter++;
 								break;
 							}
@@ -840,42 +837,40 @@ public class DialogImportSQL extends JDialog {
 								}
 							}
 
-							org.w3c.dom.Element newElement = frame_.domDocument.createElement("DataType");
+							DataType newDataType = new DataType();
 							lastElement = getLastDomElementOfTheType("DataType");
 							if (lastElement == null) {
 								lastID = 0;
 							} else {
 								lastID = Integer.parseInt(getIdFromObject(lastElement));
 							}
-							newElement.setAttribute("ID", Integer.toString(lastID + 1));
-							newElement.setAttribute("Name", typeName);
-							newElement.setAttribute("BasicType", getBasicTypeFromTypeName(typeName));
-							newElement.setAttribute("SortKey", sqlExpression);
-							newElement.setAttribute("Length", length);
-							newElement.setAttribute("Decimal", decimal);
-							if (newElement.getAttribute("BasicType").equals("Date")) {
-								newElement.setAttribute("Length", "8");
-								if (newElement.getAttribute("Name").equals("TIME") || newElement.getAttribute("Name").equals("time")) {
-									newElement.setAttribute("Length", "6");
+							newDataType.setId(Integer.toString(lastID + 1));
+							newDataType.setName(typeName);
+							newDataType.setBasicType(getBasicTypeFromTypeName(typeName));
+							newDataType.setSortKey(sqlExpression);
+							newDataType.setLength(length);
+							newDataType.setDecimal(decimal);
+							if (newDataType.getBasicType().equals("Date")) {
+								newDataType.setLength("8");
+								if (newDataType.getName().equals("TIME") || newDataType.getName().equals("time")) {
+									newDataType.setLength("6");
 								}
-								if (newElement.getAttribute("Name").equals("DATETIME") || newElement.getAttribute("Name").equals("datetime")) {
-									newElement.setAttribute("Length", "12");
+								if (newDataType.getName().equals("DATETIME") || newDataType.getName().equals("datetime")) {
+									newDataType.setLength("12");
 								}
-								if (newElement.getAttribute("Name").equals("TIMESTAMP") || newElement.getAttribute("Name").equals("timestamp")) {
-									newElement.setAttribute("Length", "14");
+								if (newDataType.getName().equals("TIMESTAMP") || newDataType.getName().equals("timestamp")) {
+									newDataType.setLength("14");
 								}
 							}
-							if (newElement.getAttribute("BasicType").equals("Boolean")) {
-								newElement.setAttribute("Length", "1");
+							if (newDataType.getBasicType().equals("Boolean")) {
+								newDataType.setLength("1");
 							}
-							if (newElement.getAttribute("BasicType").equals("Object")) {
-								newElement.setAttribute("Length", "256");
+							if (newDataType.getBasicType().equals("Object")) {
+								newDataType.setLength("256");
 							}
-							newElement.setAttribute("SQLExpression", sqlExpression);
-							// TODO: JSON migration - getNextSibling is XML-specific
-      nextSiblingNode = null;
-							systemElement.insertBefore(newElement, nextSiblingNode);
-							dataTypeID = newElement.getAttribute("ID");
+							newDataType.setSqlExpression(sqlExpression);
+							xeadSystem.getDataTypes().add(newDataType);
+							dataTypeID = newDataType.getId();
 						}
 					}
 
@@ -901,18 +896,16 @@ public class DialogImportSQL extends JDialog {
 		return basicType;
 	}
 
-	void createSecondaryKeyDefinition(org.w3c.dom.Element tableElement, String fieldAttrString) {
-		org.w3c.dom.Element secondaryKeyElement = frame_.domDocument.createElement("TableKey");
-		secondaryKeyElement.setAttribute("ID", getNextKeyIDOfTheTable(tableElement));
-		secondaryKeyElement.setAttribute("Type", "SK");
-		secondaryKeyElement.setAttribute("SortKey", "010");
-		setKeyFieldOfTheKey(secondaryKeyElement, tableElement, fieldAttrString);
-		tableElement.appendChild(secondaryKeyElement);
+	void createSecondaryKeyDefinition(Table table, String fieldAttrString) {
+		TableKey secondaryKey = new TableKey();
+		secondaryKey.setId(getNextKeyIDOfTheTable(table));
+		secondaryKey.setType("SK");
+		secondaryKey.setSortKey("010");
+		setKeyFieldOfTheKey(secondaryKey, table, fieldAttrString);
+		table.getTableKeys().add(secondaryKey);
 	}
 
-	void setKeyFieldOfTheKey(org.w3c.dom.Element keyElement, org.w3c.dom.Element tableElement, String fieldNames) {
-		org.w3c.dom.Element element;
-
+	void setKeyFieldOfTheKey(TableKey key, Table table, String fieldNames) {
 		int i = fieldNames.indexOf("(", 0);
 		if (i >= 0) {
 			int j = fieldNames.indexOf(")", i);
@@ -923,29 +916,29 @@ public class DialogImportSQL extends JDialog {
 			}
 		}
 
-		NodeList fieldList = tableElement.getElementsByTagName("TableField");
 		StringTokenizer workTokenizer = new StringTokenizer(fieldNames, "," );
 		String fieldName = "";
 		int sortKey = 0;
 		int countOfField = workTokenizer.countTokens();
 		for (int k = 1; k <= countOfField; k++) {
 			fieldName = trimBlankFromValue(workTokenizer.nextToken());
-			for (int j = 0; j < fieldList.getLength(); j++) {
-				element = (org.w3c.dom.Element)fieldList.item(j);
-				if (element.getAttribute("Alias").equals(fieldName)) {
-					org.w3c.dom.Element keyFieldElement = frame_.domDocument.createElement("TableKeyField");
-					keyFieldElement.setAttribute("FieldID", element.getAttribute("ID"));
+			for (TableField field : table.getTableFields()) {
+				if (field.getAlias().equals(fieldName)) {
+					TableKeyField keyField = new TableKeyField();
+					keyField.setFieldId(field.getId());
 					sortKey++;
-					keyFieldElement.setAttribute("SortKey", getFormatted3ByteString(sortKey) + "0");
-					keyElement.appendChild(keyFieldElement);
+					keyField.setSortKey(getFormatted3ByteString(sortKey) + "0");
+					key.getTableKeyFields().add(keyField);
 					break;
 				}
 			}
 		}
 	}
 
-	void createTableRelationship(org.w3c.dom.Element tableElement, String tableAttributes) {
-		org.w3c.dom.Element workElement;
+	void createTableRelationship(Table table, String tableAttributes) {
+		TableKey workKey;
+		Table workTable;
+		TableKey workUniqueKey;
 		String[] fieldArray = new String[1000];
 		int lastID = 0;
 		String wrkStr1 = "";
@@ -1017,23 +1010,23 @@ public class DialogImportSQL extends JDialog {
 
 				if (pos1 >= 0 && pos2 >= 0 && pos3 >= 0 && pos4 >= 0 && pos5 >= 0 && pos6 >= 0) {
 
-					table2ID = tableElement.getAttribute("ID");
+					table2ID = table.getId();
 
-					workElement = createForeignKeyDefinition(tableElement, fieldArray[i].substring(pos2+1, pos3));
-					if (workElement != null) {
-						tableKey2ID = workElement.getAttribute("ID");
-						tableKey2Type = workElement.getAttribute("Type");
-						numberOfFieldsOfKey2 = workElement.getElementsByTagName("TableKeyField").getLength();
+					workKey = createForeignKeyDefinition(table, fieldArray[i].substring(pos2+1, pos3));
+					if (workKey != null) {
+						tableKey2ID = workKey.getId();
+						tableKey2Type = workKey.getType();
+						numberOfFieldsOfKey2 = workKey.getTableKeyFields().size();
 
-						workElement = getTableElementWithTableName(fieldArray[i].substring(pos4+10, pos5));
-						if (workElement != null) {
-							table1ID = workElement.getAttribute("ID");
+						workTable = getTableWithTableName(fieldArray[i].substring(pos4+10, pos5));
+						if (workTable != null) {
+							table1ID = workTable.getId();
 
-							workElement = getUniqueKeyElementWithFieldNames(workElement, fieldArray[i].substring(pos5+1, pos6));
-							if (workElement != null) {
-								tableKey1ID = workElement.getAttribute("ID");
-								tableKey1Type = workElement.getAttribute("Type");
-								numberOfFieldsOfKey1 = workElement.getElementsByTagName("TableKeyField").getLength();
+							workUniqueKey = getUniqueKeyWithFieldNames(workTable, fieldArray[i].substring(pos5+1, pos6));
+							if (workUniqueKey != null) {
+								tableKey1ID = workUniqueKey.getId();
+								tableKey1Type = workUniqueKey.getType();
+								numberOfFieldsOfKey1 = workUniqueKey.getTableKeyFields().size();
 
 								if (tableKey1Type.equals("PK") || tableKey1Type.equals("SK")) {
 
@@ -1056,32 +1049,32 @@ public class DialogImportSQL extends JDialog {
 									}
 
 									if (!relationshipType.equals("")) {
-										org.w3c.dom.Element newElement1 = frame_.domDocument.createElement("Relationship");
+										Relationship relationship = new Relationship();
 										Object lastElement = getLastDomElementOfTheType("Relationship");
 										if (lastElement == null) {
 											lastID = 0;
 										} else {
 											lastID = Integer.parseInt(getIdFromObject(lastElement));
 										}
-										newElement1.setAttribute("ID", Integer.toString(lastID + 1));
-										newElement1.setAttribute("Table1ID", table1ID);
-										newElement1.setAttribute("Table2ID", table2ID);
-										newElement1.setAttribute("TableKey1ID", tableKey1ID);
-										newElement1.setAttribute("TableKey2ID", tableKey2ID);
-										newElement1.setAttribute("Type", relationshipType);
-										newElement1.setAttribute("ExistWhen1", "");
-										newElement1.setAttribute("ExistWhen2", "");
-										systemElement.appendChild(newElement1);
+										relationship.setId(Integer.toString(lastID + 1));
+										relationship.setTable1Id(table1ID);
+										relationship.setTable2Id(table2ID);
+										relationship.setTableKey1Id(tableKey1ID);
+										relationship.setTableKey2Id(tableKey2ID);
+										relationship.setType(relationshipType);
+										relationship.setExistWhen1("");
+										relationship.setExistWhen2("");
+										xeadSystem.getRelationships().add(relationship);
 
 										////////////////////////////////////////
 										//Create SubsystemRelationship Element//
 										////////////////////////////////////////
-										org.w3c.dom.Element newElement2 = frame_.domDocument.createElement("SubsystemRelationship");
-										newElement2.setAttribute("RelationshipID", newElement1.getAttribute("ID"));
-										newElement2.setAttribute("TerminalIndex1", "17");
-										newElement2.setAttribute("TerminalIndex2", "20");
-										newElement2.setAttribute("ShowOnModel", "true");
-										subsystemElement.appendChild(newElement2);
+										SubsystemRelationship subRel = new SubsystemRelationship();
+										subRel.setRelationshipId(relationship.getId());
+										subRel.setTerminalIndex1("17");
+										subRel.setTerminalIndex2("20");
+										subRel.setShowOnModel("true");
+										subsystem.getSubsystemRelationships().add(subRel);
 
 										numberOfTableRelationshipsCreated++;
 									}
@@ -1096,9 +1089,8 @@ public class DialogImportSQL extends JDialog {
 		}
 	}
 
-	org.w3c.dom.Element createForeignKeyDefinition(org.w3c.dom.Element tableElement, String fieldNames) {
-		org.w3c.dom.Element foreignKeyElement = null;
-		org.w3c.dom.Element element1, element2;
+	TableKey createForeignKeyDefinition(Table table, String fieldNames) {
+		TableKey foreignKey = null;
 		int index = 0;
 		String[] fieldIDArray = new String[50];
 		String wrkStr;
@@ -1115,16 +1107,14 @@ public class DialogImportSQL extends JDialog {
 		///////////////////////////////////////////
 		//Setup fieldID array of this foreign key//
 		///////////////////////////////////////////
-		NodeList fieldList = tableElement.getElementsByTagName("TableField");
 		StringTokenizer workTokenizer = new StringTokenizer(fieldNames, "," );
 		String fieldName = "";
 		int countOfField = workTokenizer.countTokens();
 		for (int k = 1; k <= countOfField; k++) {
 			fieldName = trimBlankFromValue(workTokenizer.nextToken());
-			for (int j = 0; j < fieldList.getLength(); j++) {
-				element1 = (org.w3c.dom.Element)fieldList.item(j);
-				if (element1.getAttribute("Name").equals(fieldName)) {
-					fieldIDArray[index] = element1.getAttribute("ID");
+			for (TableField field : table.getTableFields()) {
+				if (field.getName().equals(fieldName)) {
+					fieldIDArray[index] = field.getId();
 					index++;
 					break;
 				}
@@ -1135,44 +1125,38 @@ public class DialogImportSQL extends JDialog {
 		//search corresponding PK(or SK) in this table//
 		////////////////////////////////////////////////
 		int countWork = 0;
-		NodeList keyFieldList = null;
-		NodeList keyList = tableElement.getElementsByTagName("TableKey");
-		for (int k = 0; k < keyList.getLength(); k++) {
-			element1 = (org.w3c.dom.Element)keyList.item(k);
-			if (element1.getAttribute("Type").equals("PK") || element1.getAttribute("Type").equals("SK")) {
+		for (TableKey key : table.getTableKeys()) {
+			if (key.getType().equals("PK") || key.getType().equals("SK")) {
 				countWork = 0;
-				keyFieldList = element1.getElementsByTagName("TableKeyField");
-				for (int j = 0; j < keyFieldList.getLength(); j++) {
-					element2 = (org.w3c.dom.Element)keyFieldList.item(j);
-					wrkStr = element2.getAttribute("FieldID");
+				for (TableKeyField keyField : key.getTableKeyFields()) {
+					wrkStr = keyField.getFieldId();
 					for (int m = 0; m < index; m++) {
 						if (fieldIDArray[m].equals(wrkStr)) {
 							countWork++;
 						}
 					}
 				}
-				if (keyFieldList.getLength() >= countWork && countWork > 0) {
-					foreignKeyElement = element1;
+				if (key.getTableKeyFields().size() >= countWork && countWork > 0) {
+					foreignKey = key;
 					break;
 				}
 			}
 		}
 
-		if (foreignKeyElement == null) {
-			foreignKeyElement = frame_.domDocument.createElement("TableKey");
-			foreignKeyElement.setAttribute("ID", getNextKeyIDOfTheTable(tableElement));
-			foreignKeyElement.setAttribute("Type", "FK");
-			foreignKeyElement.setAttribute("SortKey", "010");
-			setKeyFieldOfTheKey(foreignKeyElement, tableElement, fieldNames);
-			tableElement.appendChild(foreignKeyElement);
+		if (foreignKey == null) {
+			foreignKey = new TableKey();
+			foreignKey.setId(getNextKeyIDOfTheTable(table));
+			foreignKey.setType("FK");
+			foreignKey.setSortKey("010");
+			setKeyFieldOfTheKey(foreignKey, table, fieldNames);
+			table.getTableKeys().add(foreignKey);
 		}
 
-		return foreignKeyElement;
+		return foreignKey;
 	}
 
-	org.w3c.dom.Element getUniqueKeyElementWithFieldNames(org.w3c.dom.Element tableElement, String fieldNames) {
-		org.w3c.dom.Element keyElement = null;
-		org.w3c.dom.Element element1, element2;
+	TableKey getUniqueKeyWithFieldNames(Table table, String fieldNames) {
+		TableKey key = null;
 		int index = 0;
 		String[] fieldIDArray = new String[50];
 		String wrkStr;
@@ -1189,16 +1173,14 @@ public class DialogImportSQL extends JDialog {
 		///////////////////////////////////
 		//Setup fieldID array of this key//
 		///////////////////////////////////
-		NodeList fieldList = tableElement.getElementsByTagName("TableField");
 		StringTokenizer workTokenizer = new StringTokenizer(fieldNames, "," );
 		String fieldName = "";
 		int countOfField = workTokenizer.countTokens();
 		for (int k = 1; k <= countOfField; k++) {
 			fieldName = trimBlankFromValue(workTokenizer.nextToken());
-			for (int j = 0; j < fieldList.getLength(); j++) {
-				element1 = (org.w3c.dom.Element)fieldList.item(j);
-				if (element1.getAttribute("Name").equals(fieldName)) {
-					fieldIDArray[index] = element1.getAttribute("ID");
+			for (TableField field : table.getTableFields()) {
+				if (field.getName().equals(fieldName)) {
+					fieldIDArray[index] = field.getId();
 					index++;
 					break;
 				}
@@ -1209,41 +1191,36 @@ public class DialogImportSQL extends JDialog {
 		//search corresponding PK(or SK) in this table//
 		////////////////////////////////////////////////
 		int countWork = 0;
-		NodeList keyFieldList = null;
-		NodeList keyList = tableElement.getElementsByTagName("TableKey");
-		for (int k = 0; k < keyList.getLength(); k++) {
-			element1 = (org.w3c.dom.Element)keyList.item(k);
-			if (element1.getAttribute("Type").equals("PK") || element1.getAttribute("Type").equals("SK")) {
+		for (TableKey tableKey : table.getTableKeys()) {
+			if (tableKey.getType().equals("PK") || tableKey.getType().equals("SK")) {
 				countWork = 0;
-				keyFieldList = element1.getElementsByTagName("TableKeyField");
-				for (int j = 0; j < keyFieldList.getLength(); j++) {
-					element2 = (org.w3c.dom.Element)keyFieldList.item(j);
-					wrkStr = element2.getAttribute("FieldID");
+				for (TableKeyField keyField : tableKey.getTableKeyFields()) {
+					wrkStr = keyField.getFieldId();
 					for (int m = 0; m < index; m++) {
 						if (fieldIDArray[m].equals(wrkStr)) {
 							countWork++;
 						}
 					}
 				}
-				if (keyFieldList.getLength() == countWork) {
-					keyElement = element1;
+				if (tableKey.getTableKeyFields().size() == countWork) {
+					key = tableKey;
 					break;
 				}
 			}
 		}
 
-		return keyElement;
+		return key;
 	}
 
-	org.w3c.dom.Element getTableElementWithTableName(String name) {
-		org.w3c.dom.Element keyElement = null;
+	Table getTableWithTableName(String name) {
+		Table table = null;
 		String trimmedName = trimBlankFromValue(name);
 		for (int i = 0; i <= itemsOfArray; i++) {
 			if (nameArray[i].equals(trimmedName)) {
-				keyElement = tableElementArray[i];
+				table = tableArray[i];
 			}
 		}
-		return keyElement;
+		return table;
 	}
 
 	String trimBlankFromValue(String value) {
@@ -1310,17 +1287,14 @@ public class DialogImportSQL extends JDialog {
 		}
 	}
 
-	String getNextKeyIDOfTheTable(org.w3c.dom.Element tableElement) {
-		org.w3c.dom.Element element = null;
+	String getNextKeyIDOfTheTable(Table table) {
 		int workElementID = 0;
 		int elementID = 0;
-		NodeList nodeList = tableElement.getElementsByTagName("TableKey");
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			element = (org.w3c.dom.Element)nodeList.item(i);
+		for (TableKey key : table.getTableKeys()) {
 			if (elementID == 0) {
-				elementID = Integer.parseInt(element.getAttribute("ID"));
+				elementID = Integer.parseInt(key.getId());
 			} else {
-				workElementID = Integer.parseInt(element.getAttribute("ID"));
+				workElementID = Integer.parseInt(key.getId());
 				if (workElementID > elementID) {
 					elementID = workElementID;
 				}
@@ -1330,15 +1304,13 @@ public class DialogImportSQL extends JDialog {
 	}
 
 	/**
-	 * Class of Xead Tree Node
+	 * Class of Xead Tree Node - JSON-based wrapper for Subsystem
 	 */
 	class XeadNode implements Comparable {
-		private String nodeType_;
-		private org.w3c.dom.Element domNode_;
-		public XeadNode(String type, org.w3c.dom.Element node) {
+		private Subsystem subsystem_;
+		public XeadNode(Subsystem subsystem) {
 			super();
-			nodeType_ = type;
-			domNode_ = node;
+			subsystem_ = subsystem;
 		}
 		public String toString() {
 			String str = "";
@@ -1346,18 +1318,14 @@ public class DialogImportSQL extends JDialog {
 			return str;
 		}
 		public String getName() {
-			String str = "";
-			if (nodeType_.equals("Subsystem")) {
-				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
-			}
-			return str;
+			return subsystem_.getSortKey() + " " + subsystem_.getName();
 		}
-		public org.w3c.dom.Element getElement() {
-			return domNode_;
+		public Subsystem getSubsystem() {
+			return subsystem_;
 		}
         public int compareTo(Object other) {
             XeadNode otherNode = (XeadNode)other;
-            return domNode_.getAttribute("SortKey").compareTo(otherNode.getElement().getAttribute("SortKey"));
+            return subsystem_.getSortKey().compareTo(otherNode.getSubsystem().getSortKey());
         }
 	}
 

@@ -9013,8 +9013,17 @@ public class Modeler extends JFrame {
     if (xeadSystem == null) return;
     
     // Remove IOTableField entries with empty descriptions
-    // This is handled by the JSON model directly
-    // TODO: Implement JSON-based reorganization if needed
+    // JSON-based implementation: iterate through all IOTables and their fields
+    // Remove fields where descriptions is null or empty
+    for (int i = xeadSystem.getIotables().size() - 1; i >= 0; i--) {
+      xeadModeler.model.json.IOTable iotable = xeadSystem.getIotables().get(i);
+      for (int j = iotable.getIotableFields().size() - 1; j >= 0; j--) {
+        xeadModeler.model.json.IOTableField field = iotable.getIotableFields().get(j);
+        if (field.getDescriptions() == null || field.getDescriptions().trim().isEmpty()) {
+          iotable.getIotableFields().remove(j);
+        }
+      }
+    }
   }
 
   /**
@@ -27559,18 +27568,12 @@ public class Modeler extends JFrame {
       }
       //
       if (nodeType_.equals("TableField")) {
+        // JSON-based implementation: TableField only has dataTypeId, no child DataType elements
+        // Simply replace the TableField element without moving DataType children
         org.w3c.dom.Element cloneElement = (org.w3c.dom.Element) newElement.cloneNode(true);
-        Object lastElement = getLastDomElementOfTheType("DataType");
-        // TODO: JSON migration - getNextSibling is XML-specific
-        org.w3c.dom.Node nextSiblingNode = null; // lastElement.getNextSibling();
-        NodeList nodeList = cloneElement.getElementsByTagName("DataType");
-        for (int i = 0; i < nodeList.getLength(); i++) {
-          systemNode.getElement()
-              .insertBefore((org.w3c.dom.Element) nodeList.item(i), nextSiblingNode);
-        }
         //
         parentNode = (XeadTreeNode) this.getParent().getParent();
-        nodeList = parentNode.getElement().getElementsByTagName("TableField");
+        NodeList nodeList = parentNode.getElement().getElementsByTagName("TableField");
         for (int i = 0; i < nodeList.getLength(); i++) {
           element = (org.w3c.dom.Element) nodeList.item(i);
           if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
@@ -35983,36 +35986,34 @@ public class Modeler extends JFrame {
    * @param e :Action Event
    */
   void jMenuItemComponentToPaste_actionPerformed(ActionEvent e) {
-    org.w3c.dom.Node nextSiblingNode;
     org.w3c.dom.Element element, newElement, newElementChild1;
     Object lastElement;
     int id = 0;
+    XeadSystem xeadSystem = xeadDocumentModel.getXeadSystem();
     //
     //Paste Department//
     if (componentType_jPopupMenuComponent.equals("SystemDepartmentList")) {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("Department");
+      //Create JSON POJO//
+      xeadModeler.model.json.Department newDept = new xeadModeler.model.json.Department();
       lastElement = getLastDomElementOfTheType("Department");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Name", pastingElement.getAttribute("Name"));
-      newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-      newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      // TODO: JSON migration - getNextSibling is XML-specific
-      nextSiblingNode = null;
-      systemNode.getElement().appendChild(newElement);
+      newDept.setId(Integer.toString(id + 1));
+      newDept.setName(pastingElement.getAttribute("Name"));
+      newDept.setDescriptions(pastingElement.getAttribute("Descriptions"));
+      newDept.setSortKey(pastingElement.getAttribute("SortKey"));
+      xeadSystem.getDepartments().add(newDept);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemDepartmentList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Name");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemDepartmentList.getRowCount() + 1, newDept);
+      Cell[1] = newDept.getSortKey();
+      Cell[2] = newDept.getName();
+      Cell[3] = newDept.getDescriptions();
       tableModelSystemDepartmentList.addRow(Cell);
       selectedRow_jTableSystemDepartmentList = jTableSystemDepartmentList.getRowCount() - 1;
       jTableSystemDepartmentList.setRowSelectionInterval(selectedRow_jTableSystemDepartmentList,
@@ -36024,26 +36025,24 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("TaskType");
+      //Create JSON POJO//
+      xeadModeler.model.json.TaskType newTaskType = new xeadModeler.model.json.TaskType();
       lastElement = getLastDomElementOfTheType("TaskType");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Name", pastingElement.getAttribute("Name"));
-      newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-      newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      // TODO: JSON migration - getNextSibling is XML-specific
-      nextSiblingNode = null;
-      systemNode.getElement().appendChild(newElement);
+      newTaskType.setId(Integer.toString(id + 1));
+      newTaskType.setName(pastingElement.getAttribute("Name"));
+      newTaskType.setDescriptions(pastingElement.getAttribute("Descriptions"));
+      newTaskType.setSortKey(pastingElement.getAttribute("SortKey"));
+      xeadSystem.getTaskTypes().add(newTaskType);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemTaskTypeList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Name");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemTaskTypeList.getRowCount() + 1, newTaskType);
+      Cell[1] = newTaskType.getSortKey();
+      Cell[2] = newTaskType.getName();
+      Cell[3] = newTaskType.getDescriptions();
       tableModelSystemTaskTypeList.addRow(Cell);
       selectedRow_jTableSystemTaskTypeList = jTableSystemTaskTypeList.getRowCount() - 1;
       jTableSystemTaskTypeList.setRowSelectionInterval(selectedRow_jTableSystemTaskTypeList,
@@ -36055,26 +36054,24 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("TableType");
+      //Create JSON POJO//
+      xeadModeler.model.json.TableType newTableType = new xeadModeler.model.json.TableType();
       lastElement = getLastDomElementOfTheType("TableType");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Name", pastingElement.getAttribute("Name"));
-      newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-      newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      // TODO: JSON migration - getNextSibling is XML-specific
-      nextSiblingNode = null;
-      systemNode.getElement().appendChild(newElement);
+      newTableType.setId(Integer.toString(id + 1));
+      newTableType.setName(pastingElement.getAttribute("Name"));
+      newTableType.setDescriptions(pastingElement.getAttribute("Descriptions"));
+      newTableType.setSortKey(pastingElement.getAttribute("SortKey"));
+      xeadSystem.getTableTypes().add(newTableType);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemTableTypeList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Name");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemTableTypeList.getRowCount() + 1, newTableType);
+      Cell[1] = newTableType.getSortKey();
+      Cell[2] = newTableType.getName();
+      Cell[3] = newTableType.getDescriptions();
       tableModelSystemTableTypeList.addRow(Cell);
       selectedRow_jTableSystemTableTypeList = jTableSystemTableTypeList.getRowCount() - 1;
       jTableSystemTableTypeList.setRowSelectionInterval(selectedRow_jTableSystemTableTypeList,
@@ -36086,32 +36083,30 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("DataType");
+      //Create JSON POJO//
+      xeadModeler.model.json.DataType newDataType = new xeadModeler.model.json.DataType();
       lastElement = getLastDomElementOfTheType("DataType");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Name", pastingElement.getAttribute("Name"));
-      newElement.setAttribute("BasicType", pastingElement.getAttribute("BasicType"));
-      newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      newElement.setAttribute("Length", pastingElement.getAttribute("Length"));
-      newElement.setAttribute("Decimal", pastingElement.getAttribute("Decimal"));
-      newElement.setAttribute("SQLExpression", pastingElement.getAttribute("SQLExpression"));
-      // TODO: JSON migration - getNextSibling is XML-specific
-      nextSiblingNode = null;
-      systemNode.getElement().appendChild(newElement);
+      newDataType.setId(Integer.toString(id + 1));
+      newDataType.setName(pastingElement.getAttribute("Name"));
+      newDataType.setBasicType(pastingElement.getAttribute("BasicType"));
+      newDataType.setSortKey(pastingElement.getAttribute("SortKey"));
+      newDataType.setLength(pastingElement.getAttribute("Length"));
+      newDataType.setDecimal(pastingElement.getAttribute("Decimal"));
+      newDataType.setSqlExpression(pastingElement.getAttribute("SQLExpression"));
+      xeadSystem.getDataTypes().add(newDataType);
       Object[] Cell = new Object[7];
-      Cell[0] = new TableRowNumber(jTableSystemDataTypeList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Name");
-      Cell[3] = newElement.getAttribute("BasicType");
-      Cell[4] = Integer.parseInt(newElement.getAttribute("Length"));
-      Cell[5] = Integer.parseInt(newElement.getAttribute("Decimal"));
-      Cell[6] = newElement.getAttribute("SQLExpression");
+      Cell[0] = new TableRowNumber(jTableSystemDataTypeList.getRowCount() + 1, newDataType);
+      Cell[1] = newDataType.getSortKey();
+      Cell[2] = newDataType.getName();
+      Cell[3] = newDataType.getBasicType();
+      Cell[4] = Integer.parseInt(newDataType.getLength());
+      Cell[5] = Integer.parseInt(newDataType.getDecimal());
+      Cell[6] = newDataType.getSqlExpression();
       tableModelSystemDataTypeList.addRow(Cell);
       selectedRow_jTableSystemDataTypeList = jTableSystemDataTypeList.getRowCount() - 1;
       jTableSystemDataTypeList.setRowSelectionInterval(selectedRow_jTableSystemDataTypeList,
@@ -36123,26 +36118,24 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("FunctionType");
+      //Create JSON POJO//
+      xeadModeler.model.json.FunctionType newFunctionType = new xeadModeler.model.json.FunctionType();
       lastElement = getLastDomElementOfTheType("FunctionType");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Name", pastingElement.getAttribute("Name"));
-      newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-      newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      // TODO: JSON migration - getNextSibling is XML-specific
-      nextSiblingNode = null;
-      systemNode.getElement().appendChild(newElement);
+      newFunctionType.setId(Integer.toString(id + 1));
+      newFunctionType.setName(pastingElement.getAttribute("Name"));
+      newFunctionType.setDescriptions(pastingElement.getAttribute("Descriptions"));
+      newFunctionType.setSortKey(pastingElement.getAttribute("SortKey"));
+      xeadSystem.getFunctionTypes().add(newFunctionType);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemTableTypeList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Name");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemTableTypeList.getRowCount() + 1, newFunctionType);
+      Cell[1] = newFunctionType.getSortKey();
+      Cell[2] = newFunctionType.getName();
+      Cell[3] = newFunctionType.getDescriptions();
       tableModelSystemFunctionTypeList.addRow(Cell);
       selectedRow_jTableSystemFunctionTypeList = jTableSystemFunctionTypeList.getRowCount() - 1;
       jTableSystemFunctionTypeList.setRowSelectionInterval(selectedRow_jTableSystemFunctionTypeList,
@@ -36154,33 +36147,31 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("Terms");
+      //Create JSON POJO//
+      xeadModeler.model.json.Terms newTerms = new xeadModeler.model.json.Terms();
       lastElement = getLastDomElementOfTheType("Terms");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
+      newTerms.setId(Integer.toString(id + 1));
       if (jTableSystemTermsList.getRowCount() == 0) {
-        newElement.setAttribute("SortKey", "10");
+        newTerms.setSortKey("10");
       } else {
         TableRowNumber tableRowNumber = (TableRowNumber) tableModelSystemTermsList.getValueAt(
             jTableSystemTermsList.getRowCount() - 1, 0);
         lastElement = tableRowNumber.getElement();
         id = Integer.parseInt(getIdFromObject(lastElement));
-        newElement.setAttribute("SortKey", Integer.toString(id + 10));
+        newTerms.setSortKey(Integer.toString(id + 10));
       }
-      newElement.setAttribute("Header", pastingElement.getAttribute("Header"));
-      newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-      // TODO: JSON migration - getNextSibling is XML-specific
-      nextSiblingNode = null;
-      systemNode.getElement().appendChild(newElement);
+      newTerms.setHeader(pastingElement.getAttribute("Header"));
+      newTerms.setDescriptions(pastingElement.getAttribute("Descriptions"));
+      xeadSystem.getTerms().add(newTerms);
       Object[] Cell = new Object[3];
-      Cell[0] = new TableRowNumber(jTableSystemTermsList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("Header");
-      Cell[2] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemTermsList.getRowCount() + 1, newTerms);
+      Cell[1] = newTerms.getHeader();
+      Cell[2] = newTerms.getDescriptions();
       tableModelSystemTermsList.addRow(Cell);
       selectedRow_jTableSystemTermsList = jTableSystemTermsList.getRowCount() - 1;
       jTableSystemTermsList.setRowSelectionInterval(selectedRow_jTableSystemTermsList,
@@ -36192,26 +36183,24 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("MaintenanceLog");
+      //Create JSON POJO//
+      xeadModeler.model.json.MaintenanceLog newMaintenanceLog = new xeadModeler.model.json.MaintenanceLog();
       lastElement = getLastDomElementOfTheType("MaintenanceLog");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Headder", pastingElement.getAttribute("Headder"));
-      newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-      newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      // TODO: JSON migration - getNextSibling is XML-specific
-      nextSiblingNode = null;
-      systemNode.getElement().appendChild(newElement);
+      newMaintenanceLog.setId(Integer.toString(id + 1));
+      newMaintenanceLog.setHeader(pastingElement.getAttribute("Headder"));
+      newMaintenanceLog.setDescriptions(pastingElement.getAttribute("Descriptions"));
+      newMaintenanceLog.setSortKey(pastingElement.getAttribute("SortKey"));
+      xeadSystem.getMaintenanceLogs().add(newMaintenanceLog);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemMaintenanceLog.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Headder");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemMaintenanceLog.getRowCount() + 1, newMaintenanceLog);
+      Cell[1] = newMaintenanceLog.getSortKey();
+      Cell[2] = newMaintenanceLog.getHeader();
+      Cell[3] = newMaintenanceLog.getDescriptions();
       tableModelSystemMaintenanceLog.addRow(Cell);
       selectedRow_jTableSystemMaintenanceLog = jTableSystemMaintenanceLog.getRowCount() - 1;
       jTableSystemMaintenanceLog.setRowSelectionInterval(selectedRow_jTableSystemMaintenanceLog,
