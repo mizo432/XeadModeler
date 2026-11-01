@@ -21771,119 +21771,46 @@ public class Modeler extends JFrame {
       ((CardLayout) jPanelContentsPane.getLayout()).show(jPanelContentsPane, panelName);
     }
 
-    public org.w3c.dom.Element getUndoRedoElement() {
-      org.w3c.dom.Element element = null;
+    public Object getUndoRedoElement() {
+      Object node = null;
+      XeadSystem system = xeadDocumentModel.getXeadSystem();
+      //
+      // For JSON POJOs, simply return the reference - no cloning needed
+      // as POJOs are mutable and can be directly restored
       //
       if (nodeType_.equals("System")) {
-        element = (org.w3c.dom.Element) domNode_.cloneNode(false);
-        element.setAttribute("SelectedIndex",
-            Integer.toString(previousSelectedIndex_jTabbedPaneSystem));
-        if (previousSelectedIndex_jTabbedPaneSystem == 1) {
-          NodeList departmentList = systemNode.getElement().getElementsByTagName("Department");
-          for (int i = 0; i < departmentList.getLength(); i++) {
-            org.w3c.dom.Element departmentElementClone = (org.w3c.dom.Element) departmentList.item(
-                i).cloneNode(true);
-            element.appendChild(departmentElementClone);
-          }
-        }
-        if (previousSelectedIndex_jTabbedPaneSystem == 2) {
-          NodeList taskTypeList = systemNode.getElement().getElementsByTagName("TaskType");
-          for (int i = 0; i < taskTypeList.getLength(); i++) {
-            org.w3c.dom.Element taskTypeElementClone = (org.w3c.dom.Element) taskTypeList.item(i)
-                .cloneNode(true);
-            element.appendChild(taskTypeElementClone);
-          }
-        }
-        if (previousSelectedIndex_jTabbedPaneSystem == 3) {
-          NodeList tableTypeList = systemNode.getElement().getElementsByTagName("TableType");
-          for (int i = 0; i < tableTypeList.getLength(); i++) {
-            org.w3c.dom.Element tableTypeElementClone = (org.w3c.dom.Element) tableTypeList.item(i)
-                .cloneNode(true);
-            element.appendChild(tableTypeElementClone);
-          }
-        }
-        if (previousSelectedIndex_jTabbedPaneSystem == 4) {
-          NodeList dataTypeList = systemNode.getElement().getElementsByTagName("DataType");
-          for (int i = 0; i < dataTypeList.getLength(); i++) {
-            org.w3c.dom.Element dataTypeElementClone = (org.w3c.dom.Element) dataTypeList.item(i)
-                .cloneNode(true);
-            element.appendChild(dataTypeElementClone);
-          }
-        }
-        if (previousSelectedIndex_jTabbedPaneSystem == 5) {
-          NodeList functionTypeList = systemNode.getElement().getElementsByTagName("FunctionType");
-          for (int i = 0; i < functionTypeList.getLength(); i++) {
-            org.w3c.dom.Element functionTypeElementClone = (org.w3c.dom.Element) functionTypeList.item(
-                i).cloneNode(true);
-            element.appendChild(functionTypeElementClone);
-          }
-        }
-        if (previousSelectedIndex_jTabbedPaneSystem == 6) {
-          NodeList termsList = systemNode.getElement().getElementsByTagName("Terms");
-          for (int i = 0; i < termsList.getLength(); i++) {
-            org.w3c.dom.Element termsElementClone = (org.w3c.dom.Element) termsList.item(i)
-                .cloneNode(true);
-            element.appendChild(termsElementClone);
-          }
-        }
-        if (previousSelectedIndex_jTabbedPaneSystem == 7) {
-          NodeList maintenanceLogList = systemNode.getElement()
-              .getElementsByTagName("MaintenanceLog");
-          for (int i = 0; i < maintenanceLogList.getLength(); i++) {
-            org.w3c.dom.Element maintenanceLogElementClone = (org.w3c.dom.Element) maintenanceLogList.item(
-                i).cloneNode(true);
-            element.appendChild(maintenanceLogElementClone);
-          }
-        }
+        // Return the system object reference
+        node = system;
       }
       //
       if (nodeType_.equals("TableList")) {
         XeadTreeNode parentNode = (XeadTreeNode) this.getParent();
-        element = (org.w3c.dom.Element) parentNode.getElement().cloneNode(true);
+        // Return the parent's JSON node reference
+        node = parentNode.getJsonNode_();
       }
       //
       if (nodeType_.equals("TableFieldList")) {
         XeadTreeNode parentNode = (XeadTreeNode) this.getParent();
-        element = (org.w3c.dom.Element) parentNode.getElement().cloneNode(true);
+        // Return the parent's JSON node reference
+        node = parentNode.getJsonNode_();
       }
       //
       if (nodeType_.equals("TableKey")) {
-        element = (org.w3c.dom.Element) domNode_.cloneNode(true);
-        //
-        //Create clone of all relationship related to the key//
-        org.w3c.dom.Element relationshipElement;
-        XeadTreeNode tableNode = (XeadTreeNode) this.getParent().getParent();
-        String tableID = tableNode.getElement().getAttribute("ID");
-        String keyID = domNode_.getAttribute("ID");
-        //
-        NodeList relationshipList = systemNode.getElement().getElementsByTagName("Relationship");
-        for (int i = 0; i < relationshipList.getLength(); i++) {
-          relationshipElement = (org.w3c.dom.Element) relationshipList.item(i);
-          if (tableID.equals(relationshipElement.getAttribute("Table1ID")) && keyID.equals(
-              relationshipElement.getAttribute("TableKey1ID")) ||
-              tableID.equals(relationshipElement.getAttribute("Table2ID")) && keyID.equals(
-                  relationshipElement.getAttribute("TableKey2ID"))) {
-            element.appendChild(relationshipElement.cloneNode(true));
-          }
-        }
+        // Return the current JSON node reference
+        node = getJsonNode_();
       }
       //
       if (nodeType_.equals("TableField")) {
-        element = (org.w3c.dom.Element) domNode_.cloneNode(true);
-        for (int i = 0; i < newlyAddedDataTypeElementList.size(); i++) {
-          Object dataTypeObj = newlyAddedDataTypeElementList.get(i);
-          if (dataTypeObj instanceof org.w3c.dom.Element) {
-            element.appendChild((org.w3c.dom.Element) ((org.w3c.dom.Element) dataTypeObj).cloneNode(true));
-          }
-          // For JSON POJOs, they are already in XeadSystem, no need to clone
-        }
+        // Return the current JSON node reference
+        node = getJsonNode_();
       }
       //
-      if (element == null) {
-        element = (org.w3c.dom.Element) domNode_.cloneNode(true);
+      if (node == null) {
+        // Default: return the current JSON node reference
+        node = getJsonNode_();
       }
       //
-      return element;
+      return node;
     }
 
     public boolean isPrimaryKeyField() {
