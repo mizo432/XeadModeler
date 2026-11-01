@@ -2,6 +2,9 @@ package xeadModeler.view;
 
 import xeadModeler.Modeler;
 import xeadModeler.Modeler.XeadTreeNode;
+import xeadModeler.model.json.Table;
+import xeadModeler.model.json.TableKey;
+import xeadModeler.model.json.Relationship;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -24,25 +27,28 @@ public class TableModelRelationshipList extends DefaultTableModel {
         boolean editable = false;
         if (col == 6) {
             XeadTreeNode tableNode = (XeadTreeNode) modeler.tableKeyNode.getParent().getParent();
-            String tableID = tableNode.getElement().getAttribute("ID");
-            String tableKeyID = modeler.tableKeyNode.getElement().getAttribute("ID");
+            Table table = (Table) tableNode.getPojo();
+            TableKey tableKey = (TableKey) modeler.tableKeyNode.getPojo();
+            String tableID = table.getId();
+            String tableKeyID = tableKey.getId();
             TableRowNumber tableRowNumber = (TableRowNumber) getValueAt(row, 0);
-            if (tableRowNumber.getElement().getAttribute("Type").equals("SUBTYPE")) {
+            Relationship relationship = (Relationship) tableRowNumber.getPojo();
+            if (relationship.getType() != null && relationship.getType().equals("SUBTYPE")) {
                 editable = true;
                 modeler.informationOnThisPageChanged = true;
             }
-            if (tableRowNumber.getElement().getAttribute("Type").equals("REFFER")) {
-                if (tableRowNumber.getElement().getAttribute("Table1ID").equals(tableID)
-                    && tableRowNumber.getElement().getAttribute("TableKey1ID").equals(tableKeyID)) {
+            if (relationship.getType() != null && relationship.getType().equals("REFFER")) {
+                if (relationship.getTable1Id() != null && relationship.getTable1Id().equals(tableID)
+                    && relationship.getTableKey1Id() != null && relationship.getTableKey1Id().equals(tableKeyID)) {
                     editable = false;
                 }
-                if (tableRowNumber.getElement().getAttribute("Table2ID").equals(tableID)
-                    && tableRowNumber.getElement().getAttribute("TableKey2ID").equals(tableKeyID)) {
+                if (relationship.getTable2Id() != null && relationship.getTable2Id().equals(tableID)
+                    && relationship.getTableKey2Id() != null && relationship.getTableKey2Id().equals(tableKeyID)) {
                     editable = true;
                     modeler.informationOnThisPageChanged = true;
                 }
             }
-            if (tableRowNumber.getElement().getAttribute("Type").equals("FAMILY")) {
+            if (relationship.getType() != null && relationship.getType().equals("FAMILY")) {
                 editable = false;
             }
         }

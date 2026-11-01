@@ -1,9 +1,12 @@
 package xeadModeler.service;
 
-import xeadModeler.view.DialogMatrixList;
+// TODO: DialogMatrixListをJSONベースに修正するまでコメントアウト
+// import xeadModeler.view.DialogMatrixList;
 import xeadModeler.view.DialogCreateTableStatement;
-import xeadModeler.view.DialogDocuments;
-import xeadModeler.view.DialogReorganizeDataTypes;
+// TODO: DialogDocumentsをJSONベースに修正するまでコメントアウト
+// import xeadModeler.view.DialogDocuments;
+// TODO: DialogReorganizeDataTypesをJSONベースに修正するまでコメントアウト
+// import xeadModeler.view.DialogReorganizeDataTypes;
 
 import org.springframework.stereotype.Service;
 

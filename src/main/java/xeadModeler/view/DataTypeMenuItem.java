@@ -2,12 +2,18 @@ package xeadModeler.view;
 
 import xeadModeler.Modeler;
 import xeadModeler.Modeler.XeadTreeNode;
+import xeadModeler.model.json.XeadSystem;
+import xeadModeler.model.json.Relationship;
+import xeadModeler.model.json.Table;
+import xeadModeler.model.json.TableField;
+import xeadModeler.model.json.TableKey;
+import xeadModeler.model.json.TableKeyField;
+import xeadModeler.model.json.DataType;
 
 import javax.swing.*;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 /**
  * データタイプメニュー項目クラス
@@ -20,35 +26,38 @@ public class DataTypeMenuItem extends JMenuItem {
     private static final long serialVersionUID = 1L;
     String dataTypeID;
     String dataTypeName;
-    Element dataTypeElement;
+    DataType dataTypeObj;
     private Modeler modeler;
 
-    public DataTypeMenuItem(Modeler modeler, Element element) {
+    public DataTypeMenuItem(Modeler modeler, DataType dt) {
         super();
         this.modeler = modeler;
         String wrkStr1 = "";
         String wrkStr2 = "";
         String zenkaku = "";
-        dataTypeElement = element;
-        if (dataTypeElement.getAttribute("BasicType").equals("SignedNumber")
-            || dataTypeElement.getAttribute("BasicType").equals("UnsignedNumber")) {
+        dataTypeObj = dt;
+        String basicType = dt.getBasicType() != null ? dt.getBasicType() : "";
+        if (basicType.equals("SignedNumber")
+            || basicType.equals("UnsignedNumber")) {
             wrkStr1 =
-                dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
+                (dt.getLength() != null ? dt.getLength() : 0) + "." + (dt.getDecimal() != null ? dt.getDecimal() : 0);
         } else {
-            wrkStr1 = dataTypeElement.getAttribute("Length");
+            wrkStr1 = String.valueOf(dt.getLength() != null ? dt.getLength() : 0);
         }
         zenkaku = getZenkakuOfHankaku(wrkStr1);
-        if (dataTypeElement.getAttribute("Name").contains(wrkStr1)
-            || dataTypeElement.getAttribute("SortKey").contains(wrkStr1)
-            || dataTypeElement.getAttribute("Name").contains(zenkaku)) {
-            wrkStr2 = dataTypeElement.getAttribute("Name");
+        String name = dt.getName() != null ? dt.getName() : "";
+        String sortKey = dt.getSortKey() != null ? dt.getSortKey() : "";
+        if (name.contains(wrkStr1)
+            || sortKey.contains(wrkStr1)
+            || name.contains(zenkaku)) {
+            wrkStr2 = name;
         } else {
-            wrkStr2 = dataTypeElement.getAttribute("Name") + "(" + wrkStr1 + ")";
+            wrkStr2 = name + "(" + wrkStr1 + ")";
         }
-        if (wrkStr2.startsWith(dataTypeElement.getAttribute("SortKey"))) {
+        if (wrkStr2.startsWith(sortKey)) {
             setText(wrkStr2);
         } else {
-            setText(dataTypeElement.getAttribute("SortKey") + " " + wrkStr2);
+            setText(sortKey + " " + wrkStr2);
         }
         addActionListener(new dataTypeMenuItemActionListener());
     }
@@ -74,30 +83,38 @@ public class DataTypeMenuItem extends JMenuItem {
 
         public void actionPerformed(ActionEvent e) {
             XeadTreeNode tableNode = (XeadTreeNode) modeler.currentMainTreeNode.getParent().getParent();
-            NodeList nodeList1, nodeList2;
-            NodeList nodeList3 = modeler.domDocument.getElementsByTagName("Relationship");
-            Element element1, element2, element3;
+            XeadSystem xeadSystem = modeler.getXeadDocumentModel().getXeadSystem();
+            List<Relationship> relationshipList = xeadSystem != null ? xeadSystem.getRelationships() : null;
+            Table table = (Table) tableNode.getPojo();
+            TableField tableField = (TableField) modeler.currentMainTreeNode.getPojo();
             boolean relationshipAlreadyExist, thisIsComposedOfKey;
-            String tableID = tableNode.getElement().getAttribute("ID");
-            String tableFieldID = modeler.currentMainTreeNode.getElement().getAttribute("ID");
+            String tableID = table.getId();
+            String tableFieldID = tableField.getId();
             //
-            if (!dataTypeElement.getAttribute("ID").equals(modeler.tableFieldDataTypeID)) {
-                modeler.tableFieldDataTypeID = dataTypeElement.getAttribute("ID");
+            if (!dataTypeObj.getId().equals(modeler.tableFieldDataTypeID)) {
+                modeler.tableFieldDataTypeID = dataTypeObj.getId();
                 modeler.jTextFieldTableFieldDataType.setText(getText());
                 if (modeler.jTextFieldTableFieldAlias.getText().equals("")) {
-                    NodeList fieldList = modeler.domDocument.getElementsByTagName("TableField");
+                    List<TableField> allFields = new java.util.ArrayList<>();
+                    if (xeadSystem != null) {
+                        for (Table t : xeadSystem.getTables()) {
+                            if (t.getTableFields() != null) {
+                                allFields.addAll(t.getTableFields());
+                            }
+                        }
+                    }
                     String fieldAlias = "";
                     boolean isAllTheSameAlias = true;
-                    for (int i = 0; i < fieldList.getLength(); i++) {
-                        element1 = (Element) fieldList.item(i);
-                        if (element1.getAttribute("DataTypeID").equals(modeler.tableFieldDataTypeID)) {
-                            if (!element1.getAttribute("Alias").equals("")
+                    for (TableField tf : allFields) {
+                        if (tf.getDataTypeId() != null && tf.getDataTypeId().equals(modeler.tableFieldDataTypeID)) {
+                            String alias = tf.getAlias() != null ? tf.getAlias() : "";
+                            if (!alias.equals("")
                                 && !fieldAlias.equals("")
-                                && !element1.getAttribute("Alias").equals(fieldAlias)) {
+                                && !alias.equals(fieldAlias)) {
                                 isAllTheSameAlias = false;
                             }
-                            if (!element1.getAttribute("Alias").equals("")) {
-                                fieldAlias = element1.getAttribute("Alias");
+                            if (!alias.equals("")) {
+                                fieldAlias = alias;
                             }
                         }
                     }
@@ -106,47 +123,46 @@ public class DataTypeMenuItem extends JMenuItem {
                     }
                 }
                 //
-                nodeList1 = tableNode.getElement().getElementsByTagName("TableKey");
-                for (int i = 0; i < nodeList1.getLength(); i++) {
-                    element1 = (Element) nodeList1.item(i);
-                    thisIsComposedOfKey = false;
-                    nodeList2 = element1.getElementsByTagName("TableKeyField");
-                    for (int j = 0; j < nodeList2.getLength(); j++) {
-                        element2 = (Element) nodeList2.item(j);
-                        if (element2.getAttribute("FieldID").equals(tableFieldID)) {
-                            thisIsComposedOfKey = true;
-                            break;
-                        }
-                    }
-                    if (thisIsComposedOfKey) {
-                        relationshipAlreadyExist = false;
-                        String tableKeyID = element1.getAttribute("ID");
-                        for (int j = 0; j < nodeList3.getLength(); j++) {
-                            element3 = (Element) nodeList3.item(j);
-                            if (element3.getAttribute("Table1ID").equals(tableID) && element3.getAttribute(
-                                "TableKey1ID").equals(tableKeyID)) {
-                                relationshipAlreadyExist = true;
-                                break;
-                            }
-                            if (element3.getAttribute("Table2ID").equals(tableID) && element3.getAttribute(
-                                "TableKey2ID").equals(tableKeyID)) {
-                                relationshipAlreadyExist = true;
-                                break;
-                            }
-                        }
-                        if (relationshipAlreadyExist) {
-                            if (!modeler.isWarningAcceptedForDataTypeUnmatch) {
-                                Object[] bts = {"OK", modeler.res.getString("S5763")};
-                                int rtn = JOptionPane.showOptionDialog(modeler.jButtonTableFieldDataTypeChange,
-                                    modeler.res.getString("S1920") + "\n"
-                                        + modeler.res.getString("S1922") + "\n" + modeler.res.getString("S1924"),
-                                    modeler.res.getString("S1925"), JOptionPane.DEFAULT_OPTION,
-                                    JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
-                                if (rtn == 1) {
-                                    modeler.isWarningAcceptedForDataTypeUnmatch = true;
+                if (table.getTableKeys() != null) {
+                    for (TableKey tableKey : table.getTableKeys()) {
+                        thisIsComposedOfKey = false;
+                        if (tableKey.getTableKeyFields() != null) {
+                            for (TableKeyField tkf : tableKey.getTableKeyFields()) {
+                                if (tkf.getFieldId() != null && tkf.getFieldId().equals(tableFieldID)) {
+                                    thisIsComposedOfKey = true;
+                                    break;
                                 }
                             }
-                            break;
+                        }
+                        if (thisIsComposedOfKey) {
+                            relationshipAlreadyExist = false;
+                            String tableKeyID = tableKey.getId();
+                            if (relationshipList != null) {
+                                for (Relationship rel : relationshipList) {
+                                    if (rel.getTable1Id() != null && rel.getTable1Id().equals(tableID) && rel.getTableKey1Id() != null && rel.getTableKey1Id().equals(tableKeyID)) {
+                                        relationshipAlreadyExist = true;
+                                        break;
+                                    }
+                                    if (rel.getTable2Id() != null && rel.getTable2Id().equals(tableID) && rel.getTableKey2Id() != null && rel.getTableKey2Id().equals(tableKeyID)) {
+                                        relationshipAlreadyExist = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (relationshipAlreadyExist) {
+                                if (!modeler.isWarningAcceptedForDataTypeUnmatch) {
+                                    Object[] bts = {"OK", modeler.res.getString("S5763")};
+                                    int rtn = JOptionPane.showOptionDialog(modeler.jButtonTableFieldDataTypeChange,
+                                        modeler.res.getString("S1920") + "\n"
+                                            + modeler.res.getString("S1922") + "\n" + modeler.res.getString("S1924"),
+                                        modeler.res.getString("S1925"), JOptionPane.DEFAULT_OPTION,
+                                        JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
+                                    if (rtn == 1) {
+                                        modeler.isWarningAcceptedForDataTypeUnmatch = true;
+                                    }
+                                }
+                                break;
+                            }
                         }
                     }
                 }
