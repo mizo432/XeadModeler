@@ -1,12 +1,14 @@
 package xeadModeler.view;
 
 import xeadModeler.model.XeadElement;
+import tools.jackson.databind.JsonNode;
 
 import javax.swing.*;
 import java.util.*;
 
 /**
- * ソート可能なDOM要素のListModel
+ * ソート可能な要素のListModel
+ * XML DOM要素とJSONノードの両方をサポートします。
  *
  * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
@@ -17,6 +19,11 @@ public class SortableDomElementListModel extends DefaultListModel<XeadElement> {
 
     public void addElementFromDom(org.w3c.dom.Element element) {
         XeadElement xeadElement = new XeadElement(element);
+        super.addElement(xeadElement);
+    }
+
+    public void addElementFromJson(JsonNode node) {
+        XeadElement xeadElement = new XeadElement(node);
         super.addElement(xeadElement);
     }
 
