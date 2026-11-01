@@ -20371,9 +20371,7 @@ public class Modeler extends JFrame {
     public String deleteNode() {
       XeadTreeNode parentNode = (XeadTreeNode) this.getParent();
       String errorMessage = "";
-      org.w3c.dom.Element element1, element2, element3;
-      NodeList nodeList1, nodeList2, nodeList3;
-      org.w3c.dom.Node parentDomNode;
+      XeadSystem system = xeadDocumentModel.getXeadSystem();
       //
       //Delete SubjectArea//
       if (nodeType_.equals("SubjectArea")) {
@@ -20382,20 +20380,27 @@ public class Modeler extends JFrame {
         application.getXeadUndoManager().addLogOfRemove(this);
         //
         //Remove node//
-        systemNode.getElement().removeChild(domNode_);
+        if (system.getSubjectAreas() != null) {
+          system.getSubjectAreas().removeIf(subjectArea ->
+              subjectArea.getId() != null && subjectArea.getId().equals(getAttribute("ID")));
+        }
         parentNode.remove(this);
       }
       //
       //Delete Role//
       if (nodeType_.equals("Role")) {
-        String roleID = domNode_.getAttribute("ID");
-        nodeList1 = domDocument.getElementsByTagName("Task");
-        for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          if (element1.getAttribute("RoleID").equals(roleID)) {
-            errorMessage = res.getString("S3802");
-            break;
+        String roleID = getAttribute("ID");
+        boolean roleInUse = false;
+        if (system.getTasks() != null) {
+          for (Task task : system.getTasks()) {
+            if (roleID.equals(task.getRoleID())) {
+              roleInUse = true;
+              break;
+            }
           }
+        }
+        if (roleInUse) {
+          errorMessage = res.getString("S3802");
         }
         if (errorMessage == "") {
           //
@@ -20403,7 +20408,10 @@ public class Modeler extends JFrame {
           application.getXeadUndoManager().addLogOfRemove(this);
           //
           //Remove node//
-          systemNode.getElement().removeChild(domNode_);
+          if (system.getRoles() != null) {
+            system.getRoles().removeIf(role ->
+                role.getId() != null && role.getId().equals(roleID));
+          }
           parentNode.remove(this);
         }
       }
@@ -20412,15 +20420,18 @@ public class Modeler extends JFrame {
       if (nodeType_.equals("Task")) {
         int numberOfSubjectAreaUsingThisTask = 0;
         String nameOfSubjectArea = "";
-        String taskID = domNode_.getAttribute("ID");
-        nodeList1 = domDocument.getElementsByTagName("DataflowNode");
-        for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          if (element1.getAttribute("TaskID").equals(taskID)) {
-            numberOfSubjectAreaUsingThisTask++;
-            if (numberOfSubjectAreaUsingThisTask == 1) {
-              element2 = (org.w3c.dom.Element) element1.getParentNode();
-              nameOfSubjectArea = element2.getAttribute("Name");
+        String taskID = getAttribute("ID");
+        if (system.getSubjectAreas() != null) {
+          for (xeadModeler.model.json.SubjectArea subjectArea : system.getSubjectAreas()) {
+            if (subjectArea.getDataflowNodes() != null) {
+              for (xeadModeler.model.json.DataflowNode dataflowNode : subjectArea.getDataflowNodes()) {
+                if (taskID.equals(dataflowNode.getTaskID())) {
+                  numberOfSubjectAreaUsingThisTask++;
+                  if (numberOfSubjectAreaUsingThisTask == 1) {
+                    nameOfSubjectArea = subjectArea.getName();
+                  }
+                }
+              }
             }
           }
         }
@@ -20435,31 +20446,36 @@ public class Modeler extends JFrame {
           application.getXeadUndoManager().addLogOfRemove(this);
           //
           //Remove node//
-          systemNode.getElement().removeChild(domNode_);
+          if (system.getTasks() != null) {
+            system.getTasks().removeIf(task ->
+                task.getId() != null && task.getId().equals(taskID));
+          }
           parentNode.remove(this);
         }
       }
       //
       //Delete Subsystem//
       if (nodeType_.equals("Subsystem")) {
-        String subsystemID = domNode_.getAttribute("ID");
-        nodeList1 = domDocument.getElementsByTagName("Table");
-        for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          if (element1.getAttribute("SubsystemID").equals(subsystemID)) {
-            errorMessage = res.getString("S3820");
-            break;
-          }
-        }
-        if (errorMessage == "") {
-          nodeList1 = domDocument.getElementsByTagName("Function");
-          for (int i = 0; i < nodeList1.getLength(); i++) {
-            element1 = (org.w3c.dom.Element) nodeList1.item(i);
-            if (element1.getAttribute("SubsystemID").equals(subsystemID)) {
-              errorMessage = res.getString("S3824");
+        String subsystemID = getAttribute("ID");
+        boolean subsystemInUse = false;
+        if (system.getTables() != null) {
+          for (Table table : system.getTables()) {
+            if (subsystemID.equals(table.getSubsystemID())) {
+              subsystemInUse = true;
               break;
             }
           }
+        }
+        if (!subsystemInUse && system.getFunctions() != null) {
+          for (xeadModeler.model.json.Function function : system.getFunctions()) {
+            if (subsystemID.equals(function.getSubsystemID())) {
+              subsystemInUse = true;
+              break;
+            }
+          }
+        }
+        if (subsystemInUse) {
+          errorMessage = res.getString("S3820");
         }
         if (errorMessage == "") {
           //
@@ -20467,45 +20483,48 @@ public class Modeler extends JFrame {
           application.getXeadUndoManager().addLogOfRemove(this);
           //
           //Remove node//
-          systemNode.getElement().removeChild(domNode_);
+          if (system.getSubsystems() != null) {
+            system.getSubsystems().removeIf(subsystem ->
+                subsystem.getId() != null && subsystem.getId().equals(subsystemID));
+          }
           parentNode.remove(this);
         }
       }
       //
       //Delete Table//
       if (nodeType_.equals("Table")) {
-        String tableID = domNode_.getAttribute("ID");
-        nodeList1 = domDocument.getElementsByTagName("IOTable");
-        for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          if (element1.getAttribute("TableID").equals(tableID)) {
-            errorMessage = res.getString("S3830");
-            break;
-          }
-        }
-        if (errorMessage == "") {
-          nodeList1 = domDocument.getElementsByTagName("Relationship");
-          for (int i = 0; i < nodeList1.getLength(); i++) {
-            element1 = (org.w3c.dom.Element) nodeList1.item(i);
-            if (element1.getAttribute("Table1ID").equals(tableID) || element1.getAttribute(
-                "Table2ID").equals(tableID)) {
-              errorMessage = res.getString("S3835");
+        String tableID = getAttribute("ID");
+        boolean tableInUse = false;
+        if (system.getIotables() != null) {
+          for (IOTable iotable : system.getIotables()) {
+            if (tableID.equals(iotable.getTableId())) {
+              tableInUse = true;
               break;
             }
           }
         }
-        if (errorMessage == "") {
-          nodeList1 = domDocument.getElementsByTagName("SubsystemTable");
+        if (!tableInUse && system.getRelationships() != null) {
+          for (Relationship relationship : system.getRelationships()) {
+            if (tableID.equals(relationship.getTable1Id()) || tableID.equals(relationship.getTable2Id())) {
+              tableInUse = true;
+              break;
+            }
+          }
+        }
+        if (!tableInUse && system.getSubsystems() != null) {
           int numberOfSubsystemUsingThisTable = 0;
           String nameOfSubsystem = "";
-          for (int i = 0; i < nodeList1.getLength(); i++) {
-            element1 = (org.w3c.dom.Element) nodeList1.item(i);
-            element2 = (org.w3c.dom.Element) element1.getParentNode(); //Subsystem element//
-            if (element1.getAttribute("TableID").equals(tableID) &&
-                !domNode_.getAttribute("SubsystemID").equals(element2.getAttribute("ID"))) {
-              numberOfSubsystemUsingThisTable = numberOfSubsystemUsingThisTable + 1;
-              if (numberOfSubsystemUsingThisTable == 1) {
-                nameOfSubsystem = element2.getAttribute("Name");
+          String thisSubsystemID = getAttribute("SubsystemID");
+          for (Subsystem subsystem : system.getSubsystems()) {
+            if (subsystem.getSubsystemTables() != null) {
+              for (SubsystemTable subsystemTable : subsystem.getSubsystemTables()) {
+                if (tableID.equals(subsystemTable.getTableId()) &&
+                    !thisSubsystemID.equals(subsystem.getId())) {
+                  numberOfSubsystemUsingThisTable++;
+                  if (numberOfSubsystemUsingThisTable == 1) {
+                    nameOfSubsystem = subsystem.getName();
+                  }
+                }
               }
             }
           }
@@ -20519,13 +20538,19 @@ public class Modeler extends JFrame {
                 "\n" + res.getString("S3851");
           }
         }
+        if (tableInUse && errorMessage == "") {
+          errorMessage = res.getString("S3830");
+        }
         if (errorMessage == "") {
           //
           //Add Log of Remove//
           application.getXeadUndoManager().addLogOfRemove(this);
           //
           //Remove node//
-          systemNode.getElement().removeChild(domNode_);
+          if (system.getTables() != null) {
+            system.getTables().removeIf(table ->
+                table.getId() != null && table.getId().equals(tableID));
+          }
           parentNode.remove(this);
           //
           //*****************************************************************//
@@ -20534,21 +20559,6 @@ public class Modeler extends JFrame {
           //DELETED WHEN APPLICATION ENDS. FOR THAT PURPOSE, FLAG CONTROLER( //
           //purgeOfSubsystemTableForDeletedTableRequired) IS INTRODUCED.     //
           //*****************************************************************//
-          ////Delete SubsystemTable//
-          //arrayIndex1 = -1;
-          //nodeList1 = domDocument.getElementsByTagName("SubsystemTable");
-          //for (int i = 0; i < nodeList1.getLength(); i++) {
-          //  element1 = (org.w3c.dom.Element)nodeList1.item(i);
-          //  if (element1.getAttribute("TableID").equals(tableID)) {
-          //    arrayIndex1 = arrayIndex1 + 1;
-          //    elementArray1[arrayIndex1] = element1;
-          //  }
-          //}
-          //for (int i = 0; i <= arrayIndex1; i++) {
-          //  parentDomNode = elementArray1[i].getParentNode();
-          //  parentDomNode.removeChild(elementArray1[i]);
-          //}
-          //
           isRequiredToPurgeInvalidSubsystemTable = true;
           //
           isRequiredToSetupSortableFieldList = true;
@@ -20558,31 +20568,40 @@ public class Modeler extends JFrame {
       //Delete TableField//
       if (nodeType_.equals("TableField")) {
         XeadTreeNode tableNode = (XeadTreeNode) parentNode.getParent();
-        String tableID = tableNode.getElement().getAttribute("ID");
-        String fieldID = domNode_.getAttribute("ID");
-        nodeList1 = tableNode.getElement().getElementsByTagName("TableKeyField");
-        for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          if (element1.getAttribute("FieldID").equals(fieldID)) {
-            errorMessage = res.getString("S3858");
-            break;
+        String tableID = tableNode.getAttribute("ID");
+        String fieldID = getAttribute("ID");
+        boolean fieldInKey = false;
+        Table table = (Table) tableNode.getJsonNode_();
+        if (table != null && table.getTableKeys() != null) {
+          for (TableKey tableKey : table.getTableKeys()) {
+            if (tableKey.getTableKeyFields() != null) {
+              for (TableKeyField keyField : tableKey.getTableKeyFields()) {
+                if (fieldID.equals(keyField.getFieldId())) {
+                  fieldInKey = true;
+                  break;
+                }
+              }
+            }
+            if (fieldInKey) break;
           }
         }
-        if (errorMessage == "") {
-          nodeList2 = domDocument.getElementsByTagName("IOTable");
-          for (int i = 0; i < nodeList2.getLength(); i++) {
-            element2 = (org.w3c.dom.Element) nodeList2.item(i);
-            if (element2.getAttribute("TableID").equals(tableID)) {
-              nodeList3 = element2.getElementsByTagName("IOTableField");
-              for (int j = 0; j < nodeList3.getLength(); j++) {
-                element3 = (org.w3c.dom.Element) nodeList3.item(j);
-                if (element3.getAttribute("FieldID").equals(fieldID)) {
-                  if (!element3.getAttribute("Descriptions").equals("")) {
-                    errorMessage = res.getString("S3866");
-                    break;
+        if (fieldInKey) {
+          errorMessage = res.getString("S3858");
+        }
+        if (errorMessage == "" && system.getIotables() != null) {
+          for (IOTable iotable : system.getIotables()) {
+            if (tableID.equals(iotable.getTableId())) {
+              if (iotable.getIotableFields() != null) {
+                for (IOTableField ioField : iotable.getIotableFields()) {
+                  if (fieldID.equals(ioField.getFieldId())) {
+                    if (ioField.getDescriptions() != null && !ioField.getDescriptions().equals("")) {
+                      errorMessage = res.getString("S3866");
+                      break;
+                    }
                   }
                 }
               }
+              break;
             }
           }
         }
@@ -20594,31 +20613,23 @@ public class Modeler extends JFrame {
           application.getXeadUndoManager().addLogOfRemove(this);
           //
           //Remove node//
-          NodeList nodeList = tableNode.getElement().getElementsByTagName("TableField");
-          for (int i = 0; i < nodeList.getLength(); i++) {
-            org.w3c.dom.Element element = (org.w3c.dom.Element) nodeList.item(i);
-            if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
-              tableNode.getElement().removeChild(element);
-              break;
-            }
+          if (table != null && table.getTableFields() != null) {
+            table.getTableFields().removeIf(tf ->
+                tf.getId() != null && tf.getId().equals(fieldID));
           }
           parentNode.remove(this);
           //
           isRequiredToSetupSortableFieldList = true;
           //
           //Delete IOTableField//
-          nodeList2 = domDocument.getElementsByTagName("IOTable");
-          for (int i = 0; i < nodeList2.getLength(); i++) {
-            element2 = (org.w3c.dom.Element) nodeList2.item(i);
-            if (element2.getAttribute("TableID").equals(tableID)) {
-              nodeList3 = element2.getElementsByTagName("IOTableField");
-              for (int j = 0; j < nodeList3.getLength(); j++) {
-                element3 = (org.w3c.dom.Element) nodeList3.item(j);
-                if (element3.getAttribute("FieldID").equals(fieldID)) {
-                  parentDomNode = element3.getParentNode();
-                  parentDomNode.removeChild(element3);
-                  break;
+          if (system.getIotables() != null) {
+            for (IOTable iotable : system.getIotables()) {
+              if (tableID.equals(iotable.getTableId())) {
+                if (iotable.getIotableFields() != null) {
+                  iotable.getIotableFields().removeIf(ioField ->
+                      ioField.getFieldId() != null && ioField.getFieldId().equals(fieldID));
                 }
+                break;
               }
             }
           }
@@ -20627,68 +20638,21 @@ public class Modeler extends JFrame {
       //
       //Delete TableKey//
       if (nodeType_.equals("TableKey")) {
-        if (domNode_.getAttribute("Type").equals("PK")) {
+        if ("PK".equals(getAttribute("Type"))) {
           errorMessage = res.getString("S3878");
         } else {
           XeadTreeNode tableNode = (XeadTreeNode) parentNode.getParent();
-          String tableID = tableNode.getElement().getAttribute("ID");
-          nodeList1 = domDocument.getElementsByTagName("Relationship");
-          for (int i = 0; i < nodeList1.getLength(); i++) {
-            element1 = (org.w3c.dom.Element) nodeList1.item(i);
-            if (element1.getAttribute("Table1ID").equals(tableID) && element1.getAttribute(
-                "TableKey1ID").equals(domNode_.getAttribute("ID"))) {
-              errorMessage = res.getString("S3884");
-              break;
-            }
-            if (element1.getAttribute("Table2ID").equals(tableID) && element1.getAttribute(
-                "TableKey2ID").equals(domNode_.getAttribute("ID"))) {
-              errorMessage = res.getString("S3884");
-              break;
-            }
-          }
-        }
-        if (errorMessage == "") {
-          //
-          //Add Log of Remove//
-          application.getXeadUndoManager().addLogOfRemove(this);
-          //
-          //Remove node//
-          XeadTreeNode tableNode = (XeadTreeNode) parentNode.getParent();
-          NodeList nodeList = tableNode.getElement().getElementsByTagName("TableKey");
-          for (int i = 0; i < nodeList.getLength(); i++) {
-            org.w3c.dom.Element element = (org.w3c.dom.Element) nodeList.item(i);
-            if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
-              tableNode.getElement().removeChild(element);
-              break;
-            }
-          }
-          parentNode.remove(this);
-        }
-      }
-      //
-      //Delete Function//
-      if (nodeType_.equals("Function")) {
-        String functionID = domNode_.getAttribute("ID");
-        nodeList1 = domDocument.getElementsByTagName("TaskFunctionIO");
-        for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          if (element1.getAttribute("FunctionID").equals(functionID)) {
-            errorMessage = res.getString("S3897");
-            break;
-          }
-        }
-        if (errorMessage == "") {
-          nodeList1 = domDocument.getElementsByTagName("Function");
-          for (int i = 0; i < nodeList1.getLength(); i++) {
-            element1 = (org.w3c.dom.Element) nodeList1.item(i);
-            if (!element1.getAttribute("ID").equals(functionID)) {
-              nodeList2 = element1.getElementsByTagName("FunctionUsedByThis");
-              for (int j = 0; j < nodeList2.getLength(); j++) {
-                element2 = (org.w3c.dom.Element) nodeList2.item(j);
-                if (element2.getAttribute("FunctionID").equals(functionID)) {
-                  errorMessage = res.getString("S3903");
-                  break;
-                }
+          String tableID = tableNode.getAttribute("ID");
+          String keyID = getAttribute("ID");
+          if (system.getRelationships() != null) {
+            for (Relationship relationship : system.getRelationships()) {
+              if (tableID.equals(relationship.getTable1Id()) && keyID.equals(relationship.getTableKey1Id())) {
+                errorMessage = res.getString("S3884");
+                break;
+              }
+              if (tableID.equals(relationship.getTable2Id()) && keyID.equals(relationship.getTableKey2Id())) {
+                errorMessage = res.getString("S3884");
+                break;
               }
             }
           }
@@ -20699,7 +20663,61 @@ public class Modeler extends JFrame {
           application.getXeadUndoManager().addLogOfRemove(this);
           //
           //Remove node//
-          systemNode.getElement().removeChild(domNode_);
+          XeadTreeNode tableNode = (XeadTreeNode) parentNode.getParent();
+          Table table = (Table) tableNode.getJsonNode_();
+          if (table != null && table.getTableKeys() != null) {
+            table.getTableKeys().removeIf(tk ->
+                tk.getId() != null && tk.getId().equals(getAttribute("ID")));
+          }
+          parentNode.remove(this);
+        }
+      }
+      //
+      //Delete Function//
+      if (nodeType_.equals("Function")) {
+        String functionID = getAttribute("ID");
+        boolean functionInUse = false;
+        if (system.getTasks() != null) {
+          for (Task task : system.getTasks()) {
+            if (task.getTaskFunctionIOs() != null) {
+              for (TaskFunctionIO tio : task.getTaskFunctionIOs()) {
+                if (functionID.equals(tio.getFunctionId())) {
+                  functionInUse = true;
+                  break;
+                }
+              }
+            }
+            if (functionInUse) break;
+          }
+        }
+        if (!functionInUse && system.getFunctions() != null) {
+          for (xeadModeler.model.json.Function func : system.getFunctions()) {
+            if (!functionID.equals(func.getId())) {
+              if (func.getFunctionUsedByThiss() != null) {
+                for (FunctionUsedByThis fubt : func.getFunctionUsedByThiss()) {
+                  if (functionID.equals(fubt.getFunctionId())) {
+                    functionInUse = true;
+                    break;
+                  }
+                }
+              }
+            }
+            if (functionInUse) break;
+          }
+        }
+        if (functionInUse) {
+          errorMessage = res.getString("S3897");
+        }
+        if (errorMessage == "") {
+          //
+          //Add Log of Remove//
+          application.getXeadUndoManager().addLogOfRemove(this);
+          //
+          //Remove node//
+          if (system.getFunctions() != null) {
+            system.getFunctions().removeIf(func ->
+                func.getId() != null && func.getId().equals(functionID));
+          }
           parentNode.remove(this);
           //
           isRequiredToSetupFunctionsStructre = true;
@@ -20708,15 +20726,24 @@ public class Modeler extends JFrame {
       //
       //Delete IOPanel//
       if (nodeType_.equals("IOPanel")) {
-        String functionID = parentNode.getElement().getAttribute("ID");
-        nodeList1 = domDocument.getElementsByTagName("TaskFunctionIO");
-        for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          if (element1.getAttribute("FunctionID").equals(functionID) && element1.getAttribute(
-              "IOID").equals(domNode_.getAttribute("ID"))) {
-            errorMessage = res.getString("S3911");
-            break;
+        String functionID = parentNode.getAttribute("ID");
+        String ioID = getAttribute("ID");
+        boolean ioInUse = false;
+        if (system.getTasks() != null) {
+          for (Task task : system.getTasks()) {
+            if (task.getTaskFunctionIOs() != null) {
+              for (TaskFunctionIO tio : task.getTaskFunctionIOs()) {
+                if (functionID.equals(tio.getFunctionId()) && ioID.equals(tio.getIoId())) {
+                  ioInUse = true;
+                  break;
+                }
+              }
+            }
+            if (ioInUse) break;
           }
+        }
+        if (ioInUse) {
+          errorMessage = res.getString("S3911");
         }
         if (errorMessage == "") {
           //
@@ -20724,13 +20751,10 @@ public class Modeler extends JFrame {
           application.getXeadUndoManager().addLogOfRemove(this);
           //
           //Remove node//
-          NodeList nodeList = parentNode.getElement().getElementsByTagName("IOPanel");
-          for (int i = 0; i < nodeList.getLength(); i++) {
-            org.w3c.dom.Element element = (org.w3c.dom.Element) nodeList.item(i);
-            if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
-              parentNode.getElement().removeChild(element);
-              break;
-            }
+          xeadModeler.model.json.Function function = (xeadModeler.model.json.Function) parentNode.getJsonNode_();
+          if (function != null && function.getIopanels() != null) {
+            function.getIopanels().removeIf(io ->
+                io.getId() != null && io.getId().equals(ioID));
           }
           parentNode.remove(this);
           //
@@ -20740,15 +20764,24 @@ public class Modeler extends JFrame {
       //
       //Delete IOSpool//
       if (nodeType_.equals("IOSpool")) {
-        String functionID = parentNode.getElement().getAttribute("ID");
-        nodeList1 = domDocument.getElementsByTagName("TaskFunctionIO");
-        for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          if (element1.getAttribute("FunctionID").equals(functionID) && element1.getAttribute(
-              "IOID").equals(domNode_.getAttribute("ID"))) {
-            errorMessage = res.getString("S3922");
-            break;
+        String functionID = parentNode.getAttribute("ID");
+        String ioID = getAttribute("ID");
+        boolean ioInUse = false;
+        if (system.getTasks() != null) {
+          for (Task task : system.getTasks()) {
+            if (task.getTaskFunctionIOs() != null) {
+              for (TaskFunctionIO tio : task.getTaskFunctionIOs()) {
+                if (functionID.equals(tio.getFunctionId()) && ioID.equals(tio.getIoId())) {
+                  ioInUse = true;
+                  break;
+                }
+              }
+            }
+            if (ioInUse) break;
           }
+        }
+        if (ioInUse) {
+          errorMessage = res.getString("S3922");
         }
         if (errorMessage == "") {
           //
@@ -20756,13 +20789,10 @@ public class Modeler extends JFrame {
           application.getXeadUndoManager().addLogOfRemove(this);
           //
           //Remove node//
-          NodeList nodeList = parentNode.getElement().getElementsByTagName("IOSpool");
-          for (int i = 0; i < nodeList.getLength(); i++) {
-            org.w3c.dom.Element element = (org.w3c.dom.Element) nodeList.item(i);
-            if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
-              parentNode.getElement().removeChild(element);
-              break;
-            }
+          xeadModeler.model.json.Function function = (xeadModeler.model.json.Function) parentNode.getJsonNode_();
+          if (function != null && function.getIospools() != null) {
+            function.getIospools().removeIf(io ->
+                io.getId() != null && io.getId().equals(ioID));
           }
           parentNode.remove(this);
           //
@@ -20777,28 +20807,34 @@ public class Modeler extends JFrame {
         application.getXeadUndoManager().addLogOfRemove(this);
         //
         //Remove node//
-        NodeList nodeList = parentNode.getElement().getElementsByTagName("IOTable");
-        for (int i = 0; i < nodeList.getLength(); i++) {
-          org.w3c.dom.Element element = (org.w3c.dom.Element) nodeList.item(i);
-          if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
-            parentNode.getElement().removeChild(element);
-            break;
-          }
+        xeadModeler.model.json.Function function = (xeadModeler.model.json.Function) parentNode.getJsonNode_();
+        if (function != null && function.getIotables() != null) {
+          function.getIotables().removeIf(io ->
+              io.getId() != null && io.getId().equals(getAttribute("ID")));
         }
         parentNode.remove(this);
       }
       //
       //Delete IOWebPage//
       if (nodeType_.equals("IOWebPage")) {
-        String functionID = parentNode.getElement().getAttribute("ID");
-        nodeList1 = domDocument.getElementsByTagName("TaskFunctionIO");
-        for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          if (element1.getAttribute("FunctionID").equals(functionID) && element1.getAttribute(
-              "IOID").equals(domNode_.getAttribute("ID"))) {
-            errorMessage = res.getString("S3937");
-            break;
+        String functionID = parentNode.getAttribute("ID");
+        String ioID = getAttribute("ID");
+        boolean ioInUse = false;
+        if (system.getTasks() != null) {
+          for (Task task : system.getTasks()) {
+            if (task.getTaskFunctionIOs() != null) {
+              for (TaskFunctionIO tio : task.getTaskFunctionIOs()) {
+                if (functionID.equals(tio.getFunctionId()) && ioID.equals(tio.getIoId())) {
+                  ioInUse = true;
+                  break;
+                }
+              }
+            }
+            if (ioInUse) break;
           }
+        }
+        if (ioInUse) {
+          errorMessage = res.getString("S3937");
         }
         if (errorMessage == "") {
           //
@@ -20806,13 +20842,10 @@ public class Modeler extends JFrame {
           application.getXeadUndoManager().addLogOfRemove(this);
           //
           //Remove node//
-          NodeList nodeList = parentNode.getElement().getElementsByTagName("IOWebPage");
-          for (int i = 0; i < nodeList.getLength(); i++) {
-            org.w3c.dom.Element element = (org.w3c.dom.Element) nodeList.item(i);
-            if (element.getAttribute("ID").equals(domNode_.getAttribute("ID"))) {
-              parentNode.getElement().removeChild(element);
-              break;
-            }
+          xeadModeler.model.json.Function function = (xeadModeler.model.json.Function) parentNode.getJsonNode_();
+          if (function != null && function.getIowebpages() != null) {
+            function.getIowebpages().removeIf(io ->
+                io.getId() != null && io.getId().equals(ioID));
           }
           parentNode.remove(this);
           //
