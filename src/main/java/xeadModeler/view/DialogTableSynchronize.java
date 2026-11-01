@@ -150,11 +150,13 @@ public class DialogTableSynchronize extends JDialog {
 				isSynchError_ = true;
 				errorMessage_ = res.getString("DialogTableSynchronize06");
 			} else {
-				if (domDocumentComparedTo == null) {
-					synchFileDomDocument_ = frame_.getSynchFileDocument(targetTableElement_.getAttribute("SynchFile"));
-				} else {
-					synchFileDomDocument_ = domDocumentComparedTo;
-				}
+				// TODO: JSON-based implementation needed
+				// if (domDocumentComparedTo == null) {
+				// 	synchFileDomDocument_ = frame_.getSynchFileDocument(targetTableElement_.getAttribute("SynchFile"));
+				// } else {
+				// 	synchFileDomDocument_ = domDocumentComparedTo;
+				// }
+				synchFileDomDocument_ = null;
 				if (synchFileDomDocument_ == null) {
 					isSynchError_ = true;
 					errorMessage_ = res.getString("DialogTableSynchronize07");

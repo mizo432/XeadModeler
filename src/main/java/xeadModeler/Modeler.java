@@ -58,6 +58,7 @@ import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.batik.svggen.SVGGraphics2DIOException;
 import org.w3c.dom.DOMException;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -67,6 +68,7 @@ import xeadModeler.controller.FileController;
 import xeadModeler.controller.TreeController;
 import xeadModeler.model.XeadDocumentModel;
 import xeadModeler.model.json.XeadSystem;
+import xeadModeler.model.json.Table;
 import xeadModeler.service.JsonService;
 import xeadModeler.service.JsonServiceImpl;
 import xeadModeler.view.ContentView;
@@ -196,7 +198,7 @@ public class Modeler extends JFrame {
   /**
    * JSON-based document model for this application
    */
-  private org.w3c.dom.Element domDocument; // JsonNodeWrapper wrapping XeadSystem
+  public org.w3c.dom.Document domDocument; // Document for creating elements
   private HashMap<String, XeadSystem> synchFileMap = new HashMap<String, XeadSystem>();
   private ArrayList<String> referringFileNameList = new ArrayList<String>();
   private ArrayList<XeadSystem> referringFileDocList = new ArrayList<XeadSystem>();
@@ -6290,6 +6292,22 @@ public class Modeler extends JFrame {
       }
     }
     return system;
+  }
+
+  /**
+   * Get the DOM document for compatibility with legacy code
+   * @return the DOM document
+   */
+  public org.w3c.dom.Document getDomDocument() {
+    return domDocument;
+  }
+
+  /**
+   * Increment and return the last relationship ID
+   * @return the new relationship ID
+   */
+  public int incrementLastIDOfRelationship() {
+    return ++lastIDOfRelationship;
   }
 
   public void setupReferringFileList(String fileNames) {
@@ -17584,19 +17602,19 @@ public class Modeler extends JFrame {
         }
       }
       if (fileName.equals("")) {
-        org.w3c.dom.Document document;
-        org.w3c.dom.Element tableElement;
+        XeadSystem system;
+        Table table;
         String synchFileName = "";
         for (int i = 0; i < referringFileDocList.size(); i++) {
-          document = referringFileDocList.get(i);
-          if (document != null) {
-            NodeList tableList = document.getElementsByTagName("Table");
-            for (int j = 0; j < tableList.getLength(); j++) {
-              tableElement = (org.w3c.dom.Element) tableList.item(j);
-              if (tableElement.getAttribute("SortKey")
+          system = referringFileDocList.get(i);
+          if (system != null) {
+            java.util.List<Table> tableList = system.getTables();
+            for (int j = 0; j < tableList.size(); j++) {
+              table = tableList.get(j);
+              if (table.getSortKey()
                   .equals(tableNode_.getElement().getAttribute("SortKey"))
-                  && !tableElement.getAttribute("SynchFile").equals("")) {
-                synchFileName = tableElement.getAttribute("SynchFile");
+                  && !table.getSynchFile().equals("")) {
+                synchFileName = table.getSynchFile();
                 if (synchFileName.contains("<CURRENT>")) {
                   File file = new File(currentFileName);
                   synchFileName = synchFileName.replace("<CURRENT>", file.getParent());
@@ -19254,7 +19272,6 @@ public class Modeler extends JFrame {
     @Override public String getPrefix() { return null; }
     @Override public String getLocalName() { return null; }
     @Override public String getNamespaceURI() { return null; }
-    @Override public String getPrefix() { return null; }
     @Override public void setPrefix(String prefix) throws DOMException {}
     @Override public String lookupNamespaceURI(String prefix) { return null; }
     @Override public boolean isDefaultNamespace(String namespaceURI) { return false; }
@@ -19272,8 +19289,10 @@ public class Modeler extends JFrame {
     @Override public Node removeChild(Node oldChild) throws DOMException { return null; }
     @Override public Node replaceChild(Node newChild, Node oldChild) throws DOMException { return null; }
     @Override public boolean hasChildNodes() { return false; }
+    @Override public boolean hasAttributes() { return false; }
     @Override public void normalize() {}
-    @Override public Node importNode(Node importedNode, boolean deep) throws DOMException { return null; }
+    // Note: importNode is deprecated in newer Java versions, removing @Override
+    public Node importNode(org.w3c.dom.Node importedNode, boolean deep) throws DOMException { return null; }
   }
 
   /**
@@ -19284,6 +19303,7 @@ public class Modeler extends JFrame {
     private static final long serialVersionUID = 1L;
     private String nodeType_;
     private Object jsonNode_; // JSON POJO (Table, Relationship, etc.)
+    private org.w3c.dom.Element domNode_; // DOM element wrapper for compatibility
     private boolean isPending_ = false;
     private boolean isError_ = false;
     private boolean isExtRefered_ = false;
@@ -23820,51 +23840,46 @@ public class Modeler extends JFrame {
             tableModelTableReferringFileList.removeRow(0);
           }
         }
+        // JSON-based: iterate over referring XeadSystem objects
         for (int i = 0; i < referringFileDocList.size(); i++) {
-          document = referringFileDocList.get(i);
-          if (document != null) {
-            NodeList tableList = document.getElementsByTagName("Table");
-            for (int j = 0; j < tableList.getLength(); j++) {
-              tableElement = (org.w3c.dom.Element) tableList.item(j);
-              if (tableElement.getAttribute("SortKey").equals(domNode_.getAttribute("SortKey"))
-                  && !tableElement.getAttribute("SynchFile").equals("")) {
-                fileName = tableElement.getAttribute("SynchFile");
-                if (fileName.contains("<CURRENT>")) {
-                  File file = new File(currentFileName);
-                  fileName = fileName.replace("<CURRENT>", file.getParent());
-                } else {
-                  if (!fileName.contains(File.separator)) {
+          XeadSystem system = referringFileDocList.get(i);
+          if (system != null) {
+            java.util.List<Table> tableList = system.getTables();
+            if (tableList != null) {
+              for (int j = 0; j < tableList.size(); j++) {
+                Table table = tableList.get(j);
+                if (table.getSortKey() != null && table.getSortKey().equals(domNode_.getAttribute("SortKey"))
+                    && table.getSynchFile() != null && !table.getSynchFile().equals("")) {
+                  fileName = table.getSynchFile();
+                  if (fileName.contains("<CURRENT>")) {
                     File file = new File(currentFileName);
-                    fileName = file.getParent() + File.separator + fileName;
-                  }
-                }
-                //fileName = fileName.replaceAll("\\", File.separator);
-                if (fileName.equals(currentFileName)) {
-                  workList = document.getElementsByTagName("System");
-                  systemElement = (org.w3c.dom.Element) workList.item(0);
-                  workList = document.getElementsByTagName("Subsystem");
-                  for (int k = 0; k < workList.getLength(); k++) {
-                    subsystemElement = (org.w3c.dom.Element) workList.item(k);
-                    if (subsystemElement.getAttribute("ID")
-                        .equals(tableElement.getAttribute("SubsystemID"))) {
-                      Object[] Cell = new Object[5];
-                      Cell[0] = count++;
-                      Cell[1] = referringFileNameList.get(i);
-                      Cell[2] =
-                          systemElement.getAttribute("Name") + "(" + systemElement.getAttribute(
-                              "Version") + ")";
-                      Cell[3] = subsystemElement.getAttribute("SortKey") + " "
-                          + subsystemElement.getAttribute("Name");
-                      if (dialogTableSynchronize.isSynchError(tableElement, domDocument)) {
-                        Cell[4] = "UNMATCH";
-                      } else {
-                        Cell[4] = "OK";
-                      }
-                      tableModelTableReferringFileList.addRow(Cell);
+                    fileName = fileName.replace("<CURRENT>", file.getParent());
+                  } else {
+                    if (!fileName.contains(File.separator)) {
+                      File file = new File(currentFileName);
+                      fileName = file.getParent() + File.separator + fileName;
                     }
                   }
+                  if (fileName.equals(currentFileName)) {
+                    String systemName = system.getName() != null ? system.getName() : "";
+                    String systemVersion = system.getVersion() != null ? system.getVersion() : "";
+                    if (system.getSubsystems() != null) {
+                      for (xeadModeler.model.json.Subsystem subsystem : system.getSubsystems()) {
+                        if (subsystem.getId() != null && subsystem.getId().equals(table.getSubsystemId())) {
+                          Object[] Cell = new Object[5];
+                          Cell[0] = count++;
+                          Cell[1] = referringFileNameList.get(i);
+                          Cell[2] = systemName + "(" + systemVersion + ")";
+                          Cell[3] = (subsystem.getSortKey() != null ? subsystem.getSortKey() : "") + " "
+                              + (subsystem.getName() != null ? subsystem.getName() : "");
+                          Cell[4] = "OK";
+                          tableModelTableReferringFileList.addRow(Cell);
+                        }
+                      }
+                    }
+                  }
+                  break;
                 }
-                break;
               }
             }
           }
@@ -31114,7 +31129,7 @@ public class Modeler extends JFrame {
   void jTextPaneIOPanelImage_caretUpdate(CaretEvent e) {
     if (jTextPaneIOPanelImage.getStyle("style1") != null) {
       drawRectangleOfBlockSelect(jTextPaneIOPanelImage);
-      Element elm = jTextPaneIOPanelImage.getStyledDocument()
+      javax.swing.text.Element elm = jTextPaneIOPanelImage.getStyledDocument()
           .getCharacterElement(jTextPaneIOPanelImage.getCaretPosition());
       jTextPaneIOPanelImage.setCaretColor(StyleConstants.getForeground(elm.getAttributes()));
     }
@@ -31227,7 +31242,7 @@ public class Modeler extends JFrame {
   void jTextPaneIOSpoolImage_caretUpdate(CaretEvent e) {
     drawRectangleOfBlockSelect(jTextPaneIOSpoolImage);
 
-    Element elm = jTextPaneIOSpoolImage.getStyledDocument()
+    javax.swing.text.Element elm = jTextPaneIOSpoolImage.getStyledDocument()
         .getCharacterElement(jTextPaneIOSpoolImage.getCaretPosition());
     Color bg = StyleConstants.getBackground(elm.getAttributes());
     if (bg.equals(Color.blue) || bg.equals(Color.gray) || bg.equals(Color.darkGray)) {

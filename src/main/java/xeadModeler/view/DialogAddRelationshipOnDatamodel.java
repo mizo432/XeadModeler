@@ -446,7 +446,8 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 		newElement.setAttribute("Type", "REFFER");
 		newElement.setAttribute("ExistWhen1", "");
 		newElement.setAttribute("ExistWhen2", "");
-		frame_.getSystemElement().appendChild(newElement);
+		// TODO: JSON-based implementation needed
+		// frame_.getSystemElement().appendChild(newElement);
 		frame_.getXeadUndoManager().addLogAfterModified(newTableKeyNode);
 		//
 		// Add Relationship attributes to each Subsystem if necessary//
@@ -623,10 +624,11 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 				newElement.setAttribute("Table2ID", targetTableNode_.getElement().getAttribute("ID"));
 				newElement.setAttribute("TableKey2ID", availableTableKeyNode.getElement().getAttribute("ID"));
 				newElement.setAttribute("Type", relationshipType);
-				newElement.setAttribute("ExistWhen1", "");
-				newElement.setAttribute("ExistWhen2", "");
-				frame_.getSystemElement().appendChild(newElement);
-				frame_.getXeadUndoManager().addLogAfterModified(availableTableKeyNode);
+ 			newElement.setAttribute("ExistWhen1", "");
+ 			newElement.setAttribute("ExistWhen2", "");
+ 			// TODO: JSON-based implementation needed
+ 			// frame_.getSystemElement().appendChild(newElement);
+ 			frame_.getXeadUndoManager().addLogAfterModified(availableTableKeyNode);
 				//
 				// Add Relationship attributes to each Subsystem if necessary//
 				NodeList subsystemNodeList = frame_.getDomDocument().getElementsByTagName("Subsystem");
