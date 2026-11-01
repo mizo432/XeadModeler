@@ -2,8 +2,6 @@ package xeadModeler.service;
 
 import xeadModeler.model.XeadDocumentModel;
 
-import org.w3c.dom.Element;
-
 /**
  * ツリー操作サービスのインターフェース
  * ツリーモデルの初期化、ノードの操作などの機能を担当します。
@@ -21,34 +19,35 @@ public interface TreeService {
     void initializeTreeModel(XeadDocumentModel documentModel) throws Exception;
     
     /**
-     * 指定されたノードの子ノードを追加します。
-     * @param parentElement 親要素
-     * @param nodeType ノードタイプ
+     * 指定されたタイプのノードを追加します。
+     * @param nodeType ノードタイプ (Table, Relationship, Subsystem, Function, Task, Role, SubjectArea, MaintenanceLog)
      * @param name ノード名
      * @param alias ノードエイリアス
-     * @return 追加された要素
+     * @return 追加されたオブジェクト
      */
-    Element addChildNode(Element parentElement, String nodeType, String name, String alias);
+    Object addChildNode(String nodeType, String name, String alias);
     
     /**
      * 指定されたノードを削除します。
-     * @param element 削除する要素
+     * @param type ノードタイプ
+     * @param id ノードID
      */
-    void removeNode(Element element);
+    void removeNode(String type, String id);
     
     /**
      * 指定されたノードを更新します。
-     * @param element 更新する要素
+     * @param type ノードタイプ
+     * @param id ノードID
      * @param name 新しい名前
      * @param alias 新しいエイリアス
      */
-    void updateNode(Element element, String name, String alias);
+    void updateNode(String type, String id, String name, String alias);
     
     /**
      * 指定されたタイプのノードを検索します。
      * @param type ノードタイプ
      * @param id ノードID
-     * @return 見つかった要素、見つからない場合はnull
+     * @return 見つかったオブジェクト、見つからない場合はnull
      */
-    Element findNode(String type, String id);
+    Object findNode(String type, String id);
 }

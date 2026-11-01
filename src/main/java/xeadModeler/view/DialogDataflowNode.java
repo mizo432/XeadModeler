@@ -420,41 +420,6 @@ public class DialogDataflowNode extends JDialog {
 	}
 }
 
-class KanjiTextArea extends JTextArea {
-	private static final long serialVersionUID = 1L;
-	public KanjiTextArea(){
-		super();
-		addFocusListener(new KanjiTextAreaListener());
-	}
-	class KanjiTextAreaListener implements FocusListener{
-		public void focusLost(FocusEvent event){
-			focusLostHandler();
-		}
-		public void focusGained(FocusEvent event){
-			focusGainedHandler();
-		}
-	}
-	private void focusGainedHandler(){
-		getInputContext().setCharacterSubsets(null);
-		String lang = Locale.getDefault().getLanguage();
-		if (lang.equals("ja")) {
-			Character.Subset[] subsets = new Character.Subset[] {java.awt.im.InputSubset.KANJI};
-			getInputContext().setCharacterSubsets(subsets);
-		}
-		//if (lang.equals("ko")) {
-		//  Character.Subset[] subsets = new Character.Subset[] {java.awt.im.InputSubset.HANJA};
-		//  getInputContext().setCharacterSubsets(subsets);
-		//}
-		if (lang.equals("zh")) {
-			Character.Subset[] subsets = new Character.Subset[] {java.awt.im.InputSubset.TRADITIONAL_HANZI};
-			getInputContext().setCharacterSubsets(subsets);
-		}
-	}
-	private void focusLostHandler() {
-		getInputContext().setCharacterSubsets(null);
-	}
-}
-
 class DialogDataflowNode_jButtonOK_actionAdapter implements java.awt.event.ActionListener {
 	DialogDataflowNode adaptee;
 

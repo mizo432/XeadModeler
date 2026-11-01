@@ -66,8 +66,15 @@ import org.apache.xml.serialize.XMLSerializer;
 
 import xeadModeler.controller.FileController;
 import xeadModeler.controller.TreeController;
+import xeadModeler.model.XeadDocumentModel;
+import xeadModeler.model.json.XeadSystem;
+import xeadModeler.service.JsonService;
+import xeadModeler.service.JsonServiceImpl;
 import xeadModeler.view.ContentView;
 import xeadModeler.view.TreeView;
+import xeadModeler.view.ModelerView;
+import xeadModeler.view.MenuBarView;
+import xeadModeler.view.SystemView;
 import xeadModeler.view.DialogAbout;
 import xeadModeler.view.DialogAddList;
 import xeadModeler.view.DialogAddRelationshipOnDatamodel;
@@ -196,6 +203,24 @@ public class Modeler extends JFrame {
   private HashMap<String, org.w3c.dom.Document> synchFileMap = new HashMap<String, org.w3c.dom.Document>();
   private ArrayList<String> referringFileNameList = new ArrayList<String>();
   private ArrayList<org.w3c.dom.Document> referringFileDocList = new ArrayList<org.w3c.dom.Document>();
+  /**
+   * JSON-based document model for file I/O
+   */
+  private XeadDocumentModel xeadDocumentModel;
+  
+  /**
+   * JSONサービス
+   */
+  private JsonService jsonService;
+  
+  /**
+   * Initialize JSON services
+   */
+  private void initializeJsonServices() {
+    this.jsonService = new JsonServiceImpl();
+    this.xeadDocumentModel = new XeadDocumentModel();
+    this.xeadDocumentModel.setJsonService(this.jsonService);
+  }
   /**
    * Variants for Properties
    */
@@ -1565,8 +1590,10 @@ public class Modeler extends JFrame {
   /**
    * MVC View and Controller instances
    */
+  private ModelerView modelerView;
   private TreeView treeView;
   private ContentView contentView;
+  private SystemView systemView;
   private TreeController treeController;
 
   /**
@@ -1592,7 +1619,7 @@ public class Modeler extends JFrame {
       // Initialize components //
       ///////////////////////////
       jbInitComponentsAndVariants();
-      jbInitComponentsForSystem();
+      initSystemView();
       jbInitComponentsForSubjectAreaList();
       jbInitComponentsForSubjectArea();
       jbInitComponentsForRoleList();
@@ -1631,6 +1658,8 @@ public class Modeler extends JFrame {
    * Initialize main components and variants
    */
   void jbInitComponentsAndVariants() {
+    // Initialize JSON services first
+    initializeJsonServices();
 
     /**
      * Read xteamdl.properties
@@ -1768,290 +1797,6 @@ public class Modeler extends JFrame {
     this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     /**
-     * main panels
-     */
-    jPanelMain = (JPanel) this.getContentPane();
-    jPanelMain.setLayout(new BorderLayout());
-    jPanelJumpButtons.setPreferredSize(new Dimension(10, 26));
-    jPanelJumpButtons.setLayout(gridLayoutJumpButtons);
-    gridLayoutJumpButtons.setColumns(8);
-    gridLayoutJumpButtons.setRows(0);
-    borderOriginal1 = BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.white,
-        UIManager.getColor("control"), Color.gray, UIManager.getColor("control"));
-    jProgressBar.setBorder(borderOriginal1);
-    jLabelChangeState.setBorder(jProgressBar.getBorder());
-    jLabelChangeState.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelChangeState.setHorizontalAlignment(SwingConstants.CENTER);
-    jPanelTopMargin1.setPreferredSize(new Dimension(10, 26));
-    jPanelTopMargin1.setLayout(new BorderLayout());
-    jPanelTopMargin1.setBorder(null);
-    GridLayout gridLayoutTopMargin = new GridLayout();
-    jPanelTopMargin2.setPreferredSize(new Dimension(160, 20));
-    jPanelTopMargin2.setLayout(gridLayoutTopMargin);
-    jPanelTopMargin2.setBorder(null);
-    jLabelSubtitle.setBorder(jProgressBar.getBorder());
-    jLabelSubtitle.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSubtitle.setPreferredSize(new Dimension(800, 17));
-    jLabelSubtitle.setText(res.getString("S49"));
-    jPanelMain.add(jPanelJumpButtons, BorderLayout.SOUTH);
-    jPanelMain.add(jSplitPaneMain, BorderLayout.CENTER);
-    jPanelMain.add(jPanelTopMargin1, BorderLayout.NORTH);
-    jPanelTopMargin1.add(jLabelSubtitle, BorderLayout.CENTER);
-    jPanelTopMargin1.add(jPanelTopMargin2, BorderLayout.EAST);
-    jPanelTopMargin2.add(jProgressBar, null);
-    jPanelTopMargin2.add(jLabelChangeState, null);
-    jSplitPaneMain.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-    jSplitPaneMain.add(jScrollPaneTreeView, JSplitPane.LEFT);
-    jSplitPaneMain.add(jPanelContentsPane, JSplitPane.RIGHT);
-    jSplitPaneMain.setDividerLocation(350);
-
-    /**
-     * main menu
-     */
-    jMenuFile.setText(res.getString("S50"));
-    jMenuFile.addMenuListener(new Modeler_jMenuFile_menuAdapter(this));
-    jMenuItemFileNew.setText(res.getString("S51"));
-    jMenuItemFileNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-    jMenuItemFileNew.addActionListener(new Modeler_jMenuItemFileNew_ActionAdapter(this));
-    jMenuItemFileOpen.setText(res.getString("S52"));
-    jMenuItemFileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-    jMenuItemFileOpen.addActionListener(new Modeler_jMenuItemFileOpen_ActionAdapter(this));
-    jMenuItemFileExit.setText(res.getString("S53"));
-    jMenuItemFileExit.addActionListener(new Modeler_jMenuItemFileExit_ActionAdapter(this));
-    jMenuItemFilePrintFormat.setText(res.getString("S54"));
-    jMenuItemFilePrintFormat.addActionListener(
-        new Modeler_jMenuItemFilePrintFormat_ActionAdapter(this));
-    jMenuItemFileSave.setText(res.getString("S56"));
-    jMenuItemFileSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-    jMenuItemFileSave.addActionListener(new Modeler_jMenuItemFileSave_ActionAdapter(this));
-    jMenuItemFileSaveAs.setText(res.getString("S57"));
-    jMenuItemFileSaveAs.addActionListener(new Modeler_jMenuItemFileSaveAs_ActionAdapter(this));
-    jMenuItemFileDiff.setText(res.getString("S120"));
-    jMenuItemFileDiff.addActionListener(new Modeler_jMenuItemFileDiff_ActionAdapter(this));
-    jMenuImport.setText(res.getString("S64"));
-    jMenuItemImportXEAD.setText(res.getString("S65"));
-    jMenuItemImportXEAD.addActionListener(new Modeler_jMenuItemImportXEAD_ActionAdapter(this));
-    jMenuItemImportXEAF.setText(res.getString("S7"));
-    jMenuItemImportXEAF.addActionListener(new Modeler_jMenuItemImportXEAF_ActionAdapter(this));
-    jMenuItemImportSQL.setText(res.getString("S66"));
-    jMenuItemImportSQL.addActionListener(new Modeler_jMenuItemImportSQL_ActionAdapter(this));
-    //jMenuItemImportRecover.setText(res.getString("S67"));
-    //jMenuItemImportRecover.addActionListener(new Modeler_jMenuItemImportRecover_ActionAdapter(this));
-    jMenuEdit.setText(res.getString("S58"));
-    jMenuEdit.addMenuListener(new Modeler_jMenuEdit_menuAdapter(this));
-    jMenuItemEditUndo.setText(res.getString("S59"));
-    jMenuItemEditUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
-    jMenuItemEditUndo.addActionListener(new Modeler_jMenuItemEditUndo_ActionAdapter(this));
-    jMenuItemEditUndo.setEnabled(false);
-    jMenuItemEditRedo.setText(res.getString("S60"));
-    jMenuItemEditRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
-    jMenuItemEditRedo.addActionListener(new Modeler_jMenuItemEditRedo_ActionAdapter(this));
-    jMenuItemEditRedo.setEnabled(false);
-    jMenuScan.setText(res.getString("S61"));
-    jMenuItemScanString.setText(res.getString("S62"));
-    jMenuItemScanString.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_F, ActionEvent.CTRL_MASK));
-    jMenuItemScanString.addActionListener(new Modeler_jMenuItemScanString_ActionAdapter(this));
-    jMenuScanSetBookmark.setText(res.getString("S63"));
-    jMenuItemScanSetBookmark1.setText("[1]");
-    jMenuItemScanSetBookmark1.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-    jMenuItemScanSetBookmark1.addActionListener(
-        new Modeler_jMenuItemScanSetBookmark1_ActionAdapter(this));
-    jMenuItemScanSetBookmark2.setText("[2]");
-    jMenuItemScanSetBookmark2.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-    jMenuItemScanSetBookmark2.addActionListener(
-        new Modeler_jMenuItemScanSetBookmark2_ActionAdapter(this));
-    jMenuItemScanSetBookmark3.setText("[3]");
-    jMenuItemScanSetBookmark3.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_3, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-    jMenuItemScanSetBookmark3.addActionListener(
-        new Modeler_jMenuItemScanSetBookmark3_ActionAdapter(this));
-    jMenuItemScanSetBookmark4.setText("[4]");
-    jMenuItemScanSetBookmark4.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_4, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-    jMenuItemScanSetBookmark4.addActionListener(
-        new Modeler_jMenuItemScanSetBookmark4_ActionAdapter(this));
-    jMenuItemScanSetBookmark5.setText("[5]");
-    jMenuItemScanSetBookmark5.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_5, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-    jMenuItemScanSetBookmark5.addActionListener(
-        new Modeler_jMenuItemScanSetBookmark5_ActionAdapter(this));
-    jMenuItemScanSetBookmark6.setText("[6]");
-    jMenuItemScanSetBookmark6.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_6, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-    jMenuItemScanSetBookmark6.addActionListener(
-        new Modeler_jMenuItemScanSetBookmark6_ActionAdapter(this));
-    jMenuItemScanSetBookmark7.setText("[7]");
-    jMenuItemScanSetBookmark7.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_7, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-    jMenuItemScanSetBookmark7.addActionListener(
-        new Modeler_jMenuItemScanSetBookmark7_ActionAdapter(this));
-    jMenuItemScanSetBookmark8.setText("[8]");
-    jMenuItemScanSetBookmark8.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_8, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-    jMenuItemScanSetBookmark8.addActionListener(
-        new Modeler_jMenuItemScanSetBookmark8_ActionAdapter(this));
-    jMenuItemScanSetBookmark9.setText("[9]");
-    jMenuItemScanSetBookmark9.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_9, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-    jMenuItemScanSetBookmark9.addActionListener(
-        new Modeler_jMenuItemScanSetBookmark9_ActionAdapter(this));
-    jMenuScanJumpBookmark.setText(res.getString("S73"));
-    jMenuScanJumpBookmark.addMenuListener(new Modeler_jMenuScanJumpBookmark_menuAdapter(this));
-    jMenuItemScanJumpBookmark1.setText("[1]");
-    jMenuItemScanJumpBookmark1.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.CTRL_MASK));
-    jMenuItemScanJumpBookmark1.addActionListener(
-        new Modeler_jMenuItemScanJumpBookmark1_ActionAdapter(this));
-    jMenuItemScanJumpBookmark2.setText("[2]");
-    jMenuItemScanJumpBookmark2.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.CTRL_MASK));
-    jMenuItemScanJumpBookmark2.addActionListener(
-        new Modeler_jMenuItemScanJumpBookmark2_ActionAdapter(this));
-    jMenuItemScanJumpBookmark3.setText("[3]");
-    jMenuItemScanJumpBookmark3.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_3, ActionEvent.CTRL_MASK));
-    jMenuItemScanJumpBookmark3.addActionListener(
-        new Modeler_jMenuItemScanJumpBookmark3_ActionAdapter(this));
-    jMenuItemScanJumpBookmark4.setText("[4]");
-    jMenuItemScanJumpBookmark4.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_4, ActionEvent.CTRL_MASK));
-    jMenuItemScanJumpBookmark4.addActionListener(
-        new Modeler_jMenuItemScanJumpBookmark4_ActionAdapter(this));
-    jMenuItemScanJumpBookmark5.setText("[5]");
-    jMenuItemScanJumpBookmark5.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_5, ActionEvent.CTRL_MASK));
-    jMenuItemScanJumpBookmark5.addActionListener(
-        new Modeler_jMenuItemScanJumpBookmark5_ActionAdapter(this));
-    jMenuItemScanJumpBookmark6.setText("[6]");
-    jMenuItemScanJumpBookmark6.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_6, ActionEvent.CTRL_MASK));
-    jMenuItemScanJumpBookmark6.addActionListener(
-        new Modeler_jMenuItemScanJumpBookmark6_ActionAdapter(this));
-    jMenuItemScanJumpBookmark7.setText("[7]");
-    jMenuItemScanJumpBookmark7.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_7, ActionEvent.CTRL_MASK));
-    jMenuItemScanJumpBookmark7.addActionListener(
-        new Modeler_jMenuItemScanJumpBookmark7_ActionAdapter(this));
-    jMenuItemScanJumpBookmark8.setText("[8]");
-    jMenuItemScanJumpBookmark8.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_8, ActionEvent.CTRL_MASK));
-    jMenuItemScanJumpBookmark8.addActionListener(
-        new Modeler_jMenuItemScanJumpBookmark8_ActionAdapter(this));
-    jMenuItemScanJumpBookmark9.setText("[9]");
-    jMenuItemScanJumpBookmark9.setAccelerator(
-        KeyStroke.getKeyStroke(KeyEvent.VK_9, ActionEvent.CTRL_MASK));
-    jMenuItemScanJumpBookmark9.addActionListener(
-        new Modeler_jMenuItemScanJumpBookmark9_ActionAdapter(this));
-    jMenuTool.setText(res.getString("S83"));
-    jMenuTool.addMenuListener(new Modeler_jMenuTool_menuAdapter(this));
-    jMenuItemToolTaskList.setText(res.getString("S84"));
-    jMenuItemToolTaskList.addActionListener(new Modeler_jMenuItemToolTaskList_ActionAdapter(this));
-    jMenuItemToolTableList.setText(res.getString("S85"));
-    jMenuItemToolTableList.addActionListener(
-        new Modeler_jMenuItemToolTableList_ActionAdapter(this));
-    jMenuItemToolDDLList.setText(res.getString("S93"));
-    jMenuItemToolDDLList.addActionListener(new Modeler_jMenuItemToolDDLList_ActionAdapter(this));
-    jMenuItemToolFieldList.setText(res.getString("S99"));
-    jMenuItemToolFieldList.addActionListener(
-        new Modeler_jMenuItemToolFieldList_ActionAdapter(this));
-    jMenuItemToolFunctionList.setText(res.getString("S86"));
-    jMenuItemToolFunctionList.addActionListener(
-        new Modeler_jMenuItemToolFunctionList_ActionAdapter(this));
-    jMenuItemToolNotedItemList.setText(res.getString("S122"));
-    jMenuItemToolNotedItemList.addActionListener(
-        new Modeler_jMenuItemToolNotedItemList_ActionAdapter(this));
-    jMenuItemToolMatrixList.setText(res.getString("S74"));
-    jMenuItemToolMatrixList.addActionListener(
-        new Modeler_jMenuItemToolMatrixList_ActionAdapter(this));
-    jMenuItemToolCreateTableStatement.setText(res.getString("S87"));
-    jMenuItemToolCreateTableStatement.addActionListener(
-        new Modeler_jMenuItemToolCreateTableStatement_ActionAdapter(this));
-    jMenuItemToolDocuments.setText(res.getString("S82"));
-    jMenuItemToolDocuments.addActionListener(
-        new Modeler_jMenuItemToolDocuments_ActionAdapter(this));
-    jMenuItemToolReorganizeDataTypes.setText(res.getString("S88"));
-    jMenuItemToolReorganizeDataTypes.addActionListener(
-        new Modeler_jMenuItemToolReorganizeDataTypes_ActionAdapter(this));
-    jMenuItemToolJumpToURLPage.setText(res.getString("S89"));
-    jMenuItemToolJumpToURLPage.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
-    jMenuItemToolJumpToURLPage.addActionListener(
-        new Modeler_jMenuItemToolJumpToURLPage_ActionAdapter(this));
-    jMenuHelp.setText(res.getString("S90"));
-    jMenuItemHelpHelp.setText(res.getString("S91"));
-    jMenuItemHelpHelp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
-    jMenuItemHelpHelp.addActionListener(new Modeler_jMenuItemHelpHelp_ActionAdapter(this));
-    jMenuItemHelpAbout.setText(res.getString("S92"));
-    jMenuItemHelpAbout.addActionListener(new Modeler_jMenuItemHelpAbout_ActionAdapter(this));
-    jMenuFile.add(jMenuItemFileNew);
-    jMenuFile.addSeparator();
-    jMenuFile.add(jMenuItemFileOpen);
-    jMenuFile.addSeparator();
-    jMenuFile.add(jMenuImport);
-    jMenuImport.add(jMenuItemImportXEAD);
-    jMenuImport.add(jMenuItemImportXEAF);
-    jMenuImport.add(jMenuItemImportSQL);
-    //jMenuImport.add(jMenuItemImportRecover);
-    jMenuFile.add(jMenuItemFileDiff);
-    jMenuFile.addSeparator();
-    jMenuFile.add(jMenuItemFileSave);
-    jMenuFile.add(jMenuItemFileSaveAs);
-    jMenuFile.addSeparator();
-    jMenuFile.add(jMenuItemFilePrintFormat);
-    jMenuFile.addSeparator();
-    jMenuFile.add(jMenuItemFileExit);
-    jMenuEdit.add(jMenuItemEditUndo);
-    jMenuEdit.add(jMenuItemEditRedo);
-    jMenuScan.add(jMenuItemScanString);
-    jMenuScan.addSeparator();
-    jMenuScan.add(jMenuScanSetBookmark);
-    jMenuScanSetBookmark.add(jMenuItemScanSetBookmark1);
-    jMenuScanSetBookmark.add(jMenuItemScanSetBookmark2);
-    jMenuScanSetBookmark.add(jMenuItemScanSetBookmark3);
-    jMenuScanSetBookmark.add(jMenuItemScanSetBookmark4);
-    jMenuScanSetBookmark.add(jMenuItemScanSetBookmark5);
-    jMenuScanSetBookmark.add(jMenuItemScanSetBookmark6);
-    jMenuScanSetBookmark.add(jMenuItemScanSetBookmark7);
-    jMenuScanSetBookmark.add(jMenuItemScanSetBookmark8);
-    jMenuScanSetBookmark.add(jMenuItemScanSetBookmark9);
-    jMenuScan.add(jMenuScanJumpBookmark);
-    jMenuScanJumpBookmark.add(jMenuItemScanJumpBookmark1);
-    jMenuScanJumpBookmark.add(jMenuItemScanJumpBookmark2);
-    jMenuScanJumpBookmark.add(jMenuItemScanJumpBookmark3);
-    jMenuScanJumpBookmark.add(jMenuItemScanJumpBookmark4);
-    jMenuScanJumpBookmark.add(jMenuItemScanJumpBookmark5);
-    jMenuScanJumpBookmark.add(jMenuItemScanJumpBookmark6);
-    jMenuScanJumpBookmark.add(jMenuItemScanJumpBookmark7);
-    jMenuScanJumpBookmark.add(jMenuItemScanJumpBookmark8);
-    jMenuScanJumpBookmark.add(jMenuItemScanJumpBookmark9);
-    jMenuTool.add(jMenuItemToolTaskList);
-    jMenuTool.add(jMenuItemToolTableList);
-    jMenuTool.add(jMenuItemToolDDLList);
-    jMenuTool.add(jMenuItemToolFieldList);
-    jMenuTool.add(jMenuItemToolFunctionList);
-    jMenuTool.addSeparator();
-    jMenuTool.add(jMenuItemToolNotedItemList);
-    jMenuTool.add(jMenuItemToolMatrixList);
-    jMenuTool.add(jMenuItemToolDocuments);
-    jMenuTool.addSeparator();
-    jMenuTool.add(jMenuItemToolCreateTableStatement);
-    jMenuTool.add(jMenuItemToolReorganizeDataTypes);
-    jMenuTool.addSeparator();
-    jMenuTool.add(jMenuItemToolJumpToURLPage);
-    jMenuHelp.add(jMenuItemHelpAbout);
-    jMenuHelp.add(jMenuItemHelpHelp);
-    jMenuHelp.addSeparator();
-    jMenuHelp.add(jMenuItemHelpAbout);
-    jMenuBar.add(jMenuFile);
-    jMenuBar.add(jMenuEdit);
-    jMenuBar.add(jMenuScan);
-    jMenuBar.add(jMenuTool);
-    jMenuBar.add(jMenuHelp);
-    this.setJMenuBar(jMenuBar);
-
-    /**
      * general purposed context menu
      */
     jMenuItemComponentToAdd.setText(res.getString("S860"));
@@ -2084,41 +1829,11 @@ public class Modeler extends JFrame {
     jMenuItemComponentToPrintImage.setText(res.getString("S55"));
 
     /**
-     * access key for MainMenu if Platform is not Mac OS
-     */
-    if (System.getProperty("mrj.version") == null) {
-      jMenuFile.setText(res.getString("S94"));
-      jMenuFile.setMnemonic('F');
-      jMenuEdit.setText(res.getString("S95"));
-      jMenuEdit.setMnemonic('E');
-      jMenuScan.setText(res.getString("S96"));
-      jMenuScan.setMnemonic('S');
-      jMenuTool.setText(res.getString("S97"));
-      jMenuTool.setMnemonic('T');
-      jMenuHelp.setText(res.getString("S98"));
-      jMenuHelp.setMnemonic('H');
-    }
-
-    /**
      * Printer Controller
      */
     printerJob = PrinterJob.getPrinterJob();
     pageFormat = printerJob.defaultPage();
     pageFormat.setOrientation(PageFormat.LANDSCAPE);
-
-    /**
-     * components for TreeView
-     */
-    jScrollPaneTreeView.setMinimumSize(new Dimension(0, 0));
-    jPanelContentsPane.setLayout(cardLayoutContentsPane);
-    jTreeMain.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTreeMain.setRowHeight(TREE_ROW_HEIGHT);
-    jTreeMain.addKeyListener(new Modeler_jTreeMain_keyAdapter(this));
-    jTreeMain.addMouseListener(new Modeler_jTreeMain_mouseAdapter(this));
-    jTreeMain.addMouseMotionListener(new Modeler_jTreeMain_mouseMotionAdapter(this));
-    jTreeMain.setCellRenderer(customTreeRenderer);
-    jTreeMain.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-    jScrollPaneTreeView.getViewport().add(jTreeMain, null);
 
     /**
      * PopupMenu for jTreeMain
@@ -2218,30 +1933,6 @@ public class Modeler extends JFrame {
         new Modeler_jMenuItemComponentToPrintImage_actionAdapter(this));
     jMenuItemComponentToSetIOWebPage.addActionListener(
         new Modeler_jMenuItemComponentToSetIOWebPage_actionAdapter(this));
-
-    /**
-     * components on Contents Pane
-     */
-    jPanelContentsPane.add(jPanelSystem, "jPanelSystem");
-    jPanelContentsPane.add(jPanelSubjectAreaList, "jPanelSubjectAreaList");
-    jPanelContentsPane.add(jPanelSubjectArea, "jPanelSubjectArea");
-    jPanelContentsPane.add(jPanelRoleList, "jPanelRoleList");
-    jPanelContentsPane.add(jPanelRole, "jPanelRole");
-    jPanelContentsPane.add(jPanelTask, "jPanelTask");
-    jPanelContentsPane.add(jPanelSubsystemList, "jPanelSubsystemList");
-    jPanelContentsPane.add(jPanelSubsystem, "jPanelSubsystem");
-    jPanelContentsPane.add(jPanelTableList, "jPanelTableList");
-    jPanelContentsPane.add(jPanelTable, "jPanelTable");
-    jPanelContentsPane.add(jPanelTableFieldList, "jPanelTableFieldList");
-    jPanelContentsPane.add(jPanelTableField, "jPanelTableField");
-    jPanelContentsPane.add(jPanelTableKeyList, "jPanelTableKeyList");
-    jPanelContentsPane.add(jPanelTableKey, "jPanelTableKey");
-    jPanelContentsPane.add(jPanelFunctionList, "jPanelFunctionList");
-    jPanelContentsPane.add(jPanelFunction, "jPanelFunction");
-    jPanelContentsPane.add(jPanelIOPanel, "jPanelIOPanel");
-    jPanelContentsPane.add(jPanelIOSpool, "jPanelIOSpool");
-    jPanelContentsPane.add(jPanelIOTable, "jPanelIOTable");
-    jPanelContentsPane.add(jPanelIOWebPage, "jPanelIOWebPage");
 
     /**
      * components on PopUp-Menu for editing IOImage
@@ -2556,71 +2247,87 @@ public class Modeler extends JFrame {
     /**
      * Initialize MVC View and Controller components
      */
-    // Initialize ContentView with panel references from Modeler
-    contentView = new ContentView(this, new ContentView.ContentListener() {
-        @Override
-        public void onContentPanelChanged(String panelName) {
-            // Panel changed notification
-        }
-    });
-    // Replace jPanelContentsPane reference with ContentView's panel
-    // Note: contentView.getJPanelContentsPane() will be used instead of jPanelContentsPane
-
-    // Initialize TreeView
-    treeView = new TreeView(this, new TreeView.TreeListener() {
-        @Override
-        public void onTreeNodeSelected(XeadTreeNode node) {
-            if (node != null) {
-                currentMainTreeNode = node;
-                if (contentView != null) {
-                    contentView.showPanelForNode(node);
+    // Initialize ModelerView that manages TreeView, ContentView, and MenuBarView
+    modelerView = new ModelerView(this,
+        new TreeView.TreeListener() {
+            @Override
+            public void onTreeNodeSelected(XeadTreeNode node) {
+                if (node != null) {
+                    currentMainTreeNode = node;
+                    if (modelerView != null && modelerView.getContentView() != null) {
+                        modelerView.getContentView().showPanelForNode(node);
+                    }
                 }
             }
-        }
-        @Override
-        public void onTreeNodeRightClick(XeadTreeNode node, int x, int y) {
-            // Delegate to existing popup menu logic
-        }
-        @Override
-        public void onTreeNodeDoubleClick(XeadTreeNode node) {
-            // Double click handling
-        }
-        @Override
-        public void onTreeNodeKeyPressed(KeyEvent e) {
-            // Key press handling - to be implemented
-        }
-        @Override
-        public void onTreeNodeAdd() {}
-        @Override
-        public void onTreeNodeAddList() {}
-        @Override
-        public void onTreeNodePaste() {}
-        @Override
-        public void onTreeNodeCopy() {}
-        @Override
-        public void onTreeNodeCut() {}
-        @Override
-        public void onTreeNodeDelete() {}
-        @Override
-        public void onTreeNodeAddIOPanel() {}
-        @Override
-        public void onTreeNodeAddIOSpool() {}
-        @Override
-        public void onTreeNodeAddIOWebPage() {}
-        @Override
-        public void onTreeNodeAddFK() {}
-        @Override
-        public void onTreeNodeAddSK() {}
-        @Override
-        public void onTreeNodeAddIndex() {}
-    });
+            @Override
+            public void onTreeNodeRightClick(XeadTreeNode node, int x, int y) {
+                // Delegate to existing popup menu logic
+            }
+            @Override
+            public void onTreeNodeDoubleClick(XeadTreeNode node) {
+                // Double click handling
+            }
+            @Override
+            public void onTreeNodeKeyPressed(KeyEvent e) {
+                // Key press handling - to be implemented
+            }
+            @Override
+            public void onTreeNodeAdd() {}
+            @Override
+            public void onTreeNodeAddList() {}
+            @Override
+            public void onTreeNodePaste() {}
+            @Override
+            public void onTreeNodeCopy() {}
+            @Override
+            public void onTreeNodeCut() {}
+            @Override
+            public void onTreeNodeDelete() {}
+            @Override
+            public void onTreeNodeAddIOPanel() {}
+            @Override
+            public void onTreeNodeAddIOSpool() {}
+            @Override
+            public void onTreeNodeAddIOWebPage() {}
+            @Override
+            public void onTreeNodeAddFK() {}
+            @Override
+            public void onTreeNodeAddSK() {}
+            @Override
+            public void onTreeNodeAddIndex() {}
+        },
+        new ContentView.ContentListener() {
+            @Override
+            public void onContentPanelChanged(String panelName) {
+                // Panel changed notification
+            }
+        },
+        null  // MenuBarListener - to be set by MainController
+    );
+
+    // Get references to child views for backward compatibility
+    treeView = modelerView.getTreeView();
+    contentView = modelerView.getContentView();
 
     // Initialize TreeController
     treeController = new TreeController(this, treeView, this);
   }
 
   /**
-   * Initialize component for node of System
+   * Initialize SystemView component
+   */
+  void initSystemView() {
+    // Initialize SystemView with this Modeler instance
+    systemView = new SystemView(this, new SystemView.SystemListener() {
+      @Override
+      public void onSystemChanged() {
+        // Handle system changes
+      }
+    });
+  }
+
+  /**
+   * Initialize component for node of System (deprecated - use initSystemView instead)
    */
   void jbInitComponentsForSystem() {
     jTabbedPaneSystem.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
@@ -6661,77 +6368,51 @@ public class Modeler extends JFrame {
       currentFileFolder = file.getParent();
       lastModifyTime = file.lastModified();
 
-      //Parse file in XML Format and setup Document//
-      domParser.parse(new InputSource(new FileInputStream(currentFileName)));
-      domDocument = domParser.getDocument();
+      //Parse file in JSON Format and setup Document//
+      xeadDocumentModel.parseDocument(currentFileName);
       if (!backupFolder.equals("")) {
-        domParser.parse(new InputSource(new FileInputStream(currentFileName)));
-        domDocumentSaved = domParser.getDocument();
+        xeadDocumentModel.parseDocumentForBackup(currentFileName);
       }
 
+      // Get XeadSystem
+      XeadSystem xeadSystem = xeadDocumentModel.getXeadSystem();
+      
       // Check Format version//
-      xmlnodelist1 = domDocument.getElementsByTagName("System");
-      element1 = (org.w3c.dom.Element) xmlnodelist1.item(0);
-      float fileFormat = Float.parseFloat(element1.getAttribute("FormatVersion"));
+      float fileFormat = Float.parseFloat(xeadSystem.getFormatVersion());
       float appliFormat = Float.parseFloat(DialogAbout.FORMAT_VERSION);
       if (fileFormat > appliFormat) {
         JOptionPane.showMessageDialog(this,
-            res.getString("S1") + element1.getAttribute("FormatVersion") + res.getString("S2")
+            res.getString("S1") + xeadSystem.getFormatVersion() + res.getString("S2")
                 + DialogAbout.FORMAT_VERSION + res.getString("S3"));
         System.exit(0);
       }
 
       // Setup node of "System"//
-      systemNode = new XeadTreeNode("System", element1);
+      systemNode = new XeadTreeNode("System", xeadSystem);
       treeModel = new DefaultTreeModel(systemNode);
-      systemName = systemNode.getElement().getAttribute("Name");
-      setupReferringFileList(systemNode.getElement().getAttribute("RefFiles"));
+      systemName = xeadSystem.getName();
+      setupReferringFileList(""); // RefFiles is not in XeadSystem, will be handled separately
 
-      // Setup DDL CONFIG//
-      if (!systemNode.getElement().getAttribute("DDLCommentMark").equals("")
-          || !systemNode.getElement().getAttribute("DDLSectionMark").equals("")
-          || !systemNode.getElement().getAttribute("DDLAdditionalParms").equals("")
-          || !systemNode.getElement().getAttribute("DDLCommentWithAlias").equals("")
-          || !systemNode.getElement().getAttribute("DDLIgnoreFK").equals("")
-          || !systemNode.getElement().getAttribute("DDLConvertCamel").equals("")) {
-        ddlCommentMark = systemNode.getElement().getAttribute("DDLCommentMark");
-        ddlSectionMark = systemNode.getElement().getAttribute("DDLSectionMark");
-        ddlAdditionalParms = systemNode.getElement().getAttribute("DDLAdditionalParms");
-        if (systemNode.getElement().getAttribute("DDLCommentWithAlias").equals("true")) {
-          ddlFieldCommentType = "1";
-        } else {
-          if (systemNode.getElement().getAttribute("DDLCommentWithAlias").equals("false")) {
-            ddlFieldCommentType = "0";
-          } else {
-            ddlFieldCommentType = systemNode.getElement().getAttribute("DDLCommentWithAlias");
-          }
-        }
-        if (systemNode.getElement().getAttribute("DDLIgnoreFK").equals("true")) {
-          ignoreForeignKeyConstraints = true;
-        } else {
-          ignoreForeignKeyConstraints = false;
-        }
-        if (systemNode.getElement().getAttribute("DDLConvertCamel").equals("false")) {
-          isToConvertCamel = false;
-        } else {
-          isToConvertCamel = true;
-        }
-        if (systemNode.getElement().getAttribute("UseTableNameToCreateTable").equals("false")) {
-          useTableNameAsTableNameInCreateTableStatement = false;
-        } else {
-          useTableNameAsTableNameInCreateTableStatement = true;
-        }
-      } else {
-        ddlCommentMark = "--";
-        ddlSectionMark = ";";
-        ddlAdditionalParms = "";
-        ddlFieldCommentType = "1";
-        ignoreForeignKeyConstraints = false;
-        isToConvertCamel = true;
-      }
+      // Setup DDL CONFIG from XeadSystem//
+      xeadDocumentModel.loadDdlConfig();
+      ddlCommentMark = xeadDocumentModel.getDdlCommentMark();
+      ddlSectionMark = xeadDocumentModel.getDdlSectionMark();
+      ddlAdditionalParms = xeadDocumentModel.getDdlAdditionalParms();
+      ddlFieldCommentType = xeadDocumentModel.getDdlFieldCommentType();
+      ignoreForeignKeyConstraints = xeadDocumentModel.isIgnoreForeignKeyConstraints();
+      isToConvertCamel = xeadDocumentModel.isIsToConvertCamel();
+      useTableNameAsTableNameInCreateTableStatement = xeadDocumentModel.isUseTableNameAsTableNameInCreateTableStatement();
 
       if (this.isVisible()) {
-        jProgressBar.setMaximum(9 + domDocument.getElementsByTagName("TableField").getLength());
+        int tableFieldCount = 0;
+        if (xeadSystem.getTables() != null) {
+          for (xeadModeler.model.json.Table table : xeadSystem.getTables()) {
+            if (table.getTableFields() != null) {
+              tableFieldCount += table.getTableFields().size();
+            }
+          }
+        }
+        jProgressBar.setMaximum(9 + tableFieldCount);
       }
 
       // Add Node of "SubjectAreaList"//
@@ -6739,11 +6420,11 @@ public class Modeler extends JFrame {
       systemNode.add(SubjectAreaListNode);
 
       // Add Node of "SubjectArea"//
-      xmlnodelist1 = domDocument.getElementsByTagName("SubjectArea");
-      for (int i = 0; i < xmlnodelist1.getLength(); i++) {
-        element1 = (org.w3c.dom.Element) xmlnodelist1.item(i);
-        xeadTreeNode1 = new XeadTreeNode("SubjectArea", element1);
-        SubjectAreaListNode.add(xeadTreeNode1);
+      if (xeadSystem.getSubjectAreas() != null) {
+        for (xeadModeler.model.json.SubjectArea subjectArea : xeadSystem.getSubjectAreas()) {
+          xeadTreeNode1 = new XeadTreeNode("SubjectArea", subjectArea);
+          SubjectAreaListNode.add(xeadTreeNode1);
+        }
       }
       SubjectAreaListNode.sortChildNodes();
       if (this.isVisible()) {
@@ -6756,11 +6437,11 @@ public class Modeler extends JFrame {
       systemNode.add(roleListNode);
 
       // Add Node of "Role"//
-      xmlnodelist1 = domDocument.getElementsByTagName("Role");
-      for (int i = 0; i < xmlnodelist1.getLength(); i++) {
-        element1 = (org.w3c.dom.Element) xmlnodelist1.item(i);
-        xeadTreeNode1 = new XeadTreeNode("Role", element1);
-        roleListNode.add(xeadTreeNode1);
+      if (xeadSystem.getRoles() != null) {
+        for (xeadModeler.model.json.Role role : xeadSystem.getRoles()) {
+          xeadTreeNode1 = new XeadTreeNode("Role", role);
+          roleListNode.add(xeadTreeNode1);
+        }
       }
       roleListNode.sortChildNodes();
       if (this.isVisible()) {
@@ -6769,12 +6450,12 @@ public class Modeler extends JFrame {
       }
 
       // Add Node of "Task"//
-      xmlnodelist1 = domDocument.getElementsByTagName("Task");
-      for (int i = 0; i < xmlnodelist1.getLength(); i++) {
-        element1 = (org.w3c.dom.Element) xmlnodelist1.item(i);
-        xeadTreeNode1 = getSpecificXeadTreeNode("Role", element1.getAttribute("RoleID"), null);
-        xeadTreeNode2 = new XeadTreeNode("Task", element1);
-        xeadTreeNode1.add(xeadTreeNode2);
+      if (xeadSystem.getTasks() != null) {
+        for (xeadModeler.model.json.Task task : xeadSystem.getTasks()) {
+          xeadTreeNode1 = getSpecificXeadTreeNode("Role", task.getRoleId(), null);
+          xeadTreeNode2 = new XeadTreeNode("Task", task);
+          xeadTreeNode1.add(xeadTreeNode2);
+        }
       }
       if (this.isVisible()) {
         jProgressBar.setValue(jProgressBar.getValue() + 1);
@@ -6799,21 +6480,21 @@ public class Modeler extends JFrame {
       isRequiredToPurgeInvalidSubsystemRelationship = false;
 
       // Add Node of "Subsystem" and its children//
-      xmlnodelist1 = domDocument.getElementsByTagName("Subsystem");
-      for (int i = 0; i < xmlnodelist1.getLength(); i++) {
+      if (xeadSystem.getSubsystems() != null) {
+        for (xeadModeler.model.json.Subsystem subsystem : xeadSystem.getSubsystems()) {
 
-        // Add Node of "Subsystem"//
-        element1 = (org.w3c.dom.Element) xmlnodelist1.item(i);
-        xeadTreeNode1 = new XeadTreeNode("Subsystem", element1);
-        subsystemListNode.add(xeadTreeNode1);
+          // Add Node of "Subsystem"//
+          xeadTreeNode1 = new XeadTreeNode("Subsystem", subsystem);
+          subsystemListNode.add(xeadTreeNode1);
 
-        // Add Node of "TableList"//
-        xeadTreeNode2 = new XeadTreeNode("TableList", null);
-        xeadTreeNode1.add(xeadTreeNode2);
+          // Add Node of "TableList"//
+          xeadTreeNode2 = new XeadTreeNode("TableList", null);
+          xeadTreeNode1.add(xeadTreeNode2);
 
-        // Add Node of "FunctionList"//
-        xeadTreeNode2 = new XeadTreeNode("FunctionList", null);
-        xeadTreeNode1.add(xeadTreeNode2);
+          // Add Node of "FunctionList"//
+          xeadTreeNode2 = new XeadTreeNode("FunctionList", null);
+          xeadTreeNode1.add(xeadTreeNode2);
+        }
       }
       subsystemListNode.sortChildNodes();
       if (this.isVisible()) {
@@ -6822,47 +6503,47 @@ public class Modeler extends JFrame {
       }
 
       // Add Node of "Table" and its children//
-      xmlnodelist1 = domDocument.getElementsByTagName("Table");
-      for (int i = 0; i < xmlnodelist1.getLength(); i++) {
+      if (xeadSystem.getTables() != null) {
+        for (xeadModeler.model.json.Table table : xeadSystem.getTables()) {
 
-        // Add Node of "Table"//
-        element1 = (org.w3c.dom.Element) xmlnodelist1.item(i);
-        xeadTreeNode1 = getSpecificXeadTreeNode("Subsystem", element1.getAttribute("SubsystemID"),
-            null);
-        xeadTreeNode1 = (XeadTreeNode) xeadTreeNode1.getChildAt(0);
-        xeadTreeNode2 = new XeadTreeNode("Table", element1);
-        xeadTreeNode1.add(xeadTreeNode2);
-        if (!element1.getAttribute("SynchFile").equals("")) {
-          xeadTreeNode2.setError(
-              dialogTableSynchronize.isSynchError(xeadTreeNode2.getElement(), null));
-          if (!xeadTreeNode2.isError()) {
-            xeadTreeNode2.setExtRefered(true);
+          // Add Node of "Table"//
+          xeadTreeNode1 = getSpecificXeadTreeNode("Subsystem", table.getSubsystemId(),
+              null);
+          xeadTreeNode1 = (XeadTreeNode) xeadTreeNode1.getChildAt(0);
+          xeadTreeNode2 = new XeadTreeNode("Table", table);
+          xeadTreeNode1.add(xeadTreeNode2);
+          if (table.getSynchFile() != null && !table.getSynchFile().equals("")) {
+            xeadTreeNode2.setError(
+                dialogTableSynchronize.isSynchError(xeadTreeNode2.getElement(), null));
+            if (!xeadTreeNode2.isError()) {
+              xeadTreeNode2.setExtRefered(true);
+            }
+            repaintErrorStatusOfParentNodes(xeadTreeNode1);
           }
-          repaintErrorStatusOfParentNodes(xeadTreeNode1);
-        }
 
-        // Add Node of "TableFieldList"//
-        xeadTreeNode3 = new XeadTreeNode("TableFieldList", null);
-        xeadTreeNode2.add(xeadTreeNode3);
+          // Add Node of "TableFieldList"//
+          xeadTreeNode3 = new XeadTreeNode("TableFieldList", null);
+          xeadTreeNode2.add(xeadTreeNode3);
 
-        // Add Node of "TableField"//
-        xmlnodelist2 = element1.getElementsByTagName("TableField");
-        for (int j = 0; j < xmlnodelist2.getLength(); j++) {
-          element2 = (org.w3c.dom.Element) xmlnodelist2.item(j);
-          xeadTreeNode4 = new XeadTreeNode("TableField", element2);
-          xeadTreeNode3.add(xeadTreeNode4);
-        }
+          // Add Node of "TableField"//
+          if (table.getTableFields() != null) {
+            for (xeadModeler.model.json.TableField tableField : table.getTableFields()) {
+              xeadTreeNode4 = new XeadTreeNode("TableField", tableField);
+              xeadTreeNode3.add(xeadTreeNode4);
+            }
+          }
 
-        // Add Node of "TableKeyList"//
-        xeadTreeNode3 = new XeadTreeNode("TableKeyList", null);
-        xeadTreeNode2.add(xeadTreeNode3);
+          // Add Node of "TableKeyList"//
+          xeadTreeNode3 = new XeadTreeNode("TableKeyList", null);
+          xeadTreeNode2.add(xeadTreeNode3);
 
-        // Add Node of "TableKey"//
-        xmlnodelist2 = element1.getElementsByTagName("TableKey");
-        for (int j = 0; j < xmlnodelist2.getLength(); j++) {
-          element2 = (org.w3c.dom.Element) xmlnodelist2.item(j);
-          xeadTreeNode4 = new XeadTreeNode("TableKey", element2);
-          xeadTreeNode3.add(xeadTreeNode4);
+          // Add Node of "TableKey"//
+          if (table.getTableKeys() != null) {
+            for (xeadModeler.model.json.TableKey tableKey : table.getTableKeys()) {
+              xeadTreeNode4 = new XeadTreeNode("TableKey", tableKey);
+              xeadTreeNode3.add(xeadTreeNode4);
+            }
+          }
         }
       }
       if (this.isVisible()) {
@@ -6887,58 +6568,63 @@ public class Modeler extends JFrame {
       }
 
       //Setup ID-Ordered Field List//
-      NodeList fieldList = domDocument.getElementsByTagName("TableField");
       sortableDomElementFieldListModel.removeAllElements();
-      for (int j = 0; j < fieldList.getLength(); j++) {
-        sortableDomElementFieldListModel.addElement((Object) fieldList.item(j));
-        if (this.isVisible()) {
-          jProgressBar.setValue(jProgressBar.getValue() + 1);
-          jProgressBar.paintImmediately(0, 0, jProgressBar.getWidth(), jProgressBar.getHeight());
+      if (xeadSystem.getTables() != null) {
+        for (xeadModeler.model.json.Table table : xeadSystem.getTables()) {
+          if (table.getTableFields() != null) {
+            for (xeadModeler.model.json.TableField tableField : table.getTableFields()) {
+              sortableDomElementFieldListModel.addElement((Object) tableField);
+              if (this.isVisible()) {
+                jProgressBar.setValue(jProgressBar.getValue() + 1);
+                jProgressBar.paintImmediately(0, 0, jProgressBar.getWidth(), jProgressBar.getHeight());
+              }
+            }
+          }
         }
       }
       sortableDomElementFieldListModel.sortElements();
       isRequiredToSetupSortableFieldList = false;
 
       // Add Node of "Function" and its children//
-      xmlnodelist1 = domDocument.getElementsByTagName("Function");
-      for (int i = 0; i < xmlnodelist1.getLength(); i++) {
-        // Add Node of "Function"//
-        element1 = (org.w3c.dom.Element) xmlnodelist1.item(i);
-        xeadTreeNode1 = getSpecificXeadTreeNode("Subsystem", element1.getAttribute("SubsystemID"),
-            null);
-        xeadTreeNode1 = (XeadTreeNode) xeadTreeNode1.getChildAt(1);
-        xeadTreeNode2 = new XeadTreeNode("Function", element1);
-        xeadTreeNode1.add(xeadTreeNode2);
-        // Add Node of "IOPanel"//
-        xmlnodelist2 = element1.getElementsByTagName("IOPanel");
-        for (int j = 0; j < xmlnodelist2.getLength(); j++) {
-          element2 = (org.w3c.dom.Element) xmlnodelist2.item(j);
-          xeadTreeNode3 = new XeadTreeNode("IOPanel", element2);
-          xeadTreeNode2.add(xeadTreeNode3);
+      if (xeadSystem.getFunctions() != null) {
+        for (xeadModeler.model.json.Function function : xeadSystem.getFunctions()) {
+          // Add Node of "Function"//
+          xeadTreeNode1 = getSpecificXeadTreeNode("Subsystem", function.getSubsystemId(),
+              null);
+          xeadTreeNode1 = (XeadTreeNode) xeadTreeNode1.getChildAt(1);
+          xeadTreeNode2 = new XeadTreeNode("Function", function);
+          xeadTreeNode1.add(xeadTreeNode2);
+          // Add Node of "IOPanel"//
+          if (function.getIOPanels() != null) {
+            for (xeadModeler.model.json.IOPanel ioPanel : function.getIOPanels()) {
+              xeadTreeNode3 = new XeadTreeNode("IOPanel", ioPanel);
+              xeadTreeNode2.add(xeadTreeNode3);
+            }
+          }
+          // Add Node of "IOSpool"//
+          if (function.getIOSpools() != null) {
+            for (xeadModeler.model.json.IOSpool ioSpool : function.getIOSpools()) {
+              xeadTreeNode3 = new XeadTreeNode("IOSpool", ioSpool);
+              xeadTreeNode2.add(xeadTreeNode3);
+            }
+          }
+          // Add Node of "IOTable"//
+          if (function.getIOTables() != null) {
+            for (xeadModeler.model.json.IOTable ioTable : function.getIOTables()) {
+              xeadTreeNode3 = new XeadTreeNode("IOTable", ioTable);
+              xeadTreeNode2.add(xeadTreeNode3);
+            }
+          }
+          // Add Node of "IOWebPage"//
+          if (function.getIOWebPages() != null) {
+            for (xeadModeler.model.json.IOWebPage ioWebPage : function.getIOWebPages()) {
+              xeadTreeNode3 = new XeadTreeNode("IOWebPage", ioWebPage);
+              xeadTreeNode2.add(xeadTreeNode3);
+            }
+          }
+          //Sort IOList//
+          xeadTreeNode2.sortChildNodes();
         }
-        // Add Node of "IOSpool"//
-        xmlnodelist2 = element1.getElementsByTagName("IOSpool");
-        for (int j = 0; j < xmlnodelist2.getLength(); j++) {
-          element2 = (org.w3c.dom.Element) xmlnodelist2.item(j);
-          xeadTreeNode3 = new XeadTreeNode("IOSpool", element2);
-          xeadTreeNode2.add(xeadTreeNode3);
-        }
-        // Add Node of "IOTable"//
-        xmlnodelist2 = element1.getElementsByTagName("IOTable");
-        for (int j = 0; j < xmlnodelist2.getLength(); j++) {
-          element2 = (org.w3c.dom.Element) xmlnodelist2.item(j);
-          xeadTreeNode3 = new XeadTreeNode("IOTable", element2);
-          xeadTreeNode2.add(xeadTreeNode3);
-        }
-        // Add Node of "IOWebPage"//
-        xmlnodelist2 = element1.getElementsByTagName("IOWebPage");
-        for (int j = 0; j < xmlnodelist2.getLength(); j++) {
-          element2 = (org.w3c.dom.Element) xmlnodelist2.item(j);
-          xeadTreeNode3 = new XeadTreeNode("IOWebPage", element2);
-          xeadTreeNode2.add(xeadTreeNode3);
-        }
-        //Sort IOList//
-        xeadTreeNode2.sortChildNodes();
       }
       if (this.isVisible()) {
         jProgressBar.setValue(jProgressBar.getValue() + 1);
@@ -6959,14 +6645,14 @@ public class Modeler extends JFrame {
       }
       //
       // Set lastIDOfRelationship//
-      xmlnodelist1 = domDocument.getElementsByTagName("Relationship");
       int id;
       lastIDOfRelationship = 0;
-      for (int i = 0; i < xmlnodelist1.getLength(); i++) {
-        element1 = (org.w3c.dom.Element) xmlnodelist1.item(i);
-        id = Integer.parseInt(element1.getAttribute("ID"));
-        if (id > lastIDOfRelationship) {
-          lastIDOfRelationship = id;
+      if (xeadSystem.getRelationships() != null) {
+        for (xeadModeler.model.json.Relationship relationship : xeadSystem.getRelationships()) {
+          id = Integer.parseInt(relationship.getId());
+          if (id > lastIDOfRelationship) {
+            lastIDOfRelationship = id;
+          }
         }
       }
       jProgressBar.setValue(0);
@@ -19498,12 +19184,13 @@ public class Modeler extends JFrame {
     private static final long serialVersionUID = 1L;
     private String nodeType_;
     private org.w3c.dom.Element domNode_;
+    private Object jsonNode_; // JSON POJO (Table, Relationship, etc.)
     private boolean isPending_ = false;
     private boolean isError_ = false;
     private boolean isExtRefered_ = false;
     private boolean searchImageFile_ = true; //a variant particularly for Function PanelIO and SpoolIO//
 
-    //Constructor//
+    //Constructor for DOM Element (legacy)
     public XeadTreeNode(String type, org.w3c.dom.Element node) {
       super();
       nodeType_ = type;
@@ -19513,10 +19200,68 @@ public class Modeler extends JFrame {
       }
     }
 
+    //Constructor for JSON POJO
+    public XeadTreeNode(String type, Object jsonNode) {
+      super();
+      nodeType_ = type;
+      this.jsonNode_ = jsonNode;
+      // Check if the JSON node has descriptions containing @NOTE@
+      if (jsonNode != null) {
+        try {
+          java.lang.reflect.Method method = jsonNode.getClass().getMethod("getDescriptions");
+          String descriptions = (String) method.invoke(jsonNode);
+          if (descriptions != null && descriptions.contains("@NOTE@")) {
+            isPending_ = true;
+          }
+        } catch (Exception e) {
+          // Ignore if method not found
+        }
+      }
+    }
+
+    /**
+     * Get attribute value from either DOM Element or JSON POJO
+     */
+    public String getAttribute(String attributeName) {
+      if (domNode_ != null) {
+        return domNode_.getAttribute(attributeName);
+      } else if (jsonNode_ != null) {
+        // Convert attributeName to getter method name (e.g., "Name" -> "getName", "SortKey" -> "getSortKey")
+        String getter = "get" + attributeName.substring(0, 1).toUpperCase() + attributeName.substring(1);
+        try {
+          java.lang.reflect.Method method = jsonNode_.getClass().getMethod(getter);
+          Object result = method.invoke(jsonNode_);
+          return result != null ? result.toString() : "";
+        } catch (Exception e) {
+          // Try boolean getter (isXxx)
+          String isGetter = "is" + attributeName.substring(0, 1).toUpperCase() + attributeName.substring(1);
+          try {
+            java.lang.reflect.Method method = jsonNode_.getClass().getMethod(isGetter);
+            Object result = method.invoke(jsonNode_);
+            return result != null ? result.toString() : "";
+          } catch (Exception e2) {
+            return "";
+          }
+        }
+      }
+      return "";
+    }
+
+    /**
+     * Get child elements by type from either DOM Element or JSON POJO
+     */
+    public NodeList getElementsByTagName(String tagName) {
+      if (domNode_ != null) {
+        return domNode_.getElementsByTagName(tagName);
+      }
+      // For JSON POJO, return empty NodeList (should not be used in JSON mode)
+      return null;
+    }
+
     public int compareTo(Object other) {
       XeadTreeNode otherNode = (XeadTreeNode) other;
-      return domNode_.getAttribute("SortKey")
-          .compareTo(otherNode.getElement().getAttribute("SortKey"));
+      return getAttribute("SortKey")
+          .compareTo(otherNode.getAttribute("SortKey"));
     }
 
     public void setSearchImageFileValid() {

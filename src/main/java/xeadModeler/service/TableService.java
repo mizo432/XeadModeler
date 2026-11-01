@@ -2,8 +2,6 @@ package xeadModeler.service;
 
 import xeadModeler.model.XeadDocumentModel;
 
-import org.w3c.dom.Element;
-
 /**
  * テーブル操作サービスのインターフェース
  * テーブルデータの編集、更新などの機能を担当します。
@@ -15,25 +13,26 @@ public interface TableService {
     
     /**
      * テーブルのセル値を更新します。
-     * @param element 更新する要素
-     * @param attributeName 属性名
+     * @param object 更新するオブジェクト
+     * @param propertyName プロパティ名
      * @param value 新しい値
      */
-    void updateCell(Element element, String attributeName, String value);
+    void updateCell(Object object, String propertyName, String value);
     
     /**
      * テーブルに行を追加します。
-     * @param parentElement 親要素
-     * @param rowType 行のタイプ
-     * @return 追加された要素
+     * @param parentTypeId 親テーブルのID
+     * @param rowType 行のタイプ (TableField, TableKey)
+     * @return 追加されたオブジェクト
      */
-    Element addRow(Element parentElement, String rowType);
+    Object addRow(String parentTypeId, String parentType, String rowType);
     
     /**
      * テーブルから行を削除します。
-     * @param element 削除する要素
+     * @param type 行のタイプ
+     * @param id 行のID
      */
-    void removeRow(Element element);
+    void removeRow(String type, String id);
     
     /**
      * テーブルのデータを再読み込みします。
@@ -44,9 +43,9 @@ public interface TableService {
     /**
      * 指定された属性値を持つ要素を検索します。
      * @param elementType 要素タイプ
-     * @param attributeName 属性名
-     * @param attributeValue 属性値
-     * @return 見つかった要素、見つからない場合はnull
+     * @param propertyName プロパティ名
+     * @param propertyValue プロパティ値
+     * @return 見つかったオブジェクト、見つからない場合はnull
      */
-    Element findElementByAttribute(String elementType, String attributeName, String attributeValue);
+    Object findElementByAttribute(String elementType, String propertyName, String propertyValue);
 }

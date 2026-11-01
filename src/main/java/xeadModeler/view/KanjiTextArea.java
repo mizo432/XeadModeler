@@ -33,7 +33,6 @@ public class KanjiTextArea extends JTextArea {
 
         public void focusGained(FocusEvent event) {
             focusGainedHandler();
-            modeler.lastFocusedTextArea = (KanjiTextArea) getFocusOwner();
         }
     }
 

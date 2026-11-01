@@ -770,6 +770,24 @@ public class SystemView {
     }
     
     /**
+     * テーブルを初期化します。
+     */
+    public void initTables() {
+        // Initialize renderers
+        rendererAlignmentCenter = new DefaultTableCellRenderer();
+        rendererAlignmentCenter.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        rendererAlignmentLeft = new DefaultTableCellRenderer();
+        rendererAlignmentLeft.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        rendererAlignmentRight = new DefaultTableCellRenderer();
+        rendererAlignmentRight.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        // Initialize table models
+        initTableModels();
+    }
+    
+    /**
      * テーブルモデルを初期化します。
      */
     private void initTableModels() {

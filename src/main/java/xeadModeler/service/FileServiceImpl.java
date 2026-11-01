@@ -104,7 +104,7 @@ public class FileServiceImpl implements FileService {
             documentModel.loadDdlConfig();
             
             // フォーマットバージョンチェック
-            String formatVersion = documentModel.getSystemElement().getAttribute("FormatVersion");
+            String formatVersion = documentModel.getSystemElement().getFormatVersion();
             // TODO: フォーマットバージョンのチェックロジックを追加
             
             // Undo/Redoリセット
@@ -156,7 +156,7 @@ public class FileServiceImpl implements FileService {
             }
             
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             if (fileOperationListener != null) {
                 fileOperationListener.onError("Failed to save file: " + e.getMessage());
             }
@@ -179,7 +179,7 @@ public class FileServiceImpl implements FileService {
             }
             
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             if (fileOperationListener != null) {
                 fileOperationListener.onError("Failed to save file: " + e.getMessage());
             }
@@ -213,7 +213,7 @@ public class FileServiceImpl implements FileService {
             documentModel.saveBackupDocument(backupFileName);
             
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
             if (fileOperationListener != null) {
                 fileOperationListener.onError("Failed to save backup: " + e.getMessage());
             }
