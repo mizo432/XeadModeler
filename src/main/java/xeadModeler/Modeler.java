@@ -226,11 +226,6 @@ public class Modeler extends JFrame {
    */
   private JsonNodeFactory jsonNodeFactory;
   
-  /**
-   * @deprecated JSONファクトリパターンを使用してください
-   */
-  @Deprecated
-  public org.w3c.dom.Document domDocument; // Document for creating elements (legacy, not used)
   private HashMap<String, XeadSystem> synchFileMap = new HashMap<String, XeadSystem>();
   private ArrayList<String> referringFileNameList = new ArrayList<String>();
   private ArrayList<XeadSystem> referringFileDocList = new ArrayList<XeadSystem>();
@@ -6328,14 +6323,6 @@ public class Modeler extends JFrame {
   }
 
   /**
-   * Get the DOM document for compatibility with legacy code
-   * @return the DOM document
-   */
-  public org.w3c.dom.Document getDomDocument() {
-    return domDocument;
-  }
-
-  /**
    * Get the JSON node factory for creating JSON POJOs
    * @return the JSON node factory
    */
@@ -6344,7 +6331,7 @@ public class Modeler extends JFrame {
   }
 
   /**
-   * Get attribute value from any object (JSON POJO or XML Element).
+   * Get attribute value from a JSON POJO using reflection.
    *
    * @param obj the object to read from
    * @param attributeName the attribute name
@@ -6353,9 +6340,6 @@ public class Modeler extends JFrame {
   private String getAttributeFromObject(Object obj, String attributeName) {
     if (obj == null) {
       return "";
-    }
-    if (obj instanceof org.w3c.dom.Element) {
-      return ((org.w3c.dom.Element) obj).getAttribute(attributeName);
     }
     // JSON POJO: use reflection
     String getter = "get" + attributeName.substring(0, 1).toUpperCase() + attributeName.substring(1);

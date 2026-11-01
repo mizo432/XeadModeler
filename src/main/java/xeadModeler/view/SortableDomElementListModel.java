@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * ソート可能な要素のListModel
- * XML DOM要素とJSONノードの両方をサポートします。
+ * JSONノードとJSON POJOをサポートします。
  *
  * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
@@ -16,11 +16,6 @@ import java.util.*;
 public class SortableDomElementListModel extends DefaultListModel<XeadElement> {
 
     private static final long serialVersionUID = 1L;
-
-    public void addElementFromDom(org.w3c.dom.Element element) {
-        XeadElement xeadElement = new XeadElement(element);
-        super.addElement(xeadElement);
-    }
 
     public void addElementFromJson(JsonNode node) {
         XeadElement xeadElement = new XeadElement(node);

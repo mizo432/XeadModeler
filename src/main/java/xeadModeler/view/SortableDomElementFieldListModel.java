@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * Aliasでソート可能なフィールド要素のListModel
- * XML DOM要素とJSONノードの両方をサポートします。
+ * JSONノードとJSON POJOをサポートします。
  *
  * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
@@ -16,11 +16,6 @@ import java.util.*;
 public class SortableDomElementFieldListModel extends DefaultListModel<XeadFieldElement> {
 
     private static final long serialVersionUID = 1L;
-
-    public void addElementFromDom(org.w3c.dom.Element element) {
-        XeadFieldElement xeadFieldElement = new XeadFieldElement(element);
-        super.addElement(xeadFieldElement);
-    }
 
     public void addElementFromJson(JsonNode node) {
         XeadFieldElement xeadFieldElement = new XeadFieldElement(node);
