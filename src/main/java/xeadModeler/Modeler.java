@@ -70,6 +70,7 @@ import xeadModeler.model.XeadDocumentModel;
 import xeadModeler.model.json.DataType;
 import xeadModeler.model.json.Department;
 import xeadModeler.model.json.FunctionType;
+import xeadModeler.model.json.MaintenanceLog;
 import xeadModeler.model.json.IOPanel;
 import xeadModeler.model.json.IOPanelField;
 import xeadModeler.model.json.IOSpool;
@@ -87,6 +88,7 @@ import xeadModeler.model.json.TableKey;
 import xeadModeler.model.json.Task;
 import xeadModeler.model.json.TaskAction;
 import xeadModeler.model.json.TaskType;
+import xeadModeler.model.json.Terms;
 import xeadModeler.model.json.XeadSystem;
 import xeadModeler.model.json.Table;
 import xeadModeler.model.json.TableType;
@@ -1247,7 +1249,7 @@ public class Modeler extends JFrame {
   public JTextField jTextFieldTableFieldDataType = new JTextField();
   public String tableFieldDataTypeID = "";
   private JMenuItem jMenuItemAddDataType = new JMenuItem();
-  private ArrayList<org.w3c.dom.Element> newlyAddedDataTypeElementList = new ArrayList<org.w3c.dom.Element>();
+  private ArrayList<Object> newlyAddedDataTypeElementList = new ArrayList<Object>();
   /**
    * Definition components on jPanelTableKeyList
    */
@@ -21832,11 +21834,13 @@ public class Modeler extends JFrame {
       }
       //
       if (nodeType_.equals("TableField")) {
-        org.w3c.dom.Element dataTypeElement;
         element = (org.w3c.dom.Element) domNode_.cloneNode(true);
         for (int i = 0; i < newlyAddedDataTypeElementList.size(); i++) {
-          dataTypeElement = newlyAddedDataTypeElementList.get(i);
-          element.appendChild((org.w3c.dom.Element) dataTypeElement.cloneNode(true));
+          Object dataTypeObj = newlyAddedDataTypeElementList.get(i);
+          if (dataTypeObj instanceof org.w3c.dom.Element) {
+            element.appendChild((org.w3c.dom.Element) ((org.w3c.dom.Element) dataTypeObj).cloneNode(true));
+          }
+          // For JSON POJOs, they are already in XeadSystem, no need to clone
         }
       }
       //
@@ -28040,7 +28044,7 @@ public class Modeler extends JFrame {
         if (selectedRow_jTableSystemDepartmentList >= 0) {
           TableRowNumber tableRowNumber = (TableRowNumber) tableModelSystemDepartmentList.getValueAt(
               selectedRow_jTableSystemDepartmentList, 0);
-          org.w3c.dom.Element element = tableRowNumber.getElement();
+          org.w3c.dom.Element element = (org.w3c.dom.Element) tableRowNumber.getElement();
           if (!element.getAttribute("SortKey")
               .equals(jTextFieldSystemDepartmentSortKey.getText())) {
             valueOfFieldsChangedByTabbedPane = true;
@@ -28079,7 +28083,7 @@ public class Modeler extends JFrame {
         if (selectedRow_jTableSystemTaskTypeList >= 0) {
           TableRowNumber tableRowNumber = (TableRowNumber) tableModelSystemTaskTypeList.getValueAt(
               selectedRow_jTableSystemTaskTypeList, 0);
-          org.w3c.dom.Element element = tableRowNumber.getElement();
+          org.w3c.dom.Element element = (org.w3c.dom.Element) tableRowNumber.getElement();
           if (!element.getAttribute("SortKey").equals(jTextFieldSystemTaskTypeSortKey.getText())) {
             valueOfFieldsChangedByTabbedPane = true;
           }
@@ -28118,7 +28122,7 @@ public class Modeler extends JFrame {
           TableRowNumber tableRowNumber =
               (TableRowNumber) tableModelSystemTableTypeList.getValueAt(
                   selectedRow_jTableSystemTableTypeList, 0);
-          org.w3c.dom.Element element = tableRowNumber.getElement();
+          org.w3c.dom.Element element = (org.w3c.dom.Element) tableRowNumber.getElement();
           if (!element.getAttribute("SortKey").equals(jTextFieldSystemTableTypeSortKey.getText())) {
             valueOfFieldsChangedByTabbedPane = true;
           }
@@ -28157,7 +28161,7 @@ public class Modeler extends JFrame {
           TableRowNumber tableRowNumber =
               (TableRowNumber) tableModelSystemDataTypeList.getValueAt(
                   selectedRow_jTableSystemDataTypeList, 0);
-          org.w3c.dom.Element element = tableRowNumber.getElement();
+          org.w3c.dom.Element element = (org.w3c.dom.Element) tableRowNumber.getElement();
           if (!element.getAttribute("SortKey").equals(jTextFieldSystemDataTypeSortKey.getText())) {
             valueOfFieldsChangedByTabbedPane = true;
           }
@@ -28231,7 +28235,7 @@ public class Modeler extends JFrame {
           TableRowNumber tableRowNumber =
               (TableRowNumber) tableModelSystemFunctionTypeList.getValueAt(
                   selectedRow_jTableSystemFunctionTypeList, 0);
-          org.w3c.dom.Element element = tableRowNumber.getElement();
+          org.w3c.dom.Element element = (org.w3c.dom.Element) tableRowNumber.getElement();
           if (!element.getAttribute("SortKey")
               .equals(jTextFieldSystemFunctionTypeSortKey.getText())) {
             valueOfFieldsChangedByTabbedPane = true;
@@ -28269,7 +28273,7 @@ public class Modeler extends JFrame {
         if (selectedRow_jTableSystemTermsList >= 0) {
           TableRowNumber tableRowNumber = (TableRowNumber) tableModelSystemTermsList.getValueAt(
               selectedRow_jTableSystemTermsList, 0);
-          org.w3c.dom.Element element = tableRowNumber.getElement();
+          org.w3c.dom.Element element = (org.w3c.dom.Element) tableRowNumber.getElement();
           if (!element.getAttribute("SortKey").equals(jTextFieldSystemTermsSortKey.getText())) {
             valueOfFieldsChangedByTabbedPane = true;
           }
@@ -28312,7 +28316,7 @@ public class Modeler extends JFrame {
           TableRowNumber tableRowNumber =
               (TableRowNumber) tableModelSystemMaintenanceLog.getValueAt(
                   selectedRow_jTableSystemMaintenanceLog, 0);
-          org.w3c.dom.Element element = tableRowNumber.getElement();
+          org.w3c.dom.Element element = (org.w3c.dom.Element) tableRowNumber.getElement();
           if (!element.getAttribute("SortKey")
               .equals(jTextFieldSystemMaintenanceLogSortKey.getText())) {
             valueOfFieldsChangedByTabbedPane = true;
@@ -28716,7 +28720,7 @@ public class Modeler extends JFrame {
           number = (TableRowNumber) tableModelNativeTableList.getValueAt(i, 0);
           for (int j = 0; j < subsystemTableList.getLength(); j++) {
             org.w3c.dom.Element element = (org.w3c.dom.Element) subsystemTableList.item(j);
-            if (number.getElement().getAttribute("ID").equals(element.getAttribute("TableID"))) {
+            if (number.getAttribute("ID").equals(element.getAttribute("TableID"))) {
               if (showOnModelFlag.booleanValue()) {
                 if (element.getAttribute("ShowOnModel").equals("false")) {
                   valueOfFieldsChanged = true;
@@ -28744,7 +28748,7 @@ public class Modeler extends JFrame {
           number = (TableRowNumber) tableModelForeignTableList.getValueAt(i, 0);
           for (int j = 0; j < subsystemTableList.getLength(); j++) {
             org.w3c.dom.Element element = (org.w3c.dom.Element) subsystemTableList.item(j);
-            if (number.getElement().getAttribute("TableID")
+            if (number.getAttribute("TableID")
                 .equals(element.getAttribute("TableID"))) {
               if (showOnModelFlag.booleanValue()) {
                 if (element.getAttribute("ShowOnModel").equals("false")) {
@@ -28888,7 +28892,7 @@ public class Modeler extends JFrame {
         number = (TableRowNumber) tableModelTableFieldList.getValueAt(i, 0);
         for (int j = 0; j < tableFieldList.getLength(); j++) {
           org.w3c.dom.Element element = (org.w3c.dom.Element) tableFieldList.item(j);
-          if (number.getElement().getAttribute("ID").equals(element.getAttribute("ID"))) {
+          if (number.getAttribute("ID").equals(element.getAttribute("ID"))) {
             if (showOnModelFlag.booleanValue()) {
               if (element.getAttribute("ShowOnModel").equals("false")) {
                 valueOfFieldsChanged = true;
@@ -29045,7 +29049,7 @@ public class Modeler extends JFrame {
         org.w3c.dom.Element elementRelationship;
         for (int i = 0; i < tableModelRelationshipList.getRowCount(); i++) {
           tableRowNumber = (TableRowNumber) tableModelRelationshipList.getValueAt(i, 0);
-          elementRelationship = tableRowNumber.getElement();
+          elementRelationship = (org.w3c.dom.Element) tableRowNumber.getElement();
           if (elementRelationship.getAttribute("Type").equals("REFFER")) {
             if (elementRelationship.getAttribute("Table2ID").equals(tableID)
                 && elementRelationship.getAttribute("TableKey2ID").equals(tableKeyID)) {
@@ -29053,7 +29057,7 @@ public class Modeler extends JFrame {
                   (String) tableModelRelationshipList.getValueAt(i, 6));
             }
           }
-          if (tableRowNumber.getElement().getAttribute("Type").equals("SUBTYPE")) {
+          if (tableRowNumber.getAttribute("Type").equals("SUBTYPE")) {
             if (elementRelationship.getAttribute("Table1ID").equals(tableID)
                 && elementRelationship.getAttribute("TableKey1ID").equals(tableKeyID)) {
               elementRelationship.setAttribute("ExistWhen2",
@@ -29130,7 +29134,7 @@ public class Modeler extends JFrame {
       for (int i = 0; i < tableModelFunctionsUsedByThis.getRowCount(); i++) {
         listRowChanged = false;
         tableRowNumber = (TableRowNumber) tableModelFunctionsUsedByThis.getValueAt(i, 0);
-        elementFunctionUsedByThis = tableRowNumber.getElement();
+        elementFunctionUsedByThis = (org.w3c.dom.Element) tableRowNumber.getElement();
         if (!elementFunctionUsedByThis.getAttribute("LaunchEvent")
             .equals((String) tableModelFunctionsUsedByThis.getValueAt(i, 5))) {
           listRowChanged = true;
@@ -29330,7 +29334,7 @@ public class Modeler extends JFrame {
       for (int i = 0; i < tableModelIOPanelFieldList.getRowCount(); i++) {
         listRowChanged = false;
         tableRowNumber = (TableRowNumber) tableModelIOPanelFieldList.getValueAt(i, 0);
-        fieldElement = tableRowNumber.getElement();
+        fieldElement = (org.w3c.dom.Element) tableRowNumber.getElement();
         if (!fieldElement.getAttribute("SortKey")
             .equals((String) tableModelIOPanelFieldList.getValueAt(i, 1))) {
           listRowChanged = true;
@@ -29613,7 +29617,7 @@ public class Modeler extends JFrame {
       for (int i = 0; i < tableModelIOSpoolFieldList.getRowCount(); i++) {
         listRowChanged = false;
         tableRowNumber = (TableRowNumber) tableModelIOSpoolFieldList.getValueAt(i, 0);
-        fieldElement = tableRowNumber.getElement();
+        fieldElement = (org.w3c.dom.Element) tableRowNumber.getElement();
         if (!fieldElement.getAttribute("SortKey")
             .equals((String) tableModelIOSpoolFieldList.getValueAt(i, 1))) {
           listRowChanged = true;
@@ -29691,7 +29695,7 @@ public class Modeler extends JFrame {
       for (int i = 0; i < tableModelIOWebPageFieldList.getRowCount(); i++) {
         listRowChanged = false;
         tableRowNumber = (TableRowNumber) tableModelIOWebPageFieldList.getValueAt(i, 0);
-        fieldElement = tableRowNumber.getElement();
+        fieldElement = (org.w3c.dom.Element) tableRowNumber.getElement();
         if (!fieldElement.getAttribute("SortKey")
             .equals((String) tableModelIOWebPageFieldList.getValueAt(i, 1))) {
           listRowChanged = true;
@@ -29886,7 +29890,7 @@ public class Modeler extends JFrame {
 //					JOptionPane.showMessageDialog(null, res.getString("S4"));
 //					break;
 //				} else {
-        fieldIOElement = tableRowNumber.getElement();
+        fieldIOElement = (org.w3c.dom.Element) tableRowNumber.getElement();
         if (fieldIOElement == null) {
           wrkStr = (String) tableModelIOTableFieldList.getValueAt(i, 4);
           if (!wrkStr.equals("")) {
@@ -29929,9 +29933,9 @@ public class Modeler extends JFrame {
    */
   class TableRowNumber extends Object {
 
-    private org.w3c.dom.Element element_;
-    private org.w3c.dom.Element element_ext1;
-    private org.w3c.dom.Element element_ext2;
+    private Object element_; // Can be org.w3c.dom.Element or JSON POJO
+    private Object element_ext1;
+    private Object element_ext2;
     private int number_;
 
     public TableRowNumber(int num, org.w3c.dom.Element elm) {
@@ -29949,20 +29953,225 @@ public class Modeler extends JFrame {
       element_ext2 = elmExt2;
     }
 
+    // Constructor for JSON POJO
+    public TableRowNumber(int num, Object jsonObj) {
+      number_ = num;
+      element_ = jsonObj;
+      element_ext1 = null;
+      element_ext2 = null;
+    }
+
     public String toString() {
       return Integer.toString(number_);
     }
 
-    public org.w3c.dom.Element getElement() {
+    public Object getElement() {
       return element_;
     }
 
-    public org.w3c.dom.Element getElementExt1() {
+    public Object getElementExt1() {
       return element_ext1;
     }
 
-    public org.w3c.dom.Element getElementExt2() {
+    public Object getElementExt2() {
       return element_ext2;
+    }
+
+    /**
+     * Get attribute value from either XML Element or JSON POJO.
+     * For JSON POJOs, maps attribute names to getter method names.
+     */
+    public String getAttribute(String attributeName) {
+      if (element_ == null) {
+        return null;
+      }
+      if (element_ instanceof org.w3c.dom.Element) {
+        return ((org.w3c.dom.Element) element_).getAttribute(attributeName);
+      }
+      // Handle JSON POJOs by mapping attribute names to getter methods
+      return getAttributeFromJsonPojo(element_, attributeName);
+    }
+
+    /**
+     * Get attribute value from element_ext1.
+     */
+    public String getAttributeExt1(String attributeName) {
+      if (element_ext1 == null) {
+        return null;
+      }
+      if (element_ext1 instanceof org.w3c.dom.Element) {
+        return ((org.w3c.dom.Element) element_ext1).getAttribute(attributeName);
+      }
+      return getAttributeFromJsonPojo(element_ext1, attributeName);
+    }
+
+    /**
+     * Get attribute value from element_ext2.
+     */
+    public String getAttributeExt2(String attributeName) {
+      if (element_ext2 == null) {
+        return null;
+      }
+      if (element_ext2 instanceof org.w3c.dom.Element) {
+        return ((org.w3c.dom.Element) element_ext2).getAttribute(attributeName);
+      }
+      return getAttributeFromJsonPojo(element_ext2, attributeName);
+    }
+
+    /**
+     * Get attribute value from JSON POJO by mapping attribute names to getter methods.
+     */
+    private String getAttributeFromJsonPojo(Object obj, String attributeName) {
+      if (obj == null) {
+        return null;
+      }
+      // Map common attribute names to getter method names
+      String getterName;
+      switch (attributeName) {
+        case "ID":
+          getterName = "getId";
+          break;
+        case "Name":
+          getterName = "getName";
+          break;
+        case "Descriptions":
+          getterName = "getDescriptions";
+          break;
+        case "SortKey":
+          getterName = "getSortKey";
+          break;
+        case "BasicType":
+          getterName = "getBasicType";
+          break;
+        case "Length":
+          getterName = "getLength";
+          break;
+        case "Decimal":
+          getterName = "getDecimal";
+          break;
+        case "SQLExpression":
+          getterName = "getSqlExpression";
+          break;
+        case "Header":
+        case "Headder":
+          getterName = "getHeader";
+          break;
+        case "Type":
+          getterName = "getType";
+          break;
+        case "Table1ID":
+          getterName = "getTable1ID";
+          break;
+        case "TableKey1ID":
+          getterName = "getTableKey1ID";
+          break;
+        case "Table2ID":
+          getterName = "getTable2ID";
+          break;
+        case "TableKey2ID":
+          getterName = "getTableKey2ID";
+          break;
+        case "Version":
+          getterName = "getVersion";
+          break;
+        default:
+          // Try to construct getter name from attribute name
+          getterName = "get" + attributeName.substring(0, 1).toUpperCase() + attributeName.substring(1);
+          break;
+      }
+      try {
+        java.lang.reflect.Method method = obj.getClass().getMethod(getterName);
+        Object result = method.invoke(obj);
+        return result != null ? result.toString() : null;
+      } catch (Exception e) {
+        // If getter doesn't exist or fails, return null
+        return null;
+      }
+    }
+
+    /**
+     * Set attribute value on either XML Element or JSON POJO.
+     */
+    public void setAttribute(String attributeName, String value) {
+      if (element_ == null) {
+        return;
+      }
+      if (element_ instanceof org.w3c.dom.Element) {
+        ((org.w3c.dom.Element) element_).setAttribute(attributeName, value);
+        return;
+      }
+      // Handle JSON POJOs by mapping attribute names to setter methods
+      setAttributeOnJsonPojo(element_, attributeName, value);
+    }
+
+    /**
+     * Set attribute value on JSON POJO by mapping attribute names to setter methods.
+     */
+    private void setAttributeOnJsonPojo(Object obj, String attributeName, String value) {
+      if (obj == null) {
+        return;
+      }
+      String setterName;
+      switch (attributeName) {
+        case "ID":
+          setterName = "setId";
+          break;
+        case "Name":
+          setterName = "setName";
+          break;
+        case "Descriptions":
+          setterName = "setDescriptions";
+          break;
+        case "SortKey":
+          setterName = "setSortKey";
+          break;
+        case "BasicType":
+          setterName = "setBasicType";
+          break;
+        case "Length":
+          setterName = "setLength";
+          break;
+        case "Decimal":
+          setterName = "setDecimal";
+          break;
+        case "SQLExpression":
+          setterName = "setSqlExpression";
+          break;
+        case "Header":
+        case "Headder":
+          setterName = "setHeader";
+          break;
+        case "Type":
+          setterName = "setType";
+          break;
+        case "Table1ID":
+          setterName = "setTable1ID";
+          break;
+        case "TableKey1ID":
+          setterName = "setTableKey1ID";
+          break;
+        case "Table2ID":
+          setterName = "setTable2ID";
+          break;
+        case "TableKey2ID":
+          setterName = "setTableKey2ID";
+          break;
+        case "Version":
+          setterName = "setVersion";
+          break;
+        case "AscDesc":
+          setterName = "setAscDesc";
+          break;
+        default:
+          setterName = "set" + attributeName.substring(0, 1).toUpperCase() + attributeName.substring(1);
+          break;
+      }
+      try {
+        java.lang.reflect.Method method = obj.getClass().getMethod(setterName, String.class);
+        method.invoke(obj, value);
+      } catch (Exception e) {
+        // If setter doesn't exist or fails, ignore
+      }
     }
   }
 
@@ -30009,22 +30218,22 @@ public class Modeler extends JFrame {
         String tableKeyID = tableKeyNode.getElement().getAttribute("ID");
         TableRowNumber tableRowNumber = (TableRowNumber) tableModelRelationshipList.getValueAt(row,
             0);
-        if (tableRowNumber.getElement().getAttribute("Type").equals("SUBTYPE")) {
+        if (tableRowNumber.getAttribute("Type").equals("SUBTYPE")) {
           editable = true;
           informationOnThisPageChanged = true;
         }
-        if (tableRowNumber.getElement().getAttribute("Type").equals("REFFER")) {
-          if (tableRowNumber.getElement().getAttribute("Table1ID").equals(tableID)
-              && tableRowNumber.getElement().getAttribute("TableKey1ID").equals(tableKeyID)) {
+        if (tableRowNumber.getAttribute("Type").equals("REFFER")) {
+          if (tableRowNumber.getAttribute("Table1ID").equals(tableID)
+              && tableRowNumber.getAttribute("TableKey1ID").equals(tableKeyID)) {
             editable = false;
           }
-          if (tableRowNumber.getElement().getAttribute("Table2ID").equals(tableID)
-              && tableRowNumber.getElement().getAttribute("TableKey2ID").equals(tableKeyID)) {
+          if (tableRowNumber.getAttribute("Table2ID").equals(tableID)
+              && tableRowNumber.getAttribute("TableKey2ID").equals(tableKeyID)) {
             editable = true;
             informationOnThisPageChanged = true;
           }
         }
-        if (tableRowNumber.getElement().getAttribute("Type").equals("FAMILY")) {
+        if (tableRowNumber.getAttribute("Type").equals("FAMILY")) {
           editable = false;
         }
       }
@@ -33909,7 +34118,7 @@ public class Modeler extends JFrame {
         for (int j = 0; j < nodeList.getLength(); j++) {
           element = (org.w3c.dom.Element) nodeList.item(j);
           if (element.getAttribute("DepartmentID")
-              .equals(tableRowNumber.getElement().getAttribute("ID"))) {
+              .equals(tableRowNumber.getAttribute("ID"))) {
             sortableDomElementListModel.addElement((Object) element);
           }
         }
@@ -34002,7 +34211,7 @@ public class Modeler extends JFrame {
         for (int j = 0; j < nodeList.getLength(); j++) {
           element = (org.w3c.dom.Element) nodeList.item(j);
           if (element.getAttribute("TaskTypeID")
-              .equals(tableRowNumber.getElement().getAttribute("ID"))) {
+              .equals(tableRowNumber.getAttribute("ID"))) {
             sortableDomElementListModel.addElement((Object) element);
           }
         }
@@ -34095,7 +34304,7 @@ public class Modeler extends JFrame {
         for (int j = 0; j < nodeList.getLength(); j++) {
           element = (org.w3c.dom.Element) nodeList.item(j);
           if (element.getAttribute("TableTypeID")
-              .equals(tableRowNumber.getElement().getAttribute("ID"))) {
+              .equals(tableRowNumber.getAttribute("ID"))) {
             sortableDomElementListModel.addElement((Object) element);
           }
         }
@@ -34214,7 +34423,7 @@ public class Modeler extends JFrame {
           for (int j = 0; j < sortableDomElementFieldListModel.getSize(); j++) {
             fieldElement = (org.w3c.dom.Element) sortableDomElementFieldListModel.getElementAt(j);
             if (fieldElement.getAttribute("DataTypeID")
-                .equals(tableRowNumber.getElement().getAttribute("ID"))) {
+                .equals(tableRowNumber.getAttribute("ID"))) {
               Object[] Cell = new Object[5];
               m = m + 1;
               Cell[0] = new TableRowNumber(m, fieldElement);
@@ -34345,7 +34554,7 @@ public class Modeler extends JFrame {
         for (int j = 0; j < nodeList.getLength(); j++) {
           element = (org.w3c.dom.Element) nodeList.item(j);
           if (element.getAttribute("FunctionTypeID")
-              .equals(tableRowNumber.getElement().getAttribute("ID"))) {
+              .equals(tableRowNumber.getAttribute("ID"))) {
             sortableDomElementListModel.addElement((Object) element);
           }
         }
@@ -35279,9 +35488,8 @@ public class Modeler extends JFrame {
    * @param e :Action Event
    */
   void jMenuItemAddDataType_actionPerformed(ActionEvent e) {
-    org.w3c.dom.Node nextSiblingNode;
     Object lastElement;
-    org.w3c.dom.Element newElement;
+    DataType dataType;
     String sortKey = "";
     int length = 0;
     String name = "";
@@ -35307,32 +35515,31 @@ public class Modeler extends JFrame {
         //
         informationOnThisPageChanged = true;
         //
-        //Insert DOM element//
-        newElement = domDocument.createElement("DataType");
+        //Create JSON DataType object//
+        dataType = new DataType();
         lastElement = getLastDomElementOfTheType("DataType");
         if (lastElement == null) {
           id = 0;
         } else {
           id = Integer.parseInt(getIdFromObject(lastElement));
         }
-        newElement.setAttribute("ID", Integer.toString(id + 1));
-        newElement.setAttribute("Name", name);
-        newElement.setAttribute("BasicType", "String");
-        newElement.setAttribute("SortKey", sortKey);
-        newElement.setAttribute("Length", Integer.toString(length));
-        newElement.setAttribute("Decimal", "0");
-        newElement.setAttribute("SQLExpression", "CHAR(" + Integer.toString(length) + ")");
-        // TODO: JSON migration - getNextSibling is XML-specific
-        nextSiblingNode = null; // lastElement.getNextSibling();
-        systemNode.getElement().appendChild(newElement); // insertBefore replaced with appendChild
+        dataType.setId(Integer.toString(id + 1));
+        dataType.setName(name);
+        dataType.setBasicType("String");
+        dataType.setSortKey(sortKey);
+        dataType.setLength(Integer.toString(length));
+        dataType.setDecimal("0");
+        dataType.setSqlExpression("CHAR(" + Integer.toString(length) + ")");
+        // Add to XeadSystem's dataTypes list
+        xeadDocumentModel.getXeadSystem().getDataTypes().add(dataType);
         //
-        tableFieldDataTypeID = newElement.getAttribute("ID");
-        jTextFieldTableFieldDataType.setText(newElement.getAttribute("SortKey") + " "
-            + newElement.getAttribute("Name") + "("
-            + newElement.getAttribute("Length") + ")");
+        tableFieldDataTypeID = dataType.getId();
+        jTextFieldTableFieldDataType.setText(dataType.getSortKey() + " "
+            + dataType.getName() + "("
+            + dataType.getLength() + ")");
         //
-        dataTypePopupMenu.initializeMenuItem(domDocument.getElementsByTagName("DataType"));
-        newlyAddedDataTypeElementList.add((org.w3c.dom.Element) newElement.cloneNode(true));
+        dataTypePopupMenu.initializeMenuItem(systemNode.getElementsByTagName("DataType"));
+        newlyAddedDataTypeElementList.add(dataType);
       }
     }
   }
@@ -35347,6 +35554,7 @@ public class Modeler extends JFrame {
     org.w3c.dom.Node nextSiblingNode;
     Object lastElement;
     org.w3c.dom.Element newElement;
+    Object newJsonElement;
     int id = 0;
     //
     //Add Department//
@@ -35354,25 +35562,24 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("Department");
+      //Create JSON Department object//
+      Department department = new Department();
       lastElement = getLastDomElementOfTheType("Department");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Name", res.getString("S2184"));
-      newElement.setAttribute("Descriptions", "");
-      newElement.setAttribute("SortKey", "");
-      // TODO: JSON migration - getNextSibling is XML-specific
-      systemNode.getElement().appendChild(newElement);
+      department.setId(Integer.toString(id + 1));
+      department.setName(res.getString("S2184"));
+      department.setDescriptions("");
+      department.setSortKey("");
+      xeadDocumentModel.getXeadSystem().getDepartments().add(department);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemDepartmentList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Name");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemDepartmentList.getRowCount() + 1, department);
+      Cell[1] = department.getSortKey();
+      Cell[2] = department.getName();
+      Cell[3] = department.getDescriptions();
       tableModelSystemDepartmentList.addRow(Cell);
       selectedRow_jTableSystemDepartmentList = jTableSystemDepartmentList.getRowCount() - 1;
       jTableSystemDepartmentList.setRowSelectionInterval(selectedRow_jTableSystemDepartmentList,
@@ -35384,25 +35591,24 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("TaskType");
+      //Create JSON TaskType object//
+      TaskType taskType = new TaskType();
       lastElement = getLastDomElementOfTheType("TaskType");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Name", res.getString("S2185"));
-      newElement.setAttribute("Descriptions", "");
-      newElement.setAttribute("SortKey", "");
-      // TODO: JSON migration - getNextSibling is XML-specific
-      systemNode.getElement().appendChild(newElement);
+      taskType.setId(Integer.toString(id + 1));
+      taskType.setName(res.getString("S2185"));
+      taskType.setDescriptions("");
+      taskType.setSortKey("");
+      xeadDocumentModel.getXeadSystem().getTaskTypes().add(taskType);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemTaskTypeList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Name");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemTaskTypeList.getRowCount() + 1, taskType);
+      Cell[1] = taskType.getSortKey();
+      Cell[2] = taskType.getName();
+      Cell[3] = taskType.getDescriptions();
       tableModelSystemTaskTypeList.addRow(Cell);
       selectedRow_jTableSystemTaskTypeList = jTableSystemTaskTypeList.getRowCount() - 1;
       jTableSystemTaskTypeList.setRowSelectionInterval(selectedRow_jTableSystemTaskTypeList,
@@ -35414,25 +35620,24 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("TableType");
+      //Create JSON TableType object//
+      TableType tableType = new TableType();
       lastElement = getLastDomElementOfTheType("TableType");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Name", res.getString("S2198"));
-      newElement.setAttribute("Descriptions", "");
-      newElement.setAttribute("SortKey", "");
-      // TODO: JSON migration - getNextSibling is XML-specific
-      systemNode.getElement().appendChild(newElement);
+      tableType.setId(Integer.toString(id + 1));
+      tableType.setName(res.getString("S2198"));
+      tableType.setDescriptions("");
+      tableType.setSortKey("");
+      xeadDocumentModel.getXeadSystem().getTableTypes().add(tableType);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemTableTypeList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Name");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemTableTypeList.getRowCount() + 1, tableType);
+      Cell[1] = tableType.getSortKey();
+      Cell[2] = tableType.getName();
+      Cell[3] = tableType.getDescriptions();
       tableModelSystemTableTypeList.addRow(Cell);
       selectedRow_jTableSystemTableTypeList = jTableSystemTableTypeList.getRowCount() - 1;
       jTableSystemTableTypeList.setRowSelectionInterval(selectedRow_jTableSystemTableTypeList,
@@ -35444,31 +35649,30 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("DataType");
+      //Create JSON DataType object//
+      DataType dataType = new DataType();
       lastElement = getLastDomElementOfTheType("DataType");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Name", res.getString("S2212"));
-      newElement.setAttribute("BasicType", "String");
-      newElement.setAttribute("SortKey", "");
-      newElement.setAttribute("Length", "10");
-      newElement.setAttribute("Decimal", "0");
-      newElement.setAttribute("SQLExpression", "CHAR(10)");
-      // TODO: JSON migration - getNextSibling is XML-specific
-      systemNode.getElement().appendChild(newElement);
+      dataType.setId(Integer.toString(id + 1));
+      dataType.setName(res.getString("S2212"));
+      dataType.setBasicType("String");
+      dataType.setSortKey("");
+      dataType.setLength("10");
+      dataType.setDecimal("0");
+      dataType.setSqlExpression("CHAR(10)");
+      xeadDocumentModel.getXeadSystem().getDataTypes().add(dataType);
       Object[] Cell = new Object[7];
-      Cell[0] = new TableRowNumber(jTableSystemDataTypeList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Name");
-      Cell[3] = newElement.getAttribute("BasicType");
-      Cell[4] = Integer.parseInt(newElement.getAttribute("Length"));
-      Cell[5] = Integer.parseInt(newElement.getAttribute("Decimal"));
-      Cell[6] = newElement.getAttribute("SQLExpression");
+      Cell[0] = new TableRowNumber(jTableSystemDataTypeList.getRowCount() + 1, dataType);
+      Cell[1] = dataType.getSortKey();
+      Cell[2] = dataType.getName();
+      Cell[3] = dataType.getBasicType();
+      Cell[4] = Integer.parseInt(dataType.getLength());
+      Cell[5] = Integer.parseInt(dataType.getDecimal());
+      Cell[6] = dataType.getSqlExpression();
       tableModelSystemDataTypeList.addRow(Cell);
       selectedRow_jTableSystemDataTypeList = jTableSystemDataTypeList.getRowCount() - 1;
       jTableSystemDataTypeList.setRowSelectionInterval(selectedRow_jTableSystemDataTypeList,
@@ -35480,25 +35684,24 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("FunctionType");
+      //Create JSON FunctionType object//
+      FunctionType functionType = new FunctionType();
       lastElement = getLastDomElementOfTheType("FunctionType");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Name", res.getString("S2235"));
-      newElement.setAttribute("Descriptions", "");
-      newElement.setAttribute("SortKey", "");
-      // TODO: JSON migration - getNextSibling is XML-specific
-      systemNode.getElement().appendChild(newElement);
+      functionType.setId(Integer.toString(id + 1));
+      functionType.setName(res.getString("S2235"));
+      functionType.setDescriptions("");
+      functionType.setSortKey("");
+      xeadDocumentModel.getXeadSystem().getFunctionTypes().add(functionType);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemFunctionTypeList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Name");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemFunctionTypeList.getRowCount() + 1, functionType);
+      Cell[1] = functionType.getSortKey();
+      Cell[2] = functionType.getName();
+      Cell[3] = functionType.getDescriptions();
       tableModelSystemFunctionTypeList.addRow(Cell);
       selectedRow_jTableSystemFunctionTypeList = jTableSystemFunctionTypeList.getRowCount() - 1;
       jTableSystemFunctionTypeList.setRowSelectionInterval(selectedRow_jTableSystemFunctionTypeList,
@@ -35511,25 +35714,24 @@ public class Modeler extends JFrame {
       currentMainTreeNode.updateFields();
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("Terms");
+      //Create JSON Terms object//
+      Terms terms = new Terms();
       lastElement = getLastDomElementOfTheType("Terms");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("SortKey", "");
-      newElement.setAttribute("Header", res.getString("S2236"));
-      newElement.setAttribute("Descriptions", "");
-      // TODO: JSON migration - getNextSibling is XML-specific
-      systemNode.getElement().appendChild(newElement);
+      terms.setId(Integer.toString(id + 1));
+      terms.setSortKey("");
+      terms.setHeader(res.getString("S2236"));
+      terms.setDescriptions("");
+      xeadDocumentModel.getXeadSystem().getTerms().add(terms);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemTermsList.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Header");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemTermsList.getRowCount() + 1, terms);
+      Cell[1] = terms.getSortKey();
+      Cell[2] = terms.getHeader();
+      Cell[3] = terms.getDescriptions();
       tableModelSystemTermsList.addRow(Cell);
       selectedRow_jTableSystemTermsList = jTableSystemTermsList.getRowCount() - 1;
       jTableSystemTermsList.setRowSelectionInterval(selectedRow_jTableSystemTermsList,
@@ -35541,25 +35743,24 @@ public class Modeler extends JFrame {
       //
       informationOnThisPageChanged = true;
       //
-      //Update DOM element//
-      newElement = domDocument.createElement("MaintenanceLog");
+      //Create JSON MaintenanceLog object//
+      MaintenanceLog maintenanceLog = new MaintenanceLog();
       lastElement = getLastDomElementOfTheType("MaintenanceLog");
       if (lastElement == null) {
         id = 0;
       } else {
         id = Integer.parseInt(getIdFromObject(lastElement));
       }
-      newElement.setAttribute("ID", Integer.toString(id + 1));
-      newElement.setAttribute("Headder", systemNode.getElement().getAttribute("Version"));
-      newElement.setAttribute("Descriptions", application.getXeadUndoManager().getTextForAmendment());
-      newElement.setAttribute("SortKey", getStringValueOfDateTime("withUnderbarAndTime"));
-      // TODO: JSON migration - getNextSibling is XML-specific
-      systemNode.getElement().appendChild(newElement);
+      maintenanceLog.setId(Integer.toString(id + 1));
+      maintenanceLog.setHeader(xeadDocumentModel.getXeadSystem().getVersion());
+      maintenanceLog.setDescriptions(application.getXeadUndoManager().getTextForAmendment());
+      maintenanceLog.setSortKey(getStringValueOfDateTime("withUnderbarAndTime"));
+      xeadDocumentModel.getXeadSystem().getMaintenanceLogs().add(maintenanceLog);
       Object[] Cell = new Object[4];
-      Cell[0] = new TableRowNumber(jTableSystemMaintenanceLog.getRowCount() + 1, newElement);
-      Cell[1] = newElement.getAttribute("SortKey");
-      Cell[2] = newElement.getAttribute("Headder");
-      Cell[3] = newElement.getAttribute("Descriptions");
+      Cell[0] = new TableRowNumber(jTableSystemMaintenanceLog.getRowCount() + 1, maintenanceLog);
+      Cell[1] = maintenanceLog.getSortKey();
+      Cell[2] = maintenanceLog.getHeader();
+      Cell[3] = maintenanceLog.getDescriptions();
       tableModelSystemMaintenanceLog.addRow(Cell);
       selectedRow_jTableSystemMaintenanceLog = jTableSystemMaintenanceLog.getRowCount() - 1;
       jTableSystemMaintenanceLog.setRowSelectionInterval(selectedRow_jTableSystemMaintenanceLog,
@@ -35761,11 +35962,11 @@ public class Modeler extends JFrame {
       //Update DomElement of TableKeyField//
       TableRowNumber tableRowNumber = (TableRowNumber) tableModelTableKeyFieldList.getValueAt(
           selectedRow_jTableTableKeyFieldList, 0);
-      if (tableRowNumber.getElement().getAttribute("AscDesc").equals("A")) {
-        tableRowNumber.getElement().setAttribute("AscDesc", "D");
+      if (tableRowNumber.getAttribute("AscDesc").equals("A")) {
+        tableRowNumber.setAttribute("AscDesc", "D");
       } else {
-        if (tableRowNumber.getElement().getAttribute("AscDesc").equals("D")) {
-          tableRowNumber.getElement().setAttribute("AscDesc", "A");
+        if (tableRowNumber.getAttribute("AscDesc").equals("D")) {
+          tableRowNumber.setAttribute("AscDesc", "A");
         }
       }
 
@@ -36229,52 +36430,52 @@ public class Modeler extends JFrame {
     if (componentType_jPopupMenuComponent.equals("SystemDepartmentList")) {
       tableRowNumber = (TableRowNumber) tableModelSystemDepartmentList.getValueAt(
           selectedRow_jTableSystemDepartmentList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("SystemTaskTypeList")) {
       tableRowNumber = (TableRowNumber) tableModelSystemTaskTypeList.getValueAt(
           selectedRow_jTableSystemTaskTypeList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("SystemTableTypeList")) {
       tableRowNumber = (TableRowNumber) tableModelSystemTableTypeList.getValueAt(
           selectedRow_jTableSystemTableTypeList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("SystemDataTypeList")) {
       tableRowNumber = (TableRowNumber) tableModelSystemDataTypeList.getValueAt(
           selectedRow_jTableSystemDataTypeList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("SystemFunctionTypeList")) {
       tableRowNumber = (TableRowNumber) tableModelSystemFunctionTypeList.getValueAt(
           selectedRow_jTableSystemFunctionTypeList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("SystemTermsList")) {
       tableRowNumber = (TableRowNumber) tableModelSystemTermsList.getValueAt(
           selectedRow_jTableSystemTermsList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("SystemMaintenanceLog")) {
       tableRowNumber = (TableRowNumber) tableModelSystemMaintenanceLog.getValueAt(
           selectedRow_jTableSystemMaintenanceLog, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("SubjectAreaList")) {
       tableRowNumber = (TableRowNumber) tableModelSubjectAreaList.getValueAt(
           selectedRow_jTableSubjectAreaList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("RoleList")) {
       tableRowNumber = (TableRowNumber) tableModelRoleList.getValueAt(selectedRow_jTableRoleList,
           0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("TaskList")) {
       tableRowNumber = (TableRowNumber) tableModelTaskList.getValueAt(selectedRow_jTableTaskList,
           0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("TreeTaskActions")) {
       TreePath tp = jTreeTaskActions.getSelectionPath();
@@ -36294,47 +36495,47 @@ public class Modeler extends JFrame {
     if (componentType_jPopupMenuComponent.equals("SubsystemList")) {
       tableRowNumber = (TableRowNumber) tableModelSubsystemList.getValueAt(
           selectedRow_jTableSubsystemList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("NativeTableList")) {
       tableRowNumber = (TableRowNumber) tableModelNativeTableList.getValueAt(
           selectedRow_jTableNativeTableList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("FunctionList")) {
       tableRowNumber = (TableRowNumber) tableModelFunctionList.getValueAt(
           selectedRow_jTableFunctionList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("FunctionIOList")) {
       tableRowNumber = (TableRowNumber) tableModelFunctionIOList.getValueAt(
           selectedRow_jTableFunctionIOList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("IOPanelFieldList")) {
       tableRowNumber = (TableRowNumber) tableModelIOPanelFieldList.getValueAt(
           selectedRow_jTableIOPanelFieldList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("IOWebPageFieldList")) {
       tableRowNumber = (TableRowNumber) tableModelIOWebPageFieldList.getValueAt(
           selectedRow_jTableIOWebPageFieldList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("IOSpoolFieldList")) {
       tableRowNumber = (TableRowNumber) tableModelIOSpoolFieldList.getValueAt(
           selectedRow_jTableIOSpoolFieldList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("TableFieldList")) {
       tableRowNumber = (TableRowNumber) tableModelTableFieldList.getValueAt(
           selectedRow_jTableTableFieldList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
     if (componentType_jPopupMenuComponent.equals("TableKeyList")) {
       tableRowNumber = (TableRowNumber) tableModelTableKeyList.getValueAt(
           selectedRow_jTableTableKeyList, 0);
-      pastingElement = tableRowNumber.getElement();
+      pastingElement = (org.w3c.dom.Element) tableRowNumber.getElement();
     }
   }
 
@@ -36379,7 +36580,7 @@ public class Modeler extends JFrame {
         boolean isUsed = false;
         tableRowNumber = (TableRowNumber) tableModelForeignTableList.getValueAt(
             selectedRow_jTableForeignTableList, 0);
-        String tableID = tableRowNumber.getElement().getAttribute("TableID");
+        String tableID = tableRowNumber.getAttribute("TableID");
         subsystemNode = (XeadTreeNode) currentMainTreeNode.getParent();
         functionListNode = (XeadTreeNode) subsystemNode.getChildAt(1); //Node of Function List//
         for (int j = 0; j < functionListNode.getChildCount(); j++) {
@@ -36404,7 +36605,7 @@ public class Modeler extends JFrame {
           informationOnThisPageChanged = true;
 
           //Remove DomElement of ForeignTable//
-          subsystemNode.getElement().removeChild(tableRowNumber.getElement());
+          subsystemNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
           currentMainTreeNode.activateContentsPane();
 
           //Remove SubsystemRelationship//
@@ -36439,7 +36640,7 @@ public class Modeler extends JFrame {
         //Remove DomElement of TableKeyField//
         tableRowNumber = (TableRowNumber) tableModelTableKeyFieldList.getValueAt(
             selectedRow_jTableTableKeyFieldList, 0);
-        currentMainTreeNode.getElement().removeChild(tableRowNumber.getElement());
+        currentMainTreeNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
         currentMainTreeNode.activateContentsPane();
 
         //Log node after modified//
@@ -36456,7 +36657,7 @@ public class Modeler extends JFrame {
       //Remove DomElement of FunctionsUsedByThis//
       tableRowNumber = (TableRowNumber) tableModelFunctionsUsedByThis.getValueAt(
           selectedRow_jTableFunctionsUsedByThis, 0);
-      currentMainTreeNode.getElement().removeChild(tableRowNumber.getElement());
+      currentMainTreeNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
       currentMainTreeNode.updateFields(); //added instead of addLogAfterModified(currentMainTreeNode) expired below//
       currentMainTreeNode.activateContentsPane();
     }
@@ -36489,7 +36690,7 @@ public class Modeler extends JFrame {
             isDeleted = true;
             tableRowNumber = (TableRowNumber) tableModelSystemDepartmentList.getValueAt(
                 selectedRow_jTableSystemDepartmentList, 0);
-            systemNode.getElement().removeChild(tableRowNumber.getElement());
+            systemNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
             application.getXeadUndoManager().addLogAfterModified(currentMainTreeNode);
             currentMainTreeNode.activateContentsPane();
           }
@@ -36507,7 +36708,7 @@ public class Modeler extends JFrame {
             isDeleted = true;
             tableRowNumber = (TableRowNumber) tableModelSystemTaskTypeList.getValueAt(
                 selectedRow_jTableSystemTaskTypeList, 0);
-            systemNode.getElement().removeChild(tableRowNumber.getElement());
+            systemNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
             application.getXeadUndoManager().addLogAfterModified(currentMainTreeNode);
             currentMainTreeNode.activateContentsPane();
           }
@@ -36525,7 +36726,7 @@ public class Modeler extends JFrame {
             isDeleted = true;
             tableRowNumber = (TableRowNumber) tableModelSystemTableTypeList.getValueAt(
                 selectedRow_jTableSystemTableTypeList, 0);
-            systemNode.getElement().removeChild(tableRowNumber.getElement());
+            systemNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
             application.getXeadUndoManager().addLogAfterModified(currentMainTreeNode);
             currentMainTreeNode.activateContentsPane();
           }
@@ -36543,7 +36744,7 @@ public class Modeler extends JFrame {
             isDeleted = true;
             tableRowNumber = (TableRowNumber) tableModelSystemDataTypeList.getValueAt(
                 selectedRow_jTableSystemDataTypeList, 0);
-            systemNode.getElement().removeChild(tableRowNumber.getElement());
+            systemNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
             application.getXeadUndoManager().addLogAfterModified(currentMainTreeNode);
             currentMainTreeNode.activateContentsPane();
           }
@@ -36562,7 +36763,7 @@ public class Modeler extends JFrame {
             isDeleted = true;
             tableRowNumber = (TableRowNumber) tableModelSystemFunctionTypeList.getValueAt(
                 selectedRow_jTableSystemFunctionTypeList, 0);
-            systemNode.getElement().removeChild(tableRowNumber.getElement());
+            systemNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
             application.getXeadUndoManager().addLogAfterModified(currentMainTreeNode);
             currentMainTreeNode.activateContentsPane();
           }
@@ -36574,7 +36775,7 @@ public class Modeler extends JFrame {
         isDeleted = true;
         tableRowNumber = (TableRowNumber) tableModelSystemTermsList.getValueAt(
             selectedRow_jTableSystemTermsList, 0);
-        systemNode.getElement().removeChild(tableRowNumber.getElement());
+        systemNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
         application.getXeadUndoManager().addLogAfterModified(currentMainTreeNode);
         currentMainTreeNode.activateContentsPane();
       }
@@ -36587,7 +36788,7 @@ public class Modeler extends JFrame {
           isDeleted = true;
           tableRowNumber = (TableRowNumber) tableModelSystemMaintenanceLog.getValueAt(
               selectedRow_jTableSystemMaintenanceLog, 0);
-          systemNode.getElement().removeChild(tableRowNumber.getElement());
+          systemNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
           application.getXeadUndoManager().addLogAfterModified(currentMainTreeNode);
           currentMainTreeNode.activateContentsPane();
         }
@@ -36625,14 +36826,14 @@ public class Modeler extends JFrame {
         tableRowNumber = (TableRowNumber) tableModelSubjectAreaList.getValueAt(
             selectedRow_jTableSubjectAreaList, 0);
         targetNode = getSpecificXeadTreeNode("SubjectArea",
-            tableRowNumber.getElement().getAttribute("ID"), null);
+            tableRowNumber.getAttribute("ID"), null);
       }
       if (componentType_jPopupMenuComponent.equals("RoleList")) {
         table = jTableRoleList;
         rowNumberDeleted = jTableRoleList.getSelectedRow();
         tableRowNumber = (TableRowNumber) tableModelRoleList.getValueAt(selectedRow_jTableRoleList,
             0);
-        targetNode = getSpecificXeadTreeNode("Role", tableRowNumber.getElement().getAttribute("ID"),
+        targetNode = getSpecificXeadTreeNode("Role", tableRowNumber.getAttribute("ID"),
             null);
       }
       if (componentType_jPopupMenuComponent.equals("TaskList")) {
@@ -36640,7 +36841,7 @@ public class Modeler extends JFrame {
         rowNumberDeleted = jTableTaskList.getSelectedRow();
         tableRowNumber = (TableRowNumber) tableModelTaskList.getValueAt(selectedRow_jTableTaskList,
             0);
-        targetNode = getSpecificXeadTreeNode("Task", tableRowNumber.getElement().getAttribute("ID"),
+        targetNode = getSpecificXeadTreeNode("Task", tableRowNumber.getAttribute("ID"),
             null);
       }
       if (componentType_jPopupMenuComponent.equals("SubsystemList")) {
@@ -36649,7 +36850,7 @@ public class Modeler extends JFrame {
         tableRowNumber = (TableRowNumber) tableModelSubsystemList.getValueAt(
             selectedRow_jTableSubsystemList, 0);
         targetNode = getSpecificXeadTreeNode("Subsystem",
-            tableRowNumber.getElement().getAttribute("ID"), null);
+            tableRowNumber.getAttribute("ID"), null);
       }
       if (componentType_jPopupMenuComponent.equals("NativeTableList")) {
         table = jTableNativeTableList;
@@ -36657,7 +36858,7 @@ public class Modeler extends JFrame {
         tableRowNumber = (TableRowNumber) tableModelNativeTableList.getValueAt(
             selectedRow_jTableNativeTableList, 0);
         targetNode = getSpecificXeadTreeNode("Table",
-            tableRowNumber.getElement().getAttribute("ID"), null);
+            tableRowNumber.getAttribute("ID"), null);
       }
       if (componentType_jPopupMenuComponent.equals("TableFieldList")) {
         table = jTableTableFieldList;
@@ -36667,7 +36868,7 @@ public class Modeler extends JFrame {
         tableRowNumber = (TableRowNumber) tableModelTableFieldList.getValueAt(
             jTableTableFieldList.getSelectedRow(), 0);
         targetNode = getSpecificXeadTreeNode("TableField", tableID,
-            tableRowNumber.getElement().getAttribute("ID"));
+            tableRowNumber.getAttribute("ID"));
       }
       if (componentType_jPopupMenuComponent.equals("TableKeyList")) {
         table = jTableTableKeyList;
@@ -36677,7 +36878,7 @@ public class Modeler extends JFrame {
         tableRowNumber = (TableRowNumber) tableModelTableKeyList.getValueAt(
             selectedRow_jTableTableKeyList, 0);
         targetNode = getSpecificXeadTreeNode("TableKey", tableID,
-            tableRowNumber.getElement().getAttribute("ID"));
+            tableRowNumber.getAttribute("ID"));
       }
       if (componentType_jPopupMenuComponent.equals("FunctionList")) {
         table = jTableFunctionList;
@@ -36685,7 +36886,7 @@ public class Modeler extends JFrame {
         tableRowNumber = (TableRowNumber) tableModelFunctionList.getValueAt(
             selectedRow_jTableFunctionList, 0);
         targetNode = getSpecificXeadTreeNode("Function",
-            tableRowNumber.getElement().getAttribute("ID"), null);
+            tableRowNumber.getAttribute("ID"), null);
       }
       if (componentType_jPopupMenuComponent.equals("FunctionIOList")) {
         table = jTableFunctionIOList;
@@ -36695,7 +36896,7 @@ public class Modeler extends JFrame {
         tableRowNumber = (TableRowNumber) tableModelFunctionIOList.getValueAt(
             selectedRow_jTableFunctionIOList, 0);
         targetNode = getSpecificXeadTreeNode("FunctionIO", functionID,
-            tableRowNumber.getElement().getAttribute("ID"));
+            tableRowNumber.getAttribute("ID"));
       }
       //
       //Delete the node//
@@ -36784,7 +36985,7 @@ public class Modeler extends JFrame {
         //Delete Relationship element//
         tableRowNumber = (TableRowNumber) tableModelRelationshipList.getValueAt(
             selectedRow_jTableRelationshipList, 0);
-        org.w3c.dom.Element relationshipElement = tableRowNumber.getElement();
+        org.w3c.dom.Element relationshipElement = (org.w3c.dom.Element) tableRowNumber.getElement();
         //
         //******************************************************************//
         //THIS ROUTINE WAS EXPIRED BECAUSE OF DIFFICULTY OF UNDO PROCESS.   //
@@ -36830,7 +37031,7 @@ public class Modeler extends JFrame {
       //Update DOM element//
       tableRowNumber = (TableRowNumber) tableModelIOPanelFieldList.getValueAt(
           selectedRow_jTableIOPanelFieldList, 0);
-      currentMainTreeNode.getElement().removeChild(tableRowNumber.getElement());
+      currentMainTreeNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
       currentMainTreeNode.updateFields();
       currentMainTreeNode.activateContentsPane();
     }
@@ -36845,7 +37046,7 @@ public class Modeler extends JFrame {
       //Update DOM element//
       tableRowNumber = (TableRowNumber) tableModelIOWebPageFieldList.getValueAt(
           selectedRow_jTableIOWebPageFieldList, 0);
-      currentMainTreeNode.getElement().removeChild(tableRowNumber.getElement());
+      currentMainTreeNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
       currentMainTreeNode.updateFields();
       currentMainTreeNode.activateContentsPane();
     }
@@ -36860,7 +37061,7 @@ public class Modeler extends JFrame {
       //Update DOM element//
       tableRowNumber = (TableRowNumber) tableModelIOSpoolFieldList.getValueAt(
           selectedRow_jTableIOSpoolFieldList, 0);
-      currentMainTreeNode.getElement().removeChild(tableRowNumber.getElement());
+      currentMainTreeNode.getElement().removeChild((org.w3c.dom.Node) tableRowNumber.getElement());
       currentMainTreeNode.updateFields();
       currentMainTreeNode.activateContentsPane();
     }
@@ -38079,55 +38280,54 @@ public class Modeler extends JFrame {
       int selectedRowNumber = jTableSystemDepartmentWhereUsedList.getSelectedRow();
       tableRowNumber = (TableRowNumber) tableModelSystemDepartmentWhereUsedList.getValueAt(
           selectedRowNumber, 0);
-      targetNode = getSpecificXeadTreeNode("Role", tableRowNumber.getElement().getAttribute("ID"),
+      targetNode = getSpecificXeadTreeNode("Role", tableRowNumber.getAttribute("ID"),
           null);
     }
     if (componentType_jPopupMenuComponent.equals("SystemTaskTypeWhereUsedList")) {
       int selectedRowNumber = jTableSystemTaskTypeWhereUsedList.getSelectedRow();
       tableRowNumber = (TableRowNumber) tableModelSystemTaskTypeWhereUsedList.getValueAt(
           selectedRowNumber, 0);
-      targetNode = getSpecificXeadTreeNode("Task", tableRowNumber.getElement().getAttribute("ID"),
+      targetNode = getSpecificXeadTreeNode("Task", tableRowNumber.getAttribute("ID"),
           null);
     }
     if (componentType_jPopupMenuComponent.equals("SystemTableTypeWhereUsedList")) {
       int selectedRowNumber = jTableSystemTableTypeWhereUsedList.getSelectedRow();
       tableRowNumber = (TableRowNumber) tableModelSystemTableTypeWhereUsedList.getValueAt(
           selectedRowNumber, 0);
-      targetNode = getSpecificXeadTreeNode("Table", tableRowNumber.getElement().getAttribute("ID"),
+      targetNode = getSpecificXeadTreeNode("Table", tableRowNumber.getAttribute("ID"),
           null);
     }
     if (componentType_jPopupMenuComponent.equals("SystemDataTypeWhereUsedList")) {
       int selectedRowNumber = jTableSystemDataTypeWhereUsedList.getSelectedRow();
       tableRowNumber = (TableRowNumber) tableModelSystemDataTypeWhereUsedList.getValueAt(
           selectedRowNumber, 0);
-      org.w3c.dom.Element tableElement = (org.w3c.dom.Element) tableRowNumber.getElement()
-          .getParentNode();
-      targetNode = getSpecificXeadTreeNode("TableField", tableElement.getAttribute("ID"),
-          tableRowNumber.getElement().getAttribute("ID"));
+      String tableID = tableRowNumber.getAttribute("TableID");
+      targetNode = getSpecificXeadTreeNode("TableField", tableID,
+          tableRowNumber.getAttribute("ID"));
     }
     if (componentType_jPopupMenuComponent.equals("SystemFunctionTypeWhereUsedList")) {
       int selectedRowNumber = jTableSystemFunctionTypeWhereUsedList.getSelectedRow();
       tableRowNumber = (TableRowNumber) tableModelSystemFunctionTypeWhereUsedList.getValueAt(
           selectedRowNumber, 0);
       targetNode = getSpecificXeadTreeNode("Function",
-          tableRowNumber.getElement().getAttribute("ID"), null);
+          tableRowNumber.getAttribute("ID"), null);
     }
     if (componentType_jPopupMenuComponent.equals("SubjectAreaList")) {
       tableRowNumber = (TableRowNumber) tableModelSubjectAreaList.getValueAt(
           selectedRow_jTableSubjectAreaList, 0);
       targetNode = getSpecificXeadTreeNode("SubjectArea",
-          tableRowNumber.getElement().getAttribute("ID"), null);
+          tableRowNumber.getAttribute("ID"), null);
     }
     if (componentType_jPopupMenuComponent.equals("RoleList")) {
       tableRowNumber = (TableRowNumber) tableModelRoleList.getValueAt(selectedRow_jTableRoleList,
           0);
-      targetNode = getSpecificXeadTreeNode("Role", tableRowNumber.getElement().getAttribute("ID"),
+      targetNode = getSpecificXeadTreeNode("Role", tableRowNumber.getAttribute("ID"),
           null);
     }
     if (componentType_jPopupMenuComponent.equals("TaskList")) {
       tableRowNumber = (TableRowNumber) tableModelTaskList.getValueAt(selectedRow_jTableTaskList,
           0);
-      targetNode = getSpecificXeadTreeNode("Task", tableRowNumber.getElement().getAttribute("ID"),
+      targetNode = getSpecificXeadTreeNode("Task", tableRowNumber.getAttribute("ID"),
           null);
     }
     if (componentType_jPopupMenuComponent.equals("TaskFunctionIO")) {
@@ -38171,7 +38371,7 @@ public class Modeler extends JFrame {
       tableRowNumber = (TableRowNumber) tableModelSubsystemList.getValueAt(
           selectedRow_jTableSubsystemList, 0);
       targetNode = getSpecificXeadTreeNode("Subsystem",
-          tableRowNumber.getElement().getAttribute("ID"), null);
+          tableRowNumber.getAttribute("ID"), null);
     }
     if (componentType_jPopupMenuComponent.equals("FunctionsStructureTableIOList")) {
       tableRowNumber = (TableRowNumber) tableModelFunctionsStructureTableIOList.getValueAt(
@@ -38179,35 +38379,33 @@ public class Modeler extends JFrame {
       TreePath tp = jTreeFunctionsStructure.getSelectionPath();
       XeadTreeNode node = (XeadTreeNode) tp.getLastPathComponent();
       targetNode = getSpecificXeadTreeNode("FunctionIO", node.getElement().getAttribute("ID"),
-          tableRowNumber.getElement().getAttribute("ID"));
+          tableRowNumber.getAttribute("ID"));
     }
     if (componentType_jPopupMenuComponent.equals("NativeTableList")) {
       tableRowNumber = (TableRowNumber) tableModelNativeTableList.getValueAt(
           selectedRow_jTableNativeTableList, 0);
-      targetNode = getSpecificXeadTreeNode("Table", tableRowNumber.getElement().getAttribute("ID"),
+      targetNode = getSpecificXeadTreeNode("Table", tableRowNumber.getAttribute("ID"),
           null);
     }
     if (componentType_jPopupMenuComponent.equals("ForeignTableList")) {
       tableRowNumber = (TableRowNumber) tableModelForeignTableList.getValueAt(
           selectedRow_jTableForeignTableList, 0);
       targetNode = getSpecificXeadTreeNode("Table",
-          tableRowNumber.getElement().getAttribute("TableID"), null);
+          tableRowNumber.getAttribute("TableID"), null);
     }
     if (componentType_jPopupMenuComponent.equals("TableUsageList")) {
       tableRowNumber = (TableRowNumber) tableModelTableUsageList.getValueAt(
           selectedRow_jTableTableUsageList, 0);
-      org.w3c.dom.Element functionElement = (org.w3c.dom.Element) tableRowNumber.getElement()
-          .getParentNode();
-      targetNode = getSpecificXeadTreeNode("FunctionIO", functionElement.getAttribute("ID"),
-          tableRowNumber.getElement().getAttribute("ID"));
+      String functionID = tableRowNumber.getAttribute("FunctionID");
+      targetNode = getSpecificXeadTreeNode("FunctionIO", functionID,
+          tableRowNumber.getAttribute("ID"));
     }
     if (componentType_jPopupMenuComponent.equals("TableForeignUsageList")) {
       tableRowNumber = (TableRowNumber) tableModelTableForeignUsageList.getValueAt(
           selectedRow_jTableTableForeignUsageList, 0);
-      org.w3c.dom.Element functionElement = (org.w3c.dom.Element) tableRowNumber.getElement()
-          .getParentNode();
-      targetNode = getSpecificXeadTreeNode("FunctionIO", functionElement.getAttribute("ID"),
-          tableRowNumber.getElement().getAttribute("ID"));
+      String functionID = tableRowNumber.getAttribute("FunctionID");
+      targetNode = getSpecificXeadTreeNode("FunctionIO", functionID,
+          tableRowNumber.getAttribute("ID"));
     }
     if (componentType_jPopupMenuComponent.equals("TableFieldList")) {
       XeadTreeNode node = (XeadTreeNode) currentMainTreeNode.getParent();
@@ -38215,23 +38413,21 @@ public class Modeler extends JFrame {
       tableRowNumber = (TableRowNumber) tableModelTableFieldList.getValueAt(
           selectedRow_jTableTableFieldList, 0);
       targetNode = getSpecificXeadTreeNode("TableField", tableID,
-          tableRowNumber.getElement().getAttribute("ID"));
+          tableRowNumber.getAttribute("ID"));
     }
     if (componentType_jPopupMenuComponent.equals("TableFieldUsageList")) {
       tableRowNumber = (TableRowNumber) tableModelTableFieldUsageList.getValueAt(
           selectedRow_jTableTableFieldUsageList, 0);
-      org.w3c.dom.Element functionElement = (org.w3c.dom.Element) tableRowNumber.getElement()
-          .getParentNode();
-      targetNode = getSpecificXeadTreeNode("FunctionIO", functionElement.getAttribute("ID"),
-          tableRowNumber.getElement().getAttribute("ID"));
+      String functionID = tableRowNumber.getAttribute("FunctionID");
+      targetNode = getSpecificXeadTreeNode("FunctionIO", functionID,
+          tableRowNumber.getAttribute("ID"));
     }
     if (componentType_jPopupMenuComponent.equals("TableFieldForeignUsageList")) {
       tableRowNumber = (TableRowNumber) tableModelTableFieldForeignUsageList.getValueAt(
           selectedRow_jTableTableFieldForeignUsageList, 0);
-      org.w3c.dom.Element functionElement = (org.w3c.dom.Element) tableRowNumber.getElement()
-          .getParentNode();
-      targetNode = getSpecificXeadTreeNode("FunctionIO", functionElement.getAttribute("ID"),
-          tableRowNumber.getElement().getAttribute("ID"));
+      String functionID = tableRowNumber.getAttribute("FunctionID");
+      targetNode = getSpecificXeadTreeNode("FunctionIO", functionID,
+          tableRowNumber.getAttribute("ID"));
     }
     if (componentType_jPopupMenuComponent.equals("TableKeyList")) {
       XeadTreeNode node = (XeadTreeNode) currentMainTreeNode.getParent();
@@ -38239,7 +38435,7 @@ public class Modeler extends JFrame {
       tableRowNumber = (TableRowNumber) tableModelTableKeyList.getValueAt(
           selectedRow_jTableTableKeyList, 0);
       targetNode = getSpecificXeadTreeNode("TableKey", tableID,
-          tableRowNumber.getElement().getAttribute("ID"));
+          tableRowNumber.getAttribute("ID"));
     }
     if (componentType_jPopupMenuComponent.equals("TableKeyFieldList")) {
       XeadTreeNode node = (XeadTreeNode) currentMainTreeNode.getParent().getParent();
@@ -38247,7 +38443,7 @@ public class Modeler extends JFrame {
       tableRowNumber = (TableRowNumber) tableModelTableKeyFieldList.getValueAt(
           selectedRow_jTableTableKeyFieldList, 0);
       targetNode = getSpecificXeadTreeNode("TableField", tableID,
-          tableRowNumber.getElement().getAttribute("FieldID"));
+          tableRowNumber.getAttribute("FieldID"));
     }
     if (componentType_jPopupMenuComponent.equals("RelationshipList")) {
       XeadTreeNode node = (XeadTreeNode) currentMainTreeNode.getParent().getParent();
@@ -38255,30 +38451,30 @@ public class Modeler extends JFrame {
       String tableKeyID = currentMainTreeNode.getElement().getAttribute("ID");
       tableRowNumber = (TableRowNumber) tableModelRelationshipList.getValueAt(
           selectedRow_jTableRelationshipList, 0);
-      if (tableRowNumber.getElement().getAttribute("Table1ID").equals(tableID)
-          && tableRowNumber.getElement().getAttribute("TableKey1ID").equals(tableKeyID)) {
+      if (tableRowNumber.getAttribute("Table1ID").equals(tableID)
+          && tableRowNumber.getAttribute("TableKey1ID").equals(tableKeyID)) {
         targetNode = getSpecificXeadTreeNode("TableKey",
-            tableRowNumber.getElement().getAttribute("Table2ID"),
-            tableRowNumber.getElement().getAttribute("TableKey2ID"));
+            tableRowNumber.getAttribute("Table2ID"),
+            tableRowNumber.getAttribute("TableKey2ID"));
       }
-      if (tableRowNumber.getElement().getAttribute("Table2ID").equals(tableID)
-          && tableRowNumber.getElement().getAttribute("TableKey2ID").equals(tableKeyID)) {
+      if (tableRowNumber.getAttribute("Table2ID").equals(tableID)
+          && tableRowNumber.getAttribute("TableKey2ID").equals(tableKeyID)) {
         targetNode = getSpecificXeadTreeNode("TableKey",
-            tableRowNumber.getElement().getAttribute("Table1ID"),
-            tableRowNumber.getElement().getAttribute("TableKey1ID"));
+            tableRowNumber.getAttribute("Table1ID"),
+            tableRowNumber.getAttribute("TableKey1ID"));
       }
     }
     if (componentType_jPopupMenuComponent.equals("FunctionList")) {
       tableRowNumber = (TableRowNumber) tableModelFunctionList.getValueAt(
           selectedRow_jTableFunctionList, 0);
       targetNode = getSpecificXeadTreeNode("Function",
-          tableRowNumber.getElement().getAttribute("ID"), null);
+          tableRowNumber.getAttribute("ID"), null);
     }
     if (componentType_jPopupMenuComponent.equals("ForeignFunctionList")) {
       tableRowNumber = (TableRowNumber) tableModelForeignFunctionList.getValueAt(
           selectedRow_jTableForeignFunctionList, 0);
       targetNode = getSpecificXeadTreeNode("Function",
-          tableRowNumber.getElement().getAttribute("ID"), null);
+          tableRowNumber.getAttribute("ID"), null);
     }
     if (componentType_jPopupMenuComponent.equals("FunctionIOList")) {
       element = currentMainTreeNode.getElement();
@@ -38286,34 +38482,34 @@ public class Modeler extends JFrame {
       tableRowNumber = (TableRowNumber) tableModelFunctionIOList.getValueAt(
           selectedRow_jTableFunctionIOList, 0);
       targetNode = getSpecificXeadTreeNode("FunctionIO", functionID,
-          tableRowNumber.getElement().getAttribute("ID"));
+          tableRowNumber.getAttribute("ID"));
     }
     if (componentType_jPopupMenuComponent.equals("FunctionsUsedByThis")) {
       tableRowNumber = (TableRowNumber) tableModelFunctionsUsedByThis.getValueAt(
           selectedRow_jTableFunctionsUsedByThis, 0);
       targetNode = getSpecificXeadTreeNode("Function",
-          tableRowNumber.getElement().getAttribute("FunctionID"), null);
+          tableRowNumber.getAttribute("FunctionID"), null);
     }
     if (componentType_jPopupMenuComponent.equals("FunctionsUsingThis")) {
       tableRowNumber = (TableRowNumber) tableModelFunctionsUsingThis.getValueAt(
           selectedRow_jTableFunctionsUsingThis, 0);
       targetNode = getSpecificXeadTreeNode("Function",
-          tableRowNumber.getElement().getAttribute("ID"), null);
+          tableRowNumber.getAttribute("ID"), null);
     }
     if (componentType_jPopupMenuComponent.equals("TasksUsingThis")) {
       tableRowNumber = (TableRowNumber) tableModelTasksUsingThis.getValueAt(
           selectedRow_jTableTasksUsingThis, 0);
-      targetNode = getSpecificXeadTreeNode("Task", tableRowNumber.getElement().getAttribute("ID"),
+      targetNode = getSpecificXeadTreeNode("Task", tableRowNumber.getAttribute("ID"),
           null);
-      elementOfTaskActionToBeFocused = tableRowNumber.getElementExt1();
-      elementOfFunctionIOToBeFocused = tableRowNumber.getElementExt2();
+      elementOfTaskActionToBeFocused = (org.w3c.dom.Element) tableRowNumber.getElementExt1();
+      elementOfFunctionIOToBeFocused = (org.w3c.dom.Element) tableRowNumber.getElementExt2();
     }
     if (componentType_jPopupMenuComponent.equals("IOTableFieldList")) {
       tableRowNumber = (TableRowNumber) tableModelIOTableFieldList.getValueAt(
           selectedRow_jTableIOTableFieldList, 0);
       targetNode = getSpecificXeadTreeNode("TableField",
           currentMainTreeNode.getElement().getAttribute("TableID"),
-          tableRowNumber.getElement().getAttribute("FieldID"));
+          tableRowNumber.getAttribute("FieldID"));
     }
     //
     //Jump to the node//
@@ -39116,7 +39312,7 @@ public class Modeler extends JFrame {
 
           for (int i = 0; i < jTableFunctionIOList.getRowCount(); i++) {
             workNumber = (TableRowNumber) jTableFunctionIOList.getValueAt(i, 0);
-            workNumber.getElement().setAttribute("SortKey", getFormatted4ByteString((i + 1) * 10));
+            workNumber.setAttribute("SortKey", getFormatted4ByteString((i + 1) * 10));
           }
 
           objectNumber = (TableRowNumber) jTableFunctionIOList.getValueAt(
@@ -39127,9 +39323,9 @@ public class Modeler extends JFrame {
           //Log Function node before modified//
           application.getXeadUndoManager().saveNodeBeforeModified(currentMainTreeNode);
 
-          String sortKeyOfTargetRow = targetNumber.getElement().getAttribute("SortKey");
+          String sortKeyOfTargetRow = targetNumber.getAttribute("SortKey");
           int newSortKey = Integer.parseInt(sortKeyOfTargetRow) + 1;
-          objectNumber.getElement().setAttribute("SortKey", getFormatted4ByteString(newSortKey));
+          objectNumber.setAttribute("SortKey", getFormatted4ByteString(newSortKey));
 
           currentMainTreeNode.sortChildNodes();
           jTreeMain.updateUI();
@@ -39341,23 +39537,23 @@ public class Modeler extends JFrame {
           tableNode = (XeadTreeNode) currentMainTreeNode.getParent();
           tableFieldNode = getSpecificXeadTreeNode("TableField",
               tableNode.getElement().getAttribute("ID"),
-              objectNumber.getElement().getAttribute("ID"));
+              objectNumber.getAttribute("ID"));
           //
           //Log TableField node before modified//
           application.getXeadUndoManager().saveNodeBeforeModified(tableFieldNode);
           //
-          String sortKeyOfTargetRow = targetNumber.getElement().getAttribute("SortKey");
+          String sortKeyOfTargetRow = targetNumber.getAttribute("SortKey");
           //
           if (targetRow_jTableTableFieldList == (tableModelTableFieldList.getRowCount() - 1)) {
             //
             int workInt = Integer.parseInt(sortKeyOfTargetRow) + 10;
-            objectNumber.getElement().setAttribute("SortKey", getFormatted4ByteString(workInt));
+            objectNumber.setAttribute("SortKey", getFormatted4ByteString(workInt));
             //
           } else {
             //
             workNumber = (TableRowNumber) tableModelTableFieldList.getValueAt(
                 targetRow_jTableTableFieldList + 1, 0);
-            String sortKeyOfFollowingRow = workNumber.getElement().getAttribute("SortKey");
+            String sortKeyOfFollowingRow = workNumber.getAttribute("SortKey");
             int sortKeyBytesOfFollowingRow = sortKeyOfFollowingRow.getBytes().length;
             if (sortKeyBytesOfFollowingRow == 4) {
               sortKeyOfFollowingRow = sortKeyOfFollowingRow + "000000";
@@ -39411,7 +39607,7 @@ public class Modeler extends JFrame {
                 }
               }
             }
-            objectNumber.getElement().setAttribute("SortKey", workStr);
+            objectNumber.setAttribute("SortKey", workStr);
           }
           //
           //Log TableField node after modified//
@@ -39532,10 +39728,10 @@ public class Modeler extends JFrame {
               selectedRow_jTableTableKeyFieldList, 0);
           targetNumber = (TableRowNumber) tableModelTableKeyFieldList.getValueAt(
               targetRow_jTableTableKeyFieldList, 0);
-          String sortKeyOfTargetRow = targetNumber.getElement().getAttribute("SortKey");
+          String sortKeyOfTargetRow = targetNumber.getAttribute("SortKey");
           //
           workInt = Integer.parseInt(sortKeyOfTargetRow) + 1;
-          objectNumber.getElement().setAttribute("SortKey", getFormatted4ByteString(workInt));
+          objectNumber.setAttribute("SortKey", getFormatted4ByteString(workInt));
           //
           informationOnThisPageChanged = true;
           //
@@ -39772,10 +39968,10 @@ public class Modeler extends JFrame {
               selectedRow_jTableFunctionsUsedByThis, 0);
           targetNumber = (TableRowNumber) tableModelFunctionsUsedByThis.getValueAt(
               targetRow_jTableFunctionsUsedByThis, 0);
-          String sortKeyOfTargetRow = targetNumber.getElement().getAttribute("SortKey");
+          String sortKeyOfTargetRow = targetNumber.getAttribute("SortKey");
           //
           workInt = Integer.parseInt(sortKeyOfTargetRow) + 1;
-          objectNumber.getElement().setAttribute("SortKey", getFormatted4ByteString(workInt));
+          objectNumber.setAttribute("SortKey", getFormatted4ByteString(workInt));
           //
           informationOnThisPageChanged = true;
           //

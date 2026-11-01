@@ -9,6 +9,7 @@ package xeadModeler.model.json;
 public class Terms {
     
     private String descriptions;
+    private String header;
     private String id;
     private String name;
     private String sortKey;
@@ -19,6 +20,14 @@ public class Terms {
     
     public void setDescriptions(String descriptions) {
         this.descriptions = descriptions;
+    }
+    
+    public String getHeader() {
+        return header;
+    }
+    
+    public void setHeader(String header) {
+        this.header = header;
     }
     
     public String getId() {
