@@ -9,6 +9,7 @@ package xeadModeler.model.json;
 public class TableKeyField {
     
     private String fieldId;
+    private String ascDesc;
     private String sortKey;
     
     public String getFieldId() {
@@ -17,6 +18,14 @@ public class TableKeyField {
     
     public void setFieldId(String fieldId) {
         this.fieldId = fieldId;
+    }
+    
+    public String getAscDesc() {
+        return ascDesc;
+    }
+    
+    public void setAscDesc(String ascDesc) {
+        this.ascDesc = ascDesc;
     }
     
     public String getSortKey() {
