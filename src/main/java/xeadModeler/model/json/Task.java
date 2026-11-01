@@ -70,6 +70,13 @@ public class Task {
         this.roleId = roleId;
     }
     
+    /**
+     * Alias for getRoleId() for compatibility
+     */
+    public String getRoleID() {
+        return roleId;
+    }
+    
     public List<TaskAction> getTaskActions() {
         return taskActions;
     }

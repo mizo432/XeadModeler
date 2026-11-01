@@ -1,5 +1,8 @@
 package xeadModeler.model.json;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 主題領域のJSONモデルクラス
  *
@@ -14,6 +17,9 @@ public class SubjectArea {
     private String sortKey;
     private String boundaryPosition;
     private String boundarySize;
+    
+    private List<DataflowNode> dataflowNodes = new ArrayList<>();
+    private List<DataflowLine> dataflowLines = new ArrayList<>();
     
     public String getDescriptions() {
         return descriptions;
@@ -61,5 +67,21 @@ public class SubjectArea {
     
     public void setBoundarySize(String boundarySize) {
         this.boundarySize = boundarySize;
+    }
+    
+    public List<DataflowNode> getDataflowNodes() {
+        return dataflowNodes;
+    }
+    
+    public void setDataflowNodes(List<DataflowNode> dataflowNodes) {
+        this.dataflowNodes = dataflowNodes;
+    }
+    
+    public List<DataflowLine> getDataflowLines() {
+        return dataflowLines;
+    }
+    
+    public void setDataflowLines(List<DataflowLine> dataflowLines) {
+        this.dataflowLines = dataflowLines;
     }
 }

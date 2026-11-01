@@ -254,6 +254,13 @@ public class XeadSystem {
     }
     
     /**
+     * Alias for getIotables() for compatibility
+     */
+    public List<IOTable> getIOTables() {
+        return iotables;
+    }
+    
+    /**
      * 指定されたタイプの要素から最大のIDを持つ要素を取得します
      * @param type 要素タイプ ("Department", "TableType", "DataType", "FunctionType", "Table", "Relationship", "Function", "Subsystem", "Task", "Role", "SubjectArea", "Terms", "TaskType", "IOTable")
      * @return 最大のIDを持つ要素、存在しない場合はnull

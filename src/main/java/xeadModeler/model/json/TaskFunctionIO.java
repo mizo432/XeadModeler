@@ -11,6 +11,7 @@ public class TaskFunctionIO {
     private String id;
     private String sortKey;
     private String functionId;
+    private String ioId;
     private String ioType;
     
     public String getId() {
@@ -35,6 +36,14 @@ public class TaskFunctionIO {
     
     public void setFunctionId(String functionId) {
         this.functionId = functionId;
+    }
+    
+    public String getIoId() {
+        return ioId;
+    }
+    
+    public void setIoId(String ioId) {
+        this.ioId = ioId;
     }
     
     public String getIoType() {

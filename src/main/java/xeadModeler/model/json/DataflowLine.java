@@ -16,6 +16,10 @@ public class DataflowLine {
     private String fromNodeId;
     private String toNodeId;
     private String descriptions;
+    private String name;
+    private String nameExt;
+    private int slideNumber;
+    private String imageType;
     
     public String getId() {
         return id;
@@ -55,5 +59,37 @@ public class DataflowLine {
     
     public void setDescriptions(String descriptions) {
         this.descriptions = descriptions;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getNameExt() {
+        return nameExt;
+    }
+    
+    public void setNameExt(String nameExt) {
+        this.nameExt = nameExt;
+    }
+    
+    public int getSlideNumber() {
+        return slideNumber;
+    }
+    
+    public void setSlideNumber(int slideNumber) {
+        this.slideNumber = slideNumber;
+    }
+    
+    public String getImageType() {
+        return imageType;
+    }
+    
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }

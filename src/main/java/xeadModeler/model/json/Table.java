@@ -71,6 +71,13 @@ public class Table {
         this.subsystemId = subsystemId;
     }
     
+    /**
+     * Alias for getSubsystemId() for compatibility
+     */
+    public String getSubsystemID() {
+        return subsystemId;
+    }
+    
     public String getTableTypeId() {
         return tableTypeId;
     }

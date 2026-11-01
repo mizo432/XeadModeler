@@ -75,6 +75,13 @@ public class Function {
         this.subsystemId = subsystemId;
     }
     
+    /**
+     * Alias for getSubsystemId() for compatibility
+     */
+    public String getSubsystemID() {
+        return subsystemId;
+    }
+    
     public List<IOPanel> getIOPanels() {
         return ioPanels;
     }
