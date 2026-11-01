@@ -19195,7 +19195,7 @@ public class Modeler extends JFrame {
       super();
       nodeType_ = type;
       domNode_ = node;
-      if (domNode_ != null && domNode_.getAttribute("Descriptions").contains("@NOTE@")) {
+      if (domNode_ != null && getAttribute("Descriptions").contains("@NOTE@")) {
         isPending_ = true;
       }
     }
@@ -19341,99 +19341,99 @@ public class Modeler extends JFrame {
     }
 
     public String getElementName() {
-      return domNode_.getAttribute("Name");
+      return getAttribute("Name");
     }
 
     public String getName() {
       String str = "";
 
       if (nodeType_.equals("Department")) {
-        str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+        str = getAttribute("SortKey") + " " + getAttribute("Name");
       }
       if (nodeType_.equals("TaskType")) {
-        str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+        str = getAttribute("SortKey") + " " + getAttribute("Name");
       }
       if (nodeType_.equals("TableType")) {
-        str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+        str = getAttribute("SortKey") + " " + getAttribute("Name");
       }
       if (nodeType_.equals("DataType")) {
-        if (domNode_.getAttribute("BasicType").equals("SignedNumber") || domNode_.getAttribute(
+        if (getAttribute("BasicType").equals("SignedNumber") || getAttribute(
             "BasicType").equals("UnsignedNumber")) {
-          str = domNode_.getAttribute("SortKey") + " "
-              + domNode_.getAttribute("Name") + "("
-              + domNode_.getAttribute("Length") + "."
-              + domNode_.getAttribute("Decimal") + ")";
+          str = getAttribute("SortKey") + " "
+              + getAttribute("Name") + "("
+              + getAttribute("Length") + "."
+              + getAttribute("Decimal") + ")";
         } else {
-          str = domNode_.getAttribute("SortKey") + " "
-              + domNode_.getAttribute("Name") + "("
-              + domNode_.getAttribute("Length") + ")";
+          str = getAttribute("SortKey") + " "
+              + getAttribute("Name") + "("
+              + getAttribute("Length") + ")";
         }
       }
       if (nodeType_.equals("FunctionType")) {
-        str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+        str = getAttribute("SortKey") + " " + getAttribute("Name");
       }
       if (nodeType_.equals("MaintenanceLog")) {
         str = res.getString("S252");
       }
 
       if (nodeType_.equals("System")) {
-        str = domNode_.getAttribute("Name");
+        str = getAttribute("Name");
       }
       if (nodeType_.equals("SubjectAreaList")) {
         str = res.getString("S3385");
       }
       if (nodeType_.equals("SubjectArea")) {
-        str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+        str = getAttribute("SortKey") + " " + getAttribute("Name");
       }
       if (nodeType_.equals("RoleList")) {
         str = res.getString("S3391");
       }
       if (nodeType_.equals("Role")) {
-        str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+        str = getAttribute("SortKey") + " " + getAttribute("Name");
       }
       if (nodeType_.equals("Task")) {
-        str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+        str = getAttribute("SortKey") + " " + getAttribute("Name");
       }
       if (nodeType_.equals("SubsystemList")) {
         str = res.getString("S3401");
       }
       if (nodeType_.equals("Subsystem")) {
-        str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+        str = getAttribute("SortKey") + " " + getAttribute("Name");
       }
       if (nodeType_.equals("TableList")) {
         str = res.getString("S3407");
       }
       if (nodeType_.equals("Table")) {
-        if (domNode_.getAttribute("SortKey").toUpperCase()
-            .equals(domNode_.getAttribute("Name").toUpperCase())) {
-          str = domNode_.getAttribute("SortKey");
+        if (getAttribute("SortKey").toUpperCase()
+            .equals(getAttribute("Name").toUpperCase())) {
+          str = getAttribute("SortKey");
         } else {
-          str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+          str = getAttribute("SortKey") + " " + getAttribute("Name");
         }
-        String wrkStr1 = domNode_.getAttribute("Alias").replaceAll("_", "").toUpperCase();
-        String wrkStr2 = domNode_.getAttribute("Name").replaceAll(" ", "").toUpperCase();
+        String wrkStr1 = getAttribute("Alias").replaceAll("_", "").toUpperCase();
+        String wrkStr2 = getAttribute("Name").replaceAll(" ", "").toUpperCase();
         if (!wrkStr1.equals(wrkStr2) && !wrkStr1.equals("")) {
-          str = str + " - " + domNode_.getAttribute("Alias");
+          str = str + " - " + getAttribute("Alias");
         }
       }
       if (nodeType_.equals("TableFieldList")) {
         str = res.getString("S613");
       }
       if (nodeType_.equals("TableField")) {
-        if (domNode_.getAttribute("AttributeType").equals("NATIVE")) {
-          if (domNode_.getAttribute("Alias").equals("") || domNode_.getAttribute("Alias")
-              .equals(domNode_.getAttribute("Name"))) {
-            str = domNode_.getAttribute("Name");
+        if (getAttribute("AttributeType").equals("NATIVE")) {
+          if (getAttribute("Alias").equals("") || getAttribute("Alias")
+              .equals(getAttribute("Name"))) {
+            str = getAttribute("Name");
           } else {
-            str = domNode_.getAttribute("Alias") + " " + domNode_.getAttribute("Name");
+            str = getAttribute("Alias") + " " + getAttribute("Name");
           }
         } else {
-          if (domNode_.getAttribute("Alias").equals("") || domNode_.getAttribute("Alias")
-              .equals(domNode_.getAttribute("Name"))) {
-            str = "( " + domNode_.getAttribute("Name") + " )";
+          if (getAttribute("Alias").equals("") || getAttribute("Alias")
+              .equals(getAttribute("Name"))) {
+            str = "( " + getAttribute("Name") + " )";
           } else {
             str =
-                "( " + domNode_.getAttribute("Alias") + " " + domNode_.getAttribute("Name") + " )";
+                "( " + getAttribute("Alias") + " " + getAttribute("Name") + " )";
           }
         }
       }
@@ -19441,67 +19441,67 @@ public class Modeler extends JFrame {
         str = res.getString("S3427");
       }
       if (nodeType_.equals("TableKey")) {
-        str = "[" + domNode_.getAttribute("Type") + "] " + this.getNameOfTableKey();
+        str = "[" + getAttribute("Type") + "] " + this.getNameOfTableKey();
       }
       if (nodeType_.equals("FunctionList")) {
         str = res.getString("S3433");
       }
       if (nodeType_.equals("Function")) {
-        str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+        str = getAttribute("SortKey") + " " + getAttribute("Name");
       }
       if (nodeType_.equals("ReccursiveFunction")) {
         str =
-            domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name") + res.getString(
+            getAttribute("SortKey") + " " + getAttribute("Name") + res.getString(
                 "S3442");
       }
       if (nodeType_.equals("IOPanel")) {
-        str = domNode_.getAttribute("Name");
+        str = getAttribute("Name");
       }
       if (nodeType_.equals("IOSpool")) {
-        str = domNode_.getAttribute("Name");
+        str = getAttribute("Name");
       }
       if (nodeType_.equals("IOTable")) {
         XeadTreeNode xeadTreeNode = getSpecificXeadTreeNode("Table",
-            domNode_.getAttribute("TableID"), null);
+            getAttribute("TableID"), null);
         String opC, opR, opU, opD;
-        if (domNode_.getAttribute("OpC").equals("+")) {
+        if (getAttribute("OpC").equals("+")) {
           opC = "C";
         } else {
           opC = "";
         }
-        if (domNode_.getAttribute("OpR").equals("+")) {
+        if (getAttribute("OpR").equals("+")) {
           opR = "R";
         } else {
           opR = "";
         }
-        if (domNode_.getAttribute("OpU").equals("+")) {
+        if (getAttribute("OpU").equals("+")) {
           opU = "U";
         } else {
           opU = "";
         }
-        if (domNode_.getAttribute("OpD").equals("+")) {
+        if (getAttribute("OpD").equals("+")) {
           opD = "D";
         } else {
           opD = "";
         }
         String tableName = "";
-        if (xeadTreeNode.getElement().getAttribute("Alias").equals("")) {
-          tableName = xeadTreeNode.getElement().getAttribute("Name");
+        if (xeadTreeNode.getAttribute("Alias").equals("")) {
+          tableName = xeadTreeNode.getAttribute("Name");
         } else {
-          String wrkStr1 = xeadTreeNode.getElement().getAttribute("Alias").replaceAll("_", "")
+          String wrkStr1 = xeadTreeNode.getAttribute("Alias").replaceAll("_", "")
               .toUpperCase();
-          String wrkStr2 = xeadTreeNode.getElement().getAttribute("Name").replaceAll(" ", "")
+          String wrkStr2 = xeadTreeNode.getAttribute("Name").replaceAll(" ", "")
               .toUpperCase();
           if (wrkStr1.equals(wrkStr2)) {
-            tableName = xeadTreeNode.getElement().getAttribute("Name");
+            tableName = xeadTreeNode.getAttribute("Name");
           } else {
             tableName =
-                xeadTreeNode.getElement().getAttribute("Name") + " - " + xeadTreeNode.getElement()
+                xeadTreeNode.getAttribute("Name") + " - " + xeadTreeNode
                     .getAttribute("Alias");
           }
         }
-        String wrk = xeadTreeNode.getElement().getAttribute("SortKey");
-        String ext = domNode_.getAttribute("NameExtension");
+        String wrk = xeadTreeNode.getAttribute("SortKey");
+        String ext = getAttribute("NameExtension");
         if (wrk.equals("")) {
           if (ext.equals("")) {
             str = tableName + "[" + opC + opR + opU + opD + "]";
@@ -19515,35 +19515,35 @@ public class Modeler extends JFrame {
             str = tableName + "(" + wrk + ":" + ext + ")[" + opC + opR + opU + opD + "]";
           }
         }
-        if (domNode_.getAttribute("Position").equals("PRIMARY")) {
+        if (getAttribute("Position").equals("PRIMARY")) {
           str = str + " " + res.getString("S751");
         }
-        if (domNode_.getAttribute("Position").equals("HEADER")) {
+        if (getAttribute("Position").equals("HEADER")) {
           str = str + " " + res.getString("S752");
         }
-        if (domNode_.getAttribute("Position").equals("DETAIL")) {
+        if (getAttribute("Position").equals("DETAIL")) {
           str = str + " " + res.getString("S753");
         }
-        if (domNode_.getAttribute("Position").equals("JOIN")) {
+        if (getAttribute("Position").equals("JOIN")) {
           str = str + " " + res.getString("S754");
         }
       }
       if (nodeType_.equals("IOWebPage")) {
-        str = domNode_.getAttribute("Name");
+        str = getAttribute("Name");
       }
 
       if (nodeType_.equals("TaskActionFirst") || nodeType_.equals("TaskAction")) {
         String workStr = "";
-        if (!domNode_.getAttribute("ExecuteIf").equals("")) {
-          workStr = domNode_.getAttribute("ExecuteIf") + "、";
+        if (!getAttribute("ExecuteIf").equals("")) {
+          workStr = getAttribute("ExecuteIf") + "、";
         }
-        NodeList list = domNode_.getElementsByTagName("TaskFunctionIO");
-        if (list.getLength() > 0) {
-          str = workStr + domNode_.getAttribute("Label") + "*";
+        NodeList list = getElementsByTagName("TaskFunctionIO");
+        if (list != null && list.getLength() > 0) {
+          str = workStr + getAttribute("Label") + "*";
         } else {
-          str = workStr + domNode_.getAttribute("Label");
+          str = workStr + getAttribute("Label");
         }
-        if (!domNode_.getAttribute("Descriptions").equals("")) {
+        if (!getAttribute("Descriptions").equals("")) {
           str = str + res.getString("S3485");
         }
       }
@@ -19862,7 +19862,7 @@ public class Modeler extends JFrame {
           newElement.setAttribute("Descriptions", descriptions);
           newElement.setAttribute("SortKey", sortKey);
           newElement.setAttribute("Event", res.getString("S3568"));
-          newElement.setAttribute("RoleID", domNode_.getAttribute("ID"));
+          newElement.setAttribute("RoleID", getAttribute("ID"));
           sortableComboBoxModelTaskType.removeAllElements();
           nodeList = domDocument.getElementsByTagName("TaskType");
           for (int i = 0; i < nodeList.getLength(); i++) {
