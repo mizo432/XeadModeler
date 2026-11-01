@@ -15,6 +15,7 @@ public class IOTable {
     private String id;
     private String name;
     private String sortKey;
+    private String tableId;
     
     private List<IOTableField> iotableFields = new ArrayList<>();
     
@@ -48,6 +49,14 @@ public class IOTable {
     
     public void setSortKey(String sortKey) {
         this.sortKey = sortKey;
+    }
+    
+    public String getTableId() {
+        return tableId;
+    }
+    
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
     }
     
     public List<IOTableField> getIotableFields() {

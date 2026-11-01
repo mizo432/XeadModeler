@@ -21,6 +21,7 @@ public class Relationship {
     private String table2Id;
     private String tableKey1Id;
     private String tableKey2Id;
+    private String type;
     
     private List<SubsystemRelationship> subsystemRelationships = new ArrayList<>();
     
@@ -102,6 +103,14 @@ public class Relationship {
     
     public void setTableKey2Id(String tableKey2Id) {
         this.tableKey2Id = tableKey2Id;
+    }
+    
+    public String getType() {
+        return type;
+    }
+    
+    public void setType(String type) {
+        this.type = type;
     }
     
     public List<SubsystemRelationship> getSubsystemRelationships() {

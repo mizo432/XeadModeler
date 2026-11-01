@@ -1080,7 +1080,7 @@ public class Modeler extends JFrame {
     }
   };
   private boolean sizeOfTableOnModelChanged = false;
-  private org.w3c.dom.Element draggingKeyElement = null;
+  private xeadModeler.model.json.TableKey draggingKeyElement = null;
   private DialogAddRelationshipOnDatamodel dialogAddRelationshipOnDatamodel = new DialogAddRelationshipOnDatamodel(
       this);
   private DialogEditInstanceOnDatamodel dialogEditInstanceOnDatamodel = new DialogEditInstanceOnDatamodel(
@@ -17485,7 +17485,7 @@ public class Modeler extends JFrame {
             jPanelElements.add(elementLabel);
 
             if (partOfPrimaryKey) {
-              elementLabel = new ElementLabel(node, true, primaryKeyNode.getElement(), this);
+              elementLabel = new ElementLabel(node, true, (xeadModeler.model.json.TableKey)primaryKeyNode.jsonNode_, this);
             } else {
               elementLabel = new ElementLabel(node, false, null, this);
             }
@@ -17539,7 +17539,7 @@ public class Modeler extends JFrame {
                     elementLabelArray.add(elementLabel);
                     jPanelElements.add(elementLabel);
                   }
-                  elementLabel = new ElementLabel(node, false, keyNode.getElement(), this);
+                  elementLabel = new ElementLabel(node, false, (xeadModeler.model.json.TableKey)keyNode.jsonNode_, this);
                   elementLabelArray.add(elementLabel);
                   jPanelElements.add(elementLabel);
                   firstFieldOfTheKey = false;
@@ -18171,9 +18171,9 @@ public class Modeler extends JFrame {
       private XeadTreeNode elementNode_;
       private boolean isKey_;
       private DatamodelEntityBox entityBox_;
-      private org.w3c.dom.Element keyElement_;
+      private xeadModeler.model.json.TableKey keyElement_;
 
-      public ElementLabel(XeadTreeNode node, boolean isKey, org.w3c.dom.Element keyElement,
+      public ElementLabel(XeadTreeNode node, boolean isKey, xeadModeler.model.json.TableKey keyElement,
           DatamodelEntityBox entityBox) {
         super();
         elementNode_ = node;
@@ -18288,7 +18288,7 @@ public class Modeler extends JFrame {
         }
       }
 
-      public org.w3c.dom.Element getKeyElement() {
+      public xeadModeler.model.json.TableKey getKeyElement() {
         return keyElement_;
       }
 

@@ -12,6 +12,7 @@ public class IOTableField {
     private String sortKey;
     private String fieldId;
     private String fieldType;
+    private String descriptions;
     
     public String getId() {
         return id;
@@ -43,5 +44,13 @@ public class IOTableField {
     
     public void setFieldType(String fieldType) {
         this.fieldType = fieldType;
+    }
+    
+    public String getDescriptions() {
+        return descriptions;
+    }
+    
+    public void setDescriptions(String descriptions) {
+        this.descriptions = descriptions;
     }
 }

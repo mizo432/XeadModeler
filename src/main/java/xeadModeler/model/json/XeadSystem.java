@@ -41,6 +41,7 @@ public class XeadSystem {
     private List<SubjectArea> subjectAreas = new ArrayList<>();
     private List<Terms> terms = new ArrayList<>();
     private List<TaskType> taskTypes = new ArrayList<>();
+    private List<IOTable> iotables = new ArrayList<>();
     
     // Getters and Setters
     
@@ -242,5 +243,13 @@ public class XeadSystem {
     
     public void setTaskTypes(List<TaskType> taskTypes) {
         this.taskTypes = taskTypes;
+    }
+    
+    public List<IOTable> getIotables() {
+        return iotables;
+    }
+    
+    public void setIotables(List<IOTable> iotables) {
+        this.iotables = iotables;
     }
 }
