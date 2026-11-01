@@ -17,6 +17,9 @@ public class Function {
     private String sortKey;
     private String functionTypeId;
     private String subsystemId;
+    private String parameters;
+    private String return_;
+    private String summary;
     
     private List<FunctionUsedByThis> functionUsedByThisList = new ArrayList<>();
     private List<IOPanel> ioPanels = new ArrayList<>();
@@ -80,12 +83,20 @@ public class Function {
         this.ioPanels = ioPanels;
     }
     
+    public List<IOPanel> getIopanels() {
+        return ioPanels;
+    }
+    
     public List<IOSpool> getIOSpools() {
         return ioSpools;
     }
     
     public void setIOSpools(List<IOSpool> ioSpools) {
         this.ioSpools = ioSpools;
+    }
+    
+    public List<IOSpool> getIospools() {
+        return ioSpools;
     }
     
     public List<IOTable> getIOTables() {
@@ -104,11 +115,39 @@ public class Function {
         this.ioWebPages = ioWebPages;
     }
     
+    public List<IOWebPage> getIowebpages() {
+        return ioWebPages;
+    }
+    
     public List<FunctionUsedByThis> getFunctionUsedByThisList() {
         return functionUsedByThisList;
     }
     
     public void setFunctionUsedByThisList(List<FunctionUsedByThis> functionUsedByThisList) {
         this.functionUsedByThisList = functionUsedByThisList;
+    }
+    
+    public String getParameters() {
+        return parameters;
+    }
+    
+    public void setParameters(String parameters) {
+        this.parameters = parameters;
+    }
+    
+    public String getReturn() {
+        return return_;
+    }
+    
+    public void setReturn(String return_) {
+        this.return_ = return_;
+    }
+    
+    public String getSummary() {
+        return summary;
+    }
+    
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

@@ -15,6 +15,9 @@ public class IOPanel {
     private String id;
     private String name;
     private String sortKey;
+    private String background;
+    private String imageText;
+    private String size;
     
     private List<IOPanelField> iopanelFields = new ArrayList<>();
     private IOPanelStyle iopanelStyle;
@@ -65,5 +68,29 @@ public class IOPanel {
     
     public void setIopanelStyle(IOPanelStyle iopanelStyle) {
         this.iopanelStyle = iopanelStyle;
+    }
+    
+    public String getBackground() {
+        return background;
+    }
+    
+    public void setBackground(String background) {
+        this.background = background;
+    }
+    
+    public String getImageText() {
+        return imageText;
+    }
+    
+    public void setImageText(String imageText) {
+        this.imageText = imageText;
+    }
+    
+    public String getSize() {
+        return size;
+    }
+    
+    public void setSize(String size) {
+        this.size = size;
     }
 }

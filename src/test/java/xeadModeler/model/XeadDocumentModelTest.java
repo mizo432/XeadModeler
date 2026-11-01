@@ -1,16 +1,15 @@
 package xeadModeler.model;
 
+import xeadModeler.model.json.XeadSystem;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.BeforeEach;
-import org.w3c.dom.Document;
-
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * XeadDocumentModelのテスト
+ * XeadDocumentModelのテスト (JSONベース)
  */
 @DisplayName("XeadDocumentModelテスト")
 public class XeadDocumentModelTest {
@@ -25,8 +24,8 @@ public class XeadDocumentModelTest {
     @Test
     @DisplayName("初期状態の確認")
     public void testInitialState() {
-        assertNull(model.getDomDocument());
-        assertNull(model.getDomDocumentSaved());
+        assertNull(model.getXeadSystem());
+        assertNull(model.getXeadSystemSaved());
         assertNull(model.getCurrentFileName());
         assertNull(model.getCurrentFileFolder());
         assertEquals(0, model.getLastModifyTime());
@@ -34,29 +33,31 @@ public class XeadDocumentModelTest {
     }
     
     @Test
-    @DisplayName("DOMドキュメントの設定と取得")
-    public void testSetAndGetDomDocument() throws Exception {
+    @DisplayName("XeadSystemの設定と取得")
+    public void testSetAndGetXeadSystem() {
         // Given
-        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        XeadSystem system = new XeadSystem();
+        system.setName("TestSystem");
         
         // When
-        model.setDomDocument(doc);
+        model.setXeadSystem(system);
         
         // Then
-        assertSame(doc, model.getDomDocument());
+        assertSame(system, model.getXeadSystem());
     }
     
     @Test
-    @DisplayName("保存済みDOMドキュメントの設定と取得")
-    public void testSetAndGetDomDocumentSaved() throws Exception {
+    @DisplayName("保存済みXeadSystemの設定と取得")
+    public void testSetAndGetXeadSystemSaved() {
         // Given
-        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        XeadSystem system = new XeadSystem();
+        system.setName("SavedSystem");
         
         // When
-        model.setDomDocumentSaved(doc);
+        model.setXeadSystemSaved(system);
         
         // Then
-        assertSame(doc, model.getDomDocumentSaved());
+        assertSame(system, model.getXeadSystemSaved());
     }
     
     @Test

@@ -15,6 +15,9 @@ public class TaskAction {
     private String sortKey;
     private String actionType;
     private String descriptions;
+    private String label;
+    private String indentLevel;
+    private String executeIf;
     private List<TaskFunctionIO> taskFunctionIOs = new ArrayList<>();
     
     public String getId() {
@@ -55,5 +58,29 @@ public class TaskAction {
     
     public void setTaskFunctionIOs(List<TaskFunctionIO> taskFunctionIOs) {
         this.taskFunctionIOs = taskFunctionIOs;
+    }
+    
+    public String getLabel() {
+        return label;
+    }
+    
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    
+    public String getIndentLevel() {
+        return indentLevel;
+    }
+    
+    public void setIndentLevel(String indentLevel) {
+        this.indentLevel = indentLevel;
+    }
+    
+    public String getExecuteIf() {
+        return executeIf;
+    }
+    
+    public void setExecuteIf(String executeIf) {
+        this.executeIf = executeIf;
     }
 }

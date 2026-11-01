@@ -17,6 +17,7 @@ public class Task {
     private String sortKey;
     private String taskTypeId;
     private String roleId;
+    private String event;
     
     private List<TaskAction> taskActions = new ArrayList<>();
     private List<TaskFunctionIO> taskFunctionIOs = new ArrayList<>();
@@ -83,5 +84,13 @@ public class Task {
     
     public void setTaskFunctionIOs(List<TaskFunctionIO> taskFunctionIOs) {
         this.taskFunctionIOs = taskFunctionIOs;
+    }
+    
+    public String getEvent() {
+        return event;
+    }
+    
+    public void setEvent(String event) {
+        this.event = event;
     }
 }

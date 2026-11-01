@@ -12,6 +12,9 @@ public class IOWebPageField {
     private String sortKey;
     private String fieldId;
     private String fieldType;
+    private String label;
+    private String name;
+    private String ioType;
     
     public String getId() {
         return id;
@@ -43,5 +46,29 @@ public class IOWebPageField {
     
     public void setFieldType(String fieldType) {
         this.fieldType = fieldType;
+    }
+    
+    public String getLabel() {
+        return label;
+    }
+    
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getIoType() {
+        return ioType;
+    }
+    
+    public void setIoType(String ioType) {
+        this.ioType = ioType;
     }
 }

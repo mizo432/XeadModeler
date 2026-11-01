@@ -12,6 +12,8 @@ public class SubjectArea {
     private String id;
     private String name;
     private String sortKey;
+    private String boundaryPosition;
+    private String boundarySize;
     
     public String getDescriptions() {
         return descriptions;
@@ -43,5 +45,21 @@ public class SubjectArea {
     
     public void setSortKey(String sortKey) {
         this.sortKey = sortKey;
+    }
+    
+    public String getBoundaryPosition() {
+        return boundaryPosition;
+    }
+    
+    public void setBoundaryPosition(String boundaryPosition) {
+        this.boundaryPosition = boundaryPosition;
+    }
+    
+    public String getBoundarySize() {
+        return boundarySize;
+    }
+    
+    public void setBoundarySize(String boundarySize) {
+        this.boundarySize = boundarySize;
     }
 }

@@ -110,4 +110,12 @@ public class TableField {
     public void setSortKey(String sortKey) {
         this.sortKey = sortKey;
     }
+    
+    public String getDefault() {
+        return default_;
+    }
+    
+    public void setDefault(String default_) {
+        this.default_ = default_;
+    }
 }

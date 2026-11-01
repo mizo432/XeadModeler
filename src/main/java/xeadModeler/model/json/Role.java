@@ -12,6 +12,7 @@ public class Role {
     private String id;
     private String name;
     private String sortKey;
+    private String departmentId;
     
     public String getDescriptions() {
         return descriptions;
@@ -43,5 +44,13 @@ public class Role {
     
     public void setSortKey(String sortKey) {
         this.sortKey = sortKey;
+    }
+    
+    public String getDepartmentId() {
+        return departmentId;
+    }
+    
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 }

@@ -15,6 +15,7 @@ public class IOWebPage {
     private String id;
     private String name;
     private String sortKey;
+    private String fileName;
     
     private List<IOWebPageField> iowebpageFields = new ArrayList<>();
     
@@ -56,5 +57,13 @@ public class IOWebPage {
     
     public void setIowebpageFields(List<IOWebPageField> iowebpageFields) {
         this.iowebpageFields = iowebpageFields;
+    }
+    
+    public String getFileName() {
+        return fileName;
+    }
+    
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

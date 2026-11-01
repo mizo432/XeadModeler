@@ -15,6 +15,9 @@ public class IOSpool {
     private String id;
     private String name;
     private String sortKey;
+    private String background;
+    private String imageText;
+    private String size;
     
     private List<IOSpoolField> iospoolFields = new ArrayList<>();
     private IOSpoolStyle iospoolStyle;
@@ -65,5 +68,29 @@ public class IOSpool {
     
     public void setIospoolStyle(IOSpoolStyle iospoolStyle) {
         this.iospoolStyle = iospoolStyle;
+    }
+    
+    public String getBackground() {
+        return background;
+    }
+    
+    public void setBackground(String background) {
+        this.background = background;
+    }
+    
+    public String getImageText() {
+        return imageText;
+    }
+    
+    public void setImageText(String imageText) {
+        this.imageText = imageText;
+    }
+    
+    public String getSize() {
+        return size;
+    }
+    
+    public void setSize(String size) {
+        this.size = size;
     }
 }
