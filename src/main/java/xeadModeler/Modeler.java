@@ -121,8 +121,7 @@ import xeadModeler.view.SortableDomElementFieldListModel;
 // TODO: DialogReorganizeDataTypesをJSONベースに修正するまでコメントアウト
 // import xeadModeler.view.DialogReorganizeDataTypes;
 import xeadModeler.view.DialogScan;
-// TODO: DialogTableSynchronizeをJSONベースに修正するまでコメントアウト
-// import xeadModeler.view.DialogTableSynchronize;
+import xeadModeler.view.DialogTableSynchronize;
 // TODO: DialogToListChangesOfFilesをJSONベースに修正するまでコメントアウト
 // import xeadModeler.view.DialogToListChangesOfFiles;
 
@@ -338,8 +337,7 @@ public class Modeler extends JFrame {
   // private DialogImportXEAF dialogImportXEAF;
   private DialogImportSQL dialogImportSQL;
   private DialogConfigColors dialogConfigColors;
-  // TODO: DialogTableSynchronizeをJSONベースに修正するまでコメントアウト
-  // private DialogTableSynchronize dialogTableSynchronize;
+  private DialogTableSynchronize dialogTableSynchronize;
   // TODO: DialogToListChangesOfFilesをJSONベースに修正するまでコメントアウト
   // private DialogToListChangesOfFiles dialogToListChangesOfFiles;
   /**
@@ -1771,8 +1769,7 @@ public class Modeler extends JFrame {
     // dialogImportXEAF = new DialogImportXEAF(this);
     dialogImportSQL = new DialogImportSQL(this);
     dialogConfigColors = new DialogConfigColors(this);
-    // TODO: DialogTableSynchronizeをJSONベースに修正するまでコメントアウト
-    // dialogTableSynchronize = new DialogTableSynchronize(this);
+    dialogTableSynchronize = new DialogTableSynchronize(this);
     // TODO: DialogToListChangesOfFilesをJSONベースに修正するまでコメントアウト
     // dialogToListChangesOfFiles = new DialogToListChangesOfFiles(this);
 
@@ -6822,9 +6819,7 @@ public class Modeler extends JFrame {
           xeadTreeNode1.add(xeadTreeNode2);
           if (table.getSynchFile() != null && !table.getSynchFile().equals("")) {
             xeadTreeNode2.setError(
-                // TODO: DialogTableSynchronizeをJSONベースに修正するまでコメントアウト
-                // dialogTableSynchronize.isSynchError(xeadTreeNode2.getElement(), null)
-                false);
+                dialogTableSynchronize.isSynchError(xeadTreeNode2, null));
             if (!xeadTreeNode2.isError()) {
               xeadTreeNode2.setExtRefered(true);
             }
@@ -29190,8 +29185,7 @@ public class Modeler extends JFrame {
         } else {
           if (!domNode_.getAttribute("SynchFile").equals(jTextFieldTableSynchronize.getText())) {
             domNode_.setAttribute("SynchFile", jTextFieldTableSynchronize.getText());
-            // TODO: DialogTableSynchronizeをJSONベースに修正するまでコメントアウト
-            // this.setError(dialogTableSynchronize.isSynchError(this.getElement(), null));
+            this.setError(dialogTableSynchronize.isSynchError(this, null));
             this.setExtRefered(!this.isError());
             repaintErrorStatusOfParentNodes((XeadTreeNode) this.getParent());
           }
@@ -40708,44 +40702,10 @@ public class Modeler extends JFrame {
   void jButtonTableSynchronize_actionPerformed(ActionEvent e) {
     currentMainTreeNode.updateFields();
 
-    // TODO: DialogTableSynchronizeをJSONベースに修正するまでコメントアウト
-    // boolean isSynchError = dialogTableSynchronize.request(currentMainTreeNode);
-    // if (dialogTableSynchronize.isImported()) {
-    //   Object[] bts = {res.getString("S1111"), res.getString("S1112"), res.getString("S1113")};
-    //   int rtn2 = JOptionPane.showOptionDialog(this, res.getString("S1110"),
-    //       res.getString("S1122"), JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
-    //       bts, bts[0]);
-    //   try {
-    //     setCursor(new Cursor(Cursor.WAIT_CURSOR));
-    //     if (rtn2 == 0) {
-    //       saveFileWithCurrentFileName(true);
-    //     }
-    //     if (rtn2 == 1) {
-    //       String name = specifyNameOfNewFile(res.getString("S788"), res.getString("S1125"),
-    //           currentFileName);
-    //       if (!name.equals("")) {
-    //         currentFileName = name;
-    //         this.setTitle(
-    //             DialogAbout.APPLICATION_NAME + " - [" + currentFileName + "] - " + systemName);
-    //         saveFileWithCurrentFileName(false);
-    //       }
-    //     }
-    //     application.getXeadUndoManager().resetLog();
-    //     changeState.setChanged(false);
-    //     setupMainTreeModelWithCurrentFileName();
-    //   } catch (Exception exception) {
-    //     exception.printStackTrace();
-    //   } finally {
-    //     setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-    //   }
-    // } else {
-    //   if (currentMainTreeNode.isError() != isSynchError) {
-    //     currentMainTreeNode.setError(isSynchError);
-    //     currentMainTreeNode.setExtRefered(!isSynchError);
-    //     repaintErrorStatusOfParentNodes((XeadTreeNode) currentMainTreeNode.getParent());
-    //     currentMainTreeNode.activateContentsPane();
-    //   }
-    // }
+    boolean isSynchError = dialogTableSynchronize.request(currentMainTreeNode);
+    if (dialogTableSynchronize.isImported()) {
+      // TODO: 保存処理をJSONベースに修正
+    }
   }
 
   /**
