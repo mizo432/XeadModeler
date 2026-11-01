@@ -1160,7 +1160,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 	// Generate ALTER TABLE statements from JSON Table vs old XML element
 	private String getAlterStatementsByTableJson(Table newTable, org.w3c.dom.Element oldTableElement,
 			List<Relationship> relationshipList) {
-		String statement = "";
+		StringBuffer statement = new StringBuffer();
 		String tableName = getTableNameForDDL(newTable);
 		String subsystemName = "";
 		String subsystemSortKey = "";
@@ -1435,19 +1435,26 @@ public class DialogToListChangesOfFiles extends JDialog {
 		// Generate ALTER-DROP-KEY statements //
 		////////////////////////////////////////
 		for (int i = 0; i < dropUniqueKeyList.size(); i++) {
-			statement = statement + frame_.ddlCommentMark + "Following is the statement to drop unique-constraint with keys(" + dropUniqueKeyList.get(i) + "). Check value of constraint id and correct '???' before executing.\n";
-			statement = statement + "ALTER TABLE " + tableName + " DROP CONSTRAINT ???" + frame_.ddlSectionMark + "\n";
+			statement.append(frame_.ddlCommentMark).append("Following is the statement to drop unique-constraint with keys(")
+					.append(dropUniqueKeyList.get(i)).append("). Check value of constraint id and correct '???' before executing.\n");
+			statement.append("ALTER TABLE ").append(tableName).append(" DROP CONSTRAINT ???")
+					.append(frame_.ddlSectionMark).append("\n");
 		}
 		for (int i = 0; i < dropIndexKeyList.size(); i++) {
-			statement = statement + "ALTER TABLE " + tableName + " DROP INDEX (" + dropIndexKeyList.get(i) + ")" + frame_.ddlSectionMark + "\n";
+			statement.append("ALTER TABLE ").append(tableName).append(" DROP INDEX (")
+					.append(dropIndexKeyList.get(i)).append(")").append(frame_.ddlSectionMark).append("\n");
 		}
 
 		////////////////////////////////////////////////
 		// Generate ALTER-DROP-FOREIGN-KEY statements //
 		////////////////////////////////////////////////
 		for (int i = 0; i < dropForeignKeyFieldIDsList.size(); i++) {
-			statement = statement + frame_.ddlCommentMark + "Following is the statement to drop refference-constraint with keys(" + dropForeignKeyFieldIDsList.get(i) + ") to " + dropForeignKeyRefferencesList.get(i) + ". Check value of constraint id and correct '???' before executing.\n";
-			statement = statement + "ALTER TABLE " + tableName + " DROP CONSTRAINT ???" + frame_.ddlSectionMark + "\n";
+			statement.append(frame_.ddlCommentMark).append("Following is the statement to drop refference-constraint with keys(")
+					.append(dropForeignKeyFieldIDsList.get(i)).append(") to ")
+					.append(dropForeignKeyRefferencesList.get(i))
+					.append(". Check value of constraint id and correct '???' before executing.\n");
+			statement.append("ALTER TABLE ").append(tableName).append(" DROP CONSTRAINT ???")
+					.append(frame_.ddlSectionMark).append("\n");
 		}
 
 		////////////////////////////////////
@@ -1457,14 +1464,14 @@ public class DialogToListChangesOfFiles extends JDialog {
 		for (int i = 0; i < dropFieldIDList.size(); i++) {
 			if (firstFieldStatement) {
 				firstFieldStatement = false;
-				statement = statement + "ALTER TABLE " + tableName + " DROP (" + "\n";
+				statement.append("ALTER TABLE ").append(tableName).append(" DROP (\n");
 			} else {
-				statement = statement + "," + "\n";
+				statement.append(",\n");
 			}
-			statement = statement + "\t" + dropFieldIDList.get(i);
+			statement.append("\t").append(dropFieldIDList.get(i));
 		}
 		if (dropFieldIDList.size() > 0) {
-			statement = statement + ")" + frame_.ddlSectionMark + "\n";
+			statement.append(")").append(frame_.ddlSectionMark).append("\n");
 		}
 
 		///////////////////////////////////
@@ -1474,22 +1481,22 @@ public class DialogToListChangesOfFiles extends JDialog {
 		for (int i = 0; i < addFieldIDList.size(); i++) {
 			if (firstFieldStatement) {
 				firstFieldStatement = false;
-				statement = statement + "ALTER TABLE " + tableName + " ADD (" + "\n";
+				statement.append("ALTER TABLE ").append(tableName).append(" ADD (\n");
 			} else {
-				statement = statement + "," + "\n";
+				statement.append(",\n");
 			}
-			statement = statement + "\t" + addFieldIDList.get(i);
-			statement = statement + " " + addFieldTypeList.get(i);
+			statement.append("\t").append(addFieldIDList.get(i));
+			statement.append(" ").append(addFieldTypeList.get(i));
 			if (addFieldNotNullList.get(i)) {
-				statement = statement + " NOT NULL";
+				statement.append(" NOT NULL");
 			}
-			statement = statement + " DEFAULT " + addFieldDefaultList.get(i);
+			statement.append(" DEFAULT ").append(addFieldDefaultList.get(i));
 			if (!addFieldCommentList.get(i).equals("") && frame_.ddlFieldCommentType.equals("1")) {
-				statement = statement + " COMMENT '" + addFieldCommentList.get(i) + "'";
+				statement.append(" COMMENT '").append(addFieldCommentList.get(i)).append("'");
 			}
 		}
 		if (addFieldIDList.size() > 0) {
-			statement = statement + ")" + frame_.ddlSectionMark + "\n";
+			statement.append(")").append(frame_.ddlSectionMark).append("\n");
 		}
 
 		//////////////////////////////////////
@@ -1499,27 +1506,27 @@ public class DialogToListChangesOfFiles extends JDialog {
 		for (int i = 0; i < modifyFieldIDList.size(); i++) {
 			if (firstFieldStatement) {
 				firstFieldStatement = false;
-				statement = statement + "ALTER TABLE " + tableName + " MODIFY (" + "\n";
+				statement.append("ALTER TABLE ").append(tableName).append(" MODIFY (\n");
 			} else {
-				statement = statement + "," + "\n";
+				statement.append(",\n");
 			}
-			statement = statement + "\t" + modifyFieldIDList.get(i);
+			statement.append("\t").append(modifyFieldIDList.get(i));
 			if (modifyFieldTypeList.get(i) != null) {
-				statement = statement + " " + modifyFieldTypeList.get(i);
+				statement.append(" ").append(modifyFieldTypeList.get(i));
 			}
 			if (modifyFieldNotNullList.get(i) != null) {
 				if (modifyFieldNotNullList.get(i)) {
-					statement = statement + " NOT NULL";
+					statement.append(" NOT NULL");
 				} else {
-					statement = statement + " NULL";
+					statement.append(" NULL");
 				}
 			}
 			if (modifyFieldDefaultList.get(i) != null) {
-				statement = statement + " DEFAULT " + modifyFieldDefaultList.get(i);
+				statement.append(" DEFAULT ").append(modifyFieldDefaultList.get(i));
 			}
 		}
 		if (modifyFieldIDList.size() > 0) {
-			statement = statement + ")" + frame_.ddlSectionMark + "\n";
+			statement.append(")").append(frame_.ddlSectionMark).append("\n");
 		}
 
 		///////////////////////////////////////
@@ -1527,38 +1534,52 @@ public class DialogToListChangesOfFiles extends JDialog {
 		///////////////////////////////////////
 		if (!addPrimaryKeyFieldIDs.equals("")) {
 			if (isToDropOldPrimaryKey) {
-				statement = statement + "ALTER TABLE " + tableName + " DROP CONSTRAINT " + tableName + "_PK PRIMARY KEY" + frame_.ddlSectionMark + "\n";
+				statement.append("ALTER TABLE ").append(tableName).append(" DROP CONSTRAINT ")
+						.append(tableName).append("_PK PRIMARY KEY").append(frame_.ddlSectionMark).append("\n");
 			}
-			statement = statement + "ALTER TABLE " + tableName + " ADD CONSTRAINT " + tableName + "_PK PRIMARY KEY (" + addPrimaryKeyFieldIDs + ")" + frame_.ddlSectionMark + "\n";
+			statement.append("ALTER TABLE ").append(tableName).append(" ADD CONSTRAINT ")
+					.append(tableName).append("_PK PRIMARY KEY (").append(addPrimaryKeyFieldIDs).append(")")
+					.append(frame_.ddlSectionMark).append("\n");
 		}
 		for (int i = 0; i < addUniqueKeyList.size(); i++) {
-			statement = statement + "ALTER TABLE " + tableName + " ADD CONSTRAINT " + tableName + "_SK" + addUniqueKeyConstraintIDList.get(i) + " UNIQUE (" + addUniqueKeyList.get(i) + ")" + frame_.ddlSectionMark + "\n";
+			statement.append("ALTER TABLE ").append(tableName).append(" ADD CONSTRAINT ")
+					.append(tableName).append("_SK").append(addUniqueKeyConstraintIDList.get(i))
+					.append(" UNIQUE (").append(addUniqueKeyList.get(i)).append(")")
+					.append(frame_.ddlSectionMark).append("\n");
 		}
 		for (int i = 0; i < addIndexKeyList.size(); i++) {
-			statement = statement + "ALTER TABLE " + tableName + " ADD INDEX (" + addIndexKeyList.get(i) + ")" + frame_.ddlSectionMark + "\n";
+			statement.append("ALTER TABLE ").append(tableName).append(" ADD INDEX (")
+					.append(addIndexKeyList.get(i)).append(")").append(frame_.ddlSectionMark).append("\n");
 		}
 
 		///////////////////////////////////////////////
 		// Generate ALTER-ADD-FOREIGN-KEY statements //
 		///////////////////////////////////////////////
 		for (int i = 0; i < addForeignKeyConstraintIDList.size(); i++) {
-			statement = statement + "ALTER TABLE " + tableName + " ADD CONSTRAINT " + tableName + "_FK" + addForeignKeyConstraintIDList.get(i) + " FOREIGN KEY (" + addForeignKeyFieldIDsList.get(i) + ") REFFERENCES " + addForeignKeyRefferencesList.get(i) + frame_.ddlSectionMark + "\n";
+			statement.append("ALTER TABLE ").append(tableName).append(" ADD CONSTRAINT ")
+					.append(tableName).append("_FK").append(addForeignKeyConstraintIDList.get(i))
+					.append(" FOREIGN KEY (").append(addForeignKeyFieldIDsList.get(i)).append(") REFFERENCES ")
+					.append(addForeignKeyRefferencesList.get(i)).append(frame_.ddlSectionMark).append("\n");
 		}
 
 		/////////////////////
 		// Header Comments //
 		/////////////////////
-		if (!statement.equals("")) {
-			statement = frame_.ddlCommentMark + subsystemName + "(" + subsystemSortKey + ")" + " - " + newTable.getName();
+		if (statement.length() > 0) {
+			StringBuffer header = new StringBuffer();
+			header.append(frame_.ddlCommentMark).append(subsystemName).append("(").append(subsystemSortKey)
+					.append(") - ").append(newTable.getName());
 			if (newTable.getAlias() != null && !newTable.getAlias().equals("")) {
-				statement = statement + "(" + newTable.getAlias() + ")";
+				header.append("(").append(newTable.getAlias()).append(")");
 			} else if (newTable.getSortKey() != null && !newTable.getSortKey().equals("")) {
-				statement = statement + "(" + newTable.getSortKey() + ")";
+				header.append("(").append(newTable.getSortKey()).append(")");
 			}
-			statement = statement + "\n" + statement;
+			header.append("\n");
+			header.append(statement);
+			statement = header;
 		}
 
-		return statement;
+		return statement.toString();
 	}
 
 	// Get key field IDs from old XML table element
