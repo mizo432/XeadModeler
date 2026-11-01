@@ -54,20 +54,14 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.*;
 import javax.swing.undo.*;
 
-import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.batik.svggen.SVGGraphics2DIOException;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import xeadModeler.controller.FileController;
 import xeadModeler.controller.TreeController;
 import xeadModeler.model.XeadDocumentModel;
 import xeadModeler.model.XeadElement;
+import xeadModeler.model.NodeList;
 import xeadModeler.model.json.DataType;
 import xeadModeler.model.json.Department;
 import xeadModeler.model.json.FunctionType;
@@ -303,7 +297,7 @@ public class Modeler extends JFrame {
   private Point blockSelectPointThru = new Point();
   private Rectangle blockSelectRec = new Rectangle(0, 0, 0, 0);
   private Graphics savedImage = null;
-  private org.w3c.dom.Element pastingElement = null; // JsonNodeWrapper for copy/paste
+  private Object pastingElement = null; // JSON POJO for copy/paste
   /**
    * Dialogs and related variants
    */
@@ -6873,23 +6867,36 @@ public class Modeler extends JFrame {
   }
 
   /**
+   * Get tag name from JSON POJO object
+   * @param pojo JSON POJO object
+   * @return tag name (class simple name)
+   */
+  private String getTagName(Object pojo) {
+    if (pojo == null) {
+      return "";
+    }
+    return pojo.getClass().getSimpleName();
+  }
+
+  /**
    * Get element of current page of jTabbedPaneTaskFunctionIO
    *
-   * @return org.w3c.dom.Element :DOM element of current selected tab
+   * @return Object :JSON POJO of current selected tab
    */
-  org.w3c.dom.Element getElementOfCurrentTabTaskFunctionIO() {
-    org.w3c.dom.Element element = null;
-    NodeList taskFunctionIOList = currentTaskActionTreeNode.getElement()
-        .getElementsByTagName("TaskFunctionIO");
+  Object getElementOfCurrentTabTaskFunctionIO() {
+    Object element = null;
+    List<?> taskFunctionIOList = currentTaskActionTreeNode.getTaskFunctionIOs();
     sortableDomElementListModel.removeAllElements();
-    for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-      sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
+    if (taskFunctionIOList != null) {
+      for (Object item : taskFunctionIOList) {
+        sortableDomElementListModel.addElementFromPojo(item);
+      }
     }
     sortableDomElementListModel.sortElements();
     for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
       if (i == jTabbedPaneTaskFunctionIO.getSelectedIndex()) {
         selectedTab_jTabbedPaneTaskFunctionIO = i;
-        element = (org.w3c.dom.Element) sortableDomElementListModel.getElementAt(i);
+        element = sortableDomElementListModel.getElementAt(i);
         break;
       }
     }
@@ -6944,7 +6951,7 @@ public class Modeler extends JFrame {
       }
       if (jTabbedPaneTaskFunctionIO.getSelectedIndex() > -1) {
         currentMainTreeNode.activateContentsPaneForTaskFunctionIO(
-            getElementOfCurrentTabTaskFunctionIO());
+            (Object) getElementOfCurrentTabTaskFunctionIO());
       }
     }
   }
@@ -6981,7 +6988,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Department")) {
+        if (getTagName(pastingElement).equals("Department")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -6993,7 +7000,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Department")) {
+        if (getTagName(pastingElement).equals("Department")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7024,7 +7031,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("TaskType")) {
+        if (getTagName(pastingElement).equals("TaskType")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7036,7 +7043,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("TaskType")) {
+        if (getTagName(pastingElement).equals("TaskType")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7067,7 +7074,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("TableType")) {
+        if (getTagName(pastingElement).equals("TableType")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7079,7 +7086,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("TableType")) {
+        if (getTagName(pastingElement).equals("TableType")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7110,7 +7117,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("DataType")) {
+        if (getTagName(pastingElement).equals("DataType")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7122,7 +7129,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("DataType")) {
+        if (getTagName(pastingElement).equals("DataType")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7153,7 +7160,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("FunctionType")) {
+        if (getTagName(pastingElement).equals("FunctionType")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7165,7 +7172,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("FunctionType")) {
+        if (getTagName(pastingElement).equals("FunctionType")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7196,7 +7203,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Terms")) {
+        if (getTagName(pastingElement).equals("Terms")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7208,7 +7215,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Terms")) {
+        if (getTagName(pastingElement).equals("Terms")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7225,7 +7232,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("MaintenanceLog")) {
+        if (getTagName(pastingElement).equals("MaintenanceLog")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7237,7 +7244,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("MaintenanceLog")) {
+        if (getTagName(pastingElement).equals("MaintenanceLog")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7254,7 +7261,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("SubjectArea")) {
+        if (getTagName(pastingElement).equals("SubjectArea")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7266,7 +7273,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("SubjectArea")) {
+        if (getTagName(pastingElement).equals("SubjectArea")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7290,7 +7297,7 @@ public class Modeler extends JFrame {
       jMenuItemComponentToPaste.setText(res.getString("S916"));
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("DataflowNode")) {
+        if (getTagName(pastingElement).equals("DataflowNode")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7320,7 +7327,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Role")) {
+        if (getTagName(pastingElement).equals("Role")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7332,7 +7339,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Role")) {
+        if (getTagName(pastingElement).equals("Role")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7351,7 +7358,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Task")) {
+        if (getTagName(pastingElement).equals("Task")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7365,7 +7372,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Task")) {
+        if (getTagName(pastingElement).equals("Task")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7386,7 +7393,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("TaskAction")) {
+        if (getTagName(pastingElement).equals("TaskAction")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7509,7 +7516,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Subsystem")) {
+        if (getTagName(pastingElement).equals("Subsystem")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7521,7 +7528,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Subsystem")) {
+        if (getTagName(pastingElement).equals("Subsystem")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7601,7 +7608,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Table")) {
+        if (getTagName(pastingElement).equals("Table")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7615,7 +7622,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Table")) {
+        if (getTagName(pastingElement).equals("Table")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7675,7 +7682,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Function")) {
+        if (getTagName(pastingElement).equals("Function")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7689,7 +7696,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("Function")) {
+        if (getTagName(pastingElement).equals("Function")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7775,10 +7782,10 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAddIOSpool);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("IOPanel") ||
-            pastingElement.getTagName().equals("IOWebPage") ||
-            pastingElement.getTagName().equals("IOSpool") ||
-            pastingElement.getTagName().equals("IOTable")) {
+        if (getTagName(pastingElement).equals("IOPanel") ||
+            getTagName(pastingElement).equals("IOWebPage") ||
+            getTagName(pastingElement).equals("IOSpool") ||
+            getTagName(pastingElement).equals("IOTable")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7794,7 +7801,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAddIOSpool);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("FunctionIO")) {
+        if (getTagName(pastingElement).equals("FunctionIO")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7822,7 +7829,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("IOPanelField")) {
+        if (getTagName(pastingElement).equals("IOPanelField")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7834,7 +7841,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("IOPanelField")) {
+        if (getTagName(pastingElement).equals("IOPanelField")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7851,7 +7858,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("IOSpoolField")) {
+        if (getTagName(pastingElement).equals("IOSpoolField")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7863,7 +7870,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("IOSpoolField")) {
+        if (getTagName(pastingElement).equals("IOSpoolField")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7880,7 +7887,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("IOWebPageField")) {
+        if (getTagName(pastingElement).equals("IOWebPageField")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7892,7 +7899,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("IOWebPageField")) {
+        if (getTagName(pastingElement).equals("IOWebPageField")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7952,7 +7959,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("TableField")) {
+        if (getTagName(pastingElement).equals("TableField")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -7966,7 +7973,7 @@ public class Modeler extends JFrame {
       jPopupMenuComponent.add(jMenuItemComponentToAdd);
       jPopupMenuComponent.add(jMenuItemComponentToPaste);
       if (pastingElement != null) {
-        if (pastingElement.getTagName().equals("TableField")) {
+        if (getTagName(pastingElement).equals("TableField")) {
           jMenuItemComponentToPaste.setEnabled(true);
         }
       }
@@ -9057,7 +9064,7 @@ public class Modeler extends JFrame {
               .getElementsByTagName("IOPanelField");
           sortableDomElementListModel.removeAllElements();
           for (int j = 0; j < fieldList.getLength(); j++) {
-            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(j)).getJsonNode());
+            sortableDomElementListModel.addElementFromPojo(fieldList.item(j));
           }
           sortableDomElementListModel.sortElements();
           for (int j = 0; j < sortableDomElementListModel.getSize(); j++) {
@@ -9077,7 +9084,7 @@ public class Modeler extends JFrame {
               .getElementsByTagName("IOSpoolField");
           sortableDomElementListModel.removeAllElements();
           for (int j = 0; j < fieldList.getLength(); j++) {
-            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(j)).getJsonNode());
+            sortableDomElementListModel.addElementFromPojo(fieldList.item(j));
           }
           sortableDomElementListModel.sortElements();
           for (int j = 0; j < sortableDomElementListModel.getSize(); j++) {
@@ -9097,7 +9104,7 @@ public class Modeler extends JFrame {
               .getElementsByTagName("IOWebPageField");
           sortableDomElementListModel.removeAllElements();
           for (int j = 0; j < fieldList.getLength(); j++) {
-            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(j)).getJsonNode());
+            sortableDomElementListModel.addElementFromPojo(fieldList.item(j));
           }
           sortableDomElementListModel.sortElements();
           for (int j = 0; j < sortableDomElementListModel.getSize(); j++) {
@@ -10528,7 +10535,7 @@ public class Modeler extends JFrame {
         keyFieldList = node3.getElement().getElementsByTagName("TableKeyField");
         sortableDomElementListModel.removeAllElements();
         for (int m = 0; m < keyFieldList.getLength(); m++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
         }
         if (sortableDomElementListModel.getSize() > 0) {
           //
@@ -10606,7 +10613,7 @@ public class Modeler extends JFrame {
             //
             sortableDomElementListModel.removeAllElements();
             for (int m = 0; m < keyFieldList.getLength(); m++) {
-              sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
+              sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
@@ -10723,7 +10730,7 @@ public class Modeler extends JFrame {
             //
             sortableDomElementListModel.removeAllElements();
             for (int m = 0; m < keyFieldList.getLength(); m++) {
-              sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
+              sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
@@ -10803,7 +10810,7 @@ public class Modeler extends JFrame {
             keyFieldList = objectTableKeyElement.getElementsByTagName("TableKeyField");
             sortableDomElementListModel.removeAllElements();
             for (int m = 0; m < keyFieldList.getLength(); m++) {
-              sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
+              sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
@@ -10857,7 +10864,7 @@ public class Modeler extends JFrame {
             //
             sortableDomElementListModel.removeAllElements();
             for (int m = 0; m < keyFieldList.getLength(); m++) {
-              sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
+              sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
@@ -10943,7 +10950,7 @@ public class Modeler extends JFrame {
             keyFieldList = objectTableKeyElement.getElementsByTagName("TableKeyField");
             sortableDomElementListModel.removeAllElements();
             for (int m = 0; m < keyFieldList.getLength(); m++) {
-              sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
+              sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
             }
             sortableDomElementListModel.sortElements();
             for (int m = 0; m < sortableDomElementListModel.getSize(); m++) {
@@ -10997,7 +11004,7 @@ public class Modeler extends JFrame {
         keyFieldList = node3.getElement().getElementsByTagName("TableKeyField");
         sortableDomElementListModel.removeAllElements();
         for (int m = 0; m < keyFieldList.getLength(); m++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(m)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
         }
         if (sortableDomElementListModel.getSize() > 0) {
           sortableDomElementListModel.sortElements();
@@ -17704,7 +17711,7 @@ public class Modeler extends JFrame {
       } else {
         SortableDomElementListModel sortableDomElementListModel = new SortableDomElementListModel();
         for (int i = 0; i < nodeList.getLength(); i++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList.item(i)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(nodeList.item(i));
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -19082,143 +19089,6 @@ public class Modeler extends JFrame {
   } //End of Class XeadPagePrinter//
 
   /**
-   * Wrapper class for JSON POJO lists to mimic NodeList behavior
-   */
-  class JsonNodeList implements NodeList {
-    private java.util.List<?> list;
-
-    public JsonNodeList(java.util.List<?> list) {
-      this.list = list;
-    }
-
-    @Override
-    public int getLength() {
-      return list.size();
-    }
-
-    @Override
-    public Node item(int index) {
-      if (index >= 0 && index < list.size()) {
-        Object obj = list.get(index);
-        return new JsonNodeWrapper(obj);
-      }
-      return null;
-    }
-
-    public java.util.List<?> getList() {
-      return list;
-    }
-  }
-
-  /**
-   * Wrapper class for JSON POJO objects to mimic Node behavior
-   */
-  public class JsonNodeWrapper implements Node {
-    private Object jsonNode;
-
-    public JsonNodeWrapper(Object jsonNode) {
-      this.jsonNode = jsonNode;
-    }
-
-    public Object getJsonNode() {
-      return jsonNode;
-    }
-
-    public String getAttribute(String name) {
-      try {
-        String getter = "get" + name.substring(0, 1).toUpperCase() + name.substring(1);
-        java.lang.reflect.Method method = jsonNode.getClass().getMethod(getter);
-        Object result = method.invoke(jsonNode);
-        return result != null ? result.toString() : "";
-      } catch (Exception e) {
-        try {
-          String isGetter = "is" + name.substring(0, 1).toUpperCase() + name.substring(1);
-          java.lang.reflect.Method method = jsonNode.getClass().getMethod(isGetter);
-          Object result = method.invoke(jsonNode);
-          return result != null ? result.toString() : "";
-        } catch (Exception e2) {
-          return "";
-        }
-      }
-    }
-
-    public void setAttribute(String name, String value) {
-      try {
-        String setter = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
-        java.lang.reflect.Method method = jsonNode.getClass().getMethod(setter, String.class);
-        method.invoke(jsonNode, value);
-      } catch (Exception e) {
-        // Ignore
-      }
-    }
-
-    public NodeList getElementsByTagName(String tagName) {
-      try {
-        String pluralTagName = tagName + "s";
-        String getter = "get" + pluralTagName;
-        java.lang.reflect.Method method = jsonNode.getClass().getMethod(getter);
-        java.util.List<?> list = (java.util.List<?>) method.invoke(jsonNode);
-        if (list != null) {
-          return new JsonNodeList(list);
-        }
-      } catch (Exception e) {
-        try {
-          String getter = "get" + tagName;
-          java.lang.reflect.Method method = jsonNode.getClass().getMethod(getter);
-          java.util.List<?> list = (java.util.List<?>) method.invoke(jsonNode);
-          if (list != null) {
-            return new JsonNodeList(list);
-          }
-        } catch (Exception e2) {
-          // Ignore
-        }
-      }
-      return null;
-    }
-
-    // Node interface implementations
-    @Override public short getNodeType() { return ELEMENT_NODE; }
-    @Override public String getNodeName() { return ""; }
-    @Override public String getNodeValue() { return null; }
-    @Override public void setNodeValue(String value) throws DOMException {}
-    @Override public Node getParentNode() { return null; }
-    @Override public NodeList getChildNodes() { return null; }
-    @Override public Node getFirstChild() { return null; }
-    @Override public Node getLastChild() { return null; }
-    @Override public Node getPreviousSibling() { return null; }
-    @Override public Node getNextSibling() { return null; }
-    @Override public NamedNodeMap getAttributes() { return null; }
-    @Override public org.w3c.dom.Document getOwnerDocument() { return null; }
-    @Override public boolean isSameNode(Node arg) { return false; }
-    @Override public boolean isEqualNode(Node arg) { return false; }
-    @Override public Node getFeature(String feature, String version) { return null; }
-    @Override public String getPrefix() { return null; }
-    @Override public String getLocalName() { return null; }
-    @Override public String getNamespaceURI() { return null; }
-    @Override public void setPrefix(String prefix) throws DOMException {}
-    @Override public String lookupNamespaceURI(String prefix) { return null; }
-    @Override public boolean isDefaultNamespace(String namespaceURI) { return false; }
-    @Override public String lookupPrefix(String namespaceURI) { return null; }
-    @Override public String getTextContent() throws DOMException { return null; }
-    @Override public void setTextContent(String value) throws DOMException {}
-    @Override public String getBaseURI() throws DOMException { return null; }
-    @Override public Object setUserData(String key, Object data, org.w3c.dom.UserDataHandler handler) { return null; }
-    @Override public Object getUserData(String key) { return null; }
-    @Override public short compareDocumentPosition(Node other) { return 0; }
-    @Override public boolean isSupported(String feature, String version) { return false; }
-    @Override public Node cloneNode(boolean deep) { return null; }
-    @Override public Node appendChild(Node newChild) throws DOMException { return null; }
-    @Override public Node insertBefore(Node newChild, Node refChild) throws DOMException { return null; }
-    @Override public Node removeChild(Node oldChild) throws DOMException { return null; }
-    @Override public Node replaceChild(Node newChild, Node oldChild) throws DOMException { return null; }
-    @Override public boolean hasChildNodes() { return false; }
-    @Override public boolean hasAttributes() { return false; }
-    @Override public void normalize() {}
-    // Note: importNode is deprecated in newer Java versions, removing @Override
-    public Node importNode(org.w3c.dom.Node importedNode, boolean deep) throws DOMException { return null; }
-  }
-
-  /**
    * Class of XEAD Tree Node
    */
   public class XeadTreeNode extends DefaultMutableTreeNode implements Comparable {
@@ -19280,7 +19150,7 @@ public class Modeler extends JFrame {
     /**
      * Get child elements by type from JSON POJO
      */
-    public JsonNodeList getElementsByTagName(String tagName) {
+    public NodeList getElementsByTagName(String tagName) {
       // For JSON POJO, use reflection to get the list of child elements
       if (jsonNode_ != null) {
         try {
@@ -19292,7 +19162,7 @@ public class Modeler extends JFrame {
           java.util.List<?> list = (java.util.List<?>) method.invoke(jsonNode_);
           if (list != null) {
             // Create a NodeList-like wrapper for the JSON POJO list
-            return new JsonNodeList(list);
+            return new NodeList(list);
           }
         } catch (Exception e) {
           // Try without 's' suffix
@@ -19705,7 +19575,7 @@ public class Modeler extends JFrame {
       if (nodeType_.equals("SubjectAreaList")) {
         jMenuItemXeadTreeNodeAdd.setEnabled(true);
         jMenuItemXeadTreeNodeAddList.setEnabled(true);
-        if (pastingElement != null && pastingElement.getTagName().equals("SubjectArea")) {
+        if (pastingElement != null && getTagName(pastingElement).equals("SubjectArea")) {
           jMenuItemXeadTreeNodePaste.setEnabled(true);
         }
       }
@@ -19716,14 +19586,14 @@ public class Modeler extends JFrame {
       if (nodeType_.equals("RoleList")) {
         jMenuItemXeadTreeNodeAdd.setEnabled(true);
         jMenuItemXeadTreeNodeAddList.setEnabled(true);
-        if (pastingElement != null && pastingElement.getTagName().equals("Role")) {
+        if (pastingElement != null && getTagName(pastingElement).equals("Role")) {
           jMenuItemXeadTreeNodePaste.setEnabled(true);
         }
       }
       if (nodeType_.equals("Role")) {
         jMenuItemXeadTreeNodeAdd.setEnabled(true);
         jMenuItemXeadTreeNodeAddList.setEnabled(true);
-        if (pastingElement != null && pastingElement.getTagName().equals("Task")) {
+        if (pastingElement != null && getTagName(pastingElement).equals("Task")) {
           jMenuItemXeadTreeNodePaste.setEnabled(true);
         }
         jMenuItemXeadTreeNodeCopy.setEnabled(true);
@@ -19737,7 +19607,7 @@ public class Modeler extends JFrame {
       if (nodeType_.equals("SubsystemList")) {
         jMenuItemXeadTreeNodeAdd.setEnabled(true);
         jMenuItemXeadTreeNodeAddList.setEnabled(true);
-        if (pastingElement != null && pastingElement.getTagName().equals("Subsystem")) {
+        if (pastingElement != null && getTagName(pastingElement).equals("Subsystem")) {
           jMenuItemXeadTreeNodePaste.setEnabled(true);
         }
       }
@@ -19748,7 +19618,7 @@ public class Modeler extends JFrame {
       if (nodeType_.equals("TableList")) {
         jMenuItemXeadTreeNodeAdd.setEnabled(true);
         jMenuItemXeadTreeNodeAddList.setEnabled(true);
-        if (pastingElement != null && pastingElement.getTagName().equals("Table")) {
+        if (pastingElement != null && getTagName(pastingElement).equals("Table")) {
           jMenuItemXeadTreeNodePaste.setEnabled(true);
         }
       }
@@ -19760,7 +19630,7 @@ public class Modeler extends JFrame {
       if (nodeType_.equals("TableFieldList")) {
         jMenuItemXeadTreeNodeAdd.setEnabled(true);
         jMenuItemXeadTreeNodeAddList.setEnabled(true);
-        if (pastingElement != null && pastingElement.getTagName().equals("TableField")) {
+        if (pastingElement != null && getTagName(pastingElement).equals("TableField")) {
           jMenuItemXeadTreeNodePaste.setEnabled(true);
         }
       }
@@ -19779,16 +19649,16 @@ public class Modeler extends JFrame {
       if (nodeType_.equals("FunctionList")) {
         jMenuItemXeadTreeNodeAdd.setEnabled(true);
         jMenuItemXeadTreeNodeAddList.setEnabled(true);
-        if (pastingElement != null && pastingElement.getTagName().equals("Function")) {
+        if (pastingElement != null && getTagName(pastingElement).equals("Function")) {
           jMenuItemXeadTreeNodePaste.setEnabled(true);
         }
       }
       if (nodeType_.equals("Function")) {
         if (pastingElement != null) {
-          if (pastingElement.getTagName().equals("IOPanel") ||
-              pastingElement.getTagName().equals("IOWebPage") ||
-              pastingElement.getTagName().equals("IOSpool") ||
-              pastingElement.getTagName().equals("IOTable")) {
+          if (getTagName(pastingElement).equals("IOPanel") ||
+              getTagName(pastingElement).equals("IOWebPage") ||
+              getTagName(pastingElement).equals("IOSpool") ||
+              getTagName(pastingElement).equals("IOTable")) {
             jMenuItemXeadTreeNodePaste.setEnabled(true);
           }
         }
@@ -20771,7 +20641,7 @@ public class Modeler extends JFrame {
       int lastID = 0;
       //
       //Paste SubjectArea//
-      if (nodeType_.equals("SubjectAreaList") && pastingElement.getTagName()
+      if (nodeType_.equals("SubjectAreaList") && getTagName(pastingElement)
           .equals("SubjectArea")) {
         newElement = domDocument.createElement("SubjectArea");
         lastElement = getLastDomElementOfTheType("SubjectArea");
@@ -20830,7 +20700,7 @@ public class Modeler extends JFrame {
       }
       //
       //Paste Role//
-      if (nodeType_.equals("RoleList") && pastingElement.getTagName().equals("Role")) {
+      if (nodeType_.equals("RoleList") && getTagName(pastingElement).equals("Role")) {
         newElement = domDocument.createElement("Role");
         lastElement = getLastDomElementOfTheType("Role");
         if (lastElement == null) {
@@ -20850,7 +20720,7 @@ public class Modeler extends JFrame {
       }
       //
       //Paste Task//
-      if (nodeType_.equals("Role") && pastingElement.getTagName().equals("Task")) {
+      if (nodeType_.equals("Role") && getTagName(pastingElement).equals("Task")) {
         newElement = domDocument.createElement("Task");
         lastElement = getLastDomElementOfTheType("Task");
         if (lastElement == null) {
@@ -20895,7 +20765,7 @@ public class Modeler extends JFrame {
       }
       //
       //Paste Subsystem//
-      if (nodeType_.equals("SubsystemList") && pastingElement.getTagName().equals("Subsystem")) {
+      if (nodeType_.equals("SubsystemList") && getTagName(pastingElement).equals("Subsystem")) {
         newElement = domDocument.createElement("Subsystem");
         lastElement = getLastDomElementOfTheType("Subsystem");
         if (lastElement == null) {
@@ -20918,7 +20788,7 @@ public class Modeler extends JFrame {
       }
       //
       //Paste Table Definition//
-      if (nodeType_.equals("TableList") && pastingElement.getTagName().equals("Table")) {
+      if (nodeType_.equals("TableList") && getTagName(pastingElement).equals("Table")) {
         newElement = domDocument.createElement("Table");
         lastID = getLastIDOfTable();
         newElement.setAttribute("ID", Integer.toString(lastID + 1));
@@ -21001,7 +20871,7 @@ public class Modeler extends JFrame {
       }
       //
       //Paste TableField//
-      if (nodeType_.equals("TableFieldList") && pastingElement.getTagName().equals("TableField")) {
+      if (nodeType_.equals("TableFieldList") && getTagName(pastingElement).equals("TableField")) {
         addNodeToTheArrayOfFieldListNodeToBeRenumbered(this);
         XeadTreeNode tableNode = (XeadTreeNode) this.getParent();
         newElement = domDocument.createElement("TableField");
@@ -21059,7 +20929,7 @@ public class Modeler extends JFrame {
       }
       //
       //Paste Function//
-      if (nodeType_.equals("FunctionList") && pastingElement.getTagName().equals("Function")) {
+      if (nodeType_.equals("FunctionList") && getTagName(pastingElement).equals("Function")) {
         XeadTreeNode subsystemNode = (XeadTreeNode) this.getParent();
         newElement = domDocument.createElement("Function");
         lastElement = getLastDomElementOfTheType("Function");
@@ -21196,7 +21066,7 @@ public class Modeler extends JFrame {
       }
       //
       //Paste IOPanel//
-      if (nodeType_.equals("Function") && pastingElement.getTagName().equals("IOPanel")) {
+      if (nodeType_.equals("Function") && getTagName(pastingElement).equals("IOPanel")) {
         newElement = domDocument.createElement("IOPanel");
         lastID = getLastIDOfFunctionIO(domNode_);
         newElement.setAttribute("ID", Integer.toString(lastID + 1));
@@ -21235,7 +21105,7 @@ public class Modeler extends JFrame {
       }
       //
       //Paste IOSpool//
-      if (nodeType_.equals("Function") && pastingElement.getTagName().equals("IOSpool")) {
+      if (nodeType_.equals("Function") && getTagName(pastingElement).equals("IOSpool")) {
         newElement = domDocument.createElement("IOSpool");
         lastID = getLastIDOfFunctionIO(domNode_);
         newElement.setAttribute("ID", Integer.toString(lastID + 1));
@@ -21273,7 +21143,7 @@ public class Modeler extends JFrame {
       }
       //
       //Paste IOWebPage//
-      if (nodeType_.equals("Function") && pastingElement.getTagName().equals("IOWebPage")) {
+      if (nodeType_.equals("Function") && getTagName(pastingElement).equals("IOWebPage")) {
         newElement = domDocument.createElement("IOWebPage");
         lastID = getLastIDOfFunctionIO(domNode_);
         newElement.setAttribute("ID", Integer.toString(lastID + 1));
@@ -21301,7 +21171,7 @@ public class Modeler extends JFrame {
       }
       //
       //Paste IOTable//
-      if (nodeType_.equals("Function") && pastingElement.getTagName().equals("IOTable")) {
+      if (nodeType_.equals("Function") && getTagName(pastingElement).equals("IOTable")) {
         XeadTreeNode subsystemNode = (XeadTreeNode) this.getParent().getParent();
         newElement = domDocument.createElement("IOTable");
         lastID = getLastIDOfFunctionIO(domNode_);
@@ -21500,12 +21370,12 @@ public class Modeler extends JFrame {
       return nodeType_;
     }
 
-    public org.w3c.dom.Element getElement() {
-      return domNode_;
+    public Object getElement() {
+      return jsonNode_;
     }
 
-    public void setElement(org.w3c.dom.Element newElement) {
-      domNode_ = newElement;
+    public void setElement(Object newElement) {
+      jsonNode_ = newElement;
     }
 
     public void setError(boolean isError) {
@@ -21870,7 +21740,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("Department");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(nodeList1.item(i));
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -21925,7 +21795,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("TaskType");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(nodeList1.item(i));
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -21980,7 +21850,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("TableType");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(nodeList1.item(i));
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22035,7 +21905,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("DataType");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(nodeList1.item(i));
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22078,7 +21948,7 @@ public class Modeler extends JFrame {
             NodeList fieldList = domDocument.getElementsByTagName("TableField");
             sortableDomElementFieldListModel.removeAllElements();
             for (int j = 0; j < fieldList.getLength(); j++) {
-              sortableDomElementFieldListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(j)).getJsonNode());
+              sortableDomElementFieldListModel.addElementFromPojo(fieldList.item(j));
             }
             sortableDomElementFieldListModel.sortElements();
           } finally {
@@ -22117,7 +21987,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("FunctionType");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(nodeList1.item(i));
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22172,7 +22042,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("Terms");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(nodeList1.item(i));
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22225,7 +22095,7 @@ public class Modeler extends JFrame {
         nodeList1 = domDocument.getElementsByTagName("MaintenanceLog");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList1.item(i)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(nodeList1.item(i));
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22702,7 +22572,7 @@ public class Modeler extends JFrame {
           .getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(taskFunctionIOList.item(i));
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -22779,7 +22649,7 @@ public class Modeler extends JFrame {
       }
     }
 
-    private void activateContentsPaneForTaskFunctionIO(org.w3c.dom.Element taskFunctionIOElement) {
+    private void activateContentsPaneForTaskFunctionIO(Object taskFunctionIOElement) {
       String strWrk = "";
       int position = 0;
       if (taskFunctionIOElement != null) {
@@ -24155,7 +24025,7 @@ public class Modeler extends JFrame {
       NodeList keyFieldList = this.getElement().getElementsByTagName("TableKeyField");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < keyFieldList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(keyFieldList.item(i));
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -24403,7 +24273,7 @@ public class Modeler extends JFrame {
           if (!nodeFunctionUsedByThis.getElement().getAttribute("SubsystemID").equals(subsystemID)
               &&
               !sortableDomElementListModel.contains((Object) nodeFunctionUsedByThis.getElement())) {
-            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeFunctionUsedByThis.getElement()).getJsonNode());
+            sortableDomElementListModel.addElementFromPojo(nodeFunctionUsedByThis.getElement());
           }
         }
         //
@@ -24630,7 +24500,7 @@ public class Modeler extends JFrame {
       //
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < functionUsedByThis.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) functionUsedByThis.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(functionUsedByThis.item(i));
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -24887,7 +24757,7 @@ public class Modeler extends JFrame {
       NodeList fieldList = this.getElement().getElementsByTagName("IOPanelField");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < fieldList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(fieldList.item(i));
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -25035,7 +24905,7 @@ public class Modeler extends JFrame {
       NodeList fieldList = this.getElement().getElementsByTagName("IOSpoolField");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < fieldList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(fieldList.item(i));
       }
       sortableDomElementListModel.sortElements();
       org.w3c.dom.Element fieldElement;
@@ -25329,7 +25199,7 @@ public class Modeler extends JFrame {
       NodeList fieldList = this.getElement().getElementsByTagName("IOWebPageField");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < fieldList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) fieldList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(fieldList.item(i));
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -25447,7 +25317,7 @@ public class Modeler extends JFrame {
           NodeList keyFieldList = this.getElement().getElementsByTagName("TableKeyField");
           sortableDomElementListModel.removeAllElements();
           for (int i = 0; i < keyFieldList.getLength(); i++) {
-            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(i)).getJsonNode());
+            sortableDomElementListModel.addElementFromPojo(keyFieldList.item(i));
           }
           sortableDomElementListModel.sortElements();
           for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -28522,7 +28392,7 @@ public class Modeler extends JFrame {
       NodeList taskFunctionIOList = domNode_.getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(taskFunctionIOList.item(i));
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -33364,7 +33234,7 @@ public class Modeler extends JFrame {
         NodeList nodeList = node.getElement().getElementsByTagName("FunctionUsedByThis");
         sortableDomElementListModel.removeAllElements();
         for (int i = 0; i < nodeList.getLength(); i++) {
-          sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList.item(i)).getJsonNode());
+          sortableDomElementListModel.addElementFromPojo(nodeList.item(i));
         }
         sortableDomElementListModel.sortElements();
         for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -37826,7 +37696,7 @@ public class Modeler extends JFrame {
           .getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(taskFunctionIOList.item(i));
       }
       sortableDomElementListModel.sortElements();
       int lastSortKey = 0;
@@ -37847,7 +37717,7 @@ public class Modeler extends JFrame {
           .getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(taskFunctionIOList.item(i));
       }
       sortableDomElementListModel.sortElements();
       int workSortKey = 0;
@@ -37924,7 +37794,7 @@ public class Modeler extends JFrame {
           .getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(taskFunctionIOList.item(i));
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
@@ -37941,7 +37811,7 @@ public class Modeler extends JFrame {
       taskFunctionIOList = currentMainTreeNode.getElement().getElementsByTagName("TaskFunctionIO");
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < taskFunctionIOList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) taskFunctionIOList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(taskFunctionIOList.item(i));
       }
       sortableDomElementListModel.sortElements();
       int workSortKey = 0;
@@ -39599,7 +39469,7 @@ public class Modeler extends JFrame {
               .getElementsByTagName("TableKeyField");
           sortableDomElementListModel.removeAllElements();
           for (int i = 0; i < keyFieldList.getLength(); i++) {
-            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) keyFieldList.item(i)).getJsonNode());
+            sortableDomElementListModel.addElementFromPojo(keyFieldList.item(i));
           }
           //
           sortableDomElementListModel.sortElements();
@@ -39839,7 +39709,7 @@ public class Modeler extends JFrame {
               .getElementsByTagName("FunctionUsedByThis");
           sortableDomElementListModel.removeAllElements();
           for (int i = 0; i < functionsUsedByThis.getLength(); i++) {
-            sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) functionsUsedByThis.item(i)).getJsonNode());
+            sortableDomElementListModel.addElementFromPojo(functionsUsedByThis.item(i));
           }
           //
           sortableDomElementListModel.sortElements();
@@ -40506,7 +40376,7 @@ public class Modeler extends JFrame {
       this.removeAll();
       sortableDomElementListModel.removeAllElements();
       for (int i = 0; i < nodeList.getLength(); i++) {
-        sortableDomElementListModel.addElementFromPojo(((JsonNodeWrapper) nodeList.item(i)).getJsonNode());
+        sortableDomElementListModel.addElementFromPojo(nodeList.item(i));
       }
       sortableDomElementListModel.sortElements();
       for (int i = 0; i < sortableDomElementListModel.getSize(); i++) {
