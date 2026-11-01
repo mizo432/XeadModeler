@@ -200,42 +200,40 @@ public class DialogToListChangesOfFiles extends JDialog {
 			listChangesOfBasicInfo();
 			listChangesOfDataflow();
 			listChangesOfRoleAndTask();
-			listChangesOfSubsystem();
+ 		listChangesOfSubsystem();
 			listChangesOfTable();
-			// TODO: listChangesOfFunction requires further migration
-			// listChangesOfFunction();
+			listChangesOfFunction();
 
 			////////////////////////////////////
 			// Generate text file of Diff-DDL //
 			////////////////////////////////////
-			// TODO: DDL generation requires further migration of helper methods
-			// if (jCheckBoxListDiffDDL.isSelected()) {
-			// 	FileWriter fileWriter = null;
-			// 	NodeList oldTableElementList = systemElementOld.getElementsByTagName("Table");
-			// 	List<Table> newTableList = xeadSystemNew.getTables();
-			// 	BufferedWriter bufferedWriter = null;
-			// 	try {
-			// 		String diffDDL = getDiffDDL(newTableList, oldTableElementList);
-			// 		if (!diffDDL.equals("")) {
-			// 			File textFile = File.createTempFile("AlterTables" + frame_.getStringValueOfDateTime("withTime"), ".txt");
-			// 			String textFileName = textFile.getPath();
-			// 			fileWriter = new FileWriter(textFileName);
-			// 			bufferedWriter = new BufferedWriter(fileWriter);
-			// 			if (containsValueToBeCorrected) {
-			// 				diffDDL = frame_.ddlCommentMark + "Warning: It contains constraint id(s) indicated as '???' that should be checked and corrected before executing.\n\n" + diffDDL;
-			// 			}
-			// 			bufferedWriter.write(diffDDL);
-			// 			bufferedWriter.flush();
-			// 			frame_.desktop.open(textFile);
-			// 		}
-			// 	} catch (Exception ex1) {
-			// 		ex1.printStackTrace();
-			// 	} finally {
-			// 		try {
-			// 			bufferedWriter.close();
-			// 		} catch (Exception ex2) {}
-			// 	}
-			// }
+			if (jCheckBoxListDiffDDL.isSelected()) {
+				FileWriter fileWriter = null;
+				NodeList oldTableElementList = systemElementOld.getElementsByTagName("Table");
+				List<Table> newTableList = xeadSystemNew.getTables();
+				BufferedWriter bufferedWriter = null;
+				try {
+					String diffDDL = getDiffDDL(newTableList, oldTableElementList);
+					if (!diffDDL.equals("")) {
+						File textFile = File.createTempFile("AlterTables" + frame_.getStringValueOfDateTime("withTime"), ".txt");
+						String textFileName = textFile.getPath();
+						fileWriter = new FileWriter(textFileName);
+						bufferedWriter = new BufferedWriter(fileWriter);
+						if (containsValueToBeCorrected) {
+							diffDDL = frame_.ddlCommentMark + "Warning: It contains constraint id(s) indicated as '???' that should be checked and corrected before executing.\n\n" + diffDDL;
+						}
+						bufferedWriter.write(diffDDL);
+						bufferedWriter.flush();
+						frame_.desktop.open(textFile);
+					}
+				} catch (Exception ex1) {
+					ex1.printStackTrace();
+				} finally {
+					try {
+						bufferedWriter.close();
+					} catch (Exception ex2) {}
+				}
+			}
 
 		} finally {
 			jTextArea.setText(countOfChanges + res.getString("DialogToListChangesOfFiles35") + buffer.toString());
@@ -529,6 +527,37 @@ public class DialogToListChangesOfFiles extends JDialog {
 		}
 	}
 
+	void listChangesOfFunction() {
+		NodeList oldElementList;
+		String tagName;
+		ArrayList<String> attrList = new ArrayList<String>();
+		int workCount = countOfChanges;
+		buffer.append("\n\n<" + res.getString("DialogToListChangesOfFiles14") + ">");
+
+		///////////////
+		// Functions //
+		///////////////
+		tagName = "Function";
+		attrList.clear();
+		attrList.add("Name");
+		attrList.add("Descriptions");
+		attrList.add("Summary");
+		attrList.add("Parameters");
+		attrList.add("Return");
+		attrList.add("FunctionTypeID");
+		attrList.add("SubsystemID");
+		oldElementList = systemElementOld.getElementsByTagName(tagName);
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getFunctions(), oldElementList, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getFunctions(), oldElementList, tagName, "Name");
+
+		////////////////////////////////////////
+		// Set message if with no differences //
+		////////////////////////////////////////
+		if (countOfChanges == workCount) {
+			buffer.append("\n" + res.getString("DialogToListChangesOfFiles7"));
+		}
+	}
+
 	// JSON-overloaded helper methods
 
 	private String getKeyFieldIDsOfJson(Table table, TableKey tableKey) {
@@ -783,12 +812,823 @@ public class DialogToListChangesOfFiles extends JDialog {
 			if (attr.equals("SynchFile")) return t.getSynchFile() == null ? "" : t.getSynchFile();
 			if (attr.equals("TableTypeID")) return t.getTableTypeId() == null ? "" : t.getTableTypeId();
 			if (attr.equals("SubsystemID")) return t.getSubsystemId() == null ? "" : t.getSubsystemId();
-		} else if (obj instanceof Function) {
-			Function f = (Function) obj;
-			if (attr.equals("Name")) return f.getName() == null ? "" : f.getName();
-			if (attr.equals("Descriptions")) return f.getDescriptions() == null ? "" : f.getDescriptions();
-			if (attr.equals("FunctionTypeID")) return f.getFunctionTypeId() == null ? "" : f.getFunctionTypeId();
-			if (attr.equals("SubsystemID")) return f.getSubsystemId() == null ? "" : f.getSubsystemId();
+ 	} else if (obj instanceof Function) {
+ 		Function f = (Function) obj;
+ 		if (attr.equals("Name")) return f.getName() == null ? "" : f.getName();
+ 		if (attr.equals("Descriptions")) return f.getDescriptions() == null ? "" : f.getDescriptions();
+ 		if (attr.equals("Summary")) return f.getSummary() == null ? "" : f.getSummary();
+ 		if (attr.equals("Parameters")) return f.getParameters() == null ? "" : f.getParameters();
+ 		if (attr.equals("Return")) return f.getReturn() == null ? "" : f.getReturn();
+ 		if (attr.equals("FunctionTypeID")) return f.getFunctionTypeId() == null ? "" : f.getFunctionTypeId();
+ 		if (attr.equals("SubsystemID")) return f.getSubsystemId() == null ? "" : f.getSubsystemId();
+ 	}
+ 	return "";
+	}
+
+	// DDL generation methods
+
+	String getDiffDDL(List<Table> newTableList, NodeList oldTableElementList) {
+		StringBuffer bf = new StringBuffer();
+		String wrkStr, tableId = "";
+		Table newTable;
+		org.w3c.dom.Element oldTableElement, workElement;
+		NodeList dataTypeList;
+		NodeList oldSubsystemList = systemElementOld.getElementsByTagName("Subsystem");
+
+		// Build relationship list from JSON model
+		List<Relationship> jsonRelationshipList = xeadSystemNew.getRelationships();
+
+		jProgressBar.setValue(0);
+		jProgressBar.setString(res.getString("DialogToListChangesOfFiles38"));
+		jProgressBar.setMaximum(newTableList.size() + oldTableElementList.getLength());
+
+		////////////////////////
+		// Setup DataType-Map //
+		////////////////////////
+		newDataTypeMap.clear();
+		for (DataType dt : xeadSystemNew.getDataTypes()) {
+			newDataTypeMap.put(dt.getId(), dt);
+		}
+		oldDataTypeElementMap.clear();
+		dataTypeList = systemElementOld.getElementsByTagName("DataType");
+		for (int i = 0; i < dataTypeList.getLength(); i++) {
+			workElement = (org.w3c.dom.Element)dataTypeList.item(i);
+			oldDataTypeElementMap.put(workElement.getAttribute("ID"), workElement);
+		}
+
+		///////////////////////////////////
+		// Setup Create/Alter statements //
+		///////////////////////////////////
+		for (int i = 0; i < newTableList.size(); i++) {
+			newTable = newTableList.get(i);
+
+			jProgressBar.setValue(jProgressBar.getValue() + 1);
+			jProgressBar.paintImmediately(0, 0, jProgressBar.getWidth(), jProgressBar.getHeight());
+
+			oldTableElement = findOldTableElement(newTable, oldTableElementList);
+			if (oldTableElement == null) {
+				bf.append(getCreateStatementByTableJson(newTable, jsonRelationshipList));
+			} else {
+				wrkStr = getAlterStatementsByTableJson(newTable, oldTableElement, jsonRelationshipList);
+				if (!wrkStr.equals("")) {
+					bf.append(wrkStr + "\n");
+				}
+			}
+		}
+
+		///////////////////////////
+		// Setup Drop statements //
+		///////////////////////////
+		for (int i = 0; i < oldTableElementList.getLength(); i++) {
+
+			jProgressBar.setValue(jProgressBar.getValue() + 1);
+			jProgressBar.paintImmediately(0, 0, jProgressBar.getWidth(), jProgressBar.getHeight());
+
+			oldTableElement = (org.w3c.dom.Element)oldTableElementList.item(i);
+			newTable = null;
+			for (int j = 0; j < newTableList.size(); j++) {
+				workElement = (org.w3c.dom.Element)oldTableElementList.item(j);
+				if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+					tableId = oldTableElement.getAttribute("Name");
+					if (newTableList.get(j).getName().equals(tableId)) {
+						newTable = newTableList.get(j);
+						break;
+					}
+				} else {
+					String oldAlias = oldTableElement.getAttribute("Alias");
+					String oldSortKey = oldTableElement.getAttribute("SortKey");
+					String newAlias = newTableList.get(j).getAlias() == null ? "" : newTableList.get(j).getAlias();
+					String newSortKey = newTableList.get(j).getSortKey() == null ? "" : newTableList.get(j).getSortKey();
+					if (oldAlias.equals("")) {
+						if (newAlias.equals("")) {
+							if (oldSortKey.equals(newSortKey)) {
+								newTable = newTableList.get(j);
+								break;
+							}
+						} else {
+							if (oldSortKey.equals(newAlias)) {
+								newTable = newTableList.get(j);
+								break;
+							}
+						}
+					} else {
+						if (newAlias.equals("")) {
+							if (oldAlias.equals(newSortKey)) {
+								newTable = newTableList.get(j);
+								break;
+							}
+						} else {
+							if (oldAlias.equals(newAlias)) {
+								newTable = newTableList.get(j);
+								break;
+							}
+						}
+					}
+				}
+			}
+			if (newTable == null) {
+				for (int j = 0; j < oldSubsystemList.getLength(); j++) {
+					workElement = (org.w3c.dom.Element)oldSubsystemList.item(j);
+					if (oldTableElement.getAttribute("SubsystemID").equals(workElement.getAttribute("ID"))) {
+						String tableName = getTableNameForDDL(oldTableElement);
+						bf.append(frame_.ddlCommentMark + workElement.getAttribute("Name")
+								+ "(" + workElement.getAttribute("SortKey") + ")"
+								+ " - " + oldTableElement.getAttribute("Name")
+								+ (oldTableElement.getAttribute("Alias").equals("") ? "" : "(" + oldTableElement.getAttribute("Alias") + ")")
+								+ "\nDROP TABLE " + tableName + frame_.ddlSectionMark + "\n\n");
+						break;
+					}
+				}
+			}
+		}
+		return bf.toString();
+	}
+
+	// Find the corresponding old table element for a new JSON table
+	private org.w3c.dom.Element findOldTableElement(Table newTable, NodeList oldTableElementList) {
+		for (int k = 0; k < oldTableElementList.getLength(); k++) {
+			org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldTableElementList.item(k);
+			if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+				if (workElement.getAttribute("Name").equals(newTable.getName())) {
+					return workElement;
+				}
+			} else {
+				String oldAlias = workElement.getAttribute("Alias");
+				String oldSortKey = workElement.getAttribute("SortKey");
+				String newAlias = newTable.getAlias() == null ? "" : newTable.getAlias();
+				String newSortKey = newTable.getSortKey() == null ? "" : newTable.getSortKey();
+				if (oldAlias.equals("")) {
+					if (newAlias.equals("")) {
+						if (oldSortKey.equals(newSortKey)) {
+							return workElement;
+						}
+					} else {
+						if (oldSortKey.equals(newAlias)) {
+							return workElement;
+						}
+					}
+				} else {
+					if (newAlias.equals("")) {
+						if (oldAlias.equals(newSortKey)) {
+							return workElement;
+						}
+					} else {
+						if (oldAlias.equals(newAlias)) {
+							return workElement;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	// Get table name for DDL statements
+	private String getTableNameForDDL(org.w3c.dom.Element tableElement) {
+		if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+			return tableElement.getAttribute("Name");
+		} else {
+			if (tableElement.getAttribute("Alias").equals("")) {
+				if (tableElement.getAttribute("SortKey").equals("")) {
+					return tableElement.getAttribute("Name");
+				} else {
+					return tableElement.getAttribute("SortKey");
+				}
+			} else {
+				return tableElement.getAttribute("Alias");
+			}
+		}
+	}
+
+	// Get table name for DDL from JSON Table
+	private String getTableNameForDDL(Table table) {
+		if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+			return table.getName();
+		} else {
+			String alias = table.getAlias() == null ? "" : table.getAlias();
+			String sortKey = table.getSortKey() == null ? "" : table.getSortKey();
+			if (alias.equals("")) {
+				if (sortKey.equals("")) {
+					return table.getName();
+				} else {
+					return sortKey;
+				}
+			} else {
+				return alias;
+			}
+		}
+	}
+
+	// Generate CREATE TABLE statement from JSON Table
+	private String getCreateStatementByTableJson(Table table, List<Relationship> relationshipList) {
+		StringBuffer statement = new StringBuffer();
+		String tableName = getTableNameForDDL(table);
+		String subsystemName = "";
+		String subsystemSortKey = "";
+
+		// Find subsystem name
+		if (table.getSubsystemId() != null) {
+			for (Subsystem s : xeadSystemNew.getSubsystems()) {
+				if (s.getId().equals(table.getSubsystemId())) {
+					subsystemName = s.getName();
+					subsystemSortKey = s.getSortKey() == null ? "" : s.getSortKey();
+					break;
+				}
+			}
+		}
+
+		// Header comment
+		statement.append(frame_.ddlCommentMark).append(subsystemName).append("(").append(subsystemSortKey).append(") - ")
+				.append(table.getName());
+		if (!table.getAlias().equals("")) {
+			statement.append("(").append(table.getAlias()).append(")");
+		} else if (!table.getSortKey().equals("")) {
+			statement.append("(").append(table.getSortKey()).append(")");
+		}
+		statement.append("\n");
+
+		// CREATE TABLE statement
+		statement.append("CREATE TABLE ").append(tableName).append(" (\n");
+
+		// Fields
+		List<TableField> fieldList = table.getTableFields();
+		if (fieldList != null) {
+			for (int i = 0; i < fieldList.size(); i++) {
+				TableField field = fieldList.get(i);
+				String fieldName = field.getAlias() == null || field.getAlias().equals("") ? field.getName() : field.getAlias();
+				statement.append("\t").append(fieldName);
+
+				// Data type
+				DataType dt = newDataTypeMap.get(field.getDataTypeId());
+				if (dt != null && dt.getSqlExpression() != null && !dt.getSqlExpression().equals("")) {
+					statement.append(" ").append(dt.getSqlExpression());
+				} else {
+					statement.append(" Invalid-data-type");
+				}
+
+				// NOT NULL
+				if ("true".equals(field.getNotNull())) {
+					statement.append(" NOT NULL");
+				}
+
+				// DEFAULT
+				if (field.getDefault() != null && !field.getDefault().equals("")) {
+					statement.append(" DEFAULT ").append(field.getDefault());
+				}
+
+				// Comment
+				if (field.getAlias() != null && !field.getAlias().equals("") && !field.getAlias().equals(field.getName())
+						&& frame_.ddlFieldCommentType.equals("1")) {
+					statement.append(" COMMENT '").append(field.getName()).append("'");
+				}
+
+				if (i < fieldList.size() - 1) {
+					statement.append(",");
+				}
+				statement.append("\n");
+			}
+		}
+
+		// Primary Key
+		List<TableKey> keyList = table.getTableKeys();
+		if (keyList != null) {
+			for (TableKey key : keyList) {
+				if ("PK".equals(key.getType())) {
+					String keyFields = getKeyFieldIDsOfJson(table, key);
+					if (!keyFields.equals("")) {
+						statement.append(",\n\tPRIMARY KEY (").append(keyFields).append(")");
+					}
+				}
+			}
+		}
+
+		statement.append(")").append(frame_.ddlSectionMark).append("\n");
+
+		// Unique constraints
+		if (keyList != null) {
+			int skIndex = 0;
+			for (TableKey key : keyList) {
+				if ("SK".equals(key.getType())) {
+					skIndex++;
+					String keyFields = getKeyFieldIDsOfJson(table, key);
+					if (!keyFields.equals("")) {
+						statement.append("ALTER TABLE ").append(tableName)
+								.append(" ADD CONSTRAINT ").append(tableName).append("_SK").append(skIndex)
+								.append(" UNIQUE (").append(keyFields).append(")")
+								.append(frame_.ddlSectionMark).append("\n");
+					}
+				}
+			}
+		}
+
+		// Index constraints
+		if (keyList != null) {
+			for (TableKey key : keyList) {
+				if ("XK".equals(key.getType())) {
+					String keyFields = getKeyFieldIDsOfJson(table, key);
+					if (!keyFields.equals("")) {
+						statement.append("ALTER TABLE ").append(tableName)
+								.append(" ADD INDEX (").append(keyFields).append(")")
+								.append(frame_.ddlSectionMark).append("\n");
+					}
+				}
+			}
+		}
+
+		// Foreign Keys
+		if (!frame_.ignoreForeignKeyConstraints && relationshipList != null) {
+			int fkIndex = 0;
+			for (Relationship rel : relationshipList) {
+				if (rel.getTable2Id() != null && rel.getTable2Id().equals(table.getId())
+						&& (rel.getExistWhen1() == null || rel.getExistWhen1().equals(""))) {
+					fkIndex++;
+					String keyFields = getKeyFieldIDsOfJsonForTable(rel.getTable2Id(), rel.getTableKey2Id(), xeadSystemNew);
+					String references = getRefferencesOfJson(rel, xeadSystemNew);
+					if (!keyFields.equals("") && !references.equals("")) {
+						statement.append("ALTER TABLE ").append(tableName)
+								.append(" ADD CONSTRAINT ").append(tableName).append("_FK").append(fkIndex)
+								.append(" FOREIGN KEY (").append(keyFields).append(") REFERENCES ")
+								.append(references).append(frame_.ddlSectionMark).append("\n");
+					}
+				}
+			}
+		}
+
+		return statement.toString();
+	}
+
+	// Generate ALTER TABLE statements from JSON Table vs old XML element
+	private String getAlterStatementsByTableJson(Table newTable, org.w3c.dom.Element oldTableElement,
+			List<Relationship> relationshipList) {
+		String statement = "";
+		String tableName = getTableNameForDDL(newTable);
+		String subsystemName = "";
+		String subsystemSortKey = "";
+
+		// Find subsystem name
+		if (newTable.getSubsystemId() != null) {
+			for (Subsystem s : xeadSystemNew.getSubsystems()) {
+				if (s.getId().equals(newTable.getSubsystemId())) {
+					subsystemName = s.getName();
+					subsystemSortKey = s.getSortKey() == null ? "" : s.getSortKey();
+					break;
+				}
+			}
+		}
+
+		// Lists for tracking changes
+		ArrayList<String> addFieldIDList = new ArrayList<String>();
+		ArrayList<String> addFieldTypeList = new ArrayList<String>();
+		ArrayList<String> addFieldDefaultList = new ArrayList<String>();
+		ArrayList<Boolean> addFieldNotNullList = new ArrayList<Boolean>();
+		ArrayList<String> addFieldCommentList = new ArrayList<String>();
+		ArrayList<String> modifyFieldIDList = new ArrayList<String>();
+		ArrayList<String> modifyFieldTypeList = new ArrayList<String>();
+		ArrayList<String> modifyFieldDefaultList = new ArrayList<String>();
+		ArrayList<Boolean> modifyFieldNotNullList = new ArrayList<Boolean>();
+		ArrayList<String> dropFieldIDList = new ArrayList<String>();
+
+		// Key variants
+		boolean isToDropOldPrimaryKey = false;
+		String addPrimaryKeyFieldIDs = "";
+		ArrayList<String> dropUniqueKeyList = new ArrayList<String>();
+		ArrayList<String> addUniqueKeyList = new ArrayList<String>();
+		ArrayList<String> addUniqueKeyConstraintIDList = new ArrayList<String>();
+		ArrayList<String> dropIndexKeyList = new ArrayList<String>();
+		ArrayList<String> addIndexKeyList = new ArrayList<String>();
+
+		// Foreign key variants
+		ArrayList<String> addForeignKeyConstraintIDList = new ArrayList<String>();
+		ArrayList<String> addForeignKeyFieldIDsList = new ArrayList<String>();
+		ArrayList<String> addForeignKeyRefferencesList = new ArrayList<String>();
+		ArrayList<String> dropForeignKeyFieldIDsList = new ArrayList<String>();
+		ArrayList<String> dropForeignKeyRefferencesList = new ArrayList<String>();
+
+		// Old elements
+		NodeList oldFieldList = oldTableElement.getElementsByTagName("TableField");
+		NodeList oldKeyList = oldTableElement.getElementsByTagName("TableKey");
+		NodeList oldRelationshipList = systemElementOld.getElementsByTagName("Relationship");
+
+		/////////////////////////////////////////
+		// Scan fields to be added or modified //
+		/////////////////////////////////////////
+		List<TableField> newFieldList = newTable.getTableFields();
+		if (newFieldList != null) {
+			for (TableField newField : newFieldList) {
+				String fieldName = newField.getAlias() == null || newField.getAlias().equals("") 
+						? newField.getName() : newField.getAlias();
+				String fieldComment = newField.getAlias() == null || newField.getAlias().equals("") 
+						? "" : newField.getName();
+
+				// Get data type
+				String dataType = "Invalid-data-type";
+				DataType dt = newDataTypeMap.get(newField.getDataTypeId());
+				if (dt != null && dt.getSqlExpression() != null && !dt.getSqlExpression().equals("")) {
+					dataType = dt.getSqlExpression();
+				}
+
+				String defaultValue = newField.getDefault() == null ? "" : newField.getDefault();
+				boolean isNotNull = "true".equals(newField.getNotNull());
+
+				// Find corresponding old field
+				org.w3c.dom.Element correspondingFieldElement = null;
+				for (int j = 0; j < oldFieldList.getLength(); j++) {
+					org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldFieldList.item(j);
+					String oldFieldName = workElement.getAttribute("Alias").equals("") 
+							? workElement.getAttribute("Name") : workElement.getAttribute("Alias");
+					if (oldFieldName.equals(fieldName)) {
+						correspondingFieldElement = workElement;
+						break;
+					}
+				}
+
+				if (correspondingFieldElement == null) {
+					// Field to be added
+					addFieldIDList.add(fieldName);
+					addFieldTypeList.add(dataType);
+					addFieldDefaultList.add(defaultValue);
+					addFieldNotNullList.add(isNotNull);
+					addFieldCommentList.add(fieldComment);
+				} else {
+					// Check if field is modified
+					String dataTypeOld = "Invalid-data-type";
+					org.w3c.dom.Element oldDt = oldDataTypeElementMap.get(correspondingFieldElement.getAttribute("DataTypeID"));
+					if (oldDt != null && oldDt.getAttribute("SQLExpression") != null && !oldDt.getAttribute("SQLExpression").equals("")) {
+						dataTypeOld = oldDt.getAttribute("SQLExpression");
+					}
+					String defaultValueOld = correspondingFieldElement.getAttribute("Default");
+					boolean isNotNullOld = "true".equals(correspondingFieldElement.getAttribute("NotNull"));
+
+					if (!dataType.equals(dataTypeOld) || !defaultValue.equals(defaultValueOld) || isNotNull != isNotNullOld) {
+						modifyFieldIDList.add(fieldName);
+						modifyFieldTypeList.add(dataType.equals(dataTypeOld) ? null : dataType);
+						modifyFieldDefaultList.add(defaultValue.equals(defaultValueOld) ? null : defaultValue);
+						modifyFieldNotNullList.add(isNotNull == isNotNullOld ? null : isNotNull);
+					}
+				}
+			}
+		}
+
+		///////////////////////////////
+		// Scan fields to be dropped //
+		///////////////////////////////
+		for (int i = 0; i < oldFieldList.getLength(); i++) {
+			org.w3c.dom.Element fieldElement = (org.w3c.dom.Element)oldFieldList.item(i);
+			String fieldName = fieldElement.getAttribute("Alias").equals("") 
+					? fieldElement.getAttribute("Name") : fieldElement.getAttribute("Alias");
+			boolean found = false;
+			if (newFieldList != null) {
+				for (TableField newField : newFieldList) {
+					String newFieldName = newField.getAlias() == null || newField.getAlias().equals("") 
+							? newField.getName() : newField.getAlias();
+					if (newFieldName.equals(fieldName)) {
+						found = true;
+						break;
+					}
+				}
+			}
+			if (!found) {
+				dropFieldIDList.add(fieldName);
+			}
+		}
+
+		///////////////////////////
+		// Scan keys to be added //
+		///////////////////////////
+		int indexOfSK = 0;
+		List<TableKey> newKeyList = newTable.getTableKeys();
+		if (newKeyList != null) {
+			for (TableKey newKey : newKeyList) {
+				if ("SK".equals(newKey.getType())) {
+					indexOfSK++;
+				}
+				if ("PK".equals(newKey.getType()) || "SK".equals(newKey.getType()) || "XK".equals(newKey.getType())) {
+					String keyFields = getKeyFieldIDsOfJson(newTable, newKey);
+					boolean isNotFound = true;
+					for (int j = 0; j < oldKeyList.getLength(); j++) {
+						org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldKeyList.item(j);
+						if (workElement.getAttribute("Type").equals(newKey.getType())) {
+							String keyFieldsOld = getKeyFieldIDsOfOldTable(oldTableElement, workElement);
+							if (keyFieldsOld.equals(keyFields)) {
+								isNotFound = false;
+								break;
+							}
+						}
+					}
+					if (isNotFound) {
+						if ("PK".equals(newKey.getType())) {
+							// Check if old has primary key
+							for (int j = 0; j < oldKeyList.getLength(); j++) {
+								org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldKeyList.item(j);
+								if ("PK".equals(workElement.getAttribute("Type"))) {
+									isToDropOldPrimaryKey = true;
+									break;
+								}
+							}
+							addPrimaryKeyFieldIDs = keyFields;
+						} else if ("SK".equals(newKey.getType())) {
+							addUniqueKeyList.add(keyFields);
+							addUniqueKeyConstraintIDList.add(Integer.toString(indexOfSK));
+						} else if ("XK".equals(newKey.getType())) {
+							addIndexKeyList.add(keyFields);
+						}
+					}
+				}
+			}
+		}
+
+		/////////////////////////////
+		// Scan keys to be dropped //
+		/////////////////////////////
+		for (int i = 0; i < oldKeyList.getLength(); i++) {
+			org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldKeyList.item(i);
+			if ("PK".equals(workElement.getAttribute("Type")) || "SK".equals(workElement.getAttribute("Type"))
+					|| "XK".equals(workElement.getAttribute("Type"))) {
+				String keyFieldsOld = getKeyFieldIDsOfOldTable(oldTableElement, workElement);
+				boolean isNotFound = true;
+				if (newKeyList != null) {
+					for (TableKey newKey : newKeyList) {
+						if (workElement.getAttribute("Type").equals(newKey.getType())) {
+							String keyFields = getKeyFieldIDsOfJson(newTable, newKey);
+							if (keyFields.equals(keyFieldsOld)) {
+								isNotFound = false;
+								break;
+							}
+						}
+					}
+				}
+				if (isNotFound && !keyFieldsOld.equals("")) {
+					if ("PK".equals(workElement.getAttribute("Type")) || "SK".equals(workElement.getAttribute("Type"))) {
+						dropUniqueKeyList.add(keyFieldsOld);
+						containsValueToBeCorrected = true;
+					}
+					if ("XK".equals(workElement.getAttribute("Type"))) {
+						dropIndexKeyList.add(keyFieldsOld);
+					}
+				}
+			}
+		}
+
+		//////////////////////////////////////////////
+		// Scan foreign-key constraints to be added //
+		//////////////////////////////////////////////
+		if (!frame_.ignoreForeignKeyConstraints && relationshipList != null && newKeyList != null) {
+			int indexOfFK = 0;
+			for (TableKey newKey : newKeyList) {
+				if ("PK".equals(newKey.getType()) || "SK".equals(newKey.getType()) || "FK".equals(newKey.getType())) {
+					indexOfFK++;
+					for (Relationship rel : relationshipList) {
+						if (rel.getTable2Id() != null && rel.getTable2Id().equals(newTable.getId())
+								&& rel.getTableKey2Id() != null && rel.getTableKey2Id().equals(newKey.getId())
+								&& (rel.getExistWhen1() == null || rel.getExistWhen1().equals(""))) {
+							if (isLackingForeignKeyConstraintOfJson(rel, newTable, xeadSystemNew, oldTableElement, systemElementOld)) {
+								addForeignKeyConstraintIDList.add(Integer.toString(indexOfFK));
+								addForeignKeyFieldIDsList.add(getKeyFieldIDsOfJson(newTable, newKey));
+								addForeignKeyRefferencesList.add(getRefferencesOfJson(rel, xeadSystemNew));
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		////////////////////////////////////////////////
+		// Scan foreign-key constraints to be dropped //
+		////////////////////////////////////////////////
+		if (!frame_.ignoreForeignKeyConstraints) {
+			for (int i = 0; i < oldKeyList.getLength(); i++) {
+				org.w3c.dom.Element keyElement = (org.w3c.dom.Element)oldKeyList.item(i);
+				if ("PK".equals(keyElement.getAttribute("Type")) || "SK".equals(keyElement.getAttribute("Type"))
+						|| "FK".equals(keyElement.getAttribute("Type"))) {
+					for (int j = 0; j < oldRelationshipList.getLength(); j++) {
+						org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldRelationshipList.item(j);
+						if (workElement.getAttribute("Table2ID").equals(oldTableElement.getAttribute("ID"))
+								&& workElement.getAttribute("TableKey2ID").equals(keyElement.getAttribute("ID"))
+								&& workElement.getAttribute("ExistWhen1").equals("")) {
+							// Check if this relationship exists in the new model
+							boolean foundInNew = false;
+							if (relationshipList != null) {
+								for (Relationship rel : relationshipList) {
+									if (rel.getTable1Id() != null && rel.getTable1Id().equals(workElement.getAttribute("Table1ID"))
+											&& rel.getTableKey1Id() != null && rel.getTableKey1Id().equals(workElement.getAttribute("TableKey1ID"))
+											&& rel.getTable2Id() != null && rel.getTable2Id().equals(workElement.getAttribute("Table2ID"))
+											&& rel.getTableKey2Id() != null && rel.getTableKey2Id().equals(workElement.getAttribute("TableKey2ID"))) {
+										foundInNew = true;
+										break;
+									}
+								}
+							}
+							if (!foundInNew) {
+								dropForeignKeyFieldIDsList.add(getKeyFieldIDsOfOldTable(oldTableElement, keyElement));
+								dropForeignKeyRefferencesList.add(getRefferencesOfOldRelationship(workElement, systemElementOld));
+								containsValueToBeCorrected = true;
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		////////////////////////////////////////
+		// Generate ALTER-DROP-KEY statements //
+		////////////////////////////////////////
+		for (int i = 0; i < dropUniqueKeyList.size(); i++) {
+			statement = statement + frame_.ddlCommentMark + "Following is the statement to drop unique-constraint with keys(" + dropUniqueKeyList.get(i) + "). Check value of constraint id and correct '???' before executing.\n";
+			statement = statement + "ALTER TABLE " + tableName + " DROP CONSTRAINT ???" + frame_.ddlSectionMark + "\n";
+		}
+		for (int i = 0; i < dropIndexKeyList.size(); i++) {
+			statement = statement + "ALTER TABLE " + tableName + " DROP INDEX (" + dropIndexKeyList.get(i) + ")" + frame_.ddlSectionMark + "\n";
+		}
+
+		////////////////////////////////////////////////
+		// Generate ALTER-DROP-FOREIGN-KEY statements //
+		////////////////////////////////////////////////
+		for (int i = 0; i < dropForeignKeyFieldIDsList.size(); i++) {
+			statement = statement + frame_.ddlCommentMark + "Following is the statement to drop refference-constraint with keys(" + dropForeignKeyFieldIDsList.get(i) + ") to " + dropForeignKeyRefferencesList.get(i) + ". Check value of constraint id and correct '???' before executing.\n";
+			statement = statement + "ALTER TABLE " + tableName + " DROP CONSTRAINT ???" + frame_.ddlSectionMark + "\n";
+		}
+
+		////////////////////////////////////
+		// Generate DROP-COLUMN statement //
+		////////////////////////////////////
+		boolean firstFieldStatement = true;
+		for (int i = 0; i < dropFieldIDList.size(); i++) {
+			if (firstFieldStatement) {
+				firstFieldStatement = false;
+				statement = statement + "ALTER TABLE " + tableName + " DROP (" + "\n";
+			} else {
+				statement = statement + "," + "\n";
+			}
+			statement = statement + "\t" + dropFieldIDList.get(i);
+		}
+		if (dropFieldIDList.size() > 0) {
+			statement = statement + ")" + frame_.ddlSectionMark + "\n";
+		}
+
+		///////////////////////////////////
+		// Generate ADD-COLUMN statement //
+		///////////////////////////////////
+		firstFieldStatement = true;
+		for (int i = 0; i < addFieldIDList.size(); i++) {
+			if (firstFieldStatement) {
+				firstFieldStatement = false;
+				statement = statement + "ALTER TABLE " + tableName + " ADD (" + "\n";
+			} else {
+				statement = statement + "," + "\n";
+			}
+			statement = statement + "\t" + addFieldIDList.get(i);
+			statement = statement + " " + addFieldTypeList.get(i);
+			if (addFieldNotNullList.get(i)) {
+				statement = statement + " NOT NULL";
+			}
+			statement = statement + " DEFAULT " + addFieldDefaultList.get(i);
+			if (!addFieldCommentList.get(i).equals("") && frame_.ddlFieldCommentType.equals("1")) {
+				statement = statement + " COMMENT '" + addFieldCommentList.get(i) + "'";
+			}
+		}
+		if (addFieldIDList.size() > 0) {
+			statement = statement + ")" + frame_.ddlSectionMark + "\n";
+		}
+
+		//////////////////////////////////////
+		// Generate MODIFY-COLUMN statement //
+		//////////////////////////////////////
+		firstFieldStatement = true;
+		for (int i = 0; i < modifyFieldIDList.size(); i++) {
+			if (firstFieldStatement) {
+				firstFieldStatement = false;
+				statement = statement + "ALTER TABLE " + tableName + " MODIFY (" + "\n";
+			} else {
+				statement = statement + "," + "\n";
+			}
+			statement = statement + "\t" + modifyFieldIDList.get(i);
+			if (modifyFieldTypeList.get(i) != null) {
+				statement = statement + " " + modifyFieldTypeList.get(i);
+			}
+			if (modifyFieldNotNullList.get(i) != null) {
+				if (modifyFieldNotNullList.get(i)) {
+					statement = statement + " NOT NULL";
+				} else {
+					statement = statement + " NULL";
+				}
+			}
+			if (modifyFieldDefaultList.get(i) != null) {
+				statement = statement + " DEFAULT " + modifyFieldDefaultList.get(i);
+			}
+		}
+		if (modifyFieldIDList.size() > 0) {
+			statement = statement + ")" + frame_.ddlSectionMark + "\n";
+		}
+
+		///////////////////////////////////////
+		// Generate ALTER-ADD-KEY statements //
+		///////////////////////////////////////
+		if (!addPrimaryKeyFieldIDs.equals("")) {
+			if (isToDropOldPrimaryKey) {
+				statement = statement + "ALTER TABLE " + tableName + " DROP CONSTRAINT " + tableName + "_PK PRIMARY KEY" + frame_.ddlSectionMark + "\n";
+			}
+			statement = statement + "ALTER TABLE " + tableName + " ADD CONSTRAINT " + tableName + "_PK PRIMARY KEY (" + addPrimaryKeyFieldIDs + ")" + frame_.ddlSectionMark + "\n";
+		}
+		for (int i = 0; i < addUniqueKeyList.size(); i++) {
+			statement = statement + "ALTER TABLE " + tableName + " ADD CONSTRAINT " + tableName + "_SK" + addUniqueKeyConstraintIDList.get(i) + " UNIQUE (" + addUniqueKeyList.get(i) + ")" + frame_.ddlSectionMark + "\n";
+		}
+		for (int i = 0; i < addIndexKeyList.size(); i++) {
+			statement = statement + "ALTER TABLE " + tableName + " ADD INDEX (" + addIndexKeyList.get(i) + ")" + frame_.ddlSectionMark + "\n";
+		}
+
+		///////////////////////////////////////////////
+		// Generate ALTER-ADD-FOREIGN-KEY statements //
+		///////////////////////////////////////////////
+		for (int i = 0; i < addForeignKeyConstraintIDList.size(); i++) {
+			statement = statement + "ALTER TABLE " + tableName + " ADD CONSTRAINT " + tableName + "_FK" + addForeignKeyConstraintIDList.get(i) + " FOREIGN KEY (" + addForeignKeyFieldIDsList.get(i) + ") REFFERENCES " + addForeignKeyRefferencesList.get(i) + frame_.ddlSectionMark + "\n";
+		}
+
+		/////////////////////
+		// Header Comments //
+		/////////////////////
+		if (!statement.equals("")) {
+			statement = frame_.ddlCommentMark + subsystemName + "(" + subsystemSortKey + ")" + " - " + newTable.getName();
+			if (newTable.getAlias() != null && !newTable.getAlias().equals("")) {
+				statement = statement + "(" + newTable.getAlias() + ")";
+			} else if (newTable.getSortKey() != null && !newTable.getSortKey().equals("")) {
+				statement = statement + "(" + newTable.getSortKey() + ")";
+			}
+			statement = statement + "\n" + statement;
+		}
+
+		return statement;
+	}
+
+	// Get key field IDs from old XML table element
+	private String getKeyFieldIDsOfOldTable(org.w3c.dom.Element tableElement, org.w3c.dom.Element keyElement) {
+		String keyFieldIDs = "";
+		NodeList keyFieldList = keyElement.getElementsByTagName("TableKeyField");
+		frame_.sortableDomElementListModel.removeAllElements();
+		for (int m = 0; m < keyFieldList.getLength(); m++) {
+			frame_.sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
+		}
+		if (frame_.sortableDomElementListModel.getSize() > 0) {
+			frame_.sortableDomElementListModel.sortElements();
+			for (int m = 0; m < frame_.sortableDomElementListModel.getSize(); m++) {
+				xeadModeler.model.XeadElement xeadElement = frame_.sortableDomElementListModel.getElementAt(m);
+				org.w3c.dom.Element keyFieldElement = (org.w3c.dom.Element)xeadElement.getPojo();
+				org.w3c.dom.Element fieldElement = getFieldElementAccordingToID(tableElement, keyFieldElement.getAttribute("FieldID"));
+				if (m > 0) {
+					keyFieldIDs = keyFieldIDs + ", ";
+				}
+				if (fieldElement.getAttribute("Alias").equals("")) {
+					keyFieldIDs = keyFieldIDs + fieldElement.getAttribute("Name");
+				} else {
+					keyFieldIDs = keyFieldIDs + fieldElement.getAttribute("Alias");
+				}
+			}
+		}
+		return keyFieldIDs;
+	}
+
+	// Find field element by ID in old XML table element
+	private org.w3c.dom.Element getFieldElementAccordingToID(org.w3c.dom.Element tableElement, String fieldId) {
+		NodeList fieldList = tableElement.getElementsByTagName("TableField");
+		for (int i = 0; i < fieldList.getLength(); i++) {
+			org.w3c.dom.Element fieldElement = (org.w3c.dom.Element)fieldList.item(i);
+			if (fieldElement.getAttribute("ID").equals(fieldId)) {
+				return fieldElement;
+			}
+		}
+		return null;
+	}
+
+	// Get references from old XML relationship element
+	private String getRefferencesOfOldRelationship(org.w3c.dom.Element relationshipElement, org.w3c.dom.Element systemElement) {
+		String tableId = relationshipElement.getAttribute("Table1ID");
+		String tableKeyId = relationshipElement.getAttribute("TableKey1ID");
+		org.w3c.dom.Element tableElement = null;
+		org.w3c.dom.Element tableKeyElement = null;
+
+		NodeList tableElementList = systemElement.getElementsByTagName("Table");
+		for (int i = 0; i < tableElementList.getLength(); i++) {
+			org.w3c.dom.Element workElement = (org.w3c.dom.Element)tableElementList.item(i);
+			if (workElement.getAttribute("ID").equals(tableId)) {
+				tableElement = workElement;
+				break;
+			}
+		}
+		if (tableElement != null) {
+			String tableName = getTableNameForDDL(tableElement);
+			NodeList tableKeyElementList = tableElement.getElementsByTagName("TableKey");
+			for (int i = 0; i < tableKeyElementList.getLength(); i++) {
+				org.w3c.dom.Element workElement = (org.w3c.dom.Element)tableKeyElementList.item(i);
+				if (workElement.getAttribute("ID").equals(tableKeyId)) {
+					tableKeyElement = workElement;
+					break;
+				}
+			}
+			if (tableKeyElement != null) {
+				String fieldNames = getKeyFieldIDsOfOldTable(tableElement, tableKeyElement);
+				return tableName + "(" + fieldNames + ")";
+			}
 		}
 		return "";
 	}
