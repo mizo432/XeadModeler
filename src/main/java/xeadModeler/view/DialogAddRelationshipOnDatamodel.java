@@ -446,15 +446,24 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 		newElement.setAttribute("Type", "REFFER");
 		newElement.setAttribute("ExistWhen1", "");
 		newElement.setAttribute("ExistWhen2", "");
-		// TODO: JSON-based implementation needed
-		// frame_.getSystemElement().appendChild(newElement);
+		// JSON-based implementation: add Relationship to XeadSystem
+		xeadModeler.model.json.Relationship relationship = new xeadModeler.model.json.Relationship();
+		relationship.setId(newElement.getAttribute("ID"));
+		relationship.setTable1Id(newElement.getAttribute("Table1ID"));
+		relationship.setTableKey1Id(newElement.getAttribute("TableKey1ID"));
+		relationship.setTable2Id(newElement.getAttribute("Table2ID"));
+		relationship.setTableKey2Id(newElement.getAttribute("TableKey2ID"));
+		relationship.setExistWhen1(newElement.getAttribute("ExistWhen1"));
+		relationship.setExistWhen2(newElement.getAttribute("ExistWhen2"));
+		frame_.getSystemElement().getRelationships().add(relationship);
 		frame_.getXeadUndoManager().addLogAfterModified(newTableKeyNode);
 		//
 		// Add Relationship attributes to each Subsystem if necessary//
-		NodeList subsystemNodeList = frame_.getDomDocument().getElementsByTagName("Subsystem");
-		for (int i = 0; i < subsystemNodeList.getLength(); i++) {
-			//sourceTableNode_.createSubsystemAttributesForRelationship(newElement, (org.w3c.dom.Element)subsystemNodeList.item(i));
-			frame_.createSubsystemAttributesForRelationship(newElement, (org.w3c.dom.Element)subsystemNodeList.item(i));
+		// JSON-based implementation: iterate over subsystems
+		if (frame_.getSystemElement().getSubsystems() != null) {
+			for (xeadModeler.model.json.Subsystem subsystem : frame_.getSystemElement().getSubsystems()) {
+				frame_.createSubsystemAttributesForRelationship(relationship, subsystem);
+			}
 		}
 		//
 		frame_.getXeadUndoManager().saveNodeBeforeModified(frame_.getCurrentMainTreenode());
@@ -626,15 +635,24 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 				newElement.setAttribute("Type", relationshipType);
  			newElement.setAttribute("ExistWhen1", "");
  			newElement.setAttribute("ExistWhen2", "");
- 			// TODO: JSON-based implementation needed
- 			// frame_.getSystemElement().appendChild(newElement);
+ 			// JSON-based implementation: add Relationship to XeadSystem
+ 			xeadModeler.model.json.Relationship relationship = new xeadModeler.model.json.Relationship();
+ 			relationship.setId(newElement.getAttribute("ID"));
+ 			relationship.setTable1Id(newElement.getAttribute("Table1ID"));
+ 			relationship.setTableKey1Id(newElement.getAttribute("TableKey1ID"));
+ 			relationship.setTable2Id(newElement.getAttribute("Table2ID"));
+ 			relationship.setTableKey2Id(newElement.getAttribute("TableKey2ID"));
+ 			relationship.setExistWhen1(newElement.getAttribute("ExistWhen1"));
+ 			relationship.setExistWhen2(newElement.getAttribute("ExistWhen2"));
+ 			frame_.getSystemElement().getRelationships().add(relationship);
  			frame_.getXeadUndoManager().addLogAfterModified(availableTableKeyNode);
 				//
 				// Add Relationship attributes to each Subsystem if necessary//
-				NodeList subsystemNodeList = frame_.getDomDocument().getElementsByTagName("Subsystem");
-				for (int i = 0; i < subsystemNodeList.getLength(); i++) {
-					//sourceTableNode_.createSubsystemAttributesForRelationship(newElement, (org.w3c.dom.Element)subsystemNodeList.item(i));
-					frame_.createSubsystemAttributesForRelationship(newElement, (org.w3c.dom.Element)subsystemNodeList.item(i));
+				// JSON-based implementation: iterate over subsystems
+				if (frame_.getSystemElement().getSubsystems() != null) {
+					for (xeadModeler.model.json.Subsystem subsystem : frame_.getSystemElement().getSubsystems()) {
+						frame_.createSubsystemAttributesForRelationship(relationship, subsystem);
+					}
 				}
 				//
 				frame_.getXeadUndoManager().saveNodeBeforeModified(frame_.getCurrentMainTreenode());

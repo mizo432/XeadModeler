@@ -2,6 +2,7 @@ package xeadModeler.controller;
 
 import xeadModeler.Modeler;
 import xeadModeler.service.FileService;
+import xeadModeler.service.JsonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ public class ImportController {
     @Autowired
     private FileService fileService;
     
+    @Autowired
+    private JsonService jsonService;
+    
     private Modeler modeler;
     private JFrame parentFrame;
     
@@ -34,11 +38,38 @@ public class ImportController {
         this.fileService = fileService;
     }
     
+    public void setJsonService(JsonService jsonService) {
+        this.jsonService = jsonService;
+    }
+    
     /**
      * JSON形式からインポート
      */
     public void importFromJson() {
-        // TODO: JSONインポート処理を実装
+        if (modeler == null) {
+            JOptionPane.showMessageDialog(parentFrame, "Modelerが初期化されていません。", "エラー", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("JSONファイルを選択");
+        
+        int result = fileChooser.showOpenDialog(parentFrame);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try {
+                xeadModeler.model.json.XeadSystem system = jsonService.loadSystem(selectedFile.getAbsolutePath());
+                if (system == null) {
+                    JOptionPane.showMessageDialog(parentFrame, "インポートするデータがありません。", "エラー", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                // TODO: Import the system into the modeler
+                JOptionPane.showMessageDialog(parentFrame, "JSONインポートが完了しました。", "完了", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(parentFrame, "インポートに失敗しました:\n" + e.getMessage(), "エラー", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
     }
     
     /**

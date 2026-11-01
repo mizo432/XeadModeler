@@ -9249,6 +9249,61 @@ public class Modeler extends JFrame {
     return isUpdated;
   }
 
+  /**
+   * JSON-based overload for createSubsystemAttributesForRelationship
+   * @param relationship the JSON Relationship object
+   * @param subsystem the JSON Subsystem object
+   * @return true if updated, false otherwise
+   */
+  public boolean createSubsystemAttributesForRelationship(xeadModeler.model.json.Relationship relationship,
+      xeadModeler.model.json.Subsystem subsystem) {
+    boolean table1OK = false;
+    boolean table2OK = false;
+    boolean needToAdd = true;
+    boolean isUpdated = false;
+
+    // Check if relationship and subsystem are valid
+    if (relationship == null || subsystem == null) {
+      return false;
+    }
+
+    // Check whether the pair of tables of the relationship are related to the subsystem
+    if (subsystem.getSubsystemTables() != null) {
+      for (xeadModeler.model.json.SubsystemTable subsystemTable : subsystem.getSubsystemTables()) {
+        if (subsystemTable.getTableId() != null && subsystemTable.getTableId().equals(relationship.getTable1Id())) {
+          table1OK = true;
+        }
+        if (subsystemTable.getTableId() != null && subsystemTable.getTableId().equals(relationship.getTable2Id())) {
+          table2OK = true;
+        }
+      }
+    }
+
+    // Check whether subsystem attributes for the relationship are already existing
+    if (table1OK && table2OK && subsystem.getSubsystemRelationships() != null) {
+      for (xeadModeler.model.json.SubsystemRelationship subsystemRelationship : subsystem.getSubsystemRelationships()) {
+        if (subsystemRelationship.getRelationshipId() != null && subsystemRelationship.getRelationshipId().equals(relationship.getId())) {
+          needToAdd = false;
+        }
+      }
+    }
+
+    // Add attributes of the relationship to the subsystem
+    if (table1OK && table2OK && needToAdd) {
+      xeadModeler.model.json.SubsystemRelationship newSubsystemRelationship = new xeadModeler.model.json.SubsystemRelationship();
+      newSubsystemRelationship.setRelationshipId(relationship.getId());
+      newSubsystemRelationship.setTerminalIndex1("-1");
+      newSubsystemRelationship.setTerminalIndex2("-1");
+      if (subsystem.getSubsystemRelationships() == null) {
+        subsystem.setSubsystemRelationships(new java.util.ArrayList<>());
+      }
+      subsystem.getSubsystemRelationships().add(newSubsystemRelationship);
+      isUpdated = true;
+    }
+
+    return isUpdated;
+  }
+
   private void createSubsystemAttributesForTable(String tableID, String subsystemID) {
     org.w3c.dom.Element element1, element2, newElement;
     NodeList subsystemTableList, relationshipList, subsystemRelationshipList;

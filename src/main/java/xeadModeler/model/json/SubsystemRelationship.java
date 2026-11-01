@@ -11,6 +11,8 @@ public class SubsystemRelationship {
     private String relationshipId;
     private String subsystemId;
     private String showOnModel;
+    private String terminalIndex1;
+    private String terminalIndex2;
     
     public String getRelationshipId() {
         return relationshipId;
@@ -34,5 +36,21 @@ public class SubsystemRelationship {
     
     public void setShowOnModel(String showOnModel) {
         this.showOnModel = showOnModel;
+    }
+    
+    public String getTerminalIndex1() {
+        return terminalIndex1;
+    }
+    
+    public void setTerminalIndex1(String terminalIndex1) {
+        this.terminalIndex1 = terminalIndex1;
+    }
+    
+    public String getTerminalIndex2() {
+        return terminalIndex2;
+    }
+    
+    public void setTerminalIndex2(String terminalIndex2) {
+        this.terminalIndex2 = terminalIndex2;
     }
 }

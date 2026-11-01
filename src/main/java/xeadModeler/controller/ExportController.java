@@ -2,6 +2,7 @@ package xeadModeler.controller;
 
 import xeadModeler.Modeler;
 import xeadModeler.service.FileService;
+import xeadModeler.service.JsonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ public class ExportController {
     @Autowired
     private FileService fileService;
     
+    @Autowired
+    private JsonService jsonService;
+    
     private Modeler modeler;
     private JFrame parentFrame;
     
@@ -34,11 +38,39 @@ public class ExportController {
         this.fileService = fileService;
     }
     
+    public void setJsonService(JsonService jsonService) {
+        this.jsonService = jsonService;
+    }
+    
     /**
      * JSON形式でエクスポート
      */
     public void exportToJson() {
-        // TODO: JSONエクスポート処理を実装
+        if (modeler == null) {
+            JOptionPane.showMessageDialog(parentFrame, "Modelerが初期化されていません。", "エラー", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("JSONとして保存");
+        fileChooser.setSelectedFile(new File("system.json"));
+        
+        int result = fileChooser.showSaveDialog(parentFrame);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try {
+                xeadModeler.model.json.XeadSystem system = modeler.getSystemElement();
+                if (system == null) {
+                    JOptionPane.showMessageDialog(parentFrame, "エクスポートするデータがありません。", "エラー", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                jsonService.saveSystem(system, selectedFile.getAbsolutePath());
+                JOptionPane.showMessageDialog(parentFrame, "JSONエクスポートが完了しました。", "完了", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(parentFrame, "エクスポートに失敗しました:\n" + e.getMessage(), "エラー", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
     }
     
     /**
