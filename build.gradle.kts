@@ -48,6 +48,9 @@ dependencies {
     implementation("org.apache.poi:poi-ooxml-lite:5.2.5")
     implementation("org.apache.xmlbeans:xmlbeans:5.1.1")
 
+    // Material UI Swing - Material Design Look and Feel
+    implementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2")
+
     // Apache Batik (SVG support) - Updated to 1.18
     implementation("org.apache.xmlgraphics:batik-awt-util:1.18")
     implementation("org.apache.xmlgraphics:batik-dom:1.18")

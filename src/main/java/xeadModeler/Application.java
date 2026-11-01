@@ -46,6 +46,7 @@ import xeadModeler.service.DrawingService;
 import xeadModeler.service.TreeService;
 import xeadModeler.service.TableService;
 import xeadModeler.service.DialogService;
+import xeadModeler.view.DialogAbout;
 
 import javax.swing.UIManager;
 
@@ -54,6 +55,9 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.util.ResourceBundle;
+
+import mdlaf.MaterialLookAndFeel;
+import mdlaf.themes.MaterialOceanicTheme;
 
 @Component
 public class Application implements ApplicationRunner {
@@ -162,7 +166,9 @@ public class Application implements ApplicationRunner {
 		// SwingはEvent Dispatch Threadで実行する必要がある
 		EventQueue.invokeLater(() -> {
 			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				// Material Design Look and Feel を適用
+				UIManager.setLookAndFeel(new MaterialLookAndFeel());
+				new MaterialOceanicTheme();
 			}
 			catch(Exception e) {
 				// Silently ignore look and feel errors - application will use default L&F
