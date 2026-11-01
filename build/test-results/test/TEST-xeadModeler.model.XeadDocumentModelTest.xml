@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="XeadDocumentModelテスト" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-11-01T06:57:14.754Z" hostname="mizoguchikenichinoMacBook-Air.local" time="0.016">
+  <properties/>
+  <testcase name="DDL設定の変更" classname="xeadModeler.model.XeadDocumentModelTest" time="0.0"/>
+  <testcase name="CamelCase変換のデフォルト値" classname="xeadModeler.model.XeadDocumentModelTest" time="0.001"/>
+  <testcase name="DDLコメントマークのデフォルト値" classname="xeadModeler.model.XeadDocumentModelTest" time="0.001"/>
+  <testcase name="ファイル名設定時にフォルダが自動設定される" classname="xeadModeler.model.XeadDocumentModelTest" time="0.0"/>
+  <testcase name="ファイル名の設定と取得" classname="xeadModeler.model.XeadDocumentModelTest" time="0.0"/>
+  <testcase name="保存済みDOMドキュメントの設定と取得" classname="xeadModeler.model.XeadDocumentModelTest" time="0.002"/>
+  <testcase name="ファイル名がnullの場合フォルダもnull" classname="xeadModeler.model.XeadDocumentModelTest" time="0.001"/>
+  <testcase name="初期状態の確認" classname="xeadModeler.model.XeadDocumentModelTest" time="0.001"/>
+  <testcase name="リファレンスファイルリストの初期状態" classname="xeadModeler.model.XeadDocumentModelTest" time="0.0"/>
+  <testcase name="最終更新時刻の設定と取得" classname="xeadModeler.model.XeadDocumentModelTest" time="0.0"/>
+  <testcase name="外部キー制約無視のデフォルト値" classname="xeadModeler.model.XeadDocumentModelTest" time="0.0"/>
+  <testcase name="DDLフィールドコメントタイプのデフォルト値" classname="xeadModeler.model.XeadDocumentModelTest" time="0.0"/>
+  <testcase name="DDLセクションマークのデフォルト値" classname="xeadModeler.model.XeadDocumentModelTest" time="0.0"/>
+  <testcase name="DOMドキュメントの設定と取得" classname="xeadModeler.model.XeadDocumentModelTest" time="0.002"/>
+  <testcase name="システム名の設定と取得" classname="xeadModeler.model.XeadDocumentModelTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

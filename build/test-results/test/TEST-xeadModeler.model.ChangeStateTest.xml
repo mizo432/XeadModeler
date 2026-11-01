@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ChangeStateテスト" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-01T06:57:14.668Z" hostname="mizoguchikenichinoMacBook-Air.local" time="0.026">
+  <properties/>
+  <testcase name="リスナー通知" classname="xeadModeler.model.ChangeStateTest" time="0.003"/>
+  <testcase name="変更状態を設定" classname="xeadModeler.model.ChangeStateTest" time="0.001"/>
+  <testcase name="リセット機能" classname="xeadModeler.model.ChangeStateTest" time="0.001"/>
+  <testcase name="resetは変更状態をfalseに設定し通知する" classname="xeadModeler.model.ChangeStateTest" time="0.002"/>
+  <testcase name="リスナーの更新" classname="xeadModeler.model.ChangeStateTest" time="0.002"/>
+  <testcase name="初期状態は未変更" classname="xeadModeler.model.ChangeStateTest" time="0.0"/>
+  <testcase name="複数の状態変更" classname="xeadModeler.model.ChangeStateTest" time="0.008"/>
+  <testcase name="同じ状態を設定すると通知されない" classname="xeadModeler.model.ChangeStateTest" time="0.002"/>
+  <testcase name="リスナーがnullの場合は通知されない" classname="xeadModeler.model.ChangeStateTest" time="0.001"/>
+  <testcase name="リスナー設定と取得" classname="xeadModeler.model.ChangeStateTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

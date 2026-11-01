@@ -49,7 +49,9 @@ dependencies {
     implementation("org.apache.xmlbeans:xmlbeans:5.1.1")
 
     // Material UI Swing - Material Design Look and Feel
-    implementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2")
+    implementation("io.github.vincenzopalazzo:material-ui-swing:1.1.2") {
+        exclude(group = "org.swinglabs", module = "swingx")
+    }
 
     // Apache Batik (SVG support) - Updated to 1.18
     implementation("org.apache.xmlgraphics:batik-awt-util:1.18")

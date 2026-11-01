@@ -1,5 +1,10 @@
 package xeadModeler.service;
 
+import xeadModeler.view.DialogMatrixList;
+import xeadModeler.view.DialogCreateTableStatement;
+import xeadModeler.view.DialogDocuments;
+import xeadModeler.view.DialogReorganizeDataTypes;
+
 import org.springframework.stereotype.Service;
 
 import javax.swing.*;
@@ -39,5 +44,37 @@ public class DialogServiceImpl implements DialogService {
     public int showOptionDialog(Component parentComponent, Object message, String title, int messageType, Object[] options) {
         return JOptionPane.showOptionDialog(parentComponent, message, title, 
             JOptionPane.DEFAULT_OPTION, messageType, null, options, options[0]);
+    }
+    
+    @Override
+    public void showMatrixListDialog(JFrame parentFrame) {
+        // TODO: DialogMatrixListのコンストラクタをJFrameに変更するまでコメントアウト
+        // DialogMatrixList dialog = new DialogMatrixList(parentFrame);
+        // dialog.setLocationRelativeTo(parentFrame);
+        // dialog.setVisible(true);
+    }
+    
+    @Override
+    public void showCreateTableStatementDialog(JFrame parentFrame) {
+        // TODO: DialogCreateTableStatementのコンストラクタをJFrameに変更するまでコメントアウト
+        // DialogCreateTableStatement dialog = new DialogCreateTableStatement(parentFrame);
+        // dialog.setLocationRelativeTo(parentFrame);
+        // dialog.setVisible(true);
+    }
+    
+    @Override
+    public void showDocumentsDialog(JFrame parentFrame) {
+        // TODO: DialogDocumentsのコンストラクタをJFrameに変更するまでコメントアウト
+        // DialogDocuments dialog = new DialogDocuments(parentFrame);
+        // dialog.setLocationRelativeTo(parentFrame);
+        // dialog.setVisible(true);
+    }
+    
+    @Override
+    public void showReorganizeDataTypesDialog(JFrame parentFrame) {
+        // TODO: DialogReorganizeDataTypesのコンストラクタをJFrameに変更するまでコメントアウト
+        // DialogReorganizeDataTypes dialog = new DialogReorganizeDataTypes(parentFrame);
+        // dialog.setLocationRelativeTo(parentFrame);
+        // dialog.setVisible(true);
     }
 }

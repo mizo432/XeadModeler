@@ -19,7 +19,7 @@ import java.awt.print.Printable;
  * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  */
-public class DrawingServiceImpl implements DrawingService, XeadPagePainter {
+public class DrawingServiceImpl implements DrawingService {
     
     private JLabel jLabelSubtitle;
     private JPanel jPanelSubjectAreaDataflowEditor1;

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="XeadFieldElementテスト" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-11-01T06:57:14.785Z" hostname="mizoguchikenichinoMacBook-Air.local" time="0.008">
+  <properties/>
+  <testcase name="Aliasによる比較 - 等しい場合" classname="xeadModeler.model.XeadFieldElementTest" time="0.001"/>
+  <testcase name="Aliasによる比較 - 小さい場合" classname="xeadModeler.model.XeadFieldElementTest" time="0.001"/>
+  <testcase name="要素の作成と取得" classname="xeadModeler.model.XeadFieldElementTest" time="0.001"/>
+  <testcase name="Aliasによる比較 - 大きい場合" classname="xeadModeler.model.XeadFieldElementTest" time="0.0"/>
+  <testcase name="複数の属性を持つ要素" classname="xeadModeler.model.XeadFieldElementTest" time="0.001"/>
+  <testcase name="Aliasによるソート" classname="xeadModeler.model.XeadFieldElementTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -56,4 +56,28 @@ public interface DialogService {
      * @return ユーザーの選択結果
      */
     int showOptionDialog(Component parentComponent, Object message, String title, int messageType, Object[] options);
+    
+    /**
+     * マトリックスリストダイアログを表示します。
+     * @param parentFrame 親フレーム
+     */
+    void showMatrixListDialog(JFrame parentFrame);
+    
+    /**
+     * CreateTableStatementダイアログを表示します。
+     * @param parentFrame 親フレーム
+     */
+    void showCreateTableStatementDialog(JFrame parentFrame);
+    
+    /**
+     * ドキュメントダイアログを表示します。
+     * @param parentFrame 親フレーム
+     */
+    void showDocumentsDialog(JFrame parentFrame);
+    
+    /**
+     * データ型再編成ダイアログを表示します。
+     * @param parentFrame 親フレーム
+     */
+    void showReorganizeDataTypesDialog(JFrame parentFrame);
 }

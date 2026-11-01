@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TreeNodeServiceImplテスト" tests="16" skipped="0" failures="0" errors="0" timestamp="2026-11-01T06:57:14.795Z" hostname="mizoguchikenichinoMacBook-Air.local" time="0.009">
+  <properties/>
+  <testcase name="クリア後に新規作成可能" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.001"/>
+  <testcase name="null IDでの作成は例外をスロー" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.002"/>
+  <testcase name="すべてのノードの取得" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="リポジトリのクリア" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="リポジトリのサイズ確認" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="更新後に取得したノードは同じ参照" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="ノードの作成と取得" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.001"/>
+  <testcase name="重複IDでの作成は上書きされる" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="findAllはスナップショットを返す" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="子ノード付きノードの削除" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="ノードの削除" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="存在しないノードの更新は例外をスロー" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.001"/>
+  <testcase name="存在しないIDの取得" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="ノードの更新" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="空文字IDでの作成は例外をスロー" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <testcase name="3段階層の子ノード削除" classname="xeadModeler.service.TreeNodeServiceImplTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

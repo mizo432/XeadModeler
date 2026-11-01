@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="XeadUndoManagerテスト" tests="21" skipped="0" failures="0" errors="0" timestamp="2026-11-01T06:57:14.806Z" hostname="mizoguchikenichinoMacBook-Air.local" time="0.01">
+  <properties/>
+  <testcase name="リスナーがnullの場合" classname="xeadModeler.service.XeadUndoManagerTest" time="0.001"/>
+  <testcase name="リドゥスタックサイズの確認" classname="xeadModeler.service.XeadUndoManagerTest" time="0.001"/>
+  <testcase name="変更状態がnullの場合" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="リスナー通知" classname="xeadModeler.service.XeadUndoManagerTest" time="0.001"/>
+  <testcase name="アンドゥスタックサイズの確認" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="スタッククリア" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="リドゥ実行" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="アンドゥ実行" classname="xeadModeler.service.XeadUndoManagerTest" time="0.001"/>
+  <testcase name="アンドゥ後に新しいアクションでリドゥスタックがクリア" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="削除アクションのログ記録" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="リドゥ不可時に実行するとfalse" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="複数のアンドゥ/リドゥ" classname="xeadModeler.service.XeadUndoManagerTest" time="0.001"/>
+  <testcase name="修正アクションのログ記録" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="修正アクションのundoable=false" classname="xeadModeler.service.XeadUndoManagerTest" time="0.001"/>
+  <testcase name="新しいアクションでリドゥスタックがクリアされる" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="削除アクションのundoable=false" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="追加アクションのログ記録" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="アンドゥ不可時に実行するとfalse" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="初期状態はアンドゥ/リドゥ不可" classname="xeadModeler.service.XeadUndoManagerTest" time="0.001"/>
+  <testcase name="アクションタイプ確認" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <testcase name="undoable=falseの場合はログ記録されない" classname="xeadModeler.service.XeadUndoManagerTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

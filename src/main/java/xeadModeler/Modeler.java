@@ -65,6 +65,26 @@ import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
 
 import xeadModeler.controller.FileController;
+import xeadModeler.controller.TreeController;
+import xeadModeler.view.ContentView;
+import xeadModeler.view.TreeView;
+import xeadModeler.view.DialogAbout;
+import xeadModeler.view.DialogAddList;
+import xeadModeler.view.DialogAddRelationshipOnDatamodel;
+import xeadModeler.view.DialogConfigColors;
+import xeadModeler.view.DialogCreateTableStatement;
+import xeadModeler.view.DialogDataflowLine;
+import xeadModeler.view.DialogDataflowNode;
+import xeadModeler.view.DialogDocuments;
+import xeadModeler.view.DialogEditInstanceOnDatamodel;
+import xeadModeler.view.DialogImportSQL;
+import xeadModeler.view.DialogImportXEAD;
+import xeadModeler.view.DialogImportXEAF;
+import xeadModeler.view.DialogMatrixList;
+import xeadModeler.view.DialogReorganizeDataTypes;
+import xeadModeler.view.DialogScan;
+import xeadModeler.view.DialogTableSynchronize;
+import xeadModeler.view.DialogToListChangesOfFiles;
 
 public class Modeler extends JFrame {
 
@@ -72,7 +92,7 @@ public class Modeler extends JFrame {
   /**
    * Static constants
    */
-  private static final ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
+  public static final ResourceBundle res = ResourceBundle.getBundle("xeadModeler.Res");
   public static int MAIN_FONT_SIZE = 18;
   public static final int TREE_ROW_HEIGHT = 22;
   public static final int TABLE_ROW_HEIGHT_EDITABLE = 27;
@@ -98,8 +118,8 @@ public class Modeler extends JFrame {
   private JSplitPane jSplitPaneMain = new JSplitPane();
   private JPanel jPanelTopMargin1 = new JPanel();
   private JPanel jPanelTopMargin2 = new JPanel();
-  private JLabel jLabelSubtitle = new JLabel();
-  private JLabel jLabelChangeState = new JLabel();
+  public JLabel jLabelSubtitle = new JLabel();
+  public JLabel jLabelChangeState = new JLabel();
   private JProgressBar jProgressBar = new JProgressBar();
   private Border borderOriginal1;
   private JPanel jPanelContentsPane = new JPanel();
@@ -219,7 +239,7 @@ public class Modeler extends JFrame {
   /**
    * change status controller for general use
    */
-  boolean informationOnThisPageChanged;
+  public boolean informationOnThisPageChanged;
   private ChangeState changeState = new ChangeState();
   /**
    * Dialog box and fileChooser for general use
@@ -273,40 +293,40 @@ public class Modeler extends JFrame {
    * Icons
    */
   private Image imageTitle;
-  private ImageIcon imageIconSystem;
-  private ImageIcon imageIconSubjectAreaList;
-  private ImageIcon imageIconSubjectArea;
-  private ImageIcon imageIconRoleList;
-  private ImageIcon imageIconRole;
-  private ImageIcon imageIconTask;
-  private ImageIcon imageIconSubsystemList;
-  private ImageIcon imageIconSubsystemListErr;
-  private ImageIcon imageIconSubsystem;
-  private ImageIcon imageIconSubsystemErr;
-  private ImageIcon imageIconTableList;
-  private ImageIcon imageIconTableListErr;
-  private ImageIcon imageIconTable;
-  private ImageIcon imageIconTableSyn;
-  private ImageIcon imageIconTableErr;
-  private ImageIcon imageIconFieldList;
-  private ImageIcon imageIconField;
-  private ImageIcon imageIconKey;
-  private ImageIcon imageIconKeyList;
-  private ImageIcon imageIconFunctionList;
-  private ImageIcon imageIconFunction;
-  private ImageIcon imageIconIOPanel;
-  private ImageIcon imageIconIOTable;
-  private ImageIcon imageIconIOSpool;
-  private ImageIcon imageIconIOWebPage;
-  private ImageIcon imageIconAction;
-  private ImageIcon imageIconActionFirst;
-  private ImageIcon imageIconActionOptional;
-  private ImageIcon imageIconForeignFunction;
-  private ImageIcon imageIconForeignTable;
-  private ImageIcon imageIconTree;
-  private ImageIcon imageIconModel;
-  private ImageIcon imageIconText;
-  private ImageIcon imageIconBook;
+  public ImageIcon imageIconSystem;
+  public ImageIcon imageIconSubjectAreaList;
+  public ImageIcon imageIconSubjectArea;
+  public ImageIcon imageIconRoleList;
+  public ImageIcon imageIconRole;
+  public ImageIcon imageIconTask;
+  public ImageIcon imageIconSubsystemList;
+  public ImageIcon imageIconSubsystemListErr;
+  public ImageIcon imageIconSubsystem;
+  public ImageIcon imageIconSubsystemErr;
+  public ImageIcon imageIconTableList;
+  public ImageIcon imageIconTableListErr;
+  public ImageIcon imageIconTable;
+  public ImageIcon imageIconTableSyn;
+  public ImageIcon imageIconTableErr;
+  public ImageIcon imageIconFieldList;
+  public ImageIcon imageIconField;
+  public ImageIcon imageIconKey;
+  public ImageIcon imageIconKeyList;
+  public ImageIcon imageIconFunctionList;
+  public ImageIcon imageIconFunction;
+  public ImageIcon imageIconIOPanel;
+  public ImageIcon imageIconIOTable;
+  public ImageIcon imageIconIOSpool;
+  public ImageIcon imageIconIOWebPage;
+  public ImageIcon imageIconAction;
+  public ImageIcon imageIconActionFirst;
+  public ImageIcon imageIconActionOptional;
+  public ImageIcon imageIconForeignFunction;
+  public ImageIcon imageIconForeignTable;
+  public ImageIcon imageIconTree;
+  public ImageIcon imageIconModel;
+  public ImageIcon imageIconText;
+  public ImageIcon imageIconBook;
   /**
    * Desktop Launcher
    */
@@ -326,7 +346,7 @@ public class Modeler extends JFrame {
   private int dragStartPointX = 0;
   private int dragStartPointY = 0;
   private XeadTreeNode systemNode, SubjectAreaListNode, roleListNode, subsystemListNode;
-  private XeadTreeNode currentTaskActionTreeNode, previousTaskActionTreeNode;
+  public XeadTreeNode currentTaskActionTreeNode, previousTaskActionTreeNode;
   /**
    * PopupMenu for editing XeadTreeNode
    */
@@ -390,7 +410,7 @@ public class Modeler extends JFrame {
   /**
    * customized key-map for text component
    */
-  private JTextComponent.KeyBinding[] customBindings = {
+  public JTextComponent.KeyBinding[] customBindings = {
       new JTextComponent.KeyBinding(
           KeyStroke.getKeyStroke("ctrl B"),
           DefaultEditorKit.defaultKeyTypedAction),
@@ -606,7 +626,7 @@ public class Modeler extends JFrame {
   private boolean isChangedByUser = false;
   private KanjiTextArea jTextAreaSubjectAreaDescriptions = new KanjiTextArea();
   //private JPanel jPanelSubjectAreaDataflowEditor1 = new JPanel();
-  private JPanel jPanelSubjectAreaDataflowEditor1 = new JPanel() {
+  public JPanel jPanelSubjectAreaDataflowEditor1 = new JPanel() {
     private static final long serialVersionUID = 1L;
 
     public void paintComponent(Graphics g) {
@@ -917,15 +937,15 @@ public class Modeler extends JFrame {
   private JPanel jPanelTableList = new JPanel();
   private JScrollPane jScrollPaneNativeTableList = new JScrollPane();
   private JViewport jViewportNativeTableList = new JViewport();
-  private JTabbedPane jTabbedPaneTableList = new JTabbedPane();
+  public JTabbedPane jTabbedPaneTableList = new JTabbedPane();
   private int previousSelectedIndex_jTabbedPaneTableList = 0;
   private TableModelNativeTableList tableModelNativeTableList = new TableModelNativeTableList();
-  private JTable jTableNativeTableList = new JTable(tableModelNativeTableList);
+  public JTable jTableNativeTableList = new JTable(tableModelNativeTableList);
   private int selectedRow_jTableNativeTableList;
   private JScrollPane jScrollPaneForeignTableList = new JScrollPane();
   private JViewport jViewportForeignTableList = new JViewport();
   private TableModelForeignTableList tableModelForeignTableList = new TableModelForeignTableList();
-  private JTable jTableForeignTableList = new JTable(tableModelForeignTableList);
+  public JTable jTableForeignTableList = new JTable(tableModelForeignTableList);
   private int selectedRow_jTableForeignTableList;
   private JSplitPane jSplitPaneDatamodel = new JSplitPane();
   private JPanel jPanelDatamodelTop = new JPanel();
@@ -937,7 +957,7 @@ public class Modeler extends JFrame {
   private ArrayList<DatamodelEntityBox> datamodelEntityBoxArray = new ArrayList<DatamodelEntityBox>();
   private ArrayList<DatamodelRelationshipLine> datamodelRelationshipLineArray = new ArrayList<DatamodelRelationshipLine>();
   private ArrayList<org.w3c.dom.Element> relationshipElementArray = new ArrayList<org.w3c.dom.Element>();
-  private JPanel jPanelDatamodel = new JPanel() {
+  public JPanel jPanelDatamodel = new JPanel() {
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -1043,12 +1063,12 @@ public class Modeler extends JFrame {
       this);
   private ArrayList<DatamodelEntityBox> datamodelEntityBoxSlideShowArray = new ArrayList<DatamodelEntityBox>();
   private ArrayList<DatamodelRelationshipLine> datamodelRelationshipLineSlideShowArray = new ArrayList<DatamodelRelationshipLine>();
-  private JDialog jDialogDatamodelSlideShow = new JDialog(this, true);
+  public JDialog jDialogDatamodelSlideShow = new JDialog(this, true);
   private int datamodelSlideNumber = 0;
   private int datamodelSlideTotalNumber = 0;
   private boolean isShowingInstance = false;
   private JPanel jPanelDatamodelSlideShow1 = new JPanel();
-  private JPanel jPanelDatamodelSlideShow2 = new JPanel() {
+  public JPanel jPanelDatamodelSlideShow2 = new JPanel() {
     private static final long serialVersionUID = 1L;
 
     public void paintComponent(Graphics g) {
@@ -1091,10 +1111,10 @@ public class Modeler extends JFrame {
   private JScrollPane jScrollPaneTable1 = new JScrollPane();
   private JPanel jPanelTable = new JPanel();
   private JSplitPane jSplitPaneTable = new JSplitPane();
-  private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTableType = new SortableXeadTreeNodeComboBoxModel();
-  private TableModelReadOnlyList tableModelTableUsageList = new TableModelReadOnlyList();
-  private TableModelReadOnlyList tableModelTableForeignUsageList = new TableModelReadOnlyList();
-  private TableModelReadOnlyList tableModelTableReferringFileList = new TableModelReadOnlyList();
+  public SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTableType = new SortableXeadTreeNodeComboBoxModel();
+  public TableModelReadOnlyList tableModelTableUsageList = new TableModelReadOnlyList();
+  public TableModelReadOnlyList tableModelTableForeignUsageList = new TableModelReadOnlyList();
+  public TableModelReadOnlyList tableModelTableReferringFileList = new TableModelReadOnlyList();
   private JLabel jLabelTableDescriptions = new JLabel();
   private JPanel jPanelTable4 = new JPanel();
   private JTextField jTextFieldTablePK = new JTextField();
@@ -1111,13 +1131,13 @@ public class Modeler extends JFrame {
   private JButton jButtonTableSynchronize = new JButton();
   private JPanel jPanelTable1 = new JPanel();
   private JPanel jPanelTable3 = new JPanel();
-  private JTable jTableTableUsageList = new JTable(tableModelTableUsageList);
+  public JTable jTableTableUsageList = new JTable(tableModelTableUsageList);
   private int selectedRow_jTableTableUsageList;
   private JScrollPane jScrollPaneTableForeignUsageList = new JScrollPane();
-  private JTable jTableTableReferringFileList = new JTable(tableModelTableReferringFileList);
+  public JTable jTableTableReferringFileList = new JTable(tableModelTableReferringFileList);
   private JScrollPane jScrollPaneTableReferringFileList = new JScrollPane();
   private JTabbedPane jTabbedPaneTable = new JTabbedPane();
-  private JTable jTableTableForeignUsageList = new JTable(tableModelTableForeignUsageList);
+  public JTable jTableTableForeignUsageList = new JTable(tableModelTableForeignUsageList);
   private int selectedRow_jTableTableForeignUsageList;
   private JScrollPane jScrollPaneTableUsageList = new JScrollPane();
   private JScrollPane jScrollPaneTableDescriptions = new JScrollPane();
@@ -1133,7 +1153,7 @@ public class Modeler extends JFrame {
   private JScrollPane jScrollPaneTableFieldList = new JScrollPane();
   private JViewport jViewportTableFieldList = new JViewport();
   private TableModelTableFieldList tableModelTableFieldList = new TableModelTableFieldList();
-  private JTable jTableTableFieldList = new JTable(tableModelTableFieldList);
+  public JTable jTableTableFieldList = new JTable(tableModelTableFieldList);
   private int selectedRow_jTableTableFieldList;
   private int targetRow_jTableTableFieldList;
   /**
@@ -1142,13 +1162,13 @@ public class Modeler extends JFrame {
   private ArrayList<XeadTreeNode> fieldListNodeToBeRenumbered = new ArrayList<XeadTreeNode>();
   private JPanel jPanelTableField = new JPanel();
   private JSplitPane jSplitPaneTableField1 = new JSplitPane();
-  private TableModelReadOnlyList tableModelTableFieldUsageList = new TableModelReadOnlyList();
-  private TableModelReadOnlyList tableModelTableFieldForeignUsageList = new TableModelReadOnlyList();
-  private JTable jTableTableFieldUsageList = new JTable(tableModelTableFieldUsageList);
+  public TableModelReadOnlyList tableModelTableFieldUsageList = new TableModelReadOnlyList();
+  public TableModelReadOnlyList tableModelTableFieldForeignUsageList = new TableModelReadOnlyList();
+  public JTable jTableTableFieldUsageList = new JTable(tableModelTableFieldUsageList);
   private int selectedRow_jTableTableFieldUsageList;
   private JScrollPane jScrollPaneTableFieldForeignUsageList = new JScrollPane();
   private JTabbedPane jTabbedPaneTableField = new JTabbedPane();
-  private JTable jTableTableFieldForeignUsageList = new JTable(
+  public JTable jTableTableFieldForeignUsageList = new JTable(
       tableModelTableFieldForeignUsageList);
   private int selectedRow_jTableTableFieldForeignUsageList;
   private JScrollPane jScrollPaneTableFieldUsageList = new JScrollPane();
@@ -1166,7 +1186,7 @@ public class Modeler extends JFrame {
   private KanjiTextArea jTextAreaTableFieldDescriptions = new KanjiTextArea();
   private ButtonGroup buttonGroupTableFieldAttributeType = new ButtonGroup();
   private JLabel jLabelTableFieldAlias = new JLabel();
-  private JTextField jTextFieldTableFieldAlias = new JTextField();
+  public JTextField jTextFieldTableFieldAlias = new JTextField();
   private JLabel jLabelTableFieldAttributeType = new JLabel();
   private JLabel jLabelTableFieldDataType = new JLabel();
   private JRadioButton jRadioButtonTableFieldAttributeTypeINHERITED = new JRadioButton();
@@ -1177,10 +1197,10 @@ public class Modeler extends JFrame {
   private JLabel jLabelTableFieldDefault = new JLabel();
   private JTextField jTextFieldTableFieldDefault = new JTextField();
   private JCheckBox jCheckBoxTableFieldNotNull = new JCheckBox();
-  private JButton jButtonTableFieldDataTypeChange = new JButton();
+  public JButton jButtonTableFieldDataTypeChange = new JButton();
   private DataTypePopupMenu dataTypePopupMenu = new DataTypePopupMenu();
-  private JTextField jTextFieldTableFieldDataType = new JTextField();
-  private String tableFieldDataTypeID = "";
+  public JTextField jTextFieldTableFieldDataType = new JTextField();
+  public String tableFieldDataTypeID = "";
   private JMenuItem jMenuItemAddDataType = new JMenuItem();
   private ArrayList<org.w3c.dom.Element> newlyAddedDataTypeElementList = new ArrayList<org.w3c.dom.Element>();
   /**
@@ -1205,8 +1225,8 @@ public class Modeler extends JFrame {
   private JScrollPane jScrollPaneTableKeyFieldList = new JScrollPane();
   private JViewport jViewportTableKeyFieldList = new JViewport();
   private JPanel jPanelTableKey2 = new JPanel();
-  private TableModelReadOnlyList tableModelTableKeyFieldList = new TableModelReadOnlyList();
-  private JTable jTableTableKeyFieldList = new JTable(tableModelTableKeyFieldList);
+  public TableModelReadOnlyList tableModelTableKeyFieldList = new TableModelReadOnlyList();
+  public JTable jTableTableKeyFieldList = new JTable(tableModelTableKeyFieldList);
   private int selectedRow_jTableTableKeyFieldList;
   private int targetRow_jTableTableKeyFieldList;
   private JLabel jLabelTableKeyFieldList = new JLabel();
@@ -1215,13 +1235,13 @@ public class Modeler extends JFrame {
   private JLabel jLabelRelationshipList = new JLabel();
   private JScrollPane jScrollPaneRelationshipList = new JScrollPane();
   private JViewport jViewportRelationshipList = new JViewport();
-  private TableModelRelationshipList tableModelRelationshipList = new TableModelRelationshipList();
-  private JTable jTableRelationshipList = new JTable(tableModelRelationshipList);
+  public TableModelRelationshipList tableModelRelationshipList = new TableModelRelationshipList();
+  public JTable jTableRelationshipList = new JTable(tableModelRelationshipList);
   private int selectedRow_jTableRelationshipList;
   private JPanel jPanelTableKey3 = new JPanel();
-  private XeadTreeNode tableKeyNode;
+  public XeadTreeNode tableKeyNode;
   private int lastIDOfRelationship;
-  private boolean isWarningAcceptedForDataTypeUnmatch = false;
+  public boolean isWarningAcceptedForDataTypeUnmatch = false;
   /**
    * Definition components on jPanelFunctionList
    */
@@ -1246,20 +1266,20 @@ public class Modeler extends JFrame {
   private JPanel jPanelFunction2 = new JPanel();
   private JPanel jPanelFunction3 = new JPanel();
   private JPanel jPanelFunction4 = new JPanel();
-  private TableModelReadOnlyList tableModelFunctionIOList = new TableModelReadOnlyList();
+  public TableModelReadOnlyList tableModelFunctionIOList = new TableModelReadOnlyList();
   private TableModelFunctionsUsedByThis tableModelFunctionsUsedByThis = new TableModelFunctionsUsedByThis();
-  private TableModelReadOnlyList tableModelFunctionsUsingThis = new TableModelReadOnlyList();
-  private TableModelReadOnlyList tableModelTasksUsingThis = new TableModelReadOnlyList();
+  public TableModelReadOnlyList tableModelFunctionsUsingThis = new TableModelReadOnlyList();
+  public TableModelReadOnlyList tableModelTasksUsingThis = new TableModelReadOnlyList();
   private JSplitPane jSplitPaneFunction = new JSplitPane();
-  private JTable jTableFunctionIOList = new JTable(tableModelFunctionIOList);
+  public JTable jTableFunctionIOList = new JTable(tableModelFunctionIOList);
   private int selectedRow_jTableFunctionIOList;
   private int targetRow_jTableFunctionIOList;
-  private JTable jTableFunctionsUsingThis = new JTable(tableModelFunctionsUsingThis);
+  public JTable jTableFunctionsUsingThis = new JTable(tableModelFunctionsUsingThis);
   private int selectedRow_jTableFunctionsUsingThis;
-  private JTable jTableTasksUsingThis = new JTable(tableModelTasksUsingThis);
+  public JTable jTableTasksUsingThis = new JTable(tableModelTasksUsingThis);
   private int selectedRow_jTableTasksUsingThis;
   private JScrollPane jScrollPaneTasksUsingThis = new JScrollPane();
-  private JTable jTableFunctionsUsedByThis = new JTable(tableModelFunctionsUsedByThis);
+  public JTable jTableFunctionsUsedByThis = new JTable(tableModelFunctionsUsedByThis);
   private int selectedRow_jTableFunctionsUsedByThis;
   private int targetRow_jTableFunctionsUsedByThis;
   private JTabbedPane jTabbedPaneFunction = new JTabbedPane();
@@ -1279,7 +1299,7 @@ public class Modeler extends JFrame {
   private ArrayList<String> functionDocFileList = new ArrayList<String>();
   private ArrayList<String> functionDocFileDefaultList = new ArrayList<String>();
   private JButton jButtonFunctionDocFile = new JButton();
-  private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType = new SortableXeadTreeNodeComboBoxModel();
+  public SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType = new SortableXeadTreeNodeComboBoxModel();
   private JComboBox jComboBoxFunctionType = new JComboBox(sortableComboBoxModelFunctionType);
   private KanjiTextField jTextFieldFunctionName = new KanjiTextField();
   private KanjiTextField jTextFieldFunctionSummary = new KanjiTextField();
@@ -1307,13 +1327,13 @@ public class Modeler extends JFrame {
   private JLabel jLabelIOPanelDescriptions = new JLabel();
   private KanjiTextArea jTextAreaIOPanelDescriptions = new KanjiTextArea();
   private TableModelEditableList tableModelIOPanelFieldList = new TableModelEditableList();
-  private JTable jTableIOPanelFieldList = new JTable(tableModelIOPanelFieldList);
+  public JTable jTableIOPanelFieldList = new JTable(tableModelIOPanelFieldList);
   private int selectedRow_jTableIOPanelFieldList;
   private JScrollPane jScrollPaneIOPanelFieldList = new JScrollPane();
   private JPanel jPanelIOPanel5 = new JPanel();
-  private JTextPane jTextPaneIOPanelImage = new JTextPane();
-  private ImageIcon imageFunctionIO = null;
-  private JLabel jLabelIOImageIcon = new JLabel();
+  public JTextPane jTextPaneIOPanelImage = new JTextPane();
+  public ImageIcon imageFunctionIO = null;
+  public JLabel jLabelIOImageIcon = new JLabel();
   private JScrollPane jScrollPaneIOPanelImage1 = new JScrollPane();
   private JScrollPane jScrollPaneIOPanelImage2 = new JScrollPane();
   private JPanel jPanelIOPanelImage = new JPanel();
@@ -1374,7 +1394,7 @@ public class Modeler extends JFrame {
   private KanjiTextArea jTextAreaIOSpoolDescriptions = new KanjiTextArea();
   private JLabel jLabelIOSpoolDescriptions = new JLabel();
   private TableModelEditableList tableModelIOSpoolFieldList = new TableModelEditableList();
-  private JTable jTableIOSpoolFieldList = new JTable(tableModelIOSpoolFieldList);
+  public JTable jTableIOSpoolFieldList = new JTable(tableModelIOSpoolFieldList);
   private int selectedRow_jTableIOSpoolFieldList;
   private JScrollPane jScrollPaneIOSpoolFieldList = new JScrollPane();
   private JPanel jPanelIOSpool6 = new JPanel();
@@ -1382,7 +1402,7 @@ public class Modeler extends JFrame {
   private JScrollPane jScrollPaneIOSpoolImage2 = new JScrollPane();
   private JLabel jLabelIOSpoolImage = new JLabel();
   private JPanel jPanelIOSpool5 = new JPanel();
-  private JTextPane jTextPaneIOSpoolImage = new JTextPane();
+  public JTextPane jTextPaneIOSpoolImage = new JTextPane();
   private Border borderOriginal4;
   private JLabel jLabelIOSpoolCaretPosition = new JLabel();
   private JPanel jPanelIOSpoolImage = new JPanel();
@@ -1423,7 +1443,7 @@ public class Modeler extends JFrame {
   private JLabel jLabelIOTableName = new JLabel();
   private JScrollPane jScrollPaneIOTableFieldList = new JScrollPane();
   private TableModelIOTableFieldList tableModelIOTableFieldList = new TableModelIOTableFieldList();
-  private JTable jTableIOTableFieldList = new JTable(tableModelIOTableFieldList);
+  public JTable jTableIOTableFieldList = new JTable(tableModelIOTableFieldList);
   //private JLabel jLabelIOTableID = new JLabel();
   //private JTextField jTextFieldIOTableID = new JTextField();
   private JLabel jLabelIOTableNameExtension = new JLabel();
@@ -1518,11 +1538,11 @@ public class Modeler extends JFrame {
   private JLabel jLabelIOWebPageDescriptions = new JLabel();
   private KanjiTextArea jTextAreaIOWebPageDescriptions = new KanjiTextArea();
   private TableModelEditableList tableModelIOWebPageFieldList = new TableModelEditableList();
-  private JTable jTableIOWebPageFieldList = new JTable(tableModelIOWebPageFieldList);
+  public JTable jTableIOWebPageFieldList = new JTable(tableModelIOWebPageFieldList);
   private int selectedRow_jTableIOWebPageFieldList;
   private JScrollPane jScrollPaneIOWebPageFieldList = new JScrollPane();
   private JPanel jPanelIOWebPage5 = new JPanel();
-  private JEditorPane jEditorPaneIOWebPageImage = new JEditorPane();
+  public JEditorPane jEditorPaneIOWebPageImage = new JEditorPane();
   private JScrollPane jScrollPaneIOWebPageImage = new JScrollPane();
   private JPanel jPanelIOWebPage6 = new JPanel();
   private JLabel jLabelIOWebPageImage = new JLabel();
@@ -1542,6 +1562,12 @@ public class Modeler extends JFrame {
    * Application instance
    */
   private Application application;
+  /**
+   * MVC View and Controller instances
+   */
+  private TreeView treeView;
+  private ContentView contentView;
+  private TreeController treeController;
 
   /**
    * Constructor
@@ -2526,6 +2552,71 @@ public class Modeler extends JFrame {
     jLabelSlideShowEnd.setForeground(Color.WHITE);
     jLabelSlideShowEnd.setBackground(Color.BLACK);
     jLabelSlideShowEnd.setOpaque(true);
+
+    /**
+     * Initialize MVC View and Controller components
+     */
+    // Initialize ContentView with panel references from Modeler
+    contentView = new ContentView(this, new ContentView.ContentListener() {
+        @Override
+        public void onContentPanelChanged(String panelName) {
+            // Panel changed notification
+        }
+    });
+    // Replace jPanelContentsPane reference with ContentView's panel
+    // Note: contentView.getJPanelContentsPane() will be used instead of jPanelContentsPane
+
+    // Initialize TreeView
+    treeView = new TreeView(this, new TreeView.TreeListener() {
+        @Override
+        public void onTreeNodeSelected(XeadTreeNode node) {
+            if (node != null) {
+                currentMainTreeNode = node;
+                if (contentView != null) {
+                    contentView.showPanelForNode(node);
+                }
+            }
+        }
+        @Override
+        public void onTreeNodeRightClick(XeadTreeNode node, int x, int y) {
+            // Delegate to existing popup menu logic
+        }
+        @Override
+        public void onTreeNodeDoubleClick(XeadTreeNode node) {
+            // Double click handling
+        }
+        @Override
+        public void onTreeNodeKeyPressed(KeyEvent e) {
+            // Key press handling - to be implemented
+        }
+        @Override
+        public void onTreeNodeAdd() {}
+        @Override
+        public void onTreeNodeAddList() {}
+        @Override
+        public void onTreeNodePaste() {}
+        @Override
+        public void onTreeNodeCopy() {}
+        @Override
+        public void onTreeNodeCut() {}
+        @Override
+        public void onTreeNodeDelete() {}
+        @Override
+        public void onTreeNodeAddIOPanel() {}
+        @Override
+        public void onTreeNodeAddIOSpool() {}
+        @Override
+        public void onTreeNodeAddIOWebPage() {}
+        @Override
+        public void onTreeNodeAddFK() {}
+        @Override
+        public void onTreeNodeAddSK() {}
+        @Override
+        public void onTreeNodeAddIndex() {}
+    });
+
+    // Initialize TreeController
+    treeController = new TreeController(this, treeView, this);
   }
 
   /**
@@ -7082,28 +7173,28 @@ public class Modeler extends JFrame {
     return element;
   }
 
-  org.w3c.dom.Document getDomDocument() {
+  public org.w3c.dom.Document getDomDocument() {
     return domDocument;
   }
 
-  int incrementLastIDOfRelationship() {
+  public int incrementLastIDOfRelationship() {
     lastIDOfRelationship++;
     return lastIDOfRelationship;
   }
 
-  org.w3c.dom.Element getSystemElement() {
+  public org.w3c.dom.Element getSystemElement() {
     return systemNode.getElement();
   }
 
-  XeadTreeNode getSubsystemListNode() {
+  public XeadTreeNode getSubsystemListNode() {
     return subsystemListNode;
   }
 
-  XeadTreeNode getCurrentMainTreenode() {
+  public XeadTreeNode getCurrentMainTreenode() {
     return currentMainTreeNode;
   }
 
-  xeadModeler.service.XeadUndoManager getXeadUndoManager() {
+  public xeadModeler.service.XeadUndoManager getXeadUndoManager() {
     return application.getXeadUndoManager();
   }
 
@@ -8296,7 +8387,7 @@ public class Modeler extends JFrame {
    * @param id2 :second id of the node to be specified
    * @return XeadTreeNode :node specified
    */
-  XeadTreeNode getSpecificXeadTreeNode(String type, String id1, String id2) {
+  public XeadTreeNode getSpecificXeadTreeNode(String type, String id1, String id2) {
     XeadTreeNode returnNode = null;
     XeadTreeNode childNode0, childNode1, childNode2, childNode3, childNode4, childNode5;
     org.w3c.dom.Element element;
@@ -9592,7 +9683,7 @@ public class Modeler extends JFrame {
    * @param timeFormat :Format of date
    * @return String :Date and time
    */
-  String getStringValueOfDateTime(String timeFormat) {
+  public String getStringValueOfDateTime(String timeFormat) {
     String monthStr = "";
     String dayStr = "";
     String underbar = "";
@@ -10614,7 +10705,7 @@ public class Modeler extends JFrame {
    * @param relationshipList :NodeList of Relationship
    * @return CreateStatement :CreateStatement object
    */
-  CreateStatement getCreateStatementByTable(XeadTreeNode node1, XeadTreeNode node2,
+  public CreateStatement getCreateStatementByTable(XeadTreeNode node1, XeadTreeNode node2,
       NodeList relationshipList) {
     org.w3c.dom.Element keyFieldElement, keyFieldElement2, relationshipElement, dataTypeElement;
     XeadTreeNode node3, node4, node5;
@@ -12061,7 +12152,7 @@ public class Modeler extends JFrame {
   /**
    * Class of ComboBox-model to sort elements by its "SortKey"
    */
-  class SortableXeadTreeNodeComboBoxModel extends DefaultComboBoxModel {
+  public class SortableXeadTreeNodeComboBoxModel extends DefaultComboBoxModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -12129,7 +12220,7 @@ public class Modeler extends JFrame {
   /**
    * Class of DOM-element-model to sort elements by its "SortKey"
    */
-  class SortableDomElementListModel extends DefaultListModel {
+  public class SortableDomElementListModel extends DefaultListModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -12173,7 +12264,7 @@ public class Modeler extends JFrame {
   /**
    * Class of DOM-element-model to sort field elements by its "Alias"
    */
-  class SortableDomElementFieldListModel extends DefaultListModel {
+  public class SortableDomElementFieldListModel extends DefaultListModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -12217,7 +12308,7 @@ public class Modeler extends JFrame {
   /**
    * Class of NodeJumpButton
    */
-  class NodeJumpButton extends JButton {
+  public class NodeJumpButton extends JButton {
 
     private static final long serialVersionUID = 1L;
     private XeadTreeNode node_;
@@ -12354,7 +12445,7 @@ public class Modeler extends JFrame {
   /**
    * Class of DataFlow Node
    */
-  class DataflowNode extends JPanel {
+  public class DataflowNode extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private org.w3c.dom.Element dataflowNodeElement_;
@@ -14695,7 +14786,7 @@ public class Modeler extends JFrame {
   /**
    * Class of Data-flow line
    */
-  class DataflowLine extends Container {
+  public class DataflowLine extends Container {
 
     private static final long serialVersionUID = 1L;
     private org.w3c.dom.Element dataflowLineElement_;
@@ -17524,7 +17615,7 @@ public class Modeler extends JFrame {
   /**
    * Class of Data-model Entity Box
    */
-  class DatamodelEntityBox extends JPanel {
+  public class DatamodelEntityBox extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
@@ -19402,7 +19493,7 @@ public class Modeler extends JFrame {
   /**
    * Class of XEAD Tree Node
    */
-  class XeadTreeNode extends DefaultMutableTreeNode implements Comparable {
+  public class XeadTreeNode extends DefaultMutableTreeNode implements Comparable {
 
     private static final long serialVersionUID = 1L;
     private String nodeType_;
@@ -20446,7 +20537,7 @@ public class Modeler extends JFrame {
       return childNode;
     }
 
-    String getNextSortKeyOfTableField(XeadTreeNode tableNode) {
+    public String getNextSortKeyOfTableField(XeadTreeNode tableNode) {
       org.w3c.dom.Element element;
       int lastSortKeyInt = 0;
       int workSortKeyInt = 0;
@@ -28641,7 +28732,7 @@ public class Modeler extends JFrame {
       return updateStatusFlag;
     }
 
-    private boolean[] updateFieldsForTaskAction(XeadTreeNode mainTreeNode) {
+    public boolean[] updateFieldsForTaskAction(XeadTreeNode mainTreeNode) {
       boolean valueOfFieldsChanged = informationOnThisPageChanged;
       boolean valueOfSortKeyChanged = false;
       if (!domNode_.getAttribute("ExecuteIf").equals(jTextFieldTaskActionExecuteIf.getText())) {
@@ -30004,7 +30095,7 @@ public class Modeler extends JFrame {
   /**
    * Class of Table Model(Read Only)
    */
-  class TableModelReadOnlyList extends DefaultTableModel {
+  public class TableModelReadOnlyList extends DefaultTableModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -30189,7 +30280,7 @@ public class Modeler extends JFrame {
     }
   }
 
-  class CheckBoxHeaderRenderer extends JCheckBox implements TableCellRenderer, MouseListener {
+  public class CheckBoxHeaderRenderer extends JCheckBox implements TableCellRenderer, MouseListener {
 
     private static final long serialVersionUID = 1L;
     protected CheckBoxHeaderRenderer rendererComponent;
@@ -30488,7 +30579,7 @@ public class Modeler extends JFrame {
    * @param originalString :original string value to be processed
    * @return String :string value of processed string
    */
-  static String concatLinesWithTokenOfEOL(String originalString) {
+  public static String concatLinesWithTokenOfEOL(String originalString) {
     StringBuffer processedString = new StringBuffer();
     int lastEnd = 0;
     for (int i = 0; i <= originalString.length(); i++) {
@@ -30512,7 +30603,7 @@ public class Modeler extends JFrame {
    * @param stringToBeInserted :value to be replaced into "#EOL#"(usually it's "\n")
    * @return String :string value of processed string
    */
-  static String substringLinesWithTokenOfEOL(String originalString, String stringToBeInserted) {
+  public static String substringLinesWithTokenOfEOL(String originalString, String stringToBeInserted) {
     StringBuffer processedString = new StringBuffer();
     int lastEnd = 0;
     for (int i = 0; i <= originalString.length(); i++) {
@@ -30708,7 +30799,7 @@ public class Modeler extends JFrame {
    * @param number :number to be formatted
    * @return String :formatted value
    */
-  static String getFormatted4ByteString(int number) {
+  public static String getFormatted4ByteString(int number) {
 //		String formattedNumberString = "0000";
 //		if (0 <= number && number < 10) {formattedNumberString = "000" + number;}
 //		if (10 <= number && number < 100) {formattedNumberString = "00" + number;}
@@ -40485,7 +40576,7 @@ public class Modeler extends JFrame {
   /**
    * Class of DataTypeMenu
    */
-  class DataTypePopupMenu extends JPopupMenu {
+  public class DataTypePopupMenu extends JPopupMenu {
 
     private static final long serialVersionUID = 1L;
 
@@ -40513,167 +40604,25 @@ public class Modeler extends JFrame {
           currentMenu = new JMenu(first2BytesOfsortKey);
           this.add(currentMenu);
         }
-        currentMenu.add(new DataTypeMenuItem(element));
+        currentMenu.add(new xeadModeler.view.DataTypeMenuItem(Modeler.this, element));
       }
       this.add(jMenuItemAddDataType);
     }
   }
 
-  /**
-   * Class of DataTypeMenu
-   */
-  class DataTypeMenuItem extends JMenuItem {
-
-    private static final long serialVersionUID = 1L;
-    String dataTypeID;
-    String dataTypeName;
-    org.w3c.dom.Element dataTypeElement;
-
-    public DataTypeMenuItem(org.w3c.dom.Element element) {
-      super();
-      String wrkStr1 = "";
-      String wrkStr2 = "";
-      String zenkaku = "";
-      dataTypeElement = element;
-//			if (dataTypeElement.getAttribute("Decimal").equals("") || dataTypeElement.getAttribute("Decimal").equals("0")) {
-//				wrkStr1 = dataTypeElement.getAttribute("Length");
-//			} else {
-//				wrkStr1 = dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
-//			}
-      if (dataTypeElement.getAttribute("BasicType").equals("SignedNumber")
-          || dataTypeElement.getAttribute("BasicType").equals("UnsignedNumber")) {
-        wrkStr1 =
-            dataTypeElement.getAttribute("Length") + "." + dataTypeElement.getAttribute("Decimal");
-      } else {
-        wrkStr1 = dataTypeElement.getAttribute("Length");
-      }
-      zenkaku = getZenkakuOfHankaku(wrkStr1);
-      if (dataTypeElement.getAttribute("Name").contains(wrkStr1)
-          || dataTypeElement.getAttribute("SortKey").contains(wrkStr1)
-          || dataTypeElement.getAttribute("Name").contains(zenkaku)) {
-        wrkStr2 = dataTypeElement.getAttribute("Name");
-      } else {
-        wrkStr2 = dataTypeElement.getAttribute("Name") + "(" + wrkStr1 + ")";
-      }
-      if (wrkStr2.startsWith(dataTypeElement.getAttribute("SortKey"))) {
-        setText(wrkStr2);
-      } else {
-        setText(dataTypeElement.getAttribute("SortKey") + " " + wrkStr2);
-      }
-      addActionListener(new dataTypeMenuItemActionListener());
-    }
-
-    class dataTypeMenuItemActionListener implements ActionListener {
-
-      public void actionPerformed(ActionEvent e) {
-        XeadTreeNode tableNode = (XeadTreeNode) currentMainTreeNode.getParent().getParent();
-        NodeList nodeList1, nodeList2;
-        NodeList nodeList3 = domDocument.getElementsByTagName("Relationship");
-        org.w3c.dom.Element element1, element2, element3;
-        boolean relationshipAlreadyExist, thisIsComposedOfKey;
-        String tableID = tableNode.getElement().getAttribute("ID");
-        String tableFieldID = currentMainTreeNode.getElement().getAttribute("ID");
-        //
-        if (!dataTypeElement.getAttribute("ID").equals(tableFieldDataTypeID)) {
-          tableFieldDataTypeID = dataTypeElement.getAttribute("ID");
-          jTextFieldTableFieldDataType.setText(getText());
-          if (jTextFieldTableFieldAlias.getText().equals("")) {
-            NodeList fieldList = domDocument.getElementsByTagName("TableField");
-            String fieldAlias = "";
-            boolean isAllTheSameAlias = true;
-            for (int i = 0; i < fieldList.getLength(); i++) {
-              element1 = (org.w3c.dom.Element) fieldList.item(i);
-              if (element1.getAttribute("DataTypeID").equals(tableFieldDataTypeID)) {
-                if (!element1.getAttribute("Alias").equals("")
-                    && !fieldAlias.equals("")
-                    && !element1.getAttribute("Alias").equals(fieldAlias)) {
-                  isAllTheSameAlias = false;
-                }
-                if (!element1.getAttribute("Alias").equals("")) {
-                  fieldAlias = element1.getAttribute("Alias");
-                }
-              }
-            }
-            if (isAllTheSameAlias) {
-              jTextFieldTableFieldAlias.setText(fieldAlias);
-            }
-          }
-          //
-          nodeList1 = tableNode.getElement().getElementsByTagName("TableKey");
-          for (int i = 0; i < nodeList1.getLength(); i++) {
-            element1 = (org.w3c.dom.Element) nodeList1.item(i);
-            thisIsComposedOfKey = false;
-            nodeList2 = element1.getElementsByTagName("TableKeyField");
-            for (int j = 0; j < nodeList2.getLength(); j++) {
-              element2 = (org.w3c.dom.Element) nodeList2.item(j);
-              if (element2.getAttribute("FieldID").equals(tableFieldID)) {
-                thisIsComposedOfKey = true;
-                break;
-              }
-            }
-            if (thisIsComposedOfKey) {
-              relationshipAlreadyExist = false;
-              String tableKeyID = element1.getAttribute("ID");
-              for (int j = 0; j < nodeList3.getLength(); j++) {
-                element3 = (org.w3c.dom.Element) nodeList3.item(j);
-                if (element3.getAttribute("Table1ID").equals(tableID) && element3.getAttribute(
-                    "TableKey1ID").equals(tableKeyID)) {
-                  relationshipAlreadyExist = true;
-                  break;
-                }
-                if (element3.getAttribute("Table2ID").equals(tableID) && element3.getAttribute(
-                    "TableKey2ID").equals(tableKeyID)) {
-                  relationshipAlreadyExist = true;
-                  break;
-                }
-              }
-              if (relationshipAlreadyExist) {
-//								JOptionPane.showMessageDialog(jButtonTableFieldDataTypeChange, res.getString("S1920") + "\n"
-//										+ res.getString("S1922") + "\n"
-//										+ res.getString("S1924"));
-                if (!isWarningAcceptedForDataTypeUnmatch) {
-                  Object[] bts = {"OK", res.getString("S5763")};
-                  int rtn = JOptionPane.showOptionDialog(jButtonTableFieldDataTypeChange,
-                      res.getString("S1920") + "\n"
-                          + res.getString("S1922") + "\n" + res.getString("S1924"),
-                      res.getString("S1925"), JOptionPane.DEFAULT_OPTION,
-                      JOptionPane.INFORMATION_MESSAGE, null, bts, bts[0]);
-                  if (rtn == 1) {
-                    isWarningAcceptedForDataTypeUnmatch = true;
-                  }
-                }
-                break;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
 
   /**
    * Class of KanjiTextArea
    */
-  class KanjiTextArea extends JTextArea {
+  public class KanjiTextArea extends JTextArea {
 
     private static final long serialVersionUID = 1L;
 
     public KanjiTextArea() {
       super();
-      addFocusListener(new KanjiTextAreaListener());
+      addFocusListener(new xeadModeler.view.KanjiTextAreaListener(Modeler.this));
     }
 
-    class KanjiTextAreaListener implements FocusListener {
-
-      public void focusLost(FocusEvent event) {
-        focusLostHandler();
-      }
-
-      public void focusGained(FocusEvent event) {
-        focusGainedHandler();
-        lastFocusedTextArea = (KanjiTextArea) getFocusOwner();
-      }
-    }
 
     private void focusGainedHandler() {
       getInputContext().setCharacterSubsets(null);
@@ -40714,52 +40663,6 @@ public class Modeler extends JFrame {
 /// /////////////////////////////////////////////////////////////////////////////
 /// /////////////////////////////////////////////////////////////////////////////
 /// /////////////////////////////////////////////////////////////////////////////
-
-/**
- * Class of KanjiTextField
- */
-class KanjiTextField extends JTextField {
-
-  private static final long serialVersionUID = 1L;
-
-  public KanjiTextField() {
-    super();
-    addFocusListener(new KanjiTextFieldListener());
-  }
-
-  class KanjiTextFieldListener implements FocusListener {
-
-    public void focusLost(FocusEvent event) {
-      focusLostHandler();
-    }
-
-    public void focusGained(FocusEvent event) {
-      focusGainedHandler();
-    }
-  }
-
-  private void focusGainedHandler() {
-    getInputContext().setCharacterSubsets(null);
-    String lang = Locale.getDefault().getLanguage();
-    if (lang.equals("ja")) {
-      Character.Subset[] subsets = new Character.Subset[]{java.awt.im.InputSubset.KANJI};
-      getInputContext().setCharacterSubsets(subsets);
-    }
-    //if (lang.equals("ko")) {
-    //  Character.Subset[] subsets = new Character.Subset[] {java.awt.im.InputSubset.HANJA};
-    //  getInputContext().setCharacterSubsets(subsets);
-    //}
-    if (lang.equals("zh")) {
-      Character.Subset[] subsets = new Character.Subset[]{
-          java.awt.im.InputSubset.TRADITIONAL_HANZI};
-      getInputContext().setCharacterSubsets(subsets);
-    }
-  }
-
-  private void focusLostHandler() {
-    getInputContext().setCharacterSubsets(null);
-  }
-}
 
 /***************************************************************************
  * Action Adapter Classes                                                  *
@@ -44159,31 +44062,6 @@ class Modeler_jTableTableForeignUsageList_mouseAdapter extends java.awt.event.Mo
 
   public void mouseClicked(MouseEvent e) {
     adaptee.jTableTableForeignUsageList_mouseClicked(e);
-  }
-}
-
-class Modeler_FocusListener implements FocusListener {
-
-  String className;
-  Color ACTIVE_COLOR = new Color(49, 106, 197);
-  Color INACTIVE_COLOR = new Color(186, 186, 186);
-
-  public void focusLost(FocusEvent e) {
-    className = e.getComponent().getClass().getName();
-    if (className.equals("javax.swing.JTable")) {
-      JTable table = (JTable) e.getComponent();
-      table.setSelectionBackground(INACTIVE_COLOR);
-      table.setSelectionForeground(Color.black);
-    }
-  }
-
-  public void focusGained(FocusEvent e) {
-    className = e.getComponent().getClass().getName();
-    if (className.equals("javax.swing.JTable")) {
-      JTable table = (JTable) e.getComponent();
-      table.setSelectionBackground(ACTIVE_COLOR);
-      table.setSelectionForeground(Color.white);
-    }
   }
 }
 
