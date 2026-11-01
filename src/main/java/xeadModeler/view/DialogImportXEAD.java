@@ -41,6 +41,8 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 
 import xeadModeler.Modeler;
+import xeadModeler.model.XeadDocumentModel;
+import xeadModeler.model.json.XeadSystem;
 
 public class DialogImportXEAD extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -401,7 +403,7 @@ public class DialogImportXEAD extends JDialog {
 		XeadNode workNode;
 		NodeList workElementList;
 		String logFileName = "";
-		org.w3c.dom.Element lastElement;
+		Object lastElement;
 		int lastID = 0;
 
 		try {
@@ -472,7 +474,7 @@ public class DialogImportXEAD extends JDialog {
 					if (lastElement == null) {
 						lastID = 0;
 					} else {
-						lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+						lastID = Integer.parseInt(getIdFromObject(lastElement));
 					}
 				}
 				if (jRadioButtonTasks.isSelected()) {
@@ -481,7 +483,7 @@ public class DialogImportXEAD extends JDialog {
 					if (lastElement == null) {
 						lastID = 0;
 					} else {
-						lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+						lastID = Integer.parseInt(getIdFromObject(lastElement));
 					}
 				}
 				if (jRadioButtonDataflow.isSelected()) {
@@ -490,7 +492,7 @@ public class DialogImportXEAD extends JDialog {
 					if (lastElement == null) {
 						lastID = 0;
 					} else {
-						lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+						lastID = Integer.parseInt(getIdFromObject(lastElement));
 					}
 				}
 				blockElementInto.setAttribute("ID", Integer.toString(lastID + 1));
@@ -968,7 +970,8 @@ public class DialogImportXEAD extends JDialog {
 	}
 
 	void importDataflow() {
-		org.w3c.dom.Element workElement1, workElement2, newElement, lastElement;
+		org.w3c.dom.Element workElement1, workElement2, newElement;
+		Object lastElement;
 		NodeList workElementList;
 		int lastID;
 		String taskIDInto, roleIDInto;
@@ -1061,7 +1064,7 @@ public class DialogImportXEAD extends JDialog {
 				if (lastElement == null) {
 					lastID = 0;
 				} else {
-					lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+					lastID = Integer.parseInt(getIdFromObject(lastElement));
 				}
 				newElement.setAttribute("ID", Integer.toString(lastID + 1));
 				newElement.setAttribute("Name", workElement1.getAttribute("Name"));
@@ -1100,7 +1103,7 @@ public class DialogImportXEAD extends JDialog {
 				if (lastElement == null) {
 					lastID = 0;
 				} else {
-					lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+					lastID = Integer.parseInt(getIdFromObject(lastElement));
 				}
 				newElement.setAttribute("ID", Integer.toString(lastID + 1));
 				newElement.setAttribute("Name", workElement1.getAttribute("Name"));
@@ -1529,7 +1532,8 @@ public class DialogImportXEAD extends JDialog {
 	}
 
 	void updateTableDefinition(org.w3c.dom.Element elementFrom, org.w3c.dom.Element elementInto) {
-		org.w3c.dom.Element workElement1, workElement2, workElement3, lastElement;
+		org.w3c.dom.Element workElement1, workElement2, workElement3;
+		Object lastElement;
 		NodeList elementList;
 		int lastID = 0;
 		int checkCounter = 0;
@@ -1591,7 +1595,7 @@ public class DialogImportXEAD extends JDialog {
 				if (lastElement == null) {
 					lastID = 0;
 				} else {
-					lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+					lastID = Integer.parseInt(getIdFromObject(lastElement));
 				}
 				fieldID = Integer.toString(lastID + 1);
 				newElement.setAttribute("ID", fieldID);
@@ -1672,14 +1676,14 @@ public class DialogImportXEAD extends JDialog {
 				if (lastElement == null) {
 					lastElement = workElement2;
 				} else {
-					if (Integer.parseInt(workElement2.getAttribute("ID")) > Integer.parseInt(lastElement.getAttribute("ID"))) {
+					if (Integer.parseInt(workElement2.getAttribute("ID")) > Integer.parseInt(getIdFromObject(lastElement))) {
 						lastElement = workElement2;
 					}
 				}
 			}
 			if (checkCounter == 0 && lastElement != null) {
 				org.w3c.dom.Element childElement = frame_.domDocument.createElement("TableKey");
-				lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+				lastID = Integer.parseInt(getIdFromObject(lastElement));
 				childElement.setAttribute("ID", Integer.toString(lastID + 1));
 				childElement.setAttribute("Type", workElement1.getAttribute("Type"));
 				childElement.setAttribute("SortKey", workElement1.getAttribute("SortKey"));
@@ -1705,11 +1709,11 @@ public class DialogImportXEAD extends JDialog {
 		//Create Table Definition//
 		///////////////////////////
 		org.w3c.dom.Element newElement = frame_.domDocument.createElement("Table");
-		org.w3c.dom.Element lastElement = getLastDomElementOfTheType("Table");
+		Object lastElement = getLastDomElementOfTheType("Table");
 		if (lastElement == null) {
 			lastID = 0;
 		} else {
-			lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+			lastID = Integer.parseInt(getIdFromObject(lastElement));
 		}
 		newElement.setAttribute("ID", Integer.toString(lastID + 1));
 		newElement.setAttribute("Name", elementFrom.getAttribute("Name"));
@@ -1730,7 +1734,7 @@ public class DialogImportXEAD extends JDialog {
 			if (lastElement == null) {
 				lastID = 0;
 			} else {
-				lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+				lastID = Integer.parseInt(getIdFromObject(lastElement));
 			}
 			childElement.setAttribute("ID", Integer.toString(lastID + 1));
 			childElement.setAttribute("Name", workElement1.getAttribute("Name"));
@@ -1810,11 +1814,11 @@ public class DialogImportXEAD extends JDialog {
 				} catch (IOException ex) {}
 			} else {
 				org.w3c.dom.Element newElement = frame_.domDocument.createElement("Relationship");
-				org.w3c.dom.Element lastElement = getLastDomElementOfTheType("Relationship");
+				Object lastElement = getLastDomElementOfTheType("Relationship");
 				if (lastElement == null) {
 					lastID = 0;
 				} else {
-					lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+					lastID = Integer.parseInt(getIdFromObject(lastElement));
 				}
 				newElement.setAttribute("ID", Integer.toString(lastID + 1));
 				newElement.setAttribute("Table1ID", tableID1Into);
@@ -2079,11 +2083,11 @@ public class DialogImportXEAD extends JDialog {
 		//Create Function Definition//
 		//////////////////////////////
 		org.w3c.dom.Element newElement = frame_.domDocument.createElement("Function");
-		org.w3c.dom.Element lastElement = getLastDomElementOfTheType("Function");
+		Object lastElement = getLastDomElementOfTheType("Function");
 		if (lastElement == null) {
 			lastID = 0;
 		} else {
-			lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+			lastID = Integer.parseInt(getIdFromObject(lastElement));
 		}
 		newElement.setAttribute("ID", Integer.toString(lastID + 1));
 		newElement.setAttribute("Name", elementFrom.getAttribute("Name"));
@@ -2263,11 +2267,11 @@ public class DialogImportXEAD extends JDialog {
 		//Create Task Definition//
 		//////////////////////////
 		org.w3c.dom.Element newElement = frame_.domDocument.createElement("Task");
-		org.w3c.dom.Element lastElement = getLastDomElementOfTheType("Task");
+		Object lastElement = getLastDomElementOfTheType("Task");
 		if (lastElement == null) {
 			lastID = 0;
 		} else {
-			lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+			lastID = Integer.parseInt(getIdFromObject(lastElement));
 		}
 		newID = Integer.toString(lastID + 1);
 		newElement.setAttribute("ID", newID);
@@ -2565,11 +2569,11 @@ public class DialogImportXEAD extends JDialog {
 			if (checkCount == 0) {
 				org.w3c.dom.Element newElement = frame_.domDocument.createElement(tagName);
 
-				org.w3c.dom.Element lastElement = getLastDomElementOfTheType(tagName);
+				Object lastElement = getLastDomElementOfTheType(tagName);
 				if (lastElement == null) {
 					lastID = 0;
 				} else {
-					lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+					lastID = Integer.parseInt(getIdFromObject(lastElement));
 				}
 				newElement.setAttribute("ID", Integer.toString(lastID + 1));
 				newElement.setAttribute("SortKey", elementFrom.getAttribute("SortKey"));
@@ -2820,25 +2824,32 @@ public class DialogImportXEAD extends JDialog {
 		return result;
 	}
 
-	org.w3c.dom.Element getLastDomElementOfTheType(String tagName) {
-		org.w3c.dom.Element element = null;
-		org.w3c.dom.Element lastDomElement = null;
-		int lastDomElementID = 0;
-		int elementID = 0;
-		NodeList nodeList = frame_.domDocument.getElementsByTagName(tagName);
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			element = (org.w3c.dom.Element)nodeList.item(i);
-			if (lastDomElement == null) {
-				lastDomElement = element;
-			} else {
-				elementID = Integer.parseInt(element.getAttribute("ID"));
-				lastDomElementID = Integer.parseInt(lastDomElement.getAttribute("ID"));
-				if (elementID > lastDomElementID) {
-					lastDomElement = element;
-				}
-			}
+	Object getLastDomElementOfTheType(String tagName) {
+		XeadDocumentModel xeadDocumentModel = frame_.getXeadDocumentModel();
+		xeadModeler.model.json.XeadSystem system = xeadDocumentModel.getXeadSystem();
+		if (system == null) {
+			return null;
 		}
-		return lastDomElement;
+		return system.getLastElementOfTheType(tagName);
+	}
+
+	/**
+	 * Get ID attribute value from a JSON model object using reflection
+	 *
+	 * @param obj :JSON model object
+	 * @return String :ID value, or empty string if not found
+	 */
+	String getIdFromObject(Object obj) {
+		if (obj == null) {
+			return "";
+		}
+		try {
+			java.lang.reflect.Method method = obj.getClass().getMethod("getId");
+			Object result = method.invoke(obj);
+			return result != null ? result.toString() : "";
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 	int getNextIDOfFunctionIOs() {

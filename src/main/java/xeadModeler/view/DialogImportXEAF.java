@@ -41,6 +41,8 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 
 import xeadModeler.Modeler;
+import xeadModeler.model.XeadDocumentModel;
+import xeadModeler.model.json.XeadSystem;
 
 public class DialogImportXEAF extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -713,11 +715,11 @@ public class DialogImportXEAF extends JDialog {
 		//Create Table Definition//
 		///////////////////////////
 		org.w3c.dom.Element newElement = frame_.domDocument.createElement("Table");
-		org.w3c.dom.Element lastElement = getLastDomElementOfTheType("Table");
+		Object lastElement = getLastDomElementOfTheType("Table");
 		if (lastElement == null) {
 			lastID = 0;
 		} else {
-			lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+			lastID = Integer.parseInt(getIdFromObject(lastElement));
 		}
 		tableID = Integer.toString(lastID + 1);
 		newElement.setAttribute("ID", tableID);
@@ -740,7 +742,7 @@ public class DialogImportXEAF extends JDialog {
 			if (lastElement == null) {
 				lastID = 0;
 			} else {
-				lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+				lastID = Integer.parseInt(getIdFromObject(lastElement));
 			}
 			childElement.setAttribute("ID", Integer.toString(lastID + 1));
 			childElement.setAttribute("Name", workElement1.getAttribute("Name"));
@@ -866,11 +868,11 @@ public class DialogImportXEAF extends JDialog {
 			}
 			if (!isAlreadyExisting) {
 				org.w3c.dom.Element newElement = frame_.domDocument.createElement("FunctionType");
-				org.w3c.dom.Element lastElement = getLastDomElementOfTheType("FunctionType");
+				Object lastElement = getLastDomElementOfTheType("FunctionType");
 				if (lastElement == null) {
 					lastID = 0;
 				} else {
-					lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+					lastID = Integer.parseInt(getIdFromObject(lastElement));
 				}
 				idOfFunctionType = Integer.toString(lastID + 1);
 				newElement.setAttribute("ID", idOfFunctionType);
@@ -891,11 +893,11 @@ public class DialogImportXEAF extends JDialog {
 		//Create Function Definition//
 		//////////////////////////////
 		org.w3c.dom.Element newElement = frame_.domDocument.createElement("Function");
-		org.w3c.dom.Element lastElement = getLastDomElementOfTheType("Function");
+		Object lastElement = getLastDomElementOfTheType("Function");
 		if (lastElement == null) {
 			lastID = 0;
 		} else {
-			lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+			lastID = Integer.parseInt(getIdFromObject(lastElement));
 		}
 		newElement.setAttribute("ID", Integer.toString(lastID + 1));
 		newElement.setAttribute("Name", elementFrom.getAttribute("Name"));
@@ -1271,11 +1273,11 @@ public class DialogImportXEAF extends JDialog {
 		}
 		if (!isAlreadyExisting) {
 			org.w3c.dom.Element newElement = frame_.domDocument.createElement("DataType");
-			org.w3c.dom.Element lastElement = getLastDomElementOfTheType("DataType");
+			Object lastElement = getLastDomElementOfTheType("DataType");
 			if (lastElement == null) {
 				lastID = 0;
 			} else {
-				lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+				lastID = Integer.parseInt(getIdFromObject(lastElement));
 			}
 			idOfDataType = Integer.toString(lastID + 1);
 			newElement.setAttribute("ID", idOfDataType);
@@ -1327,25 +1329,32 @@ public class DialogImportXEAF extends JDialog {
 		return convertedElement;
 	}
 
-	org.w3c.dom.Element getLastDomElementOfTheType(String tagName) {
-		org.w3c.dom.Element element = null;
-		org.w3c.dom.Element lastDomElement = null;
-		int lastDomElementID = 0;
-		int elementID = 0;
-		NodeList nodeList = frame_.domDocument.getElementsByTagName(tagName);
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			element = (org.w3c.dom.Element)nodeList.item(i);
-			if (lastDomElement == null) {
-				lastDomElement = element;
-			} else {
-				elementID = Integer.parseInt(element.getAttribute("ID"));
-				lastDomElementID = Integer.parseInt(lastDomElement.getAttribute("ID"));
-				if (elementID > lastDomElementID) {
-					lastDomElement = element;
-				}
-			}
+	Object getLastDomElementOfTheType(String tagName) {
+		XeadDocumentModel xeadDocumentModel = frame_.getXeadDocumentModel();
+		xeadModeler.model.json.XeadSystem system = xeadDocumentModel.getXeadSystem();
+		if (system == null) {
+			return null;
 		}
-		return lastDomElement;
+		return system.getLastElementOfTheType(tagName);
+	}
+
+	/**
+	 * Get ID attribute value from a JSON model object using reflection
+	 *
+	 * @param obj :JSON model object
+	 * @return String :ID value, or empty string if not found
+	 */
+	String getIdFromObject(Object obj) {
+		if (obj == null) {
+			return "";
+		}
+		try {
+			java.lang.reflect.Method method = obj.getClass().getMethod("getId");
+			Object result = method.invoke(obj);
+			return result != null ? result.toString() : "";
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 	void jButtonCancel_actionPerformed(ActionEvent e) {

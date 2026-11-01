@@ -40,6 +40,8 @@ import javax.swing.event.*;
 import org.w3c.dom.*;
 
 import xeadModeler.Modeler;
+import xeadModeler.model.XeadDocumentModel;
+import xeadModeler.model.json.XeadSystem;
 
 public class DialogImportSQL extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -527,7 +529,7 @@ public class DialogImportSQL extends JDialog {
 	}
 
 	org.w3c.dom.Element createTableDefinition(String tableName, String tableAttributes) {
-		org.w3c.dom.Element lastElement;
+		Object lastElement;
 		int lastID = 0;
 		String[] fieldArray = new String[1000];
 
@@ -539,7 +541,7 @@ public class DialogImportSQL extends JDialog {
 		if (lastElement == null) {
 			lastID = 0;
 		} else {
-			lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+			lastID = Integer.parseInt(getIdFromObject(lastElement));
 		}
 		tableElement.setAttribute("ID", Integer.toString(lastID + 1));
 		tableElement.setAttribute("Name", tableName);
@@ -660,7 +662,7 @@ public class DialogImportSQL extends JDialog {
 		String notNullValue = "false";
 		String defaultValue = "";
 		String commentValue = "";
-		org.w3c.dom.Element lastElement;
+		Object lastElement;
 		int lastID = 0;
 
 		fieldNameValue = trimBlankFromValue(fieldAttrString);
@@ -727,7 +729,7 @@ public class DialogImportSQL extends JDialog {
 		if (lastElement == null) {
 			lastID = 0;
 		} else {
-			lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+			lastID = Integer.parseInt(getIdFromObject(lastElement));
 		}
 		fieldElement.setAttribute("ID", Integer.toString(lastID + 1));
 		if (jCheckBoxCommentControl.isSelected()) {
@@ -764,7 +766,8 @@ public class DialogImportSQL extends JDialog {
 	}
 
 	String getDataTypeID(String fieldAttrString) {
-		org.w3c.dom.Element workElement, lastElement;
+		org.w3c.dom.Element workElement;
+		Object lastElement;
 		org.w3c.dom.Node nextSiblingNode;
 		NodeList elementList;
 		int lastID = 0;
@@ -842,7 +845,7 @@ public class DialogImportSQL extends JDialog {
 							if (lastElement == null) {
 								lastID = 0;
 							} else {
-								lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+								lastID = Integer.parseInt(getIdFromObject(lastElement));
 							}
 							newElement.setAttribute("ID", Integer.toString(lastID + 1));
 							newElement.setAttribute("Name", typeName);
@@ -869,7 +872,8 @@ public class DialogImportSQL extends JDialog {
 								newElement.setAttribute("Length", "256");
 							}
 							newElement.setAttribute("SQLExpression", sqlExpression);
-							nextSiblingNode = lastElement.getNextSibling();
+							// TODO: JSON migration - getNextSibling is XML-specific
+      nextSiblingNode = null;
 							systemElement.insertBefore(newElement, nextSiblingNode);
 							dataTypeID = newElement.getAttribute("ID");
 						}
@@ -1053,11 +1057,11 @@ public class DialogImportSQL extends JDialog {
 
 									if (!relationshipType.equals("")) {
 										org.w3c.dom.Element newElement1 = frame_.domDocument.createElement("Relationship");
-										org.w3c.dom.Element lastElement = getLastDomElementOfTheType("Relationship");
+										Object lastElement = getLastDomElementOfTheType("Relationship");
 										if (lastElement == null) {
 											lastID = 0;
 										} else {
-											lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+											lastID = Integer.parseInt(getIdFromObject(lastElement));
 										}
 										newElement1.setAttribute("ID", Integer.toString(lastID + 1));
 										newElement1.setAttribute("Table1ID", table1ID);
@@ -1278,25 +1282,32 @@ public class DialogImportSQL extends JDialog {
 		return formattedNumberString;
 	}
 
-	org.w3c.dom.Element getLastDomElementOfTheType(String tagName) {
-		org.w3c.dom.Element element = null;
-		org.w3c.dom.Element lastDomElement = null;
-		int lastDomElementID = 0;
-		int elementID = 0;
-		NodeList nodeList = frame_.domDocument.getElementsByTagName(tagName);
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			element = (org.w3c.dom.Element)nodeList.item(i);
-			if (lastDomElement == null) {
-				lastDomElement = element;
-			} else {
-				elementID = Integer.parseInt(element.getAttribute("ID"));
-				lastDomElementID = Integer.parseInt(lastDomElement.getAttribute("ID"));
-				if (elementID > lastDomElementID) {
-					lastDomElement = element;
-				}
-			}
+	Object getLastDomElementOfTheType(String tagName) {
+		XeadDocumentModel xeadDocumentModel = frame_.getXeadDocumentModel();
+		xeadModeler.model.json.XeadSystem system = xeadDocumentModel.getXeadSystem();
+		if (system == null) {
+			return null;
 		}
-		return lastDomElement;
+		return system.getLastElementOfTheType(tagName);
+	}
+
+	/**
+	 * Get ID attribute value from a JSON model object using reflection
+	 *
+	 * @param obj :JSON model object
+	 * @return String :ID value, or empty string if not found
+	 */
+	String getIdFromObject(Object obj) {
+		if (obj == null) {
+			return "";
+		}
+		try {
+			java.lang.reflect.Method method = obj.getClass().getMethod("getId");
+			Object result = method.invoke(obj);
+			return result != null ? result.toString() : "";
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 	String getNextKeyIDOfTheTable(org.w3c.dom.Element tableElement) {

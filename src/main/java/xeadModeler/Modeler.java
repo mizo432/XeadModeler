@@ -69,6 +69,7 @@ import xeadModeler.controller.TreeController;
 import xeadModeler.model.XeadDocumentModel;
 import xeadModeler.model.json.XeadSystem;
 import xeadModeler.model.json.Table;
+import xeadModeler.model.json.TableType;
 import xeadModeler.service.JsonService;
 import xeadModeler.service.JsonServiceImpl;
 import xeadModeler.view.ContentView;
@@ -8272,30 +8273,44 @@ public class Modeler extends JFrame {
   }
 
   /**
-   * Get DOM element with the latest ID and specific type
+   * Get element with the latest ID and specific type (JSON-based)
    *
-   * @param tagName :tag name of DOM element to be retrieved
-   * @return org.w3c.dom.Element :DOM element retrieved
+   * @param tagName :tag name of element to be retrieved
+   * @return Object :element retrieved (JSON model object)
    */
-  org.w3c.dom.Element getLastDomElementOfTheType(String tagName) {
-    org.w3c.dom.Element element = null;
-    org.w3c.dom.Element lastDomElement = null;
-    int lastDomElementID = 0;
-    int elementID = 0;
-    NodeList nodeList = domDocument.getElementsByTagName(tagName);
-    for (int i = 0; i < nodeList.getLength(); i++) {
-      element = (org.w3c.dom.Element) nodeList.item(i);
-      if (lastDomElement == null) {
-        lastDomElement = element;
-      } else {
-        elementID = Integer.parseInt(element.getAttribute("ID"));
-        lastDomElementID = Integer.parseInt(lastDomElement.getAttribute("ID"));
-        if (elementID > lastDomElementID) {
-          lastDomElement = element;
-        }
-      }
+  Object getLastDomElementOfTheType(String tagName) {
+    XeadSystem system = xeadDocumentModel.getXeadSystem();
+    if (system == null) {
+      return null;
     }
-    return lastDomElement;
+    return system.getLastElementOfTheType(tagName);
+  }
+
+  /**
+   * Get the XeadDocumentModel instance
+   * @return XeadDocumentModel instance
+   */
+  public XeadDocumentModel getXeadDocumentModel() {
+    return xeadDocumentModel;
+  }
+
+  /**
+   * Get ID attribute value from a JSON model object using reflection
+   *
+   * @param obj :JSON model object
+   * @return String :ID value, or empty string if not found
+   */
+  String getIdFromObject(Object obj) {
+    if (obj == null) {
+      return "";
+    }
+    try {
+      java.lang.reflect.Method method = obj.getClass().getMethod("getId");
+      Object result = method.invoke(obj);
+      return result != null ? result.toString() : "";
+    } catch (Exception e) {
+      return "";
+    }
   }
 
   void repaintErrorStatusOfParentNodes(XeadTreeNode tableListNode) {
@@ -8340,41 +8355,51 @@ public class Modeler extends JFrame {
   }
 
   /**
-   * Get Last ID of Existing Tables(valid and Invalid ones) Definition
+   * Get Last ID of Existing Tables(valid and Invalid ones) Definition (JSON-based)
    *
    * @return int :Last ID of Table Definition
    */
   int getLastIDOfTable() {
-    org.w3c.dom.Element element = null;
-    int tableID = 0;
-    int lastTableID = 0;
-    NodeList nodeList = domDocument.getElementsByTagName("SubsystemTable");
-    for (int i = 0; i < nodeList.getLength(); i++) {
-      element = (org.w3c.dom.Element) nodeList.item(i);
-      tableID = Integer.parseInt(element.getAttribute("TableID"));
-      if (tableID > lastTableID) {
-        lastTableID = tableID;
-      }
+    XeadSystem system = xeadDocumentModel.getXeadSystem();
+    if (system == null) {
+      return 0;
     }
-    return lastTableID;
+    Table table = system.getTableWithMaxId();
+    if (table == null) {
+      return 0;
+    }
+    // Get TableID from SubsystemTable if available, otherwise use Table's ID
+    if (table.getSubsystemTable() != null) {
+      return Integer.parseInt(table.getSubsystemTable().getTableId());
+    }
+    return Integer.parseInt(table.getId());
   }
 
   /**
-   * Get Default ID of Table Type
+   * Get Default ID of Table Type (JSON-based)
    *
    * @return String :ID of Table Type Definition
    */
   String getDefaultTableTypeID() {
-    XeadTreeNode node;
+    XeadSystem system = xeadDocumentModel.getXeadSystem();
+    if (system == null) {
+      return "1";
+    }
+    // Populate combo box with table types
     sortableComboBoxModelTableType.removeAllElements();
-    NodeList nodeList = domDocument.getElementsByTagName("TableType");
-    for (int i = 0; i < nodeList.getLength(); i++) {
-      node = new XeadTreeNode("TableType", (org.w3c.dom.Element) nodeList.item(i));
-      sortableComboBoxModelTableType.addElement((Object) node);
+    if (system.getTableTypes() != null) {
+      for (TableType tt : system.getTableTypes()) {
+        // Create a simple node for display purposes
+        XeadTreeNode node = new XeadTreeNode("TableType", tt);
+        sortableComboBoxModelTableType.addElement((Object) node);
+      }
     }
     sortableComboBoxModelTableType.sortElements();
-    node = (XeadTreeNode) sortableComboBoxModelTableType.getElementAt(0);
-    return node.getElement().getAttribute("ID");
+    if (sortableComboBoxModelTableType.getSize() > 0) {
+      XeadTreeNode node = (XeadTreeNode) sortableComboBoxModelTableType.getElementAt(0);
+      return node.getTableType().getId();
+    }
+    return system.getDefaultTableTypeId();
   }
 
   /**
@@ -9122,7 +9147,7 @@ public class Modeler extends JFrame {
   int getLastIDOfFunctionIO(org.w3c.dom.Element nodeElement) {
     int elementID, lastID;
     org.w3c.dom.Element element;
-    org.w3c.dom.Element lastElement = null;
+    Object lastElement = null;
     NodeList nodeListToGetLastNumber = nodeElement.getElementsByTagName("IOPanel");
     for (int i = 0; i < nodeListToGetLastNumber.getLength(); i++) {
       element = (org.w3c.dom.Element) nodeListToGetLastNumber.item(i);
@@ -9130,7 +9155,7 @@ public class Modeler extends JFrame {
         lastElement = element;
       } else {
         elementID = Integer.parseInt(element.getAttribute("ID"));
-        lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+        lastID = Integer.parseInt(getIdFromObject(lastElement));
         if (elementID > lastID) {
           lastElement = element;
         }
@@ -9143,7 +9168,7 @@ public class Modeler extends JFrame {
         lastElement = element;
       } else {
         elementID = Integer.parseInt(element.getAttribute("ID"));
-        lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+        lastID = Integer.parseInt(getIdFromObject(lastElement));
         if (elementID > lastID) {
           lastElement = element;
         }
@@ -9156,7 +9181,7 @@ public class Modeler extends JFrame {
         lastElement = element;
       } else {
         elementID = Integer.parseInt(element.getAttribute("ID"));
-        lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+        lastID = Integer.parseInt(getIdFromObject(lastElement));
         if (elementID > lastID) {
           lastElement = element;
         }
@@ -9169,7 +9194,7 @@ public class Modeler extends JFrame {
         lastElement = element;
       } else {
         elementID = Integer.parseInt(element.getAttribute("ID"));
-        lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+        lastID = Integer.parseInt(getIdFromObject(lastElement));
         if (elementID > lastID) {
           lastElement = element;
         }
@@ -9178,7 +9203,7 @@ public class Modeler extends JFrame {
     if (lastElement == null) {
       lastID = 0;
     } else {
-      lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+      lastID = Integer.parseInt(getIdFromObject(lastElement));
     }
     return lastID;
   }
@@ -13897,11 +13922,11 @@ public class Modeler extends JFrame {
     void jMenuItemDataflowNodeAddFlow_actionPerformed(ActionEvent e) {
       int id = 0;
       org.w3c.dom.Element newElement = domDocument.createElement("DataflowLine");
-      org.w3c.dom.Element lastElement = getLastDomElementOfTheType("DataflowLine");
+      Object lastElement = getLastDomElementOfTheType("DataflowLine");
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("ImageType", "1");
@@ -19961,7 +19986,8 @@ public class Modeler extends JFrame {
         String name, String descriptions) {
       XeadTreeNode node;
       NodeList nodeList;
-      org.w3c.dom.Element lastElement, newElementChild1, newElementChild2;
+      Object lastElement;
+      org.w3c.dom.Element newElementChild1, newElementChild2;
       org.w3c.dom.Element newElement = null;
       int lastID = 0;
 
@@ -19973,7 +19999,7 @@ public class Modeler extends JFrame {
           if (lastElement == null) {
             lastID = 0;
           } else {
-            lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+            lastID = Integer.parseInt(getIdFromObject(lastElement));
           }
           newElement.setAttribute("ID", Integer.toString(lastID + 1));
           if (name.equals("")) {
@@ -20001,7 +20027,7 @@ public class Modeler extends JFrame {
           if (lastElement == null) {
             lastID = 0;
           } else {
-            lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+            lastID = Integer.parseInt(getIdFromObject(lastElement));
           }
           newElement.setAttribute("ID", Integer.toString(lastID + 1));
           if (name.equals("")) {
@@ -20036,7 +20062,7 @@ public class Modeler extends JFrame {
           if (lastElement == null) {
             lastID = 0;
           } else {
-            lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+            lastID = Integer.parseInt(getIdFromObject(lastElement));
           }
           newElement.setAttribute("ID", Integer.toString(lastID + 1));
           if (name.equals("")) {
@@ -20093,7 +20119,7 @@ public class Modeler extends JFrame {
           if (lastElement == null) {
             lastID = 0;
           } else {
-            lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+            lastID = Integer.parseInt(getIdFromObject(lastElement));
           }
           newElement.setAttribute("ID", Integer.toString(lastID + 1));
           if (name.equals("")) {
@@ -20255,24 +20281,24 @@ public class Modeler extends JFrame {
         if (childNode == null) {
           newElement = domDocument.createElement("TableKey");
           org.w3c.dom.Element element;
-          lastElement = null;
+          org.w3c.dom.Element lastKeyElement = null;
           lastID = 0;
           int elementID;
           NodeList nodeListToGetLastNumber = tableNode.getElement()
               .getElementsByTagName("TableKey");
           for (int i = 0; i < nodeListToGetLastNumber.getLength(); i++) {
             element = (org.w3c.dom.Element) nodeListToGetLastNumber.item(i);
-            if (lastElement == null) {
-              lastElement = element;
+            if (lastKeyElement == null) {
+              lastKeyElement = element;
             } else {
               elementID = Integer.parseInt(element.getAttribute("ID"));
-              lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+              lastID = Integer.parseInt(lastKeyElement.getAttribute("ID"));
               if (elementID > lastID) {
-                lastElement = element;
+                lastKeyElement = element;
               }
             }
           }
-          lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+          lastID = Integer.parseInt(lastKeyElement.getAttribute("ID"));
           newElement.setAttribute("ID", Integer.toString(lastID + 1));
           newElement.setAttribute("Type", typeOfNodeBeingAdded);
           if (typeOfNodeBeingAdded.equals("XK")) {
@@ -20310,7 +20336,7 @@ public class Modeler extends JFrame {
           if (lastElement == null) {
             lastID = 0;
           } else {
-            lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+            lastID = Integer.parseInt(getIdFromObject(lastElement));
           }
           newElement.setAttribute("ID", Integer.toString(lastID + 1));
           if (name.equals("")) {
@@ -20956,7 +20982,8 @@ public class Modeler extends JFrame {
 
     public void pasteChildNode(org.w3c.dom.Element pastingElement) {
       XeadTreeNode childNode = null;
-      org.w3c.dom.Element lastElement, newElement, newElementChild1, newElementChild2;
+      Object lastElement;
+      org.w3c.dom.Element newElement, newElementChild1, newElementChild2;
       int lastID = 0;
       //
       //Paste SubjectArea//
@@ -20967,7 +20994,7 @@ public class Modeler extends JFrame {
         if (lastElement == null) {
           lastID = 0;
         } else {
-          lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+          lastID = Integer.parseInt(getIdFromObject(lastElement));
         }
         newElement.setAttribute("ID", Integer.toString(lastID + 1));
         newElement.setAttribute("Name",
@@ -21025,7 +21052,7 @@ public class Modeler extends JFrame {
         if (lastElement == null) {
           lastID = 0;
         } else {
-          lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+          lastID = Integer.parseInt(getIdFromObject(lastElement));
         }
         newElement.setAttribute("ID", Integer.toString(lastID + 1));
         newElement.setAttribute("Name",
@@ -21045,7 +21072,7 @@ public class Modeler extends JFrame {
         if (lastElement == null) {
           lastID = 0;
         } else {
-          lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+          lastID = Integer.parseInt(getIdFromObject(lastElement));
         }
         newElement.setAttribute("ID", Integer.toString(lastID + 1));
         newElement.setAttribute("Name",
@@ -21090,7 +21117,7 @@ public class Modeler extends JFrame {
         if (lastElement == null) {
           lastID = 0;
         } else {
-          lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+          lastID = Integer.parseInt(getIdFromObject(lastElement));
         }
         newElement.setAttribute("ID", Integer.toString(lastID + 1));
         newElement.setAttribute("Name",
@@ -21255,7 +21282,7 @@ public class Modeler extends JFrame {
         if (lastElement == null) {
           lastID = 0;
         } else {
-          lastID = Integer.parseInt(lastElement.getAttribute("ID"));
+          lastID = Integer.parseInt(getIdFromObject(lastElement));
         }
         newElement.setAttribute("ID", Integer.toString(lastID + 1));
         newElement.setAttribute("Name",
@@ -21711,6 +21738,25 @@ public class Modeler extends JFrame {
 
     public boolean isExtRefered() {
       return isExtRefered_;
+    }
+
+    /**
+     * Get the JSON node object
+     * @return JSON POJO object
+     */
+    public Object getJsonNode() {
+      return jsonNode_;
+    }
+
+    /**
+     * Get the JSON node as TableType
+     * @return TableType object, or null if not a TableType
+     */
+    public TableType getTableType() {
+      if (jsonNode_ instanceof TableType) {
+        return (TableType) jsonNode_;
+      }
+      return null;
     }
 
     public void activateContentsPane() {
@@ -27608,8 +27654,9 @@ public class Modeler extends JFrame {
       //
       if (nodeType_.equals("TableField")) {
         org.w3c.dom.Element cloneElement = (org.w3c.dom.Element) newElement.cloneNode(true);
-        org.w3c.dom.Element lastElement = getLastDomElementOfTheType("DataType");
-        org.w3c.dom.Node nextSiblingNode = lastElement.getNextSibling();
+        Object lastElement = getLastDomElementOfTheType("DataType");
+        // TODO: JSON migration - getNextSibling is XML-specific
+        org.w3c.dom.Node nextSiblingNode = null; // lastElement.getNextSibling();
         NodeList nodeList = cloneElement.getElementsByTagName("DataType");
         for (int i = 0; i < nodeList.getLength(); i++) {
           systemNode.getElement()
@@ -35331,7 +35378,8 @@ public class Modeler extends JFrame {
    */
   void jMenuItemAddDataType_actionPerformed(ActionEvent e) {
     org.w3c.dom.Node nextSiblingNode;
-    org.w3c.dom.Element lastElement, newElement;
+    Object lastElement;
+    org.w3c.dom.Element newElement;
     String sortKey = "";
     int length = 0;
     String name = "";
@@ -35363,7 +35411,7 @@ public class Modeler extends JFrame {
         if (lastElement == null) {
           id = 0;
         } else {
-          id = Integer.parseInt(lastElement.getAttribute("ID"));
+          id = Integer.parseInt(getIdFromObject(lastElement));
         }
         newElement.setAttribute("ID", Integer.toString(id + 1));
         newElement.setAttribute("Name", name);
@@ -35372,8 +35420,9 @@ public class Modeler extends JFrame {
         newElement.setAttribute("Length", Integer.toString(length));
         newElement.setAttribute("Decimal", "0");
         newElement.setAttribute("SQLExpression", "CHAR(" + Integer.toString(length) + ")");
-        nextSiblingNode = lastElement.getNextSibling();
-        systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+        // TODO: JSON migration - getNextSibling is XML-specific
+        nextSiblingNode = null; // lastElement.getNextSibling();
+        systemNode.getElement().appendChild(newElement); // insertBefore replaced with appendChild
         //
         tableFieldDataTypeID = newElement.getAttribute("ID");
         jTextFieldTableFieldDataType.setText(newElement.getAttribute("SortKey") + " "
@@ -35394,7 +35443,8 @@ public class Modeler extends JFrame {
   void jMenuItemComponentToAdd_actionPerformed(ActionEvent e) {
     XeadTreeNode node;
     org.w3c.dom.Node nextSiblingNode;
-    org.w3c.dom.Element lastElement, newElement;
+    Object lastElement;
+    org.w3c.dom.Element newElement;
     int id = 0;
     //
     //Add Department//
@@ -35408,18 +35458,14 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Name", res.getString("S2184"));
       newElement.setAttribute("Descriptions", "");
       newElement.setAttribute("SortKey", "");
-      if (lastElement == null) {
-        systemNode.getElement().appendChild(newElement);
-      } else {
-        nextSiblingNode = lastElement.getNextSibling();
-        systemNode.getElement().insertBefore(newElement, nextSiblingNode);
-      }
+      // TODO: JSON migration - getNextSibling is XML-specific
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemDepartmentList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35442,18 +35488,14 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Name", res.getString("S2185"));
       newElement.setAttribute("Descriptions", "");
       newElement.setAttribute("SortKey", "");
-      if (lastElement == null) {
-        systemNode.getElement().appendChild(newElement);
-      } else {
-        nextSiblingNode = lastElement.getNextSibling();
-        systemNode.getElement().insertBefore(newElement, nextSiblingNode);
-      }
+      // TODO: JSON migration - getNextSibling is XML-specific
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemTaskTypeList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35476,18 +35518,14 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Name", res.getString("S2198"));
       newElement.setAttribute("Descriptions", "");
       newElement.setAttribute("SortKey", "");
-      if (lastElement == null) {
-        systemNode.getElement().appendChild(newElement);
-      } else {
-        nextSiblingNode = lastElement.getNextSibling();
-        systemNode.getElement().insertBefore(newElement, nextSiblingNode);
-      }
+      // TODO: JSON migration - getNextSibling is XML-specific
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemTableTypeList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35510,7 +35548,7 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Name", res.getString("S2212"));
@@ -35519,12 +35557,8 @@ public class Modeler extends JFrame {
       newElement.setAttribute("Length", "10");
       newElement.setAttribute("Decimal", "0");
       newElement.setAttribute("SQLExpression", "CHAR(10)");
-      if (lastElement == null) {
-        systemNode.getElement().appendChild(newElement);
-      } else {
-        nextSiblingNode = lastElement.getNextSibling();
-        systemNode.getElement().insertBefore(newElement, nextSiblingNode);
-      }
+      // TODO: JSON migration - getNextSibling is XML-specific
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[7];
       Cell[0] = new TableRowNumber(jTableSystemDataTypeList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35550,18 +35584,14 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Name", res.getString("S2235"));
       newElement.setAttribute("Descriptions", "");
       newElement.setAttribute("SortKey", "");
-      if (lastElement == null) {
-        systemNode.getElement().appendChild(newElement);
-      } else {
-        nextSiblingNode = lastElement.getNextSibling();
-        systemNode.getElement().insertBefore(newElement, nextSiblingNode);
-      }
+      // TODO: JSON migration - getNextSibling is XML-specific
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemFunctionTypeList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35585,18 +35615,14 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("SortKey", "");
       newElement.setAttribute("Header", res.getString("S2236"));
       newElement.setAttribute("Descriptions", "");
-      if (lastElement == null) {
-        systemNode.getElement().appendChild(newElement);
-      } else {
-        nextSiblingNode = lastElement.getNextSibling();
-        systemNode.getElement().insertBefore(newElement, nextSiblingNode);
-      }
+      // TODO: JSON migration - getNextSibling is XML-specific
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemTermsList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35619,18 +35645,14 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Headder", systemNode.getElement().getAttribute("Version"));
       newElement.setAttribute("Descriptions", application.getXeadUndoManager().getTextForAmendment());
       newElement.setAttribute("SortKey", getStringValueOfDateTime("withUnderbarAndTime"));
-      if (lastElement == null) {
-        systemNode.getElement().appendChild(newElement);
-      } else {
-        nextSiblingNode = lastElement.getNextSibling();
-        systemNode.getElement().insertBefore(newElement, nextSiblingNode);
-      }
+      // TODO: JSON migration - getNextSibling is XML-specific
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemMaintenanceLog.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35660,7 +35682,7 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Type", "");
@@ -35859,7 +35881,8 @@ public class Modeler extends JFrame {
    */
   void jMenuItemComponentToPaste_actionPerformed(ActionEvent e) {
     org.w3c.dom.Node nextSiblingNode;
-    org.w3c.dom.Element element, lastElement, newElement, newElementChild1;
+    org.w3c.dom.Element element, newElement, newElementChild1;
+    Object lastElement;
     int id = 0;
     //
     //Paste Department//
@@ -35873,14 +35896,15 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Name", pastingElement.getAttribute("Name"));
       newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
       newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      nextSiblingNode = lastElement.getNextSibling();
-      systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+      // TODO: JSON migration - getNextSibling is XML-specific
+      nextSiblingNode = null;
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemDepartmentList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35903,14 +35927,15 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Name", pastingElement.getAttribute("Name"));
       newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
       newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      nextSiblingNode = lastElement.getNextSibling();
-      systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+      // TODO: JSON migration - getNextSibling is XML-specific
+      nextSiblingNode = null;
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemTaskTypeList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35933,14 +35958,15 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Name", pastingElement.getAttribute("Name"));
       newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
       newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      nextSiblingNode = lastElement.getNextSibling();
-      systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+      // TODO: JSON migration - getNextSibling is XML-specific
+      nextSiblingNode = null;
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemTableTypeList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35963,7 +35989,7 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Name", pastingElement.getAttribute("Name"));
@@ -35972,8 +35998,9 @@ public class Modeler extends JFrame {
       newElement.setAttribute("Length", pastingElement.getAttribute("Length"));
       newElement.setAttribute("Decimal", pastingElement.getAttribute("Decimal"));
       newElement.setAttribute("SQLExpression", pastingElement.getAttribute("SQLExpression"));
-      nextSiblingNode = lastElement.getNextSibling();
-      systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+      // TODO: JSON migration - getNextSibling is XML-specific
+      nextSiblingNode = null;
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[7];
       Cell[0] = new TableRowNumber(jTableSystemDataTypeList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -35999,14 +36026,15 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Name", pastingElement.getAttribute("Name"));
       newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
       newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      nextSiblingNode = lastElement.getNextSibling();
-      systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+      // TODO: JSON migration - getNextSibling is XML-specific
+      nextSiblingNode = null;
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemTableTypeList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -36029,7 +36057,7 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       if (jTableSystemTermsList.getRowCount() == 0) {
@@ -36038,13 +36066,14 @@ public class Modeler extends JFrame {
         TableRowNumber tableRowNumber = (TableRowNumber) tableModelSystemTermsList.getValueAt(
             jTableSystemTermsList.getRowCount() - 1, 0);
         lastElement = tableRowNumber.getElement();
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
         newElement.setAttribute("SortKey", Integer.toString(id + 10));
       }
       newElement.setAttribute("Header", pastingElement.getAttribute("Header"));
       newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-      nextSiblingNode = lastElement.getNextSibling();
-      systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+      // TODO: JSON migration - getNextSibling is XML-specific
+      nextSiblingNode = null;
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[3];
       Cell[0] = new TableRowNumber(jTableSystemTermsList.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("Header");
@@ -36066,14 +36095,15 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Headder", pastingElement.getAttribute("Headder"));
       newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
       newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-      nextSiblingNode = lastElement.getNextSibling();
-      systemNode.getElement().insertBefore(newElement, nextSiblingNode);
+      // TODO: JSON migration - getNextSibling is XML-specific
+      nextSiblingNode = null;
+      systemNode.getElement().appendChild(newElement);
       Object[] Cell = new Object[4];
       Cell[0] = new TableRowNumber(jTableSystemMaintenanceLog.getRowCount() + 1, newElement);
       Cell[1] = newElement.getAttribute("SortKey");
@@ -36109,7 +36139,7 @@ public class Modeler extends JFrame {
       if (lastElement == null) {
         id = 0;
       } else {
-        id = Integer.parseInt(lastElement.getAttribute("ID"));
+        id = Integer.parseInt(getIdFromObject(lastElement));
       }
       newElement.setAttribute("ID", Integer.toString(id + 1));
       newElement.setAttribute("Type", pastingElement.getAttribute("Type"));
