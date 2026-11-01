@@ -60,7 +60,6 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.w3c.dom.*;
 
 import java.io.*;
 import java.net.URI;
@@ -387,13 +386,13 @@ public class DialogScan extends JDialog {
 
 	public boolean request() {
 		XeadNode node;
-		NodeList elementList;
+		java.util.List<?> elementList;
 		updated = false;
 		//
 		comboBoxModelRoles.removeAllElements();
-		elementList = frame_.domDocument.getElementsByTagName("Role");
-		for (int i = 0; i < elementList.getLength(); i++) {
-			node = new XeadNode("Role",(org.w3c.dom.Element)elementList.item(i));
+		elementList = frame_.getXeadDocumentModel().getXeadSystem().getRoles();
+		for (int i = 0; i < elementList.size(); i++) {
+			node = new XeadNode("Role", elementList.get(i));
 			comboBoxModelRoles.addElement((Object)node);
 		}
 		comboBoxModelRoles.sortElements();
@@ -401,9 +400,9 @@ public class DialogScan extends JDialog {
 		comboBoxModelRoles.setSelectedItem(comboBoxModelRoles.getElementAt(0));
 		//
 		comboBoxModelSubsystems.removeAllElements();
-		elementList = frame_.domDocument.getElementsByTagName("Subsystem");
-		for (int i = 0; i < elementList.getLength(); i++) {
-			node = new XeadNode("Subsystem",(org.w3c.dom.Element)elementList.item(i));
+		elementList = frame_.getXeadDocumentModel().getXeadSystem().getSubsystems();
+		for (int i = 0; i < elementList.size(); i++) {
+			node = new XeadNode("Subsystem", elementList.get(i));
 			comboBoxModelSubsystems.addElement((Object)node);
 		}
 		comboBoxModelSubsystems.sortElements();
@@ -460,28 +459,28 @@ public class DialogScan extends JDialog {
 
 	void jButtonStartScan_actionPerformed(ActionEvent e) {
 		XeadNode workNode;
-		org.w3c.dom.Element workElement;
+		Object workElement;
 		String subsystemID = "";
 		String roleID = "";
-		NodeList systemList = null;
-		NodeList departmentList = null;
-		NodeList taskTypeList = null;
-		NodeList tableTypeList = null;
-		NodeList dataTypeList = null;
-		NodeList functionTypeList = null;
-		NodeList termsList = null;
-		NodeList maintenanceLogList = null;
-		NodeList subjectAreaList = null;
-		NodeList roleList = null;
-		NodeList taskList = null;
-		NodeList subsystemList = null;
-		NodeList tableList = null;
-		NodeList relationshipList = null;
-		NodeList functionList = null;
-		NodeList workList1 = null;
-		NodeList workList2 = null;
+		java.util.List<?> systemList = null;
+		java.util.List<?> departmentList = null;
+		java.util.List<?> taskTypeList = null;
+		java.util.List<?> tableTypeList = null;
+		java.util.List<?> dataTypeList = null;
+		java.util.List<?> functionTypeList = null;
+		java.util.List<?> termsList = null;
+		java.util.List<?> maintenanceLogList = null;
+		java.util.List<?> subjectAreaList = null;
+		java.util.List<?> roleList = null;
+		java.util.List<?> taskList = null;
+		java.util.List<?> subsystemList = null;
+		java.util.List<?> tableList = null;
+		java.util.List<?> relationshipList = null;
+		java.util.List<?> functionList = null;
+		java.util.List<?> workList1 = null;
+		java.util.List<?> workList2 = null;
 		int numberOfTableElementsToBeScanned = -1;
-		org.w3c.dom.Element[] tableElementArray = new org.w3c.dom.Element[2000];
+		Object[] tableElementArray = new Object[2000];
 		//
 		try {
 			setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -508,103 +507,103 @@ public class DialogScan extends JDialog {
 			if (jComboBoxSubsystems.getSelectedIndex() != 0) {
 				workNode = (XeadNode)comboBoxModelSubsystems.getSelectedItem();
 				workElement = workNode.getElement();
-				subsystemID = workElement.getAttribute("ID");
+				subsystemID = getAttribute(workElement, "ID");
 			}
 			if (jComboBoxRoles.getSelectedIndex() != 0) {
 				workNode = (XeadNode)comboBoxModelRoles.getSelectedItem();
 				workElement = workNode.getElement();
-				roleID = workElement.getAttribute("ID");
+				roleID = getAttribute(workElement, "ID");
 			}
 			//
 			//Count number of elements to be scanned//
 			int countOfElementsToBeScanned = 0;
+			xeadModeler.model.json.XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
 			if (jCheckBoxSystem.isSelected()) {
-				systemList = frame_.domDocument.getElementsByTagName("System");
-				countOfElementsToBeScanned += systemList.getLength();
+				countOfElementsToBeScanned += 1;
 			}
 			if (jCheckBoxDepartment.isSelected()) {
-				departmentList = frame_.domDocument.getElementsByTagName("Department");
-				countOfElementsToBeScanned += departmentList.getLength();
+				departmentList = xeadSystem.getDepartments();
+				countOfElementsToBeScanned += departmentList.size();
 			}
 			if (jCheckBoxTaskType.isSelected()) {
-				taskTypeList = frame_.domDocument.getElementsByTagName("TaskType");
-				countOfElementsToBeScanned += taskTypeList.getLength();
+				taskTypeList = xeadSystem.getTaskTypes();
+				countOfElementsToBeScanned += taskTypeList.size();
 			}
 			if (jCheckBoxTableType.isSelected()) {
-				tableTypeList = frame_.domDocument.getElementsByTagName("TableType");
-				countOfElementsToBeScanned += tableTypeList.getLength();
+				tableTypeList = xeadSystem.getTableTypes();
+				countOfElementsToBeScanned += tableTypeList.size();
 			}
 			if (jCheckBoxDataType.isSelected()) {
-				dataTypeList = frame_.domDocument.getElementsByTagName("DataType");
-				countOfElementsToBeScanned += dataTypeList.getLength();
+				dataTypeList = xeadSystem.getDataTypes();
+				countOfElementsToBeScanned += dataTypeList.size();
 			}
 			if (jCheckBoxFunctionType.isSelected()) {
-				functionTypeList = frame_.domDocument.getElementsByTagName("FunctionType");
-				countOfElementsToBeScanned += functionTypeList.getLength();
+				functionTypeList = xeadSystem.getFunctionTypes();
+				countOfElementsToBeScanned += functionTypeList.size();
 			}
 			if (jCheckBoxTerms.isSelected()) {
-				termsList = frame_.domDocument.getElementsByTagName("Terms");
-				countOfElementsToBeScanned += termsList.getLength();
+				termsList = xeadSystem.getTerms();
+				countOfElementsToBeScanned += termsList.size();
 			}
 			if (jCheckBoxMaintenanceLog.isSelected()) {
-				maintenanceLogList = frame_.domDocument.getElementsByTagName("MaintenanceLog");
-				countOfElementsToBeScanned += maintenanceLogList.getLength();
+				maintenanceLogList = xeadSystem.getMaintenanceLogs();
+				countOfElementsToBeScanned += maintenanceLogList.size();
 			}
 			if (jCheckBoxSubjectArea.isSelected()) {
-				subjectAreaList = frame_.domDocument.getElementsByTagName("SubjectArea");
-				countOfElementsToBeScanned += subjectAreaList.getLength();
+				subjectAreaList = xeadSystem.getSubjectAreas();
+				countOfElementsToBeScanned += subjectAreaList.size();
 			}
 			if (jCheckBoxRole.isSelected()) {
-				roleList = frame_.domDocument.getElementsByTagName("Role");
+				roleList = xeadSystem.getRoles();
 				if (roleID.equals("")) {
-					countOfElementsToBeScanned += roleList.getLength();
+					countOfElementsToBeScanned += roleList.size();
 				} else {
 					countOfElementsToBeScanned++;
 				}
 			}
 			if (jCheckBoxTask.isSelected()) {
-				taskList = frame_.domDocument.getElementsByTagName("Task");
+				taskList = xeadSystem.getTasks();
 				if (roleID.equals("")) {
-					countOfElementsToBeScanned += taskList.getLength();
+					countOfElementsToBeScanned += taskList.size();
 				} else {
-					for (int i = 0; i < taskList.getLength(); i++) {
-						workElement = (org.w3c.dom.Element)taskList.item(i);
-						if (roleID.equals(workElement.getAttribute("RoleID"))) {
+					for (int i = 0; i < taskList.size(); i++) {
+						workElement = taskList.get(i);
+						if (roleID.equals(getAttribute(workElement, "RoleID"))) {
 							countOfElementsToBeScanned++;
 						}
 					}
 				}
 			}
 			if (jCheckBoxSubsystem.isSelected()) {
-				subsystemList = frame_.domDocument.getElementsByTagName("Subsystem");
+				subsystemList = xeadSystem.getSubsystems();
 				if (subsystemID.equals("")) {
-					countOfElementsToBeScanned += subsystemList.getLength();
+					countOfElementsToBeScanned += subsystemList.size();
 				} else {
 					countOfElementsToBeScanned++;
 				}
 			}
 			if (jCheckBoxTable.isSelected()) {
-				tableList = frame_.domDocument.getElementsByTagName("Table");
+				tableList = xeadSystem.getTables();
 				if (subsystemID.equals("")) {
-					countOfElementsToBeScanned += tableList.getLength();
+					countOfElementsToBeScanned += tableList.size();
 				} else {
-					for (int i = 0; i < tableList.getLength(); i++) {
-						org.w3c.dom.Element element = (org.w3c.dom.Element)tableList.item(i);
-						if (subsystemID.equals(element.getAttribute("SubsystemID"))) {
+					for (int i = 0; i < tableList.size(); i++) {
+						Object element = tableList.get(i);
+						if (subsystemID.equals(getAttribute(element, "SubsystemID"))) {
 							countOfElementsToBeScanned++;
 							numberOfTableElementsToBeScanned++;
 							tableElementArray[numberOfTableElementsToBeScanned] = element;
 						}
 					}
 				}
-				relationshipList = frame_.domDocument.getElementsByTagName("Relationship");
+				relationshipList = xeadSystem.getRelationships();
 				if (subsystemID.equals("")) {
-					countOfElementsToBeScanned += relationshipList.getLength();
+					countOfElementsToBeScanned += relationshipList.size();
 				} else {
-					for (int i = 0; i < relationshipList.getLength(); i++) {
-						workElement = (org.w3c.dom.Element)relationshipList.item(i);
+					for (int i = 0; i < relationshipList.size(); i++) {
+						workElement = relationshipList.get(i);
 						for (int j = 0; j < numberOfTableElementsToBeScanned; j++) {
-							if (tableElementArray[j].getAttribute("ID").equals(workElement.getAttribute("Table1ID")) || tableElementArray[j].getAttribute("ID").equals(workElement.getAttribute("Table2ID"))) {
+							if (getAttribute(tableElementArray[j], "ID").equals(getAttribute(workElement, "Table1ID")) || getAttribute(tableElementArray[j], "ID").equals(getAttribute(workElement, "Table2ID"))) {
 								countOfElementsToBeScanned++;
 							}
 						}
@@ -612,13 +611,13 @@ public class DialogScan extends JDialog {
 				}
 			}
 			if (jCheckBoxFunction.isSelected()) {
-				functionList = frame_.domDocument.getElementsByTagName("Function");
+				functionList = xeadSystem.getFunctions();
 				if (subsystemID.equals("")) {
-					countOfElementsToBeScanned += functionList.getLength();
+					countOfElementsToBeScanned += functionList.size();
 				} else {
-					for (int i = 0; i < functionList.getLength(); i++) {
-						workElement = (org.w3c.dom.Element)functionList.item(i);
-						if (subsystemID.equals(workElement.getAttribute("SubsystemID"))) {
+					for (int i = 0; i < functionList.size(); i++) {
+						workElement = functionList.get(i);
+						if (subsystemID.equals(getAttribute(workElement, "SubsystemID"))) {
 							countOfElementsToBeScanned++;
 						}
 					}
@@ -635,317 +634,326 @@ public class DialogScan extends JDialog {
 				jProgressBar.setValue(jProgressBar.getValue() + 1);
 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 				//
-				org.w3c.dom.Element element = (org.w3c.dom.Element)systemList.item(0);
-				scanAttribute(element, "System", "Name");
-				scanAttribute(element, "System", "Descriptions");
+				scanAttribute(xeadSystem, "System", "Name");
+				scanAttribute(xeadSystem, "System", "Descriptions");
 			}
 			if (jCheckBoxDepartment.isSelected()) {
-				for (int i = 0; i < departmentList.getLength(); i++) {
+				for (int i = 0; i < departmentList.size(); i++) {
 					jProgressBar.setValue(jProgressBar.getValue() + 1);
 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 					//
-					org.w3c.dom.Element element = (org.w3c.dom.Element)departmentList.item(i);
+					Object element = departmentList.get(i);
 					scanAttribute(element, "Department", "SortKey");
 					scanAttribute(element, "Department", "Name");
 					scanAttribute(element, "Department", "Descriptions");
 				}
 			}
 			if (jCheckBoxTaskType.isSelected()) {
-				for (int i = 0; i < taskTypeList.getLength(); i++) {
+				for (int i = 0; i < taskTypeList.size(); i++) {
 					jProgressBar.setValue(jProgressBar.getValue() + 1);
 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 					//
-					org.w3c.dom.Element element = (org.w3c.dom.Element)taskTypeList.item(i);
+					Object element = taskTypeList.get(i);
 					scanAttribute(element, "TaskType", "SortKey");
 					scanAttribute(element, "TaskType", "Name");
 					scanAttribute(element, "TaskType", "Descriptions");
 				}
 			}
 			if (jCheckBoxTableType.isSelected()) {
-				for (int i = 0; i < tableTypeList.getLength(); i++) {
+				for (int i = 0; i < tableTypeList.size(); i++) {
 					jProgressBar.setValue(jProgressBar.getValue() + 1);
 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 					//
-					org.w3c.dom.Element element = (org.w3c.dom.Element)tableTypeList.item(i);
+					Object element = tableTypeList.get(i);
 					scanAttribute(element, "TableType", "SortKey");
 					scanAttribute(element, "TableType", "Name");
 					scanAttribute(element, "TableType", "Descriptions");
 				}
 			}
 			if (jCheckBoxDataType.isSelected()) {
-				for (int i = 0; i < dataTypeList.getLength(); i++) {
+				for (int i = 0; i < dataTypeList.size(); i++) {
 					jProgressBar.setValue(jProgressBar.getValue() + 1);
 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 					//
-					org.w3c.dom.Element element = (org.w3c.dom.Element)dataTypeList.item(i);
+					Object element = dataTypeList.get(i);
 					scanAttribute(element, "DataType", "SortKey");
 					scanAttribute(element, "DataType", "Name");
 					scanAttribute(element, "DataType", "Descriptions");
 				}
 			}
 			if (jCheckBoxFunctionType.isSelected()) {
-				for (int i = 0; i < functionTypeList.getLength(); i++) {
+				for (int i = 0; i < functionTypeList.size(); i++) {
 					jProgressBar.setValue(jProgressBar.getValue() + 1);
 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 					//
-					org.w3c.dom.Element element = (org.w3c.dom.Element)functionTypeList.item(i);
+					Object element = functionTypeList.get(i);
 					scanAttribute(element, "FunctionType", "SortKey");
 					scanAttribute(element, "FunctionType", "Name");
 					scanAttribute(element, "FunctionType", "Descriptions");
 				}
 			}
 			if (jCheckBoxTerms.isSelected()) {
-				for (int i = 0; i < termsList.getLength(); i++) {
+				for (int i = 0; i < termsList.size(); i++) {
 					jProgressBar.setValue(jProgressBar.getValue() + 1);
 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 					//
-					org.w3c.dom.Element element = (org.w3c.dom.Element)termsList.item(i);
+					Object element = termsList.get(i);
 					scanAttribute(element, "Terms", "SortKey");
 					scanAttribute(element, "Terms", "Header");
 					scanAttribute(element, "Terms", "Descriptions");
 				}
 			}
 			if (jCheckBoxMaintenanceLog.isSelected()) {
-				for (int i = 0; i < maintenanceLogList.getLength(); i++) {
+				for (int i = 0; i < maintenanceLogList.size(); i++) {
 					jProgressBar.setValue(jProgressBar.getValue() + 1);
 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 					//
-					org.w3c.dom.Element element = (org.w3c.dom.Element)maintenanceLogList.item(i);
+					Object element = maintenanceLogList.get(i);
 					scanAttribute(element, "MaintenanceLog", "SortKey");
 					scanAttribute(element, "MaintenanceLog", "Headder");
 					scanAttribute(element, "MaintenanceLog", "Descriptions");
 				}
 			}
-			if (jCheckBoxSubjectArea.isSelected()) {
-				for (int i = 0; i < subjectAreaList.getLength(); i++) {
-					jProgressBar.setValue(jProgressBar.getValue() + 1);
-					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-					//
-					org.w3c.dom.Element element = (org.w3c.dom.Element)subjectAreaList.item(i);
-					scanAttribute(element, "SubjectArea", "SortKey");
-					scanAttribute(element, "SubjectArea", "Name");
-					scanAttribute(element, "SubjectArea", "Descriptions");
-					//
-					workList1 = element.getElementsByTagName("DataflowNode");
-					for (int j = 0; j < workList1.getLength(); j++) {
-						org.w3c.dom.Element dataflowNodeElement = (org.w3c.dom.Element)workList1.item(j);
-						if (!dataflowNodeElement.getAttribute("Type").equals("Process")) {
-							scanAttribute(dataflowNodeElement, "DataflowNode", "Name");
-							scanAttribute(dataflowNodeElement, "DataflowNode", "NameExt");
-						}
-						scanAttribute(dataflowNodeElement, "DataflowNode", "Descriptions");
-					}
-					//
-					workList1 = element.getElementsByTagName("DataflowLine");
-					for (int j = 0; j < workList1.getLength(); j++) {
-						org.w3c.dom.Element dataflowLineElement = (org.w3c.dom.Element)workList1.item(j);
-						scanAttribute(dataflowLineElement, "DataflowLine", "Name");
-						scanAttribute(dataflowLineElement, "DataflowLine", "NameExt");
-					}
-				}
-			}
-			if (jCheckBoxRole.isSelected()) {
-				for (int i = 0; i < roleList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)roleList.item(i);
-					if (roleID.equals("") || roleID.equals(element.getAttribute("ID"))) {
-						jProgressBar.setValue(jProgressBar.getValue() + 1);
-						jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-						//
-						scanAttribute(element, "Role", "SortKey");
-						scanAttribute(element, "Role", "Name");
-						scanAttribute(element, "Role", "Descriptions");
-						//
-						if (!roleID.equals("") && roleID.equals(element.getAttribute("ID"))) {
-							break;
-						}
-					}
-				}
-			}
-			if (jCheckBoxTask.isSelected()) {
-				for (int i = 0; i < taskList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)taskList.item(i);
-					if (roleID.equals("") || roleID.equals(element.getAttribute("RoleID"))) {
-						jProgressBar.setValue(jProgressBar.getValue() + 1);
-						jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-						//
-						scanAttribute(element, "Task", "SortKey");
-						scanAttribute(element, "Task", "Name");
-						scanAttribute(element, "Task", "Event");
-						scanAttribute(element, "Task", "Descriptions");
-						//
-						workList1 = element.getElementsByTagName("TaskAction");
-						for (int j = 0; j < workList1.getLength(); j++) {
-							org.w3c.dom.Element taskActionElement = (org.w3c.dom.Element)workList1.item(j);
-							scanAttribute(taskActionElement, "TaskAction", "ExecuteIf");
-							scanAttribute(taskActionElement, "TaskAction", "Label");
-							scanAttribute(taskActionElement, "TaskAction", "Descriptions");
-							//
-							workList2 = taskActionElement.getElementsByTagName("TaskFunctionIO");
-							for (int k = 0; k < workList2.getLength(); k++) {
-								org.w3c.dom.Element taskFunctionIOElement = (org.w3c.dom.Element)workList2.item(k);
-								scanAttribute(taskFunctionIOElement, "TaskFunctionIO", "Operations");
-							}
-						}
-					}
-				}
-			}
-			if (jCheckBoxSubsystem.isSelected()) {
-				for (int i = 0; i < subsystemList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)subsystemList.item(i);
-					if (subsystemID.equals("") || subsystemID.equals(element.getAttribute("ID"))) {
-						jProgressBar.setValue(jProgressBar.getValue() + 1);
-						jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-						//
-						scanAttribute(element, "Subsystem", "Name");
-						scanAttribute(element, "Subsystem", "Descriptions");
-						scanAttribute(element, "Subsystem", "DatamodelDescriptions");
-						//
-						if (jCheckBoxTable.isSelected()) {
-							workList1 = element.getElementsByTagName("SubsystemTable");
-							for (int j = 0; j < workList1.getLength(); j++) {
-								org.w3c.dom.Element subsystemTableElement = (org.w3c.dom.Element)workList1.item(j);
-								scanAttribute(subsystemTableElement, "SubsystemTable", "Instance");
-							}
-						}
-						//
-						if (!subsystemID.equals("") && subsystemID.equals(element.getAttribute("ID"))) {
-							break;
-						}
-					}
-				}
-			}
-			if (jCheckBoxTable.isSelected()) {
-				for (int i = 0; i < tableList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)tableList.item(i);
-					if (subsystemID.equals("") || subsystemID.equals(element.getAttribute("SubsystemID"))) {
-						jProgressBar.setValue(jProgressBar.getValue() + 1);
-						jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-						//
-						scanAttribute(element, "Table", "Name");
-						scanAttribute(element, "Table", "SortKey");
-						scanAttribute(element, "Table", "Alias");
-						scanAttribute(element, "Table", "SynchFile");
-						scanAttribute(element, "Table", "Descriptions");
-						//
-						workList1 = element.getElementsByTagName("TableField");
-						for (int j = 0; j < workList1.getLength(); j++) {
-							org.w3c.dom.Element tableFieldElement = (org.w3c.dom.Element)workList1.item(j);
-							scanAttribute(tableFieldElement, "TableField", "Name");
-							scanAttribute(tableFieldElement, "TableField", "Alias");
-							scanAttribute(tableFieldElement, "TableField", "Descriptions");
-							scanAttribute(tableFieldElement, "TableField", "Default");
-						}
-					}
-				}
-				for (int i = 0; i < relationshipList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)relationshipList.item(i);
-					if (subsystemID.equals("")) {
-						jProgressBar.setValue(jProgressBar.getValue() + 1);
-						jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-						//
-						scanAttribute(element, "Relationship", "ExistWhen1");
-						scanAttribute(element, "Relationship", "ExistWhen2");
-					} else {
-						for (int j = 0; j < numberOfTableElementsToBeScanned; j++) {
-							if (tableElementArray[j].getAttribute("ID").equals(element.getAttribute("Table1ID")) || tableElementArray[j].getAttribute("ID").equals(element.getAttribute("Table2ID"))) {
-								jProgressBar.setValue(jProgressBar.getValue() + 1);
-								jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-								//
-								scanAttribute(element, "Relationship", "ExistWhen1");
-								scanAttribute(element, "Relationship", "ExistWhen2");
-							}
-						}
-					}
-				}
-			}
-			if (jCheckBoxFunction.isSelected()) {
-				for (int i = 0; i < functionList.getLength(); i++) {
-					org.w3c.dom.Element element = (org.w3c.dom.Element)functionList.item(i);
-					if (subsystemID.equals("") || subsystemID.equals(element.getAttribute("SubsystemID"))) {
-						jProgressBar.setValue(jProgressBar.getValue() + 1);
-						jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
-						//
-						scanAttribute(element, "Function", "SortKey");
-						scanAttribute(element, "Function", "Name");
-						scanAttribute(element, "Function", "Summary");
-						scanAttribute(element, "Function", "Parameters");
-						scanAttribute(element, "Function", "Return");
-						scanAttribute(element, "Function", "DocFile");
-						scanAttribute(element, "Function", "Descriptions");
-						//
-						workList1 = element.getElementsByTagName("FunctionUsedByThis");
-						for (int j = 0; j < workList1.getLength(); j++) {
-							org.w3c.dom.Element functionUsedByThisElement = (org.w3c.dom.Element)workList1.item(j);
-							scanAttribute(functionUsedByThisElement, "FunctionUsedByThis", "LaunchEvent");
-						}
-						//
-						workList1 = element.getElementsByTagName("IOPanel");
-						for (int j = 0; j < workList1.getLength(); j++) {
-							org.w3c.dom.Element iOPanelElement = (org.w3c.dom.Element)workList1.item(j);
-							scanAttribute(iOPanelElement, "IOPanel", "SortKey");
-							scanAttribute(iOPanelElement, "IOPanel", "Name");
-							scanAttribute(iOPanelElement, "IOPanel", "Descriptions");
-							scanAttribute(iOPanelElement, "IOPanel", "ImageText");
-							//
-							workList2 = iOPanelElement.getElementsByTagName("IOPanelField");
-							for (int k = 0; k < workList2.getLength(); k++) {
-								org.w3c.dom.Element iOPanelFieldElement = (org.w3c.dom.Element)workList2.item(k);
-								scanAttribute(iOPanelFieldElement, "IOPanelField", "Name");
-								scanAttribute(iOPanelFieldElement, "IOPanelField", "Label");
-								scanAttribute(iOPanelFieldElement, "IOPanelField", "Descriptions");
-							}
-						}
-						//
-						workList1 = element.getElementsByTagName("IOWebPage");
-						for (int j = 0; j < workList1.getLength(); j++) {
-							org.w3c.dom.Element iOWebPageElement = (org.w3c.dom.Element)workList1.item(j);
-							scanAttribute(iOWebPageElement, "IOWebPage", "SortKey");
-							scanAttribute(iOWebPageElement, "IOWebPage", "Name");
-							scanAttribute(iOWebPageElement, "IOWebPage", "Descriptions");
-							scanAttribute(iOWebPageElement, "IOWebPage", "FileName");
-							//
-							workList2 = iOWebPageElement.getElementsByTagName("IOWebPageField");
-							for (int k = 0; k < workList2.getLength(); k++) {
-								org.w3c.dom.Element iOWebPageFieldElement = (org.w3c.dom.Element)workList2.item(k);
-								scanAttribute(iOWebPageFieldElement, "IOWebPageField", "Name");
-								scanAttribute(iOWebPageFieldElement, "IOWebPageField", "Label");
-								scanAttribute(iOWebPageFieldElement, "IOWebPageField", "Descriptions");
-							}
-						}
-						//
-						workList1 = element.getElementsByTagName("IOSpool");
-						for (int j = 0; j < workList1.getLength(); j++) {
-							org.w3c.dom.Element iOSpoolElement = (org.w3c.dom.Element)workList1.item(j);
-							scanAttribute(iOSpoolElement, "IOSpool", "SortKey");
-							scanAttribute(iOSpoolElement, "IOSpool", "Name");
-							scanAttribute(iOSpoolElement, "IOSpool", "Descriptions");
-							scanAttribute(iOSpoolElement, "IOSpool", "ImageText");
-							//
-							workList2 = iOSpoolElement.getElementsByTagName("IOSpoolField");
-							for (int k = 0; k < workList2.getLength(); k++) {
-								org.w3c.dom.Element iOSpoolFieldElement = (org.w3c.dom.Element)workList2.item(k);
-								scanAttribute(iOSpoolFieldElement, "IOSpoolField", "Name");
-								scanAttribute(iOSpoolFieldElement, "IOSpoolField", "Label");
-								scanAttribute(iOSpoolFieldElement, "IOSpoolField", "Descriptions");
-							}
-						}
-						//
-						workList1 = element.getElementsByTagName("IOTable");
-						for (int j = 0; j < workList1.getLength(); j++) {
-							org.w3c.dom.Element iOTableElement = (org.w3c.dom.Element)workList1.item(j);
-							scanAttribute(iOTableElement, "IOTable", "SortKey");
-							scanAttribute(iOTableElement, "IOTable", "NameExtension");
-							scanAttribute(iOTableElement, "IOTable", "Descriptions");
-							//
-							workList2 = iOTableElement.getElementsByTagName("IOTableField");
-							for (int k = 0; k < workList2.getLength(); k++) {
-								org.w3c.dom.Element iOTableFieldElement = (org.w3c.dom.Element)workList2.item(k);
-								scanAttribute(iOTableFieldElement, "IOTableField", "Descriptions");
-							}
-						}
-					}
-				}
-			}
+ 		if (jCheckBoxSubjectArea.isSelected()) {
+ 			for (int i = 0; i < subjectAreaList.size(); i++) {
+ 				jProgressBar.setValue(jProgressBar.getValue() + 1);
+ 				jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+ 				//
+ 				Object element = subjectAreaList.get(i);
+ 				scanAttribute(element, "SubjectArea", "SortKey");
+ 				scanAttribute(element, "SubjectArea", "Name");
+ 				scanAttribute(element, "SubjectArea", "Descriptions");
+ 				//
+ 				xeadModeler.model.json.SubjectArea subjectArea = (xeadModeler.model.json.SubjectArea)element;
+ 				workList1 = subjectArea.getDataflowNodes();
+ 				for (int j = 0; j < workList1.size(); j++) {
+ 					Object dataflowNodeElement = workList1.get(j);
+ 					if (!getAttribute(dataflowNodeElement, "Type").equals("Process")) {
+ 						scanAttribute(dataflowNodeElement, "DataflowNode", "Name");
+ 						scanAttribute(dataflowNodeElement, "DataflowNode", "NameExt");
+ 					}
+ 					scanAttribute(dataflowNodeElement, "DataflowNode", "Descriptions");
+ 				}
+ 				//
+ 				workList1 = subjectArea.getDataflowLines();
+ 				for (int j = 0; j < workList1.size(); j++) {
+ 					Object dataflowLineElement = workList1.get(j);
+ 					scanAttribute(dataflowLineElement, "DataflowLine", "Name");
+ 					scanAttribute(dataflowLineElement, "DataflowLine", "NameExt");
+ 				}
+ 			}
+ 		}
+ 		if (jCheckBoxRole.isSelected()) {
+ 			for (int i = 0; i < roleList.size(); i++) {
+ 				Object element = roleList.get(i);
+ 				if (roleID.equals("") || roleID.equals(getAttribute(element, "ID"))) {
+ 					jProgressBar.setValue(jProgressBar.getValue() + 1);
+ 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+ 					//
+ 					scanAttribute(element, "Role", "SortKey");
+ 					scanAttribute(element, "Role", "Name");
+ 					scanAttribute(element, "Role", "Descriptions");
+ 					//
+ 					if (!roleID.equals("") && roleID.equals(getAttribute(element, "ID"))) {
+ 						break;
+ 					}
+ 				}
+ 			}
+ 		}
+ 		if (jCheckBoxTask.isSelected()) {
+ 			for (int i = 0; i < taskList.size(); i++) {
+ 				Object element = taskList.get(i);
+ 				if (roleID.equals("") || roleID.equals(getAttribute(element, "RoleID"))) {
+ 					jProgressBar.setValue(jProgressBar.getValue() + 1);
+ 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+ 					//
+ 					scanAttribute(element, "Task", "SortKey");
+ 					scanAttribute(element, "Task", "Name");
+ 					scanAttribute(element, "Task", "Event");
+ 					scanAttribute(element, "Task", "Descriptions");
+ 					//
+ 					xeadModeler.model.json.Task task = (xeadModeler.model.json.Task)element;
+ 					workList1 = task.getTaskActions();
+ 					for (int j = 0; j < workList1.size(); j++) {
+ 						Object taskActionElement = workList1.get(j);
+ 						scanAttribute(taskActionElement, "TaskAction", "ExecuteIf");
+ 						scanAttribute(taskActionElement, "TaskAction", "Label");
+ 						scanAttribute(taskActionElement, "TaskAction", "Descriptions");
+ 						//
+ 						xeadModeler.model.json.TaskAction taskAction = (xeadModeler.model.json.TaskAction)taskActionElement;
+ 						workList2 = taskAction.getTaskFunctionIOs();
+ 						for (int k = 0; k < workList2.size(); k++) {
+ 							Object taskFunctionIOElement = workList2.get(k);
+ 							scanAttribute(taskFunctionIOElement, "TaskFunctionIO", "Operations");
+ 						}
+ 					}
+ 				}
+ 			}
+ 		}
+ 		if (jCheckBoxSubsystem.isSelected()) {
+ 			for (int i = 0; i < subsystemList.size(); i++) {
+ 				Object element = subsystemList.get(i);
+ 				if (subsystemID.equals("") || subsystemID.equals(getAttribute(element, "ID"))) {
+ 					jProgressBar.setValue(jProgressBar.getValue() + 1);
+ 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+ 					//
+ 					scanAttribute(element, "Subsystem", "Name");
+ 					scanAttribute(element, "Subsystem", "Descriptions");
+ 					scanAttribute(element, "Subsystem", "DatamodelDescriptions");
+ 					//
+ 					if (jCheckBoxTable.isSelected()) {
+ 						xeadModeler.model.json.Subsystem subsystem = (xeadModeler.model.json.Subsystem)element;
+ 						workList1 = subsystem.getSubsystemTables();
+ 						for (int j = 0; j < workList1.size(); j++) {
+ 							Object subsystemTableElement = workList1.get(j);
+ 							scanAttribute(subsystemTableElement, "SubsystemTable", "Instance");
+ 						}
+ 					}
+ 					//
+ 					if (!subsystemID.equals("") && subsystemID.equals(getAttribute(element, "ID"))) {
+ 						break;
+ 					}
+ 				}
+ 			}
+ 		}
+ 		if (jCheckBoxTable.isSelected()) {
+ 			for (int i = 0; i < tableList.size(); i++) {
+ 				Object element = tableList.get(i);
+ 				if (subsystemID.equals("") || subsystemID.equals(getAttribute(element, "SubsystemID"))) {
+ 					jProgressBar.setValue(jProgressBar.getValue() + 1);
+ 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+ 					//
+ 					scanAttribute(element, "Table", "Name");
+ 					scanAttribute(element, "Table", "SortKey");
+ 					scanAttribute(element, "Table", "Alias");
+ 					scanAttribute(element, "Table", "SynchFile");
+ 					scanAttribute(element, "Table", "Descriptions");
+ 					//
+ 					xeadModeler.model.json.Table table = (xeadModeler.model.json.Table)element;
+ 					workList1 = table.getTableFields();
+ 					for (int j = 0; j < workList1.size(); j++) {
+ 						Object tableFieldElement = workList1.get(j);
+ 						scanAttribute(tableFieldElement, "TableField", "Name");
+ 						scanAttribute(tableFieldElement, "TableField", "Alias");
+ 						scanAttribute(tableFieldElement, "TableField", "Descriptions");
+ 						scanAttribute(tableFieldElement, "TableField", "Default");
+ 					}
+ 				}
+ 			}
+ 			for (int i = 0; i < relationshipList.size(); i++) {
+ 				Object element = relationshipList.get(i);
+ 				if (subsystemID.equals("")) {
+ 					jProgressBar.setValue(jProgressBar.getValue() + 1);
+ 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+ 					//
+ 					scanAttribute(element, "Relationship", "ExistWhen1");
+ 					scanAttribute(element, "Relationship", "ExistWhen2");
+ 				} else {
+ 					for (int j = 0; j < numberOfTableElementsToBeScanned; j++) {
+ 						if (getAttribute(tableElementArray[j], "ID").equals(getAttribute(element, "Table1ID")) || getAttribute(tableElementArray[j], "ID").equals(getAttribute(element, "Table2ID"))) {
+ 							jProgressBar.setValue(jProgressBar.getValue() + 1);
+ 							jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+ 							//
+ 							scanAttribute(element, "Relationship", "ExistWhen1");
+ 							scanAttribute(element, "Relationship", "ExistWhen2");
+ 						}
+ 					}
+ 				}
+ 			}
+ 		}
+ 		if (jCheckBoxFunction.isSelected()) {
+ 			for (int i = 0; i < functionList.size(); i++) {
+ 				Object element = functionList.get(i);
+ 				if (subsystemID.equals("") || subsystemID.equals(getAttribute(element, "SubsystemID"))) {
+ 					jProgressBar.setValue(jProgressBar.getValue() + 1);
+ 					jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
+ 					//
+ 					scanAttribute(element, "Function", "SortKey");
+ 					scanAttribute(element, "Function", "Name");
+ 					scanAttribute(element, "Function", "Summary");
+ 					scanAttribute(element, "Function", "Parameters");
+ 					scanAttribute(element, "Function", "Return");
+ 					scanAttribute(element, "Function", "DocFile");
+ 					scanAttribute(element, "Function", "Descriptions");
+ 					//
+ 					xeadModeler.model.json.Function function = (xeadModeler.model.json.Function)element;
+ 					workList1 = function.getFunctionUsedByThisList();
+ 					for (int j = 0; j < workList1.size(); j++) {
+ 						Object functionUsedByThisElement = workList1.get(j);
+ 						scanAttribute(functionUsedByThisElement, "FunctionUsedByThis", "LaunchEvent");
+ 					}
+ 					//
+ 					workList1 = function.getIOPanels();
+ 					for (int j = 0; j < workList1.size(); j++) {
+ 						Object iOPanelElement = workList1.get(j);
+ 						scanAttribute(iOPanelElement, "IOPanel", "SortKey");
+ 						scanAttribute(iOPanelElement, "IOPanel", "Name");
+ 						scanAttribute(iOPanelElement, "IOPanel", "Descriptions");
+ 						scanAttribute(iOPanelElement, "IOPanel", "ImageText");
+ 						//
+ 						xeadModeler.model.json.IOPanel ioPanel = (xeadModeler.model.json.IOPanel)iOPanelElement;
+ 						workList2 = ioPanel.getIopanelFields();
+ 						for (int k = 0; k < workList2.size(); k++) {
+ 							Object iOPanelFieldElement = workList2.get(k);
+ 							scanAttribute(iOPanelFieldElement, "IOPanelField", "Name");
+ 							scanAttribute(iOPanelFieldElement, "IOPanelField", "Label");
+ 							scanAttribute(iOPanelFieldElement, "IOPanelField", "Descriptions");
+ 						}
+ 					}
+ 					//
+ 					workList1 = function.getIOWebPages();
+ 					for (int j = 0; j < workList1.size(); j++) {
+ 						Object iOWebPageElement = workList1.get(j);
+ 						scanAttribute(iOWebPageElement, "IOWebPage", "SortKey");
+ 						scanAttribute(iOWebPageElement, "IOWebPage", "Name");
+ 						scanAttribute(iOWebPageElement, "IOWebPage", "Descriptions");
+ 						scanAttribute(iOWebPageElement, "IOWebPage", "FileName");
+ 						//
+ 						xeadModeler.model.json.IOWebPage ioWebPage = (xeadModeler.model.json.IOWebPage)iOWebPageElement;
+ 						workList2 = ioWebPage.getIowebpageFields();
+ 						for (int k = 0; k < workList2.size(); k++) {
+ 							Object iOWebPageFieldElement = workList2.get(k);
+ 							scanAttribute(iOWebPageFieldElement, "IOWebPageField", "Name");
+ 							scanAttribute(iOWebPageFieldElement, "IOWebPageField", "Label");
+ 							scanAttribute(iOWebPageFieldElement, "IOWebPageField", "Descriptions");
+ 						}
+ 					}
+ 					//
+ 					workList1 = function.getIOSpools();
+ 					for (int j = 0; j < workList1.size(); j++) {
+ 						Object iOSpoolElement = workList1.get(j);
+ 						scanAttribute(iOSpoolElement, "IOSpool", "SortKey");
+ 						scanAttribute(iOSpoolElement, "IOSpool", "Name");
+ 						scanAttribute(iOSpoolElement, "IOSpool", "Descriptions");
+ 						scanAttribute(iOSpoolElement, "IOSpool", "ImageText");
+ 						//
+ 						xeadModeler.model.json.IOSpool ioSpool = (xeadModeler.model.json.IOSpool)iOSpoolElement;
+ 						workList2 = ioSpool.getIospoolFields();
+ 						for (int k = 0; k < workList2.size(); k++) {
+ 							Object iOSpoolFieldElement = workList2.get(k);
+ 							scanAttribute(iOSpoolFieldElement, "IOSpoolField", "Name");
+ 							scanAttribute(iOSpoolFieldElement, "IOSpoolField", "Label");
+ 							scanAttribute(iOSpoolFieldElement, "IOSpoolField", "Descriptions");
+ 						}
+ 					}
+ 					//
+ 					workList1 = function.getIOTables();
+ 					for (int j = 0; j < workList1.size(); j++) {
+ 						Object iOTableElement = workList1.get(j);
+ 						scanAttribute(iOTableElement, "IOTable", "SortKey");
+ 						scanAttribute(iOTableElement, "IOTable", "NameExtension");
+ 						scanAttribute(iOTableElement, "IOTable", "Descriptions");
+ 						//
+ 						xeadModeler.model.json.IOTable ioTable = (xeadModeler.model.json.IOTable)iOTableElement;
+ 						workList2 = ioTable.getIotableFields();
+ 						for (int k = 0; k < workList2.size(); k++) {
+ 							Object iOTableFieldElement = workList2.get(k);
+ 							scanAttribute(iOTableFieldElement, "IOTableField", "Descriptions");
+ 						}
+ 					}
+ 				}
+ 			}
+ 		}
 			//
 			if (countOfRows > 0) {
 				jTextPaneScanDetail.setText(countOfRows + res.getString("DialogScan32") + countOfStrings + res.getString("DialogScan33"));
@@ -962,7 +970,7 @@ public class DialogScan extends JDialog {
 		}
 	}
 
-	void scanAttribute(org.w3c.dom.Element element, String elementType, String attributeType) {
+	void scanAttribute(Object element, String elementType, String attributeType) {
 		String targetString = "";
 		int scanningPosFrom = 0;
 		int countOfScanned = 0;
@@ -973,10 +981,10 @@ public class DialogScan extends JDialog {
 				|| attributeType.equals("ImageText")
 				|| attributeType.equals("DatamodelDescriptions")) {
 			processingEOLRequired = true;
-			targetString = substringLinesWithTokenOfEOL(element.getAttribute(attributeType), "\n");
+			targetString = substringLinesWithTokenOfEOL(getAttribute(element, attributeType), "\n");
 		} else {
 			processingEOLRequired = false;
-			targetString = element.getAttribute(attributeType);
+			targetString = getAttribute(element, attributeType);
 		}
 		if (!jCheckBoxCaseSensitive.isSelected()) {
 			targetString = targetString.toUpperCase();
@@ -1000,9 +1008,9 @@ public class DialogScan extends JDialog {
 			Cell[3] = getItemName(element, elementType);
 			Cell[4] = translateAttributeType(attributeType);
 			if (processingEOLRequired) {
-				Cell[5] = getFirstSentence(element.getAttribute(attributeType));
+				Cell[5] = getFirstSentence(getAttribute(element, attributeType));
 			} else {
-				Cell[5] = element.getAttribute(attributeType);
+				Cell[5] = getAttribute(element, attributeType);
 			}
 			Cell[6] = Integer.toString(countOfScanned);
 			tableModelScanResult.addRow(Cell);
@@ -1179,171 +1187,171 @@ public class DialogScan extends JDialog {
 		return result;
 	}
 
-	String getItemName(org.w3c.dom.Element element, String elementType) {
-		NodeList workList = null;
+	String getItemName(Object element, String elementType) {
+		java.util.List<?> workList = null;
 		String workString = "";
-		org.w3c.dom.Element workElement1, workElement2, workElement3;
-		String itemName =  element.getAttribute("Name") + "(" + element.getAttribute("SortKey") + ")";
+		Object workElement1, workElement2, workElement3;
+		String itemName =  getAttribute(element, "Name") + "(" + getAttribute(element, "SortKey") + ")";
 		//
 		if (elementType.equals("Terms")) {
-			itemName = element.getAttribute("Header");
+			itemName = getAttribute(element, "Header");
 		}
 		//
 		if (elementType.equals("MaintenanceLog")) {
-			itemName = element.getAttribute("Headder");
+			itemName = getAttribute(element, "Headder");
 		}
 		//
 		if (elementType.equals("DataflowNode")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
-			if (element.getAttribute("NameExt").equals("")) {
-				itemName = workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")" +
-					" + " + element.getAttribute("Name");
+			workElement1 = getParentElement(element);
+			if (getAttribute(element, "NameExt").equals("")) {
+				itemName = getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")" +
+					" + " + getAttribute(element, "Name");
 			} else {
-				itemName = workElement1.getAttribute("Name") +
-				"(" + workElement1.getAttribute("SortKey") + ")" +
-				" + " + element.getAttribute("Name") +
-				"&" + element.getAttribute("NameExt");
+				itemName = getAttribute(workElement1, "Name") +
+				"(" + getAttribute(workElement1, "SortKey") + ")" +
+				" + " + getAttribute(element, "Name") +
+				"&" + getAttribute(element, "NameExt");
 			}
 		}
 		//
 		if (elementType.equals("DataflowLine")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
-			if (element.getAttribute("NameExt").equals("")) {
-				itemName = workElement1.getAttribute("Name") +
-				"(" + workElement1.getAttribute("SortKey") + ")" +
-				" + " + element.getAttribute("Name");
+			workElement1 = getParentElement(element);
+			if (getAttribute(element, "NameExt").equals("")) {
+				itemName = getAttribute(workElement1, "Name") +
+				"(" + getAttribute(workElement1, "SortKey") + ")" +
+				" + " + getAttribute(element, "Name");
 			} else {
-				itemName = workElement1.getAttribute("Name") +
-				"(" + workElement1.getAttribute("SortKey") + ")" +
-				" + " + element.getAttribute("Name") +
-				"&" + element.getAttribute("NameExt");
+				itemName = getAttribute(workElement1, "Name") +
+				"(" + getAttribute(workElement1, "SortKey") + ")" +
+				" + " + getAttribute(element, "Name") +
+				"&" + getAttribute(element, "NameExt");
 			}
 		}
 		//
 		if (elementType.equals("Task")) {
-			workList = frame_.domDocument.getElementsByTagName("Role");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement1 = (org.w3c.dom.Element)workList.item(m);
-				if (element.getAttribute("RoleID").equals(workElement1.getAttribute("ID"))) {
-					itemName = workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")" +
-					" + " + element.getAttribute("Name") +
-					"(" + element.getAttribute("SortKey") + ")";
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getRoles();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement1 = workList.get(m);
+				if (getAttribute(element, "RoleID").equals(getAttribute(workElement1, "ID"))) {
+					itemName = getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")" +
+					" + " + getAttribute(element, "Name") +
+					"(" + getAttribute(element, "SortKey") + ")";
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("TaskAction")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
-			workList = frame_.domDocument.getElementsByTagName("Role");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement2 = (org.w3c.dom.Element)workList.item(m);
-				if (workElement1.getAttribute("RoleID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement2.getAttribute("Name") +
-					"(" + workElement2.getAttribute("SortKey") + ")" +
-					" + " + workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")" +
-					" + " + element.getAttribute("Label");
+			workElement1 = getParentElement(element);
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getRoles();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement2 = workList.get(m);
+				if (getAttribute(workElement1, "RoleID").equals(getAttribute(workElement2, "ID"))) {
+					itemName = getAttribute(workElement2, "Name") +
+					"(" + getAttribute(workElement2, "SortKey") + ")" +
+					" + " + getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")" +
+					" + " + getAttribute(element, "Label");
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("TaskFunctionIO")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
-			workElement2 = (org.w3c.dom.Element)workElement1.getParentNode();
+			workElement1 = getParentElement(element);
+			workElement2 = getParentElement(workElement1);
 			//
-			workList = frame_.domDocument.getElementsByTagName("Role");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement3 = (org.w3c.dom.Element)workList.item(m);
-				if (workElement2.getAttribute("RoleID").equals(workElement3.getAttribute("ID"))) {
-					itemName = workElement3.getAttribute("Name") +
-					"(" + workElement3.getAttribute("SortKey") + ")" +
-					" + " + workElement2.getAttribute("Name") +
-					"(" + workElement2.getAttribute("SortKey") + ")" +
-					" + " + workElement1.getAttribute("Label");
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getRoles();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement3 = workList.get(m);
+				if (getAttribute(workElement2, "RoleID").equals(getAttribute(workElement3, "ID"))) {
+					itemName = getAttribute(workElement3, "Name") +
+					"(" + getAttribute(workElement3, "SortKey") + ")" +
+					" + " + getAttribute(workElement2, "Name") +
+					"(" + getAttribute(workElement2, "SortKey") + ")" +
+					" + " + getAttribute(workElement1, "Label");
 					break;
 				}
 			}
 			//
-			workList = frame_.domDocument.getElementsByTagName("Function");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement3 = (org.w3c.dom.Element)workList.item(m);
-				if (element.getAttribute("FunctionID").equals(workElement3.getAttribute("ID"))) {
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getFunctions();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement3 = workList.get(m);
+				if (getAttribute(element, "FunctionID").equals(getAttribute(workElement3, "ID"))) {
 					itemName = itemName + " + " +
-					workElement3.getAttribute("Name") +
-					"(" + workElement3.getAttribute("SortKey") + ")";
+					getAttribute(workElement3, "Name") +
+					"(" + getAttribute(workElement3, "SortKey") + ")";
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("SubsystemTable")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
-			workList = frame_.domDocument.getElementsByTagName("Table");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement2 = (org.w3c.dom.Element)workList.item(m);
-				if (element.getAttribute("TableID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")" +
-					" + " + workElement2.getAttribute("Name") +
-					"(" + workElement2.getAttribute("SortKey") + ")";
+			workElement1 = getParentElement(element);
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getTables();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement2 = workList.get(m);
+				if (getAttribute(element, "TableID").equals(getAttribute(workElement2, "ID"))) {
+					itemName = getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")" +
+					" + " + getAttribute(workElement2, "Name") +
+					"(" + getAttribute(workElement2, "SortKey") + ")";
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("Table")) {
-			workList = frame_.domDocument.getElementsByTagName("Subsystem");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement1 = (org.w3c.dom.Element)workList.item(m);
-				if (element.getAttribute("SubsystemID").equals(workElement1.getAttribute("ID"))) {
-					itemName = workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")" +
-					" + " + element.getAttribute("Name") +
-					"(" + element.getAttribute("SortKey") + ")";
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getSubsystems();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement1 = workList.get(m);
+				if (getAttribute(element, "SubsystemID").equals(getAttribute(workElement1, "ID"))) {
+					itemName = getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")" +
+					" + " + getAttribute(element, "Name") +
+					"(" + getAttribute(element, "SortKey") + ")";
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("TableField")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
-			workList = frame_.domDocument.getElementsByTagName("Subsystem");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement2 = (org.w3c.dom.Element)workList.item(m);
-				if (workElement1.getAttribute("SubsystemID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement2.getAttribute("Name") +
-					"(" + workElement2.getAttribute("SortKey") + ")" +
-					" + " + workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")" +
-					" + " + element.getAttribute("Name") +
-					"(" + element.getAttribute("Alias") + ")";
+			workElement1 = getParentElement(element);
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getSubsystems();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement2 = workList.get(m);
+				if (getAttribute(workElement1, "SubsystemID").equals(getAttribute(workElement2, "ID"))) {
+					itemName = getAttribute(workElement2, "Name") +
+					"(" + getAttribute(workElement2, "SortKey") + ")" +
+					" + " + getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")" +
+					" + " + getAttribute(element, "Name") +
+					"(" + getAttribute(element, "Alias") + ")";
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("Relationship")) {
-			workList = frame_.domDocument.getElementsByTagName("Table");
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getTables();
 			workString = "";
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement1 = (org.w3c.dom.Element)workList.item(m);
-				if (element.getAttribute("Table1ID").equals(workElement1.getAttribute("ID"))) {
+			for (int m = 0; m < workList.size(); m++) {
+				workElement1 = workList.get(m);
+				if (getAttribute(element, "Table1ID").equals(getAttribute(workElement1, "ID"))) {
 					if (workString.equals("")) {
-						workString = workElement1.getAttribute("Name") + "(" + workElement1.getAttribute("SortKey") + ")";
+						workString = getAttribute(workElement1, "Name") + "(" + getAttribute(workElement1, "SortKey") + ")";
 					} else {
-						workString = workString + " + " + workElement1.getAttribute("Name") + "(" + workElement1.getAttribute("SortKey") + ")";
+						workString = workString + " + " + getAttribute(workElement1, "Name") + "(" + getAttribute(workElement1, "SortKey") + ")";
 						break;
 					}
 				}
-				if (element.getAttribute("Table2ID").equals(workElement1.getAttribute("ID"))) {
+				if (getAttribute(element, "Table2ID").equals(getAttribute(workElement1, "ID"))) {
 					if (workString.equals("")) {
-						workString = workElement1.getAttribute("Name") + "(" + workElement1.getAttribute("SortKey") + ")";
+						workString = getAttribute(workElement1, "Name") + "(" + getAttribute(workElement1, "SortKey") + ")";
 					} else {
-						workString = workString + " + " + workElement1.getAttribute("Name") + "(" + workElement1.getAttribute("SortKey") + ")";
+						workString = workString + " + " + getAttribute(workElement1, "Name") + "(" + getAttribute(workElement1, "SortKey") + ")";
 						break;
 					}
 				}
@@ -1352,153 +1360,188 @@ public class DialogScan extends JDialog {
 		}
 		//
 		if (elementType.equals("Function")) {
-			workList = frame_.domDocument.getElementsByTagName("Subsystem");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement1 = (org.w3c.dom.Element)workList.item(m);
-				if (element.getAttribute("SubsystemID").equals(workElement1.getAttribute("ID"))) {
-					itemName = workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")" +
-					" + " + element.getAttribute("Name") +
-					"(" + element.getAttribute("SortKey") + ")";
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getSubsystems();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement1 = workList.get(m);
+				if (getAttribute(element, "SubsystemID").equals(getAttribute(workElement1, "ID"))) {
+					itemName = getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")" +
+					" + " + getAttribute(element, "Name") +
+					"(" + getAttribute(element, "SortKey") + ")";
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("FunctionUsedByThis")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
+			workElement1 = getParentElement(element);
 			//
-			workList = frame_.domDocument.getElementsByTagName("Subsystem");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement2 = (org.w3c.dom.Element)workList.item(m);
-				if (workElement1.getAttribute("SubsystemID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement2.getAttribute("Name") +
-					"(" + workElement2.getAttribute("SortKey") + ")" +
-					" + " + workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")";
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getSubsystems();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement2 = workList.get(m);
+				if (getAttribute(workElement1, "SubsystemID").equals(getAttribute(workElement2, "ID"))) {
+					itemName = getAttribute(workElement2, "Name") +
+					"(" + getAttribute(workElement2, "SortKey") + ")" +
+					" + " + getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")";
 					break;
 				}
 			}
 			//
-			workList = frame_.domDocument.getElementsByTagName("Function");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement3 = (org.w3c.dom.Element)workList.item(m);
-				if (element.getAttribute("FunctionID").equals(workElement3.getAttribute("ID"))) {
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getFunctions();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement3 = workList.get(m);
+				if (getAttribute(element, "FunctionID").equals(getAttribute(workElement3, "ID"))) {
 					itemName = itemName + " + " +
-					workElement3.getAttribute("Name") +
-					"(" + workElement3.getAttribute("SortKey") + ")";
+					getAttribute(workElement3, "Name") +
+					"(" + getAttribute(workElement3, "SortKey") + ")";
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("IOPanel") || elementType.equals("IOSpool") || elementType.equals("IOWebPage")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
+			workElement1 = getParentElement(element);
 			//
-			workList = frame_.domDocument.getElementsByTagName("Subsystem");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement2 = (org.w3c.dom.Element)workList.item(m);
-				if (workElement1.getAttribute("SubsystemID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement2.getAttribute("Name") +
-					"(" + workElement2.getAttribute("SortKey") + ")" +
-					" + " + workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")" +
-					" + " + element.getAttribute("Name") +
-					"(" + element.getAttribute("SortKey") + ")";
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getSubsystems();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement2 = workList.get(m);
+				if (getAttribute(workElement1, "SubsystemID").equals(getAttribute(workElement2, "ID"))) {
+					itemName = getAttribute(workElement2, "Name") +
+					"(" + getAttribute(workElement2, "SortKey") + ")" +
+					" + " + getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")" +
+					" + " + getAttribute(element, "Name") +
+					"(" + getAttribute(element, "SortKey") + ")";
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("IOPanelField") || elementType.equals("IOSpoolField") || elementType.equals("IOWebPageField")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
-			workElement2 = (org.w3c.dom.Element)workElement1.getParentNode();
+			workElement1 = getParentElement(element);
+			workElement2 = getParentElement(workElement1);
 			//
-			workList = frame_.domDocument.getElementsByTagName("Subsystem");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement3 = (org.w3c.dom.Element)workList.item(m);
-				if (workElement2.getAttribute("SubsystemID").equals(workElement3.getAttribute("ID"))) {
-					itemName = workElement3.getAttribute("Name") +
-					"(" + workElement3.getAttribute("SortKey") + ")" +
-					" + " + workElement2.getAttribute("Name") +
-					"(" + workElement2.getAttribute("SortKey") + ")" +
-					" + " + workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")" +
-					" + " + element.getAttribute("Name") +
-					"(" + element.getAttribute("SortKey") + ")";
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getSubsystems();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement3 = workList.get(m);
+				if (getAttribute(workElement2, "SubsystemID").equals(getAttribute(workElement3, "ID"))) {
+					itemName = getAttribute(workElement3, "Name") +
+					"(" + getAttribute(workElement3, "SortKey") + ")" +
+					" + " + getAttribute(workElement2, "Name") +
+					"(" + getAttribute(workElement2, "SortKey") + ")" +
+					" + " + getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")" +
+					" + " + getAttribute(element, "Name") +
+					"(" + getAttribute(element, "SortKey") + ")";
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("IOTable")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
+			workElement1 = getParentElement(element);
 			//
-			workList = frame_.domDocument.getElementsByTagName("Subsystem");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement2 = (org.w3c.dom.Element)workList.item(m);
-				if (workElement1.getAttribute("SubsystemID").equals(workElement2.getAttribute("ID"))) {
-					itemName = workElement2.getAttribute("Name") +
-					"(" + workElement2.getAttribute("SortKey") + ")" +
-					" + " + workElement1.getAttribute("Name") +
-					"(" + workElement1.getAttribute("SortKey") + ")";
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getSubsystems();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement2 = workList.get(m);
+				if (getAttribute(workElement1, "SubsystemID").equals(getAttribute(workElement2, "ID"))) {
+					itemName = getAttribute(workElement2, "Name") +
+					"(" + getAttribute(workElement2, "SortKey") + ")" +
+					" + " + getAttribute(workElement1, "Name") +
+					"(" + getAttribute(workElement1, "SortKey") + ")";
 					break;
 				}
 			}
 			//
-			workList = frame_.domDocument.getElementsByTagName("Table");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement2 = (org.w3c.dom.Element)workList.item(m);
-				if (element.getAttribute("TableID").equals(workElement2.getAttribute("ID"))) {
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getTables();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement2 = workList.get(m);
+				if (getAttribute(element, "TableID").equals(getAttribute(workElement2, "ID"))) {
 					itemName = itemName + " + " +
-					workElement2.getAttribute("Name") +
-					"(" + workElement2.getAttribute("SortKey") + ")";
+					getAttribute(workElement2, "Name") +
+					"(" + getAttribute(workElement2, "SortKey") + ")";
 					break;
 				}
 			}
 		}
 		//
 		if (elementType.equals("IOTableField")) {
-			workElement1 = (org.w3c.dom.Element)element.getParentNode();
-			workElement2 = (org.w3c.dom.Element)workElement1.getParentNode();
+			workElement1 = getParentElement(element);
+			workElement2 = getParentElement(workElement1);
 			//
-			workList = frame_.domDocument.getElementsByTagName("Subsystem");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement3 = (org.w3c.dom.Element)workList.item(m);
-				if (workElement2.getAttribute("SubsystemID").equals(workElement3.getAttribute("ID"))) {
-					itemName = workElement3.getAttribute("Name") +
-					"(" + workElement3.getAttribute("SortKey") + ")" +
-					" + " + workElement2.getAttribute("Name") + 
-					"(" + workElement2.getAttribute("SortKey") + ")";
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getSubsystems();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement3 = workList.get(m);
+				if (getAttribute(workElement2, "SubsystemID").equals(getAttribute(workElement3, "ID"))) {
+					itemName = getAttribute(workElement3, "Name") +
+					"(" + getAttribute(workElement3, "SortKey") + ")" +
+					" + " + getAttribute(workElement2, "Name") + 
+					"(" + getAttribute(workElement2, "SortKey") + ")";
 					break;
 				}
 			}
 			//
 			workElement3 = null;
-			workList = frame_.domDocument.getElementsByTagName("Table");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement3 = (org.w3c.dom.Element)workList.item(m);
-				if (workElement1.getAttribute("TableID").equals(workElement3.getAttribute("ID"))) {
+			workList = frame_.getXeadDocumentModel().getXeadSystem().getTables();
+			for (int m = 0; m < workList.size(); m++) {
+				workElement3 = workList.get(m);
+				if (getAttribute(workElement1, "TableID").equals(getAttribute(workElement3, "ID"))) {
 					itemName = itemName + " + " +
-					workElement3.getAttribute("Name") +
-					"(" + workElement3.getAttribute("SortKey") + ")";
+					getAttribute(workElement3, "Name") +
+					"(" + getAttribute(workElement3, "SortKey") + ")";
 					break;
 				}
 			}
 			//
-			workList = workElement3.getElementsByTagName("TableField");
-			for (int m = 0; m < workList.getLength(); m++) {
-				workElement3 = (org.w3c.dom.Element)workList.item(m);
-				if (element.getAttribute("FieldID").equals(workElement3.getAttribute("ID"))) {
-					itemName = itemName + " + " +
-					workElement3.getAttribute("Name") +
-					"(" + workElement3.getAttribute("Alias") + ")";
-					break;
+			if (workElement3 != null) {
+				xeadModeler.model.json.Table table = (xeadModeler.model.json.Table)workElement3;
+				workList = table.getTableFields();
+				for (int m = 0; m < workList.size(); m++) {
+					workElement3 = workList.get(m);
+					if (getAttribute(element, "FieldID").equals(getAttribute(workElement3, "ID"))) {
+						itemName = itemName + " + " +
+						getAttribute(workElement3, "Name") +
+						"(" + getAttribute(workElement3, "Alias") + ")";
+						break;
+					}
 				}
 			}
 		}
 		//
 		return itemName;
+	}
+
+	// Helper methods for POJO attribute access
+	String getAttribute(Object element, String attributeType) {
+		if (element == null) return "";
+		try {
+			java.lang.reflect.Method method = element.getClass().getMethod("get" + attributeType);
+			Object result = method.invoke(element);
+			return result != null ? result.toString() : "";
+		} catch (Exception e) {
+			return "";
+		}
+	}
+
+	void setAttribute(Object element, String attributeType, String value) {
+		if (element == null) return;
+		try {
+			java.lang.reflect.Method method = element.getClass().getMethod("set" + attributeType, String.class);
+			method.invoke(element, value);
+		} catch (Exception e) {
+			// Ignore if setter not found
+		}
+	}
+
+	Object getParentElement(Object element) {
+		// For POJO-based model, parent relationships are maintained through references
+		// This method returns null as parent navigation is not needed for JSON model
+		return null;
+	}
+
+	String getSortKey(Object element) {
+		return getAttribute(element, "SortKey");
 	}
 
 	String getFirstSentence(String originalString) {
@@ -1598,15 +1641,15 @@ public class DialogScan extends JDialog {
 					//
 					TableRowNumber tableRowNumber = (TableRowNumber)tableModelScanResult.getValueAt(i, 0);
 					//
-					org.w3c.dom.Element element = tableRowNumber.getElement();
+					Object element = tableRowNumber.getElement();
 					attributeType = tableRowNumber.getAttributeType();
 					//
 					if (attributeType.equals("Descriptions") || attributeType.equals("Operations") || attributeType.equals("ImageText")) {
 						processingEOLRequired = true;
-						targetString = substringLinesWithTokenOfEOL(element.getAttribute(attributeType), "\n");
+						targetString = substringLinesWithTokenOfEOL(getAttribute(element, attributeType), "\n");
 					} else {
 						processingEOLRequired = false;
-						targetString = element.getAttribute(attributeType);
+						targetString = getAttribute(element, attributeType);
 					}
 					if (!jCheckBoxCaseSensitive.isSelected()) {
 						targetString = targetString.toUpperCase();
@@ -1618,12 +1661,12 @@ public class DialogScan extends JDialog {
 					if (processingEOLRequired) {
 						targetString = concatLinesWithTokenOfEOL(targetString);
 					}
-					element.setAttribute(attributeType, targetString);
+					setAttribute(element, attributeType, targetString);
 					//
 					if (processingEOLRequired) {
-						tableModelScanResult.setValueAt(getFirstSentence(element.getAttribute(attributeType)), i, 5);
+						tableModelScanResult.setValueAt(getFirstSentence(getAttribute(element, attributeType)), i, 5);
 					} else {
-						tableModelScanResult.setValueAt(element.getAttribute(attributeType), i, 5);
+						tableModelScanResult.setValueAt(getAttribute(element, attributeType), i, 5);
 					}
 				}
 			}
@@ -1638,16 +1681,16 @@ public class DialogScan extends JDialog {
 	void setSelectedRowValueToTextPane() {
 		if (jTableScanResult.getSelectedRow() > -1) {
 			TableRowNumber tableRowNumber = (TableRowNumber)tableModelScanResult.getValueAt(jTableScanResult.getSelectedRow(), 0);
-			org.w3c.dom.Element element = tableRowNumber.getElement();
+			Object element = tableRowNumber.getElement();
 			//
 			String attrType = tableRowNumber.getAttributeType();
 			String imageText = "";
 			if (attrType.equals("Descriptions")
 					|| attrType.equals("Operations")
 					|| attrType.equals("ImageText")) {
-				imageText = substringLinesWithTokenOfEOL(element.getAttribute(attrType), "\n");
+				imageText = substringLinesWithTokenOfEOL(getAttribute(element, attrType), "\n");
 			} else {
-				imageText = element.getAttribute(attrType);
+				imageText = getAttribute(element, attrType);
 			}
 			String workString = imageText;
 			if (!jCheckBoxCaseSensitive.isSelected()) {
@@ -2076,19 +2119,19 @@ public class DialogScan extends JDialog {
 	}
 
 	class TableRowNumber extends Object {
-		private org.w3c.dom.Element element_;
+		private Object pojoElement_;
 		private int number_;
 		private String attributeType_;
-		public TableRowNumber(int num, org.w3c.dom.Element elm, String attr) {
+		public TableRowNumber(int num, Object elm, String attr) {
 			number_ = num;
-			element_ = elm;
+			pojoElement_ = elm;
 			attributeType_ = attr;
 		}
 		public String toString() {
 			return Integer.toString(number_);
 		}
-		public org.w3c.dom.Element getElement() {
-			return element_;
+		public Object getElement() {
+			return pojoElement_;
 		}
 		public String getAttributeType() {
 			return attributeType_;
@@ -2144,11 +2187,11 @@ public class DialogScan extends JDialog {
 
 	class XeadNode implements Comparable {
 		private String nodeType_;
-		private org.w3c.dom.Element domNode_;
-		public XeadNode(String type, org.w3c.dom.Element node) {
+		private Object pojoNode_;
+		public XeadNode(String type, Object node) {
 			super();
 			nodeType_ = type;
-			domNode_ = node;
+			pojoNode_ = node;
 		}
 		public String toString() {
 			String str = "";
@@ -2158,19 +2201,23 @@ public class DialogScan extends JDialog {
 		public String getName() {
 			String str = "";
 			if (nodeType_.equals("Role")) {
-				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+				xeadModeler.model.json.Role role = (xeadModeler.model.json.Role)pojoNode_;
+				str = role.getSortKey() + " " + role.getName();
 			}
 			if (nodeType_.equals("Subsystem")) {
-				str = domNode_.getAttribute("SortKey") + " " + domNode_.getAttribute("Name");
+				xeadModeler.model.json.Subsystem subsystem = (xeadModeler.model.json.Subsystem)pojoNode_;
+				str = subsystem.getSortKey() + " " + subsystem.getName();
 			}
 			return str;
 		}
-		public org.w3c.dom.Element getElement() {
-			return domNode_;
+		public Object getElement() {
+			return pojoNode_;
 		}
         public int compareTo(Object other) {
             XeadNode otherNode = (XeadNode)other;
-            return domNode_.getAttribute("SortKey").compareTo(otherNode.getElement().getAttribute("SortKey"));
+            String thisSortKey = getSortKey(pojoNode_);
+            String otherSortKey = getSortKey(otherNode.getElement());
+            return thisSortKey.compareTo(otherSortKey);
         }
 	}
 }
