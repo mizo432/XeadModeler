@@ -13,11 +13,11 @@ import java.util.List;
  * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  */
-public class XmlServiceImpl implements XmlService {
+public class DataServiceImpl implements DataService {
     
     private final XeadDocumentModel documentModel;
     
-    public XmlServiceImpl(XeadDocumentModel documentModel) {
+    public DataServiceImpl(XeadDocumentModel documentModel) {
         this.documentModel = documentModel;
     }
     

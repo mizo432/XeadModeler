@@ -5,8 +5,8 @@ import xeadModeler.service.FileService;
 import xeadModeler.service.FileServiceImpl;
 import xeadModeler.service.ChangeStateService;
 import xeadModeler.service.XeadUndoManager;
-import xeadModeler.service.XmlService;
-import xeadModeler.service.XmlServiceImpl;
+import xeadModeler.service.DataService;
+import xeadModeler.service.DataServiceImpl;
 import xeadModeler.service.DrawingService;
 import xeadModeler.service.DrawingServiceImpl;
 import xeadModeler.service.TreeService;
@@ -72,12 +72,12 @@ public class MvcConfig {
     }
     
     /**
-     * XMLデータ管理サービスのBeanを定義します
-     * @return XmlService
+     * データ管理サービスのBeanを定義します
+     * @return DataService
      */
     @Bean
-    public XmlService xmlService() {
-        return new XmlServiceImpl(xeadDocumentModel());
+    public DataService dataService() {
+        return new DataServiceImpl(xeadDocumentModel());
     }
     
     /**

@@ -41,7 +41,7 @@ import xeadModeler.model.XeadDocumentModel;
 import xeadModeler.service.FileService;
 import xeadModeler.service.ChangeStateService;
 import xeadModeler.service.XeadUndoManager;
-import xeadModeler.service.XmlService;
+import xeadModeler.service.DataService;
 import xeadModeler.service.DrawingService;
 import xeadModeler.service.TreeService;
 import xeadModeler.service.TableService;
@@ -75,7 +75,7 @@ public class Application implements ApplicationRunner {
 	@Autowired
 	private XeadUndoManager xeadUndoManager;
 	@Autowired
-	private XmlService xmlService;
+	private DataService dataService;
 	@Autowired
 	private DrawingService drawingService;
 	@Autowired
@@ -122,11 +122,11 @@ public class Application implements ApplicationRunner {
 	}
 
 	/**
-	 * XMLデータ管理サービスを取得します
-	 * @return XmlService
+	 * データ管理サービスを取得します
+	 * @return DataService
 	 */
-	public XmlService getXmlService() {
-		return xmlService;
+	public DataService getDataService() {
+		return dataService;
 	}
 
 	/**

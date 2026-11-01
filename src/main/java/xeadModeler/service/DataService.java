@@ -11,7 +11,7 @@ import java.util.List;
  * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  */
-public interface XmlService {
+public interface DataService {
     
     /**
      * XEADフォーマット仕様に従って要素の順序を整列します
