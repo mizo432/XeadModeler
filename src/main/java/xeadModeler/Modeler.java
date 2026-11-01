@@ -9369,6 +9369,33 @@ public class Modeler extends JFrame {
   }
 
   /**
+   * Add a child element to a JSON POJO's list property.
+   */
+  private void addChildToPojo(Object parent, String listPropertyName, Object child) {
+    if (parent == null || child == null) {
+      return;
+    }
+    try {
+      // Get the list property
+      String getterName = "get" + listPropertyName.substring(0, 1).toUpperCase() + listPropertyName.substring(1);
+      java.lang.reflect.Method getter = parent.getClass().getMethod(getterName);
+      java.util.List<?> list = (java.util.List<?>) getter.invoke(parent);
+      if (list == null) {
+        // Try to set a new list
+        String setterName = "set" + listPropertyName.substring(0, 1).toUpperCase() + listPropertyName.substring(1);
+        java.lang.reflect.Method setter = parent.getClass().getMethod(setterName, java.util.List.class);
+        java.util.List<Object> newList = new java.util.ArrayList<>();
+        newList.add(child);
+        setter.invoke(parent, newList);
+      } else {
+        list.add(child);
+      }
+    } catch (Exception e) {
+      // If method doesn't exist or fails, ignore
+    }
+  }
+
+  /**
    * add node to the list of FieldListNodeToBeRenumbered
    *
    * @param node :XeadTreeNode of tableFieldList
@@ -20802,151 +20829,175 @@ public class Modeler extends JFrame {
       return errorMessage;
     }
 
-    public void pasteChildNode(org.w3c.dom.Element pastingElement) {
+    public void pasteChildNode(Object pastingElement) {
       XeadTreeNode childNode = null;
       Object lastElement;
-      org.w3c.dom.Element newElement, newElementChild1, newElementChild2;
+      Object newElement, newElementChild1, newElementChild2;
       int lastID = 0;
       //
       //Paste SubjectArea//
       if (nodeType_.equals("SubjectAreaList") && getTagName(pastingElement)
           .equals("SubjectArea")) {
-        newElement = domDocument.createElement("SubjectArea");
+        xeadModeler.model.json.SubjectArea subjectArea = new xeadModeler.model.json.SubjectArea();
+        newElement = subjectArea;
         lastElement = getLastDomElementOfTheType("SubjectArea");
         if (lastElement == null) {
           lastID = 0;
         } else {
           lastID = Integer.parseInt(getIdFromObject(lastElement));
         }
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("Name",
-            pastingElement.getAttribute("Name") + res.getString("S3951"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-        newElement.setAttribute("BoundaryPosition",
-            pastingElement.getAttribute("BoundaryPosition"));
-        newElement.setAttribute("BoundarySize", pastingElement.getAttribute("BoundarySize"));
-        NodeList nodeList = pastingElement.getElementsByTagName("DataflowNode");
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "Name",
+            getAttributeFromJsonPojo(pastingElement, "Name") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getAttributeFromJsonPojo(pastingElement, "SortKey"));
+        setAttributeOnJsonPojo(newElement, "BoundaryPosition",
+            getAttributeFromJsonPojo(pastingElement, "BoundaryPosition"));
+        setAttributeOnJsonPojo(newElement, "BoundarySize", getAttributeFromJsonPojo(pastingElement, "BoundarySize"));
+        NodeList nodeList = getElementsByTagNameFromPojo(pastingElement, "DataflowNode");
         for (int i = 0; i < nodeList.getLength(); i++) {
-          org.w3c.dom.Element element = (org.w3c.dom.Element) nodeList.item(i);
-          newElementChild1 = domDocument.createElement("DataflowNode");
-          newElementChild1.setAttribute("ID", element.getAttribute("ID"));
-          newElementChild1.setAttribute("Name", element.getAttribute("Name"));
-          newElementChild1.setAttribute("Type", element.getAttribute("Type"));
-          if (element.getAttribute("Type").equals("Process")) {
-            newElementChild1.setAttribute("EventPos", element.getAttribute("EventPos"));
+          Object element = nodeList.item(i);
+          xeadModeler.model.json.DataflowNode dataflowNode = new xeadModeler.model.json.DataflowNode();
+          newElementChild1 = dataflowNode;
+          setAttributeOnJsonPojo(newElementChild1, "ID", getAttributeFromJsonPojo(element, "ID"));
+          setAttributeOnJsonPojo(newElementChild1, "Name", getAttributeFromJsonPojo(element, "Name"));
+          setAttributeOnJsonPojo(newElementChild1, "Type", getAttributeFromJsonPojo(element, "Type"));
+          if ("Process".equals(getAttributeFromJsonPojo(element, "Type"))) {
+            setAttributeOnJsonPojo(newElementChild1, "EventPos", getAttributeFromJsonPojo(element, "EventPos"));
           } else {
-            newElementChild1.setAttribute("NameExt", element.getAttribute("NameExt"));
+            setAttributeOnJsonPojo(newElementChild1, "NameExt", getAttributeFromJsonPojo(element, "NameExt"));
           }
-          newElementChild1.setAttribute("SlideNumber", element.getAttribute("SlideNumber"));
-          newElementChild1.setAttribute("TaskID", element.getAttribute("TaskID"));
-          newElementChild1.setAttribute("Position", element.getAttribute("Position"));
-          newElement.appendChild(newElementChild1);
+          setAttributeOnJsonPojo(newElementChild1, "SlideNumber", getAttributeFromJsonPojo(element, "SlideNumber"));
+          setAttributeOnJsonPojo(newElementChild1, "TaskID", getAttributeFromJsonPojo(element, "TaskID"));
+          setAttributeOnJsonPojo(newElementChild1, "Position", getAttributeFromJsonPojo(element, "Position"));
+          addChildToPojo(newElement, "dataflowNodes", newElementChild1);
         }
-        nodeList = pastingElement.getElementsByTagName("DataflowLine");
+        nodeList = getElementsByTagNameFromPojo(pastingElement, "DataflowLine");
         for (int i = 0; i < nodeList.getLength(); i++) {
-          org.w3c.dom.Element element = (org.w3c.dom.Element) nodeList.item(i);
-          newElementChild1 = domDocument.createElement("DataflowLine");
-          newElementChild1.setAttribute("ID", element.getAttribute("ID"));
-          newElementChild1.setAttribute("Name", element.getAttribute("Name"));
-          newElementChild1.setAttribute("NameExt", element.getAttribute("NameExt"));
-          newElementChild1.setAttribute("ImageType", element.getAttribute("ImageType"));
-          newElementChild1.setAttribute("NodeID1", element.getAttribute("NodeID1"));
-          newElementChild1.setAttribute("NodeID2", element.getAttribute("NodeID2"));
-          newElementChild1.setAttribute("ShowArrow1", element.getAttribute("ShowArrow1"));
-          newElementChild1.setAttribute("ShowArrow2", element.getAttribute("ShowArrow2"));
-          newElementChild1.setAttribute("TerminalPosIndex1",
-              element.getAttribute("TerminalPosIndex1"));
-          newElementChild1.setAttribute("TerminalPosIndex2",
-              element.getAttribute("TerminalPosIndex2"));
-          newElementChild1.setAttribute("SlideNumber", element.getAttribute("SlideNumber"));
-          newElement.appendChild(newElementChild1);
+          Object element = nodeList.item(i);
+          xeadModeler.model.json.DataflowLine dataflowLine = new xeadModeler.model.json.DataflowLine();
+          newElementChild1 = dataflowLine;
+          setAttributeOnJsonPojo(newElementChild1, "ID", getAttributeFromJsonPojo(element, "ID"));
+          setAttributeOnJsonPojo(newElementChild1, "Name", getAttributeFromJsonPojo(element, "Name"));
+          setAttributeOnJsonPojo(newElementChild1, "NameExt", getAttributeFromJsonPojo(element, "NameExt"));
+          setAttributeOnJsonPojo(newElementChild1, "ImageType", getAttributeFromJsonPojo(element, "ImageType"));
+          setAttributeOnJsonPojo(newElementChild1, "NodeID1", getAttributeFromJsonPojo(element, "NodeID1"));
+          setAttributeOnJsonPojo(newElementChild1, "NodeID2", getAttributeFromJsonPojo(element, "NodeID2"));
+          setAttributeOnJsonPojo(newElementChild1, "ShowArrow1", getAttributeFromJsonPojo(element, "ShowArrow1"));
+          setAttributeOnJsonPojo(newElementChild1, "ShowArrow2", getAttributeFromJsonPojo(element, "ShowArrow2"));
+          setAttributeOnJsonPojo(newElementChild1, "TerminalPosIndex1",
+              getAttributeFromJsonPojo(element, "TerminalPosIndex1"));
+          setAttributeOnJsonPojo(newElementChild1, "TerminalPosIndex2",
+              getAttributeFromJsonPojo(element, "TerminalPosIndex2"));
+          setAttributeOnJsonPojo(newElementChild1, "SlideNumber", getAttributeFromJsonPojo(element, "SlideNumber"));
+          addChildToPojo(newElement, "dataflowLines", newElementChild1);
         }
-        systemNode.getElement().appendChild(newElement);
+        XeadSystem system = xeadDocumentModel.getXeadSystem();
+        if (system.getSubjectAreas() == null) {
+          system.setSubjectAreas(new java.util.ArrayList<>());
+        }
+        system.getSubjectAreas().add(subjectArea);
         childNode = new XeadTreeNode("SubjectArea", newElement);
         this.add(childNode);
       }
       //
       //Paste Role//
       if (nodeType_.equals("RoleList") && getTagName(pastingElement).equals("Role")) {
-        newElement = domDocument.createElement("Role");
+        xeadModeler.model.json.Role role = new xeadModeler.model.json.Role();
+        newElement = role;
         lastElement = getLastDomElementOfTheType("Role");
         if (lastElement == null) {
           lastID = 0;
         } else {
           lastID = Integer.parseInt(getIdFromObject(lastElement));
         }
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("Name",
-            pastingElement.getAttribute("Name") + res.getString("S3951"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-        newElement.setAttribute("DepartmentID", pastingElement.getAttribute("DepartmentID"));
-        systemNode.getElement().appendChild(newElement);
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "Name",
+            getAttributeFromJsonPojo(pastingElement, "Name") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getAttributeFromJsonPojo(pastingElement, "SortKey"));
+        setAttributeOnJsonPojo(newElement, "DepartmentID", getAttributeFromJsonPojo(pastingElement, "DepartmentID"));
+        XeadSystem system = xeadDocumentModel.getXeadSystem();
+        if (system.getRoles() == null) {
+          system.setRoles(new java.util.ArrayList<>());
+        }
+        system.getRoles().add(role);
         childNode = new XeadTreeNode("Role", newElement);
         this.add(childNode);
       }
       //
       //Paste Task//
       if (nodeType_.equals("Role") && getTagName(pastingElement).equals("Task")) {
-        newElement = domDocument.createElement("Task");
+        xeadModeler.model.json.Task task = new xeadModeler.model.json.Task();
+        newElement = task;
         lastElement = getLastDomElementOfTheType("Task");
         if (lastElement == null) {
           lastID = 0;
         } else {
           lastID = Integer.parseInt(getIdFromObject(lastElement));
         }
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("Name",
-            pastingElement.getAttribute("Name") + res.getString("S3951"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-        newElement.setAttribute("RoleID", domNode_.getAttribute("ID"));
-        newElement.setAttribute("Event", pastingElement.getAttribute("Event"));
-        newElement.setAttribute("TaskTypeID", pastingElement.getAttribute("TaskTypeID"));
-        NodeList nodeList1 = pastingElement.getElementsByTagName("TaskAction");
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "Name",
+            getAttributeFromJsonPojo(pastingElement, "Name") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getAttributeFromJsonPojo(pastingElement, "SortKey"));
+        setAttributeOnJsonPojo(newElement, "RoleID", getAttributeFromJsonPojo(jsonNode_, "ID"));
+        setAttributeOnJsonPojo(newElement, "Event", getAttributeFromJsonPojo(pastingElement, "Event"));
+        setAttributeOnJsonPojo(newElement, "TaskTypeID", getAttributeFromJsonPojo(pastingElement, "TaskTypeID"));
+        NodeList nodeList1 = getElementsByTagNameFromPojo(pastingElement, "TaskAction");
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          org.w3c.dom.Element element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          newElementChild1 = domDocument.createElement("TaskAction");
-          newElementChild1.setAttribute("ID", element1.getAttribute("ID"));
-          newElementChild1.setAttribute("Label", element1.getAttribute("Label"));
-          newElementChild1.setAttribute("IndentLevel", element1.getAttribute("IndentLevel"));
-          newElementChild1.setAttribute("ExecuteIf", element1.getAttribute("ExecuteIf"));
-          newElementChild1.setAttribute("SortKey", element1.getAttribute("SortKey"));
-          newElementChild1.setAttribute("Descriptions", element1.getAttribute("Descriptions"));
-          newElement.appendChild(newElementChild1);
-          NodeList nodeList2 = element1.getElementsByTagName("TaskFunctionIO");
+          Object element1 = nodeList1.item(i);
+          xeadModeler.model.json.TaskAction taskAction = new xeadModeler.model.json.TaskAction();
+          newElementChild1 = taskAction;
+          setAttributeOnJsonPojo(newElementChild1, "ID", getAttributeFromJsonPojo(element1, "ID"));
+          setAttributeOnJsonPojo(newElementChild1, "Label", getAttributeFromJsonPojo(element1, "Label"));
+          setAttributeOnJsonPojo(newElementChild1, "IndentLevel", getAttributeFromJsonPojo(element1, "IndentLevel"));
+          setAttributeOnJsonPojo(newElementChild1, "ExecuteIf", getAttributeFromJsonPojo(element1, "ExecuteIf"));
+          setAttributeOnJsonPojo(newElementChild1, "SortKey", getAttributeFromJsonPojo(element1, "SortKey"));
+          setAttributeOnJsonPojo(newElementChild1, "Descriptions", getAttributeFromJsonPojo(element1, "Descriptions"));
+          addChildToPojo(newElement, "taskActions", newElementChild1);
+          NodeList nodeList2 = getElementsByTagNameFromPojo(element1, "TaskFunctionIO");
           for (int j = 0; j < nodeList2.getLength(); j++) {
-            org.w3c.dom.Element element2 = (org.w3c.dom.Element) nodeList2.item(j);
-            newElementChild2 = domDocument.createElement("TaskFunctionIO");
-            newElementChild2.setAttribute("FunctionID", element2.getAttribute("FunctionID"));
-            newElementChild2.setAttribute("IOID", element2.getAttribute("IOID"));
-            newElementChild2.setAttribute("IOIDSeq", element2.getAttribute("IOIDSeq"));
-            newElementChild2.setAttribute("Operations", element2.getAttribute("Operations"));
-            newElementChild2.setAttribute("SortKey", element2.getAttribute("SortKey"));
-            newElementChild1.appendChild(newElementChild2);
+            Object element2 = nodeList2.item(j);
+            xeadModeler.model.json.TaskFunctionIO taskFunctionIO = new xeadModeler.model.json.TaskFunctionIO();
+            newElementChild2 = taskFunctionIO;
+            setAttributeOnJsonPojo(newElementChild2, "FunctionID", getAttributeFromJsonPojo(element2, "FunctionID"));
+            setAttributeOnJsonPojo(newElementChild2, "IOID", getAttributeFromJsonPojo(element2, "IOID"));
+            setAttributeOnJsonPojo(newElementChild2, "IOIDSeq", getAttributeFromJsonPojo(element2, "IOIDSeq"));
+            setAttributeOnJsonPojo(newElementChild2, "Operations", getAttributeFromJsonPojo(element2, "Operations"));
+            setAttributeOnJsonPojo(newElementChild2, "SortKey", getAttributeFromJsonPojo(element2, "SortKey"));
+            addChildToPojo(newElementChild1, "taskFunctionIOs", newElementChild2);
           }
         }
-        systemNode.getElement().appendChild(newElement);
+        XeadSystem system = xeadDocumentModel.getXeadSystem();
+        if (system.getTasks() == null) {
+          system.setTasks(new java.util.ArrayList<>());
+        }
+        system.getTasks().add(task);
         childNode = new XeadTreeNode("Task", newElement);
         this.add(childNode);
       }
       //
       //Paste Subsystem//
       if (nodeType_.equals("SubsystemList") && getTagName(pastingElement).equals("Subsystem")) {
-        newElement = domDocument.createElement("Subsystem");
+        xeadModeler.model.json.Subsystem subsystem = new xeadModeler.model.json.Subsystem();
+        newElement = subsystem;
         lastElement = getLastDomElementOfTheType("Subsystem");
         if (lastElement == null) {
           lastID = 0;
         } else {
           lastID = Integer.parseInt(getIdFromObject(lastElement));
         }
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("Name",
-            pastingElement.getAttribute("Name") + res.getString("S3951"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-        systemNode.getElement().appendChild(newElement);
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "Name",
+            getAttributeFromJsonPojo(pastingElement, "Name") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getAttributeFromJsonPojo(pastingElement, "SortKey"));
+        XeadSystem system = xeadDocumentModel.getXeadSystem();
+        if (system.getSubsystems() == null) {
+          system.setSubsystems(new java.util.ArrayList<>());
+        }
+        system.getSubsystems().add(subsystem);
         childNode = new XeadTreeNode("Subsystem", newElement);
         XeadTreeNode node1 = new XeadTreeNode("TableList", null);
         childNode.add(node1);
@@ -20957,18 +21008,19 @@ public class Modeler extends JFrame {
       //
       //Paste Table Definition//
       if (nodeType_.equals("TableList") && getTagName(pastingElement).equals("Table")) {
-        newElement = domDocument.createElement("Table");
+        xeadModeler.model.json.Table table = new xeadModeler.model.json.Table();
+        newElement = table;
         lastID = getLastIDOfTable();
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("Name",
-            pastingElement.getAttribute("Name") + res.getString("S3951"));
-        newElement.setAttribute("SynchFile", pastingElement.getAttribute("SynchFile"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-        newElement.setAttribute("Alias", pastingElement.getAttribute("Alias"));
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "Name",
+            getAttributeFromJsonPojo(pastingElement, "Name") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "SynchFile", getAttributeFromJsonPojo(pastingElement, "SynchFile"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getAttributeFromJsonPojo(pastingElement, "SortKey"));
+        setAttributeOnJsonPojo(newElement, "Alias", getAttributeFromJsonPojo(pastingElement, "Alias"));
         XeadTreeNode subsystemNode = (XeadTreeNode) this.getParent();
-        newElement.setAttribute("SubsystemID", subsystemNode.getElement().getAttribute("ID"));
-        newElement.setAttribute("TableTypeID", pastingElement.getAttribute("TableTypeID"));
+        setAttributeOnJsonPojo(newElement, "SubsystemID", getAttributeFromJsonPojo(subsystemNode.getElement(), "ID"));
+        setAttributeOnJsonPojo(newElement, "TableTypeID", getAttributeFromJsonPojo(pastingElement, "TableTypeID"));
         childNode = new XeadTreeNode("Table", newElement);
         XeadTreeNode fieldListNode = new XeadTreeNode("TableFieldList", null);
         childNode.add(fieldListNode);
@@ -20977,22 +21029,23 @@ public class Modeler extends JFrame {
         //
         //Add fields//
         XeadTreeNode fieldNode;
-        NodeList nodeList1 = pastingElement.getElementsByTagName("TableField");
+        NodeList nodeList1 = getElementsByTagNameFromPojo(pastingElement, "TableField");
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          org.w3c.dom.Element element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          newElementChild1 = domDocument.createElement("TableField");
-          newElementChild1.setAttribute("ID", element1.getAttribute("ID"));
-          newElementChild1.setAttribute("AttributeType", element1.getAttribute("AttributeType"));
-          newElementChild1.setAttribute("Name", element1.getAttribute("Name"));
-          newElementChild1.setAttribute("DataTypeID", element1.getAttribute("DataTypeID"));
-          newElementChild1.setAttribute("Alias", element1.getAttribute("Alias"));
-          newElementChild1.setAttribute("Descriptions", element1.getAttribute("Descriptions"));
-          newElementChild1.setAttribute("SortKey", element1.getAttribute("SortKey"));
-          newElementChild1.setAttribute("ShowOnModel", element1.getAttribute("ShowOnModel"));
-          newElementChild1.setAttribute("NotNull", element1.getAttribute("NotNull"));
-          newElementChild1.setAttribute("NoUpdate", element1.getAttribute("NoUpdate"));
-          newElementChild1.setAttribute("Default", element1.getAttribute("Default"));
-          newElement.appendChild(newElementChild1);
+          Object element1 = nodeList1.item(i);
+          xeadModeler.model.json.TableField tableField = new xeadModeler.model.json.TableField();
+          newElementChild1 = tableField;
+          setAttributeOnJsonPojo(newElementChild1, "ID", getAttributeFromJsonPojo(element1, "ID"));
+          setAttributeOnJsonPojo(newElementChild1, "AttributeType", getAttributeFromJsonPojo(element1, "AttributeType"));
+          setAttributeOnJsonPojo(newElementChild1, "Name", getAttributeFromJsonPojo(element1, "Name"));
+          setAttributeOnJsonPojo(newElementChild1, "DataTypeID", getAttributeFromJsonPojo(element1, "DataTypeID"));
+          setAttributeOnJsonPojo(newElementChild1, "Alias", getAttributeFromJsonPojo(element1, "Alias"));
+          setAttributeOnJsonPojo(newElementChild1, "Descriptions", getAttributeFromJsonPojo(element1, "Descriptions"));
+          setAttributeOnJsonPojo(newElementChild1, "SortKey", getAttributeFromJsonPojo(element1, "SortKey"));
+          setAttributeOnJsonPojo(newElementChild1, "ShowOnModel", getAttributeFromJsonPojo(element1, "ShowOnModel"));
+          setAttributeOnJsonPojo(newElementChild1, "NotNull", getAttributeFromJsonPojo(element1, "NotNull"));
+          setAttributeOnJsonPojo(newElementChild1, "NoUpdate", getAttributeFromJsonPojo(element1, "NoUpdate"));
+          setAttributeOnJsonPojo(newElementChild1, "Default", getAttributeFromJsonPojo(element1, "Default"));
+          addChildToPojo(newElement, "tableFields", newElementChild1);
           fieldNode = new XeadTreeNode("TableField", newElementChild1);
           fieldListNode.add(fieldNode);
         }
@@ -21003,36 +21056,42 @@ public class Modeler extends JFrame {
         //
         //Add keys//
         XeadTreeNode keyNode;
-        nodeList1 = pastingElement.getElementsByTagName("TableKey");
+        nodeList1 = getElementsByTagNameFromPojo(pastingElement, "TableKey");
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          org.w3c.dom.Element element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          newElementChild1 = domDocument.createElement("TableKey");
-          newElementChild1.setAttribute("ID", element1.getAttribute("ID"));
-          newElementChild1.setAttribute("Type", element1.getAttribute("Type"));
-          newElementChild1.setAttribute("SortKey", element1.getAttribute("SortKey"));
-          NodeList nodeList2 = element1.getElementsByTagName("TableKeyField");
+          Object element1 = nodeList1.item(i);
+          xeadModeler.model.json.TableKey tableKey = new xeadModeler.model.json.TableKey();
+          newElementChild1 = tableKey;
+          setAttributeOnJsonPojo(newElementChild1, "ID", getAttributeFromJsonPojo(element1, "ID"));
+          setAttributeOnJsonPojo(newElementChild1, "Type", getAttributeFromJsonPojo(element1, "Type"));
+          setAttributeOnJsonPojo(newElementChild1, "SortKey", getAttributeFromJsonPojo(element1, "SortKey"));
+          NodeList nodeList2 = getElementsByTagNameFromPojo(element1, "TableKeyField");
           for (int j = 0; j < nodeList2.getLength(); j++) {
-            org.w3c.dom.Element element2 = (org.w3c.dom.Element) nodeList2.item(j);
-            newElementChild2 = domDocument.createElement("TableKeyField");
-            newElementChild2.setAttribute("FieldID", element2.getAttribute("FieldID"));
-            if (pastingElement.getAttribute("Type").equals("XK")) {
-              newElementChild2.setAttribute("AscDesc", "A");
+            Object element2 = nodeList2.item(j);
+            xeadModeler.model.json.TableKeyField tableKeyField = new xeadModeler.model.json.TableKeyField();
+            newElementChild2 = tableKeyField;
+            setAttributeOnJsonPojo(newElementChild2, "FieldID", getAttributeFromJsonPojo(element2, "FieldID"));
+            if ("XK".equals(getAttributeFromJsonPojo(pastingElement, "Type"))) {
+              setAttributeOnJsonPojo(newElementChild2, "AscDesc", "A");
             }
-            newElementChild2.setAttribute("SortKey", element2.getAttribute("SortKey"));
-            newElementChild1.appendChild(newElementChild2);
+            setAttributeOnJsonPojo(newElementChild2, "SortKey", getAttributeFromJsonPojo(element2, "SortKey"));
+            addChildToPojo(newElementChild1, "tableKeyFields", newElementChild2);
           }
-          newElement.appendChild(newElementChild1);
+          addChildToPojo(newElement, "tableKeys", newElementChild1);
           keyNode = new XeadTreeNode("TableKey", newElementChild1);
           keyListNode.add(keyNode);
         }
         keyListNode.sortChildNodes();
         //
-        //Insert DOM Element//
-        systemNode.getElement().appendChild(newElement);
+        //Insert JSON Element//
+        XeadSystem system = xeadDocumentModel.getXeadSystem();
+        if (system.getTables() == null) {
+          system.setTables(new java.util.ArrayList<>());
+        }
+        system.getTables().add(table);
         //
         //Add subsystem attributes//
-        createSubsystemAttributesForTable(newElement.getAttribute("ID"),
-            newElement.getAttribute("SubsystemID"));
+        createSubsystemAttributesForTable(getAttributeFromJsonPojo(newElement, "ID"),
+            getAttributeFromJsonPojo(newElement, "SubsystemID"));
         //
         //Add tree-node//
         this.add(childNode);
@@ -21042,38 +21101,36 @@ public class Modeler extends JFrame {
       if (nodeType_.equals("TableFieldList") && getTagName(pastingElement).equals("TableField")) {
         addNodeToTheArrayOfFieldListNodeToBeRenumbered(this);
         XeadTreeNode tableNode = (XeadTreeNode) this.getParent();
-        newElement = domDocument.createElement("TableField");
-        org.w3c.dom.Element element1 = null;
+        xeadModeler.model.json.TableField tableField = new xeadModeler.model.json.TableField();
+        newElement = tableField;
+        Object element1 = null;
         int intFieldID = 0;
         lastID = 0;
-        NodeList nodeList1 = tableNode.getElement().getElementsByTagName("TableField");
+        NodeList nodeList1 = getElementsByTagNameFromPojo(tableNode.getElement(), "TableField");
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          intFieldID = Integer.parseInt(element1.getAttribute("ID"));
+          element1 = nodeList1.item(i);
+          intFieldID = Integer.parseInt(getAttributeFromJsonPojo(element1, "ID"));
           if (intFieldID > lastID) {
             lastID = intFieldID;
           }
         }
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("Name",
-            pastingElement.getAttribute("Name") + res.getString("S3951"));
-        newElement.setAttribute("Alias", pastingElement.getAttribute("Alias"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("SortKey", getNextSortKeyOfTableField(tableNode));
-        newElement.setAttribute("ShowOnModel", pastingElement.getAttribute("ShowOnModel"));
-        newElement.setAttribute("DataTypeID", pastingElement.getAttribute("DataTypeID"));
-        newElement.setAttribute("AttributeType", pastingElement.getAttribute("AttributeType"));
-        newElement.setAttribute("NotNull", pastingElement.getAttribute("NotNull"));
-        newElement.setAttribute("NoUpdate", pastingElement.getAttribute("NoUpdate"));
-        newElement.setAttribute("Default", pastingElement.getAttribute("Default"));
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "Name",
+            getAttributeFromJsonPojo(pastingElement, "Name") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "Alias", getAttributeFromJsonPojo(pastingElement, "Alias"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getNextSortKeyOfTableField(tableNode));
+        setAttributeOnJsonPojo(newElement, "ShowOnModel", getAttributeFromJsonPojo(pastingElement, "ShowOnModel"));
+        setAttributeOnJsonPojo(newElement, "DataTypeID", getAttributeFromJsonPojo(pastingElement, "DataTypeID"));
+        setAttributeOnJsonPojo(newElement, "AttributeType", getAttributeFromJsonPojo(pastingElement, "AttributeType"));
+        setAttributeOnJsonPojo(newElement, "NotNull", getAttributeFromJsonPojo(pastingElement, "NotNull"));
+        setAttributeOnJsonPojo(newElement, "NoUpdate", getAttributeFromJsonPojo(pastingElement, "NoUpdate"));
+        setAttributeOnJsonPojo(newElement, "Default", getAttributeFromJsonPojo(pastingElement, "Default"));
         //
-        //Insert DOM Element before Key element//
-        NodeList nodeList2 = tableNode.getElement().getElementsByTagName("TableKey");
-        if (nodeList2.getLength() > 0) {
-          org.w3c.dom.Element element = (org.w3c.dom.Element) nodeList2.item(0);
-          tableNode.getElement().insertBefore(newElement, element);
-        } else {
-          tableNode.getElement().appendChild(newElement);
+        //Insert JSON Element - add to parent table's tableFields list
+        Object parentTable = tableNode.getParent() != null ? tableNode.getParent().getElement() : null;
+        if (parentTable != null) {
+          addChildToPojo(parentTable, "tableFields", newElement);
         }
         //
         //Add tree-node//
@@ -21083,15 +21140,16 @@ public class Modeler extends JFrame {
         isRequiredToSetupSortableFieldList = true;
         //
         //Add as a IOTable Field//
-        String tableID = tableNode.getElement().getAttribute("ID");
-        nodeList1 = domDocument.getElementsByTagName("IOTable");
+        String tableID = getAttributeFromJsonPojo(tableNode.getElement(), "ID");
+        nodeList1 = getElementsByTagNameFromPojo(xeadDocumentModel.getXeadSystem(), "IOTable");
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          if (element1.getAttribute("TableID").equals(tableID)) {
-            newElementChild1 = domDocument.createElement("IOTableField");
-            newElementChild1.setAttribute("FieldID", newElement.getAttribute("ID"));
-            newElementChild1.setAttribute("Descriptions", "");
-            element1.appendChild(newElementChild1);
+          element1 = nodeList1.item(i);
+          if (getAttributeFromJsonPojo(element1, "TableID").equals(tableID)) {
+            xeadModeler.model.json.IOTableField ioTableField = new xeadModeler.model.json.IOTableField();
+            newElementChild1 = ioTableField;
+            setAttributeOnJsonPojo(newElementChild1, "FieldID", getAttributeFromJsonPojo(newElement, "ID"));
+            setAttributeOnJsonPojo(newElementChild1, "Descriptions", "");
+            addChildToPojo(element1, "ioTableFields", newElementChild1);
           }
         }
       }
@@ -21099,238 +21157,265 @@ public class Modeler extends JFrame {
       //Paste Function//
       if (nodeType_.equals("FunctionList") && getTagName(pastingElement).equals("Function")) {
         XeadTreeNode subsystemNode = (XeadTreeNode) this.getParent();
-        newElement = domDocument.createElement("Function");
+        xeadModeler.model.json.Function function = new xeadModeler.model.json.Function();
+        newElement = function;
         lastElement = getLastDomElementOfTheType("Function");
         if (lastElement == null) {
           lastID = 0;
         } else {
           lastID = Integer.parseInt(getIdFromObject(lastElement));
         }
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("Name",
-            pastingElement.getAttribute("Name") + res.getString("S3951"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-        newElement.setAttribute("SubsystemID", subsystemNode.getElement().getAttribute("ID"));
-        newElement.setAttribute("FunctionTypeID", pastingElement.getAttribute("FunctionTypeID"));
-        newElement.setAttribute("Parameters", pastingElement.getAttribute("Parameters"));
-        newElement.setAttribute("Return", pastingElement.getAttribute("Return"));
-        newElement.setAttribute("Summary", pastingElement.getAttribute("Summary"));
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "Name",
+            getAttributeFromJsonPojo(pastingElement, "Name") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getAttributeFromJsonPojo(pastingElement, "SortKey"));
+        setAttributeOnJsonPojo(newElement, "SubsystemID", getAttributeFromJsonPojo(subsystemNode.getElement(), "ID"));
+        setAttributeOnJsonPojo(newElement, "FunctionTypeID", getAttributeFromJsonPojo(pastingElement, "FunctionTypeID"));
+        setAttributeOnJsonPojo(newElement, "Parameters", getAttributeFromJsonPojo(pastingElement, "Parameters"));
+        setAttributeOnJsonPojo(newElement, "Return", getAttributeFromJsonPojo(pastingElement, "Return"));
+        setAttributeOnJsonPojo(newElement, "Summary", getAttributeFromJsonPojo(pastingElement, "Summary"));
         childNode = new XeadTreeNode("Function", newElement);
         //
         isRequiredToSetupFunctionsStructre = true;
         //
         //Add IOPanel//
         XeadTreeNode ioPanelNode;
-        NodeList nodeList1 = pastingElement.getElementsByTagName("IOPanel");
+        NodeList nodeList1 = getElementsByTagNameFromPojo(pastingElement, "IOPanel");
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          org.w3c.dom.Element element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          newElementChild1 = domDocument.createElement("IOPanel");
-          newElementChild1.setAttribute("ID", element1.getAttribute("ID"));
-          newElementChild1.setAttribute("Name", element1.getAttribute("Name"));
-          newElementChild1.setAttribute("ImageText", element1.getAttribute("ImageText"));
-          newElementChild1.setAttribute("Background", element1.getAttribute("Background"));
-          newElementChild1.setAttribute("Size", element1.getAttribute("Size"));
-          newElementChild1.setAttribute("FontSize", element1.getAttribute("FontSize"));
-          newElementChild1.setAttribute("SortKey", element1.getAttribute("SortKey"));
-          newElementChild1.setAttribute("Descriptions", element1.getAttribute("Descriptions"));
-          newElement.appendChild(newElementChild1);
+          Object element1 = nodeList1.item(i);
+          xeadModeler.model.json.IOPanel ioPanel = new xeadModeler.model.json.IOPanel();
+          newElementChild1 = ioPanel;
+          setAttributeOnJsonPojo(newElementChild1, "ID", getAttributeFromJsonPojo(element1, "ID"));
+          setAttributeOnJsonPojo(newElementChild1, "Name", getAttributeFromJsonPojo(element1, "Name"));
+          setAttributeOnJsonPojo(newElementChild1, "ImageText", getAttributeFromJsonPojo(element1, "ImageText"));
+          setAttributeOnJsonPojo(newElementChild1, "Background", getAttributeFromJsonPojo(element1, "Background"));
+          setAttributeOnJsonPojo(newElementChild1, "Size", getAttributeFromJsonPojo(element1, "Size"));
+          setAttributeOnJsonPojo(newElementChild1, "FontSize", getAttributeFromJsonPojo(element1, "FontSize"));
+          setAttributeOnJsonPojo(newElementChild1, "SortKey", getAttributeFromJsonPojo(element1, "SortKey"));
+          setAttributeOnJsonPojo(newElementChild1, "Descriptions", getAttributeFromJsonPojo(element1, "Descriptions"));
+          addChildToPojo(newElement, "ioPanels", newElementChild1);
           ioPanelNode = new XeadTreeNode("IOPanel", newElementChild1);
           childNode.add(ioPanelNode);
-          NodeList nodeList2 = element1.getElementsByTagName("IOPanelStyle");
+          NodeList nodeList2 = getElementsByTagNameFromPojo(element1, "IOPanelStyle");
           for (int j = 0; j < nodeList2.getLength(); j++) {
-            org.w3c.dom.Element element2 = (org.w3c.dom.Element) nodeList2.item(j);
-            newElementChild2 = domDocument.createElement("IOPanelStyle");
-            newElementChild2.setAttribute("Value", element2.getAttribute("Value"));
-            newElementChild1.appendChild(newElementChild2);
+            Object element2 = nodeList2.item(j);
+            xeadModeler.model.json.IOPanelStyle ioPanelStyle = new xeadModeler.model.json.IOPanelStyle();
+            newElementChild2 = ioPanelStyle;
+            setAttributeOnJsonPojo(newElementChild2, "Value", getAttributeFromJsonPojo(element2, "Value"));
+            addChildToPojo(newElementChild1, "ioPanelStyles", newElementChild2);
           }
           //
           //Add IOPanelField//
-          nodeList2 = element1.getElementsByTagName("IOPanelField");
+          nodeList2 = getElementsByTagNameFromPojo(element1, "IOPanelField");
           for (int j = 0; j < nodeList2.getLength(); j++) {
-            org.w3c.dom.Element element2 = (org.w3c.dom.Element) nodeList2.item(j);
-            newElementChild2 = domDocument.createElement("IOPanelField");
-            newElementChild2.setAttribute("Label", element2.getAttribute("Label"));
-            newElementChild2.setAttribute("IOType", element2.getAttribute("IOType"));
-            newElementChild2.setAttribute("Name", element2.getAttribute("Name"));
-            newElementChild2.setAttribute("SortKey", element2.getAttribute("SortKey"));
-            newElementChild2.setAttribute("Descriptions", element2.getAttribute("Descriptions"));
-            newElementChild1.appendChild(newElementChild2);
+            Object element2 = nodeList2.item(j);
+            xeadModeler.model.json.IOPanelField ioPanelField = new xeadModeler.model.json.IOPanelField();
+            newElementChild2 = ioPanelField;
+            setAttributeOnJsonPojo(newElementChild2, "Label", getAttributeFromJsonPojo(element2, "Label"));
+            setAttributeOnJsonPojo(newElementChild2, "IOType", getAttributeFromJsonPojo(element2, "IOType"));
+            setAttributeOnJsonPojo(newElementChild2, "Name", getAttributeFromJsonPojo(element2, "Name"));
+            setAttributeOnJsonPojo(newElementChild2, "SortKey", getAttributeFromJsonPojo(element2, "SortKey"));
+            setAttributeOnJsonPojo(newElementChild2, "Descriptions", getAttributeFromJsonPojo(element2, "Descriptions"));
+            addChildToPojo(newElementChild1, "ioPanelFields", newElementChild2);
           }
         }
         //
         //Add IOSpool//
         XeadTreeNode ioSpoolNode;
-        nodeList1 = pastingElement.getElementsByTagName("IOSpool");
+        nodeList1 = getElementsByTagNameFromPojo(pastingElement, "IOSpool");
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          org.w3c.dom.Element element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          newElementChild1 = domDocument.createElement("IOSpool");
-          newElementChild1.setAttribute("ID", element1.getAttribute("ID"));
-          newElementChild1.setAttribute("Name", element1.getAttribute("Name"));
-          newElementChild1.setAttribute("ImageText", element1.getAttribute("ImageText"));
-          newElementChild1.setAttribute("Background", element1.getAttribute("Background"));
-          newElementChild1.setAttribute("Size", element1.getAttribute("Size"));
-          newElementChild1.setAttribute("FontSize", element1.getAttribute("FontSize"));
-          newElementChild1.setAttribute("SortKey", element1.getAttribute("SortKey"));
-          newElementChild1.setAttribute("Descriptions", element1.getAttribute("Descriptions"));
-          newElement.appendChild(newElementChild1);
+          Object element1 = nodeList1.item(i);
+          xeadModeler.model.json.IOSpool ioSpool = new xeadModeler.model.json.IOSpool();
+          newElementChild1 = ioSpool;
+          setAttributeOnJsonPojo(newElementChild1, "ID", getAttributeFromJsonPojo(element1, "ID"));
+          setAttributeOnJsonPojo(newElementChild1, "Name", getAttributeFromJsonPojo(element1, "Name"));
+          setAttributeOnJsonPojo(newElementChild1, "ImageText", getAttributeFromJsonPojo(element1, "ImageText"));
+          setAttributeOnJsonPojo(newElementChild1, "Background", getAttributeFromJsonPojo(element1, "Background"));
+          setAttributeOnJsonPojo(newElementChild1, "Size", getAttributeFromJsonPojo(element1, "Size"));
+          setAttributeOnJsonPojo(newElementChild1, "FontSize", getAttributeFromJsonPojo(element1, "FontSize"));
+          setAttributeOnJsonPojo(newElementChild1, "SortKey", getAttributeFromJsonPojo(element1, "SortKey"));
+          setAttributeOnJsonPojo(newElementChild1, "Descriptions", getAttributeFromJsonPojo(element1, "Descriptions"));
+          addChildToPojo(newElement, "ioSpools", newElementChild1);
           ioSpoolNode = new XeadTreeNode("IOSpool", newElementChild1);
           childNode.add(ioSpoolNode);
           //
           //IOSpool ImageTextStyle//
-          NodeList nodeList2 = element1.getElementsByTagName("IOSpoolStyle");
+          NodeList nodeList2 = getElementsByTagNameFromPojo(element1, "IOSpoolStyle");
           for (int j = 0; j < nodeList2.getLength(); j++) {
-            org.w3c.dom.Element element2 = (org.w3c.dom.Element) nodeList2.item(j);
-            newElementChild2 = domDocument.createElement("IOSpoolStyle");
-            newElementChild2.setAttribute("Value", element2.getAttribute("Value"));
-            newElementChild1.appendChild(newElementChild2);
+            Object element2 = nodeList2.item(j);
+            xeadModeler.model.json.IOSpoolStyle ioSpoolStyle = new xeadModeler.model.json.IOSpoolStyle();
+            newElementChild2 = ioSpoolStyle;
+            setAttributeOnJsonPojo(newElementChild2, "Value", getAttributeFromJsonPojo(element2, "Value"));
+            addChildToPojo(newElementChild1, "ioSpoolStyles", newElementChild2);
           }
           //
           //Add IOSpool Field//
-          nodeList2 = element1.getElementsByTagName("IOSpoolField");
+          nodeList2 = getElementsByTagNameFromPojo(element1, "IOSpoolField");
           for (int j = 0; j < nodeList2.getLength(); j++) {
-            org.w3c.dom.Element element2 = (org.w3c.dom.Element) nodeList2.item(j);
-            newElementChild2 = domDocument.createElement("IOSpoolField");
-            newElementChild2.setAttribute("Label", element2.getAttribute("Label"));
-            newElementChild2.setAttribute("Name", element2.getAttribute("Name"));
-            newElementChild2.setAttribute("SortKey", element2.getAttribute("SortKey"));
-            newElementChild2.setAttribute("Descriptions", element2.getAttribute("Descriptions"));
-            newElementChild1.appendChild(newElementChild2);
+            Object element2 = nodeList2.item(j);
+            xeadModeler.model.json.IOSpoolField ioSpoolField = new xeadModeler.model.json.IOSpoolField();
+            newElementChild2 = ioSpoolField;
+            setAttributeOnJsonPojo(newElementChild2, "Label", getAttributeFromJsonPojo(element2, "Label"));
+            setAttributeOnJsonPojo(newElementChild2, "Name", getAttributeFromJsonPojo(element2, "Name"));
+            setAttributeOnJsonPojo(newElementChild2, "SortKey", getAttributeFromJsonPojo(element2, "SortKey"));
+            setAttributeOnJsonPojo(newElementChild2, "Descriptions", getAttributeFromJsonPojo(element2, "Descriptions"));
+            addChildToPojo(newElementChild1, "ioSpoolFields", newElementChild2);
           }
         }
         //
         //Add IOWebPage//
         XeadTreeNode ioWebPageNode;
-        nodeList1 = pastingElement.getElementsByTagName("IOWebPage");
+        nodeList1 = getElementsByTagNameFromPojo(pastingElement, "IOWebPage");
         for (int i = 0; i < nodeList1.getLength(); i++) {
-          org.w3c.dom.Element element1 = (org.w3c.dom.Element) nodeList1.item(i);
-          newElementChild1 = domDocument.createElement("IOWebPage");
-          newElementChild1.setAttribute("ID", element1.getAttribute("ID"));
-          newElementChild1.setAttribute("Name", element1.getAttribute("Name"));
-          newElementChild1.setAttribute("FileName", element1.getAttribute("FileName"));
-          newElementChild1.setAttribute("SortKey", element1.getAttribute("SortKey"));
-          newElementChild1.setAttribute("Descriptions", element1.getAttribute("Descriptions"));
-          newElement.appendChild(newElementChild1);
+          Object element1 = nodeList1.item(i);
+          xeadModeler.model.json.IOWebPage ioWebPage = new xeadModeler.model.json.IOWebPage();
+          newElementChild1 = ioWebPage;
+          setAttributeOnJsonPojo(newElementChild1, "ID", getAttributeFromJsonPojo(element1, "ID"));
+          setAttributeOnJsonPojo(newElementChild1, "Name", getAttributeFromJsonPojo(element1, "Name"));
+          setAttributeOnJsonPojo(newElementChild1, "FileName", getAttributeFromJsonPojo(element1, "FileName"));
+          setAttributeOnJsonPojo(newElementChild1, "SortKey", getAttributeFromJsonPojo(element1, "SortKey"));
+          setAttributeOnJsonPojo(newElementChild1, "Descriptions", getAttributeFromJsonPojo(element1, "Descriptions"));
+          addChildToPojo(newElement, "ioWebPages", newElementChild1);
           ioWebPageNode = new XeadTreeNode("IOWebPage", newElementChild1);
           childNode.add(ioWebPageNode);
           //
           //Add IOWebPageField//
-          NodeList nodeList2 = element1.getElementsByTagName("IOWebPageField");
+          NodeList nodeList2 = getElementsByTagNameFromPojo(element1, "IOWebPageField");
           for (int j = 0; j < nodeList2.getLength(); j++) {
-            org.w3c.dom.Element element2 = (org.w3c.dom.Element) nodeList2.item(j);
-            newElementChild2 = domDocument.createElement("IOWebPageField");
-            newElementChild2.setAttribute("Label", element2.getAttribute("Label"));
-            newElementChild2.setAttribute("IOType", element2.getAttribute("IOType"));
-            newElementChild2.setAttribute("Name", element2.getAttribute("Name"));
-            newElementChild2.setAttribute("SortKey", element2.getAttribute("SortKey"));
-            newElementChild2.setAttribute("Descriptions", element2.getAttribute("Descriptions"));
-            newElementChild1.appendChild(newElementChild2);
+            Object element2 = nodeList2.item(j);
+            xeadModeler.model.json.IOWebPageField ioWebPageField = new xeadModeler.model.json.IOWebPageField();
+            newElementChild2 = ioWebPageField;
+            setAttributeOnJsonPojo(newElementChild2, "Label", getAttributeFromJsonPojo(element2, "Label"));
+            setAttributeOnJsonPojo(newElementChild2, "IOType", getAttributeFromJsonPojo(element2, "IOType"));
+            setAttributeOnJsonPojo(newElementChild2, "Name", getAttributeFromJsonPojo(element2, "Name"));
+            setAttributeOnJsonPojo(newElementChild2, "SortKey", getAttributeFromJsonPojo(element2, "SortKey"));
+            setAttributeOnJsonPojo(newElementChild2, "Descriptions", getAttributeFromJsonPojo(element2, "Descriptions"));
+            addChildToPojo(newElementChild1, "ioWebPageFields", newElementChild2);
           }
         }
         //
-        systemNode.getElement().appendChild(newElement);
+        XeadSystem system = xeadDocumentModel.getXeadSystem();
+        if (system.getFunctions() == null) {
+          system.setFunctions(new java.util.ArrayList<>());
+        }
+        system.getFunctions().add(function);
         childNode.sortChildNodes();
         this.add(childNode);
       }
       //
       //Paste IOPanel//
       if (nodeType_.equals("Function") && getTagName(pastingElement).equals("IOPanel")) {
+        xeadModeler.model.json.IOPanel ioPanel = new xeadModeler.model.json.IOPanel();
+        newElement = ioPanel;
         lastID = getLastIDOfFunctionIO(jsonNode_);
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("Name",
-            pastingElement.getAttribute("Name") + res.getString("S3951"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("ImageText", pastingElement.getAttribute("ImageText"));
-        newElement.setAttribute("Background", pastingElement.getAttribute("Background"));
-        newElement.setAttribute("Size", pastingElement.getAttribute("Size"));
-        newElement.setAttribute("FontSize", pastingElement.getAttribute("FontSize"));
-        newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "Name",
+            getAttributeFromJsonPojo(pastingElement, "Name") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "ImageText", getAttributeFromJsonPojo(pastingElement, "ImageText"));
+        setAttributeOnJsonPojo(newElement, "Background", getAttributeFromJsonPojo(pastingElement, "Background"));
+        setAttributeOnJsonPojo(newElement, "Size", getAttributeFromJsonPojo(pastingElement, "Size"));
+        setAttributeOnJsonPojo(newElement, "FontSize", getAttributeFromJsonPojo(pastingElement, "FontSize"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getAttributeFromJsonPojo(pastingElement, "SortKey"));
         //
-        org.w3c.dom.Element element;
-        NodeList nodeList = pastingElement.getElementsByTagName("IOPanelStyle");
+        Object element;
+        NodeList nodeList = getElementsByTagNameFromPojo(pastingElement, "IOPanelStyle");
         for (int i = 0; i < nodeList.getLength(); i++) {
-          element = (org.w3c.dom.Element) nodeList.item(i);
-          newElementChild1 = domDocument.createElement("IOPanelStyle");
-          newElementChild1.setAttribute("Value", element.getAttribute("Value"));
-          newElement.appendChild(newElementChild1);
+          element = nodeList.item(i);
+          xeadModeler.model.json.IOPanelStyle ioPanelStyle = new xeadModeler.model.json.IOPanelStyle();
+          newElementChild1 = ioPanelStyle;
+          setAttributeOnJsonPojo(newElementChild1, "Value", getAttributeFromJsonPojo(element, "Value"));
+          addChildToPojo(newElement, "ioPanelStyles", newElementChild1);
         }
         //
-        nodeList = pastingElement.getElementsByTagName("IOPanelField");
+        nodeList = getElementsByTagNameFromPojo(pastingElement, "IOPanelField");
         for (int i = 0; i < nodeList.getLength(); i++) {
-          element = (org.w3c.dom.Element) nodeList.item(i);
-          newElementChild1 = domDocument.createElement("IOPanelField");
-          newElementChild1.setAttribute("Label", element.getAttribute("Label"));
-          newElementChild1.setAttribute("IOType", element.getAttribute("IOType"));
-          newElementChild1.setAttribute("Name", element.getAttribute("Name"));
-          newElementChild1.setAttribute("SortKey", element.getAttribute("SortKey"));
-          newElementChild1.setAttribute("Descriptions", element.getAttribute("Descriptions"));
-          newElement.appendChild(newElementChild1);
+          element = nodeList.item(i);
+          xeadModeler.model.json.IOPanelField ioPanelField = new xeadModeler.model.json.IOPanelField();
+          newElementChild1 = ioPanelField;
+          setAttributeOnJsonPojo(newElementChild1, "Label", getAttributeFromJsonPojo(element, "Label"));
+          setAttributeOnJsonPojo(newElementChild1, "IOType", getAttributeFromJsonPojo(element, "IOType"));
+          setAttributeOnJsonPojo(newElementChild1, "Name", getAttributeFromJsonPojo(element, "Name"));
+          setAttributeOnJsonPojo(newElementChild1, "SortKey", getAttributeFromJsonPojo(element, "SortKey"));
+          setAttributeOnJsonPojo(newElementChild1, "Descriptions", getAttributeFromJsonPojo(element, "Descriptions"));
+          addChildToPojo(newElement, "ioPanelFields", newElementChild1);
         }
-        domNode_.appendChild(newElement);
+        // Add to parent function's ioPanels list
+        addChildToPojo(jsonNode_, "ioPanels", newElement);
         childNode = new XeadTreeNode("IOPanel", newElement);
         this.add(childNode);
       }
       //
       //Paste IOSpool//
       if (nodeType_.equals("Function") && getTagName(pastingElement).equals("IOSpool")) {
+        xeadModeler.model.json.IOSpool ioSpool = new xeadModeler.model.json.IOSpool();
+        newElement = ioSpool;
         lastID = getLastIDOfFunctionIO(jsonNode_);
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("Name",
-            pastingElement.getAttribute("Name") + res.getString("S3951"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("ImageText", pastingElement.getAttribute("ImageText"));
-        newElement.setAttribute("Background", pastingElement.getAttribute("Background"));
-        newElement.setAttribute("Size", pastingElement.getAttribute("Size"));
-        newElement.setAttribute("FontSize", pastingElement.getAttribute("FontSize"));
-        newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "Name",
+            getAttributeFromJsonPojo(pastingElement, "Name") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "ImageText", getAttributeFromJsonPojo(pastingElement, "ImageText"));
+        setAttributeOnJsonPojo(newElement, "Background", getAttributeFromJsonPojo(pastingElement, "Background"));
+        setAttributeOnJsonPojo(newElement, "Size", getAttributeFromJsonPojo(pastingElement, "Size"));
+        setAttributeOnJsonPojo(newElement, "FontSize", getAttributeFromJsonPojo(pastingElement, "FontSize"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getAttributeFromJsonPojo(pastingElement, "SortKey"));
         //
-        org.w3c.dom.Element element;
-        NodeList nodeList = pastingElement.getElementsByTagName("IOSpoolStyle");
+        Object element;
+        NodeList nodeList = getElementsByTagNameFromPojo(pastingElement, "IOSpoolStyle");
         for (int i = 0; i < nodeList.getLength(); i++) {
-          element = (org.w3c.dom.Element) nodeList.item(i);
-          newElementChild1 = domDocument.createElement("IOSpoolStyle");
-          newElementChild1.setAttribute("Value", element.getAttribute("Value"));
-          newElement.appendChild(newElementChild1);
+          element = nodeList.item(i);
+          xeadModeler.model.json.IOSpoolStyle ioSpoolStyle = new xeadModeler.model.json.IOSpoolStyle();
+          newElementChild1 = ioSpoolStyle;
+          setAttributeOnJsonPojo(newElementChild1, "Value", getAttributeFromJsonPojo(element, "Value"));
+          addChildToPojo(newElement, "ioSpoolStyles", newElementChild1);
         }
         //
-        nodeList = pastingElement.getElementsByTagName("IOSpoolField");
+        nodeList = getElementsByTagNameFromPojo(pastingElement, "IOSpoolField");
         for (int i = 0; i < nodeList.getLength(); i++) {
-          element = (org.w3c.dom.Element) nodeList.item(i);
-          newElementChild1 = domDocument.createElement("IOSpoolField");
-          newElementChild1.setAttribute("Label", element.getAttribute("Label"));
-          newElementChild1.setAttribute("Name", element.getAttribute("Name"));
-          newElementChild1.setAttribute("SortKey", element.getAttribute("SortKey"));
-          newElementChild1.setAttribute("Descriptions", element.getAttribute("Descriptions"));
-          newElement.appendChild(newElementChild1);
+          element = nodeList.item(i);
+          xeadModeler.model.json.IOSpoolField ioSpoolField = new xeadModeler.model.json.IOSpoolField();
+          newElementChild1 = ioSpoolField;
+          setAttributeOnJsonPojo(newElementChild1, "Label", getAttributeFromJsonPojo(element, "Label"));
+          setAttributeOnJsonPojo(newElementChild1, "Name", getAttributeFromJsonPojo(element, "Name"));
+          setAttributeOnJsonPojo(newElementChild1, "SortKey", getAttributeFromJsonPojo(element, "SortKey"));
+          setAttributeOnJsonPojo(newElementChild1, "Descriptions", getAttributeFromJsonPojo(element, "Descriptions"));
+          addChildToPojo(newElement, "ioSpoolFields", newElementChild1);
         }
-        domNode_.appendChild(newElement);
+        // Add to parent function's ioSpools list
+        addChildToPojo(jsonNode_, "ioSpools", newElement);
         childNode = new XeadTreeNode("IOSpool", newElement);
         this.add(childNode);
       }
       //
       //Paste IOWebPage//
       if (nodeType_.equals("Function") && getTagName(pastingElement).equals("IOWebPage")) {
+        xeadModeler.model.json.IOWebPage ioWebPage = new xeadModeler.model.json.IOWebPage();
+        newElement = ioWebPage;
         lastID = getLastIDOfFunctionIO(jsonNode_);
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("Name",
-            pastingElement.getAttribute("Name") + res.getString("S3951"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("FileName", pastingElement.getAttribute("FileName"));
-        newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "Name",
+            getAttributeFromJsonPojo(pastingElement, "Name") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "FileName", getAttributeFromJsonPojo(pastingElement, "FileName"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getAttributeFromJsonPojo(pastingElement, "SortKey"));
         //
-        org.w3c.dom.Element element;
-        NodeList nodeList = pastingElement.getElementsByTagName("IOWebPageField");
+        Object element;
+        NodeList nodeList = getElementsByTagNameFromPojo(pastingElement, "IOWebPageField");
         for (int i = 0; i < nodeList.getLength(); i++) {
-          element = (org.w3c.dom.Element) nodeList.item(i);
-          newElementChild1 = domDocument.createElement("IOWebPageField");
-          newElementChild1.setAttribute("Label", element.getAttribute("Label"));
-          newElementChild1.setAttribute("IOType", element.getAttribute("IOType"));
-          newElementChild1.setAttribute("Name", element.getAttribute("Name"));
-          newElementChild1.setAttribute("SortKey", element.getAttribute("SortKey"));
-          newElementChild1.setAttribute("Descriptions", element.getAttribute("Descriptions"));
-          newElement.appendChild(newElementChild1);
+          element = nodeList.item(i);
+          xeadModeler.model.json.IOWebPageField ioWebPageField = new xeadModeler.model.json.IOWebPageField();
+          newElementChild1 = ioWebPageField;
+          setAttributeOnJsonPojo(newElementChild1, "Label", getAttributeFromJsonPojo(element, "Label"));
+          setAttributeOnJsonPojo(newElementChild1, "IOType", getAttributeFromJsonPojo(element, "IOType"));
+          setAttributeOnJsonPojo(newElementChild1, "Name", getAttributeFromJsonPojo(element, "Name"));
+          setAttributeOnJsonPojo(newElementChild1, "SortKey", getAttributeFromJsonPojo(element, "SortKey"));
+          setAttributeOnJsonPojo(newElementChild1, "Descriptions", getAttributeFromJsonPojo(element, "Descriptions"));
+          addChildToPojo(newElement, "ioWebPageFields", newElementChild1);
         }
-        domNode_.appendChild(newElement);
+        // Add to parent function's ioWebPages list
+        addChildToPojo(jsonNode_, "ioWebPages", newElement);
         childNode = new XeadTreeNode("IOWebPage", newElement);
         this.add(childNode);
       }
@@ -21338,34 +21423,37 @@ public class Modeler extends JFrame {
       //Paste IOTable//
       if (nodeType_.equals("Function") && getTagName(pastingElement).equals("IOTable")) {
         XeadTreeNode subsystemNode = (XeadTreeNode) this.getParent().getParent();
+        xeadModeler.model.json.IOTable ioTable = new xeadModeler.model.json.IOTable();
+        newElement = ioTable;
         lastID = getLastIDOfFunctionIO(jsonNode_);
-        newElement.setAttribute("ID", Integer.toString(lastID + 1));
-        newElement.setAttribute("NameExtension",
-            pastingElement.getAttribute("NameExtension") + res.getString("S3951"));
-        newElement.setAttribute("Descriptions", pastingElement.getAttribute("Descriptions"));
-        newElement.setAttribute("TableID", pastingElement.getAttribute("TableID"));
-        newElement.setAttribute("OpC", pastingElement.getAttribute("OpC"));
-        newElement.setAttribute("OpR", pastingElement.getAttribute("OpR"));
-        newElement.setAttribute("OpU", pastingElement.getAttribute("OpU"));
-        newElement.setAttribute("OpD", pastingElement.getAttribute("OpD"));
-        //newElement.setAttribute("SortKey", pastingElement.getAttribute("SortKey"));
-        newElement.setAttribute("SortKey", getFollowingSortKeyOfChildNode(this));
-        org.w3c.dom.Element element;
-        NodeList nodeList = pastingElement.getElementsByTagName("IOTableField");
+        setAttributeOnJsonPojo(newElement, "ID", Integer.toString(lastID + 1));
+        setAttributeOnJsonPojo(newElement, "NameExtension",
+            getAttributeFromJsonPojo(pastingElement, "NameExtension") + res.getString("S3951"));
+        setAttributeOnJsonPojo(newElement, "Descriptions", getAttributeFromJsonPojo(pastingElement, "Descriptions"));
+        setAttributeOnJsonPojo(newElement, "TableID", getAttributeFromJsonPojo(pastingElement, "TableID"));
+        setAttributeOnJsonPojo(newElement, "OpC", getAttributeFromJsonPojo(pastingElement, "OpC"));
+        setAttributeOnJsonPojo(newElement, "OpR", getAttributeFromJsonPojo(pastingElement, "OpR"));
+        setAttributeOnJsonPojo(newElement, "OpU", getAttributeFromJsonPojo(pastingElement, "OpU"));
+        setAttributeOnJsonPojo(newElement, "OpD", getAttributeFromJsonPojo(pastingElement, "OpD"));
+        setAttributeOnJsonPojo(newElement, "SortKey", getFollowingSortKeyOfChildNode(this));
+        Object element;
+        NodeList nodeList = getElementsByTagNameFromPojo(pastingElement, "IOTableField");
         for (int i = 0; i < nodeList.getLength(); i++) {
-          element = (org.w3c.dom.Element) nodeList.item(i);
-          newElementChild1 = domDocument.createElement("IOTableField");
-          newElementChild1.setAttribute("FieldID", element.getAttribute("FieldID"));
-          newElementChild1.setAttribute("Descriptions", element.getAttribute("Descriptions"));
-          newElement.appendChild(newElementChild1);
+          element = nodeList.item(i);
+          xeadModeler.model.json.IOTableField ioTableField = new xeadModeler.model.json.IOTableField();
+          newElementChild1 = ioTableField;
+          setAttributeOnJsonPojo(newElementChild1, "FieldID", getAttributeFromJsonPojo(element, "FieldID"));
+          setAttributeOnJsonPojo(newElementChild1, "Descriptions", getAttributeFromJsonPojo(element, "Descriptions"));
+          addChildToPojo(newElement, "ioTableFields", newElementChild1);
         }
-        domNode_.appendChild(newElement);
+        // Add to parent function's ioTables list
+        addChildToPojo(jsonNode_, "ioTables", newElement);
         childNode = new XeadTreeNode("IOTable", newElement);
         this.add(childNode);
         //
         //Add subsystem attributes for the table//
-        createSubsystemAttributesForTable(newElement.getAttribute("TableID"),
-            subsystemNode.getElement().getAttribute("ID"));
+        createSubsystemAttributesForTable(getAttributeFromJsonPojo(newElement, "TableID"),
+            getAttributeFromJsonPojo(subsystemNode.getElement(), "ID"));
       }
       //
       if (childNode != null) {
