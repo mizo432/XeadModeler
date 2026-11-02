@@ -211,7 +211,7 @@ public class SystemView {
     public SystemView(Modeler modeler, SystemListener listener) {
         this.modeler = modeler;
         this.systemListener = listener;
-        initComponents();
+        initComponents(modeler);
     }
     
     public JPanel getPanel() {
@@ -221,7 +221,7 @@ public class SystemView {
     /**
      * コンポーネントを初期化します。
      */
-    private void initComponents() {
+    public void initComponents(Modeler m) {
         jPanelSystem.setLayout(new BorderLayout());
         jPanelSystem6.setBorder(BorderFactory.createEtchedBorder());
         jPanelSystem6.setPreferredSize(new Dimension(10, 74));

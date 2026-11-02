@@ -169,18 +169,18 @@ public class Modeler extends JFrame {
   /**
    * Main panels and labels
    */
-  private JPanel jPanelMain;
-  private JPanel jPanelJumpButtons = new JPanel();
+  JPanel jPanelMain;
+  JPanel jPanelJumpButtons = new JPanel();
   private GridLayout gridLayoutJumpButtons = new GridLayout();
   private NodeJumpButton[] nodeJumpButton = new NodeJumpButton[8];
-  private JSplitPane jSplitPaneMain = new JSplitPane();
-  private JPanel jPanelTopMargin1 = new JPanel();
-  private JPanel jPanelTopMargin2 = new JPanel();
+  JSplitPane jSplitPaneMain = new JSplitPane();
+  JPanel jPanelTopMargin1 = new JPanel();
+  JPanel jPanelTopMargin2 = new JPanel();
   public JLabel jLabelSubtitle = new JLabel();
   public JLabel jLabelChangeState = new JLabel();
-  private JProgressBar jProgressBar = new JProgressBar();
-  private Border borderOriginal1;
-  private JPanel jPanelContentsPane = new JPanel();
+  JProgressBar jProgressBar = new JProgressBar();
+  Border borderOriginal1;
+  JPanel jPanelContentsPane = new JPanel();
   private CardLayout cardLayoutContentsPane = new CardLayout();
   public String currentFileName, currentFileFolder, systemName;
   private long lastModifyTime = 0;
@@ -191,60 +191,60 @@ public class Modeler extends JFrame {
   /**
    * Main Menu
    */
-  private JMenuBar jMenuBar = new JMenuBar();
-  private JMenu jMenuFile = new JMenu();
-  private JMenuItem jMenuItemFileNew = new JMenuItem();
-  private JMenuItem jMenuItemFileOpen = new JMenuItem();
-  private JMenuItem jMenuItemFileExit = new JMenuItem();
-  private JMenuItem jMenuItemFileSave = new JMenuItem();
-  private JMenuItem jMenuItemFileSaveAs = new JMenuItem();
-  private JMenuItem jMenuItemFilePrintFormat = new JMenuItem();
-  private JMenuItem jMenuItemFileDiff = new JMenuItem();
-  private JMenu jMenuImport = new JMenu();
-  private JMenuItem jMenuItemImportXEAD = new JMenuItem();
+  JMenuBar jMenuBar = new JMenuBar();
+  JMenu jMenuFile = new JMenu();
+  JMenuItem jMenuItemFileNew = new JMenuItem();
+  JMenuItem jMenuItemFileOpen = new JMenuItem();
+  JMenuItem jMenuItemFileExit = new JMenuItem();
+  JMenuItem jMenuItemFileSave = new JMenuItem();
+  JMenuItem jMenuItemFileSaveAs = new JMenuItem();
+  JMenuItem jMenuItemFilePrintFormat = new JMenuItem();
+  JMenuItem jMenuItemFileDiff = new JMenuItem();
+  JMenu jMenuImport = new JMenu();
+  JMenuItem jMenuItemImportXEAD = new JMenuItem();
   //private JMenuItem jMenuItemImportRecover = new JMenuItem();
-  private JMenuItem jMenuItemImportSQL = new JMenuItem();
-  private JMenuItem jMenuItemImportXEAF = new JMenuItem();
-  private JMenu jMenuEdit = new JMenu();
-  private JMenuItem jMenuItemEditUndo = new JMenuItem();
-  private JMenuItem jMenuItemEditRedo = new JMenuItem();
-  private JMenu jMenuScan = new JMenu();
-  private JMenuItem jMenuItemScanString = new JMenuItem();
-  private JMenu jMenuScanSetBookmark = new JMenu();
-  private JMenuItem jMenuItemScanSetBookmark1 = new JMenuItem();
-  private JMenuItem jMenuItemScanSetBookmark2 = new JMenuItem();
-  private JMenuItem jMenuItemScanSetBookmark3 = new JMenuItem();
-  private JMenuItem jMenuItemScanSetBookmark4 = new JMenuItem();
-  private JMenuItem jMenuItemScanSetBookmark5 = new JMenuItem();
-  private JMenuItem jMenuItemScanSetBookmark6 = new JMenuItem();
-  private JMenuItem jMenuItemScanSetBookmark7 = new JMenuItem();
-  private JMenuItem jMenuItemScanSetBookmark8 = new JMenuItem();
-  private JMenuItem jMenuItemScanSetBookmark9 = new JMenuItem();
-  private JMenu jMenuScanJumpBookmark = new JMenu();
-  private JMenuItem jMenuItemScanJumpBookmark1 = new JMenuItem();
-  private JMenuItem jMenuItemScanJumpBookmark2 = new JMenuItem();
-  private JMenuItem jMenuItemScanJumpBookmark3 = new JMenuItem();
-  private JMenuItem jMenuItemScanJumpBookmark4 = new JMenuItem();
-  private JMenuItem jMenuItemScanJumpBookmark5 = new JMenuItem();
-  private JMenuItem jMenuItemScanJumpBookmark6 = new JMenuItem();
-  private JMenuItem jMenuItemScanJumpBookmark7 = new JMenuItem();
-  private JMenuItem jMenuItemScanJumpBookmark8 = new JMenuItem();
-  private JMenuItem jMenuItemScanJumpBookmark9 = new JMenuItem();
-  private JMenu jMenuTool = new JMenu();
-  private JMenuItem jMenuItemToolTaskList = new JMenuItem();
-  private JMenuItem jMenuItemToolTableList = new JMenuItem();
-  private JMenuItem jMenuItemToolDDLList = new JMenuItem();
-  private JMenuItem jMenuItemToolFieldList = new JMenuItem();
-  private JMenuItem jMenuItemToolFunctionList = new JMenuItem();
-  private JMenuItem jMenuItemToolNotedItemList = new JMenuItem();
-  private JMenuItem jMenuItemToolMatrixList = new JMenuItem();
-  private JMenuItem jMenuItemToolCreateTableStatement = new JMenuItem();
-  private JMenuItem jMenuItemToolDocuments = new JMenuItem();
-  private JMenuItem jMenuItemToolReorganizeDataTypes = new JMenuItem();
-  private JMenuItem jMenuItemToolJumpToURLPage = new JMenuItem();
-  private JMenu jMenuHelp = new JMenu();
-  private JMenuItem jMenuItemHelpHelp = new JMenuItem();
-  private JMenuItem jMenuItemHelpAbout = new JMenuItem();
+  JMenuItem jMenuItemImportSQL = new JMenuItem();
+  JMenuItem jMenuItemImportXEAF = new JMenuItem();
+  JMenu jMenuEdit = new JMenu();
+  JMenuItem jMenuItemEditUndo = new JMenuItem();
+  JMenuItem jMenuItemEditRedo = new JMenuItem();
+  JMenu jMenuScan = new JMenu();
+  JMenuItem jMenuItemScanString = new JMenuItem();
+  JMenu jMenuScanSetBookmark = new JMenu();
+  JMenuItem jMenuItemScanSetBookmark1 = new JMenuItem();
+  JMenuItem jMenuItemScanSetBookmark2 = new JMenuItem();
+  JMenuItem jMenuItemScanSetBookmark3 = new JMenuItem();
+  JMenuItem jMenuItemScanSetBookmark4 = new JMenuItem();
+  JMenuItem jMenuItemScanSetBookmark5 = new JMenuItem();
+  JMenuItem jMenuItemScanSetBookmark6 = new JMenuItem();
+  JMenuItem jMenuItemScanSetBookmark7 = new JMenuItem();
+  JMenuItem jMenuItemScanSetBookmark8 = new JMenuItem();
+  JMenuItem jMenuItemScanSetBookmark9 = new JMenuItem();
+  JMenu jMenuScanJumpBookmark = new JMenu();
+  JMenuItem jMenuItemScanJumpBookmark1 = new JMenuItem();
+  JMenuItem jMenuItemScanJumpBookmark2 = new JMenuItem();
+  JMenuItem jMenuItemScanJumpBookmark3 = new JMenuItem();
+  JMenuItem jMenuItemScanJumpBookmark4 = new JMenuItem();
+  JMenuItem jMenuItemScanJumpBookmark5 = new JMenuItem();
+  JMenuItem jMenuItemScanJumpBookmark6 = new JMenuItem();
+  JMenuItem jMenuItemScanJumpBookmark7 = new JMenuItem();
+  JMenuItem jMenuItemScanJumpBookmark8 = new JMenuItem();
+  JMenuItem jMenuItemScanJumpBookmark9 = new JMenuItem();
+  JMenu jMenuTool = new JMenu();
+  JMenuItem jMenuItemToolTaskList = new JMenuItem();
+  JMenuItem jMenuItemToolTableList = new JMenuItem();
+  JMenuItem jMenuItemToolDDLList = new JMenuItem();
+  JMenuItem jMenuItemToolFieldList = new JMenuItem();
+  JMenuItem jMenuItemToolFunctionList = new JMenuItem();
+  JMenuItem jMenuItemToolNotedItemList = new JMenuItem();
+  JMenuItem jMenuItemToolMatrixList = new JMenuItem();
+  JMenuItem jMenuItemToolCreateTableStatement = new JMenuItem();
+  JMenuItem jMenuItemToolDocuments = new JMenuItem();
+  JMenuItem jMenuItemToolReorganizeDataTypes = new JMenuItem();
+  JMenuItem jMenuItemToolJumpToURLPage = new JMenuItem();
+  JMenu jMenuHelp = new JMenu();
+  JMenuItem jMenuItemHelpHelp = new JMenuItem();
+  JMenuItem jMenuItemHelpAbout = new JMenuItem();
   /**
    * JSONファクトリ - JSON POJOを生成
    */
@@ -261,7 +261,7 @@ public class Modeler extends JFrame {
   /**
    * JSONサービス
    */
-  private JsonService jsonService;
+  JsonService jsonService;
   
   /**
    * Initialize JSON services
@@ -275,7 +275,7 @@ public class Modeler extends JFrame {
   /**
    * Variants for Properties
    */
-  private Properties properties = new Properties();
+  Properties properties = new Properties();
   public String mainFontName = "SansSerif";
   public String ioImageFontName = "Monospaced";
   public int ioImageFontSize = 16;
@@ -290,7 +290,7 @@ public class Modeler extends JFrame {
    */
   private xeadModeler.view.SortableXeadTreeNodeListModel sortableXeadTreeNodeListModel = new xeadModeler.view.SortableXeadTreeNodeListModel();
   public SortableDomElementListModel sortableDomElementListModel = new SortableDomElementListModel();
-  private SortableDomElementFieldListModel sortableDomElementFieldListModel = new SortableDomElementFieldListModel();
+  SortableDomElementFieldListModel sortableDomElementFieldListModel = new SortableDomElementFieldListModel();
   /**
    * fields for style processing for JTextpane
    */
@@ -316,28 +316,28 @@ public class Modeler extends JFrame {
    * change status controller for general use
    */
   public boolean informationOnThisPageChanged;
-  private ChangeState changeState = new ChangeState(this);
+  ChangeState changeState = new ChangeState(this);
   /**
    * Dialog box and fileChooser for general use
    */
-  private JFileChooser jFileChooser = new JFileChooser();
+  JFileChooser jFileChooser = new JFileChooser();
   /**
    * common used storage for copy/paste operation
    */
   private boolean inBlockSelectMode = false;
-  private Point blockSelectPointFrom = new Point();
-  private Point blockSelectPointThru = new Point();
-  private Rectangle blockSelectRec = new Rectangle(0, 0, 0, 0);
-  private Graphics savedImage = null;
+  Point blockSelectPointFrom = new Point();
+  Point blockSelectPointThru = new Point();
+  Rectangle blockSelectRec = new Rectangle(0, 0, 0, 0);
+  Graphics savedImage = null;
   private Object pastingElement = null; // JSON POJO for copy/paste
   /**
    * Dialogs and related variants
    */
-  private DialogDataflowNode dialogDataflowNode;
-  private DialogDataflowLine dialogDataflowLine;
-  private DialogScan dialogScan;
-  private DialogReorganizeDataTypes dialogReorganizeDataTypes;
-  private DialogCreateTableStatement dialogCreateTableStatement;
+  DialogDataflowNode dialogDataflowNode;
+  DialogDataflowLine dialogDataflowLine;
+  DialogScan dialogScan;
+  DialogReorganizeDataTypes dialogReorganizeDataTypes;
+  DialogCreateTableStatement dialogCreateTableStatement;
   public boolean useTableNameAsTableNameInCreateTableStatement = false;
   public String ddlCommentMark = "";
   public String ddlSectionMark = "";
@@ -346,29 +346,29 @@ public class Modeler extends JFrame {
   public boolean ignoreForeignKeyConstraints = false;
   public boolean ignoreKeyDefinitionWarnings = true;
   public boolean isToConvertCamel = true;
-  private DialogMatrixList dialogMatrixList;
-  private DialogDocuments dialogDocuments;
-  private DialogImportXEAD dialogImportXEAD;
-  private DialogImportXEAF dialogImportXEAF;
-  private DialogImportSQL dialogImportSQL;
-  private DialogConfigColors dialogConfigColors;
-  private DialogTableSynchronize dialogTableSynchronize;
-  private DialogToListChangesOfFiles dialogToListChangesOfFiles;
+  DialogMatrixList dialogMatrixList;
+  DialogDocuments dialogDocuments;
+  DialogImportXEAD dialogImportXEAD;
+  DialogImportXEAF dialogImportXEAF;
+  DialogImportSQL dialogImportSQL;
+  DialogConfigColors dialogConfigColors;
+  DialogTableSynchronize dialogTableSynchronize;
+  DialogToListChangesOfFiles dialogToListChangesOfFiles;
   /**
    * Print Controller
    */
   private xeadModeler.view.XeadPagePainter painter = new xeadModeler.view.XeadPagePainter(this);
-  private PrinterJob printerJob;
-  private PageFormat pageFormat;
+  PrinterJob printerJob;
+  PageFormat pageFormat;
   private boolean printFormatSpecified = false;
   /**
    * Last focused KanjiTextArea
    */
-  private KanjiTextArea lastFocusedTextArea = null;
+  KanjiTextArea lastFocusedTextArea = null;
   /**
    * Icons
    */
-  private Image imageTitle;
+  Image imageTitle;
   public ImageIcon imageIconSystem;
   public ImageIcon imageIconSubjectAreaList;
   public ImageIcon imageIconSubjectArea;
@@ -413,7 +413,7 @@ public class Modeler extends JFrame {
   public JScrollPane jScrollPaneTreeView = new JScrollPane();
   private CustomTreeRenderer customTreeRenderer = new CustomTreeRenderer(this);
   public JTree jTreeMain = new JTree();
-  private DefaultTreeModel treeModel;
+  DefaultTreeModel treeModel;
   public XeadTreeNode currentMainTreeNode;
   private XeadTreeNode previousMainTreeNode, dragSourceMainTreeNode;
   private XeadTreeNode bookmarkedNode1, bookmarkedNode2, bookmarkedNode3, bookmarkedNode4, bookmarkedNode5;
@@ -426,63 +426,63 @@ public class Modeler extends JFrame {
   /**
    * PopupMenu for editing XeadTreeNode
    */
-  private JPopupMenu jPopupMenuXeadTreeNode = new JPopupMenu();
-  private JMenuItem jMenuItemXeadTreeNodeAdd = new JMenuItem();
-  private JMenuItem jMenuItemXeadTreeNodeAddList = new JMenuItem();
-  private JMenuItem jMenuItemXeadTreeNodeCopy = new JMenuItem();
-  private JMenuItem jMenuItemXeadTreeNodeCut = new JMenuItem();
-  private JMenuItem jMenuItemXeadTreeNodePaste = new JMenuItem();
-  private JMenuItem jMenuItemXeadTreeNodeDelete = new JMenuItem();
-  private JMenu jMenuXeadTreeNodeAdd = new JMenu();
-  private JMenuItem jMenuItemXeadTreeNodeAddIOPanel = new JMenuItem();
-  private JMenuItem jMenuItemXeadTreeNodeAddIOSpool = new JMenuItem();
-  private JMenuItem jMenuItemXeadTreeNodeAddIOWebPage = new JMenuItem();
-  private JMenuItem jMenuItemXeadTreeNodeAddFK = new JMenuItem();
-  private JMenuItem jMenuItemXeadTreeNodeAddSK = new JMenuItem();
-  private JMenuItem jMenuItemXeadTreeNodeAddIndex = new JMenuItem();
+  JPopupMenu jPopupMenuXeadTreeNode = new JPopupMenu();
+  JMenuItem jMenuItemXeadTreeNodeAdd = new JMenuItem();
+  JMenuItem jMenuItemXeadTreeNodeAddList = new JMenuItem();
+  JMenuItem jMenuItemXeadTreeNodeCopy = new JMenuItem();
+  JMenuItem jMenuItemXeadTreeNodeCut = new JMenuItem();
+  JMenuItem jMenuItemXeadTreeNodePaste = new JMenuItem();
+  JMenuItem jMenuItemXeadTreeNodeDelete = new JMenuItem();
+  JMenu jMenuXeadTreeNodeAdd = new JMenu();
+  JMenuItem jMenuItemXeadTreeNodeAddIOPanel = new JMenuItem();
+  JMenuItem jMenuItemXeadTreeNodeAddIOSpool = new JMenuItem();
+  JMenuItem jMenuItemXeadTreeNodeAddIOWebPage = new JMenuItem();
+  JMenuItem jMenuItemXeadTreeNodeAddFK = new JMenuItem();
+  JMenuItem jMenuItemXeadTreeNodeAddSK = new JMenuItem();
+  JMenuItem jMenuItemXeadTreeNodeAddIndex = new JMenuItem();
   /**
    * PopupMenu for Contents Pane Components
    */
-  private JPopupMenu jPopupMenuComponent = new JPopupMenu();
-  private JMenuItem jMenuItemComponentToAdd = new JMenuItem();
-  private JMenuItem jMenuItemComponentToAddIOPanel = new JMenuItem();
-  private JMenuItem jMenuItemComponentToAddIOSpool = new JMenuItem();
-  private JMenuItem jMenuItemComponentToAddIOWebPage = new JMenuItem();
-  private JMenuItem jMenuItemComponentToAddFK = new JMenuItem();
-  private JMenuItem jMenuItemComponentToAddSK = new JMenuItem();
-  private JMenuItem jMenuItemComponentToAddIndex = new JMenuItem();
-  private JMenuItem jMenuItemComponentToSetAscDesc = new JMenuItem();
-  private JMenuItem jMenuItemComponentToCopy = new JMenuItem();
-  private JMenuItem jMenuItemComponentToPaste = new JMenuItem();
-  private JMenuItem jMenuItemComponentToDelete = new JMenuItem();
-  private JMenuItem jMenuItemComponentToRemove = new JMenuItem();
-  private JMenuItem jMenuItemComponentToMoveUp = new JMenuItem();
-  private JMenuItem jMenuItemComponentToMoveDown = new JMenuItem();
-  private JMenuItem jMenuItemComponentToMoveLeft = new JMenuItem();
-  private JMenuItem jMenuItemComponentToMoveRight = new JMenuItem();
-  private JMenuItem jMenuItemComponentToJump = new JMenuItem();
-  private JMenuItem jMenuItemComponentToStartSlideShow = new JMenuItem();
-  private JMenuItem jMenuItemComponentToShowInstance = new JMenuItem();
-  private JMenuItem jMenuItemComponentToShowSlideNumber = new JMenuItem();
-  private JMenuItem jMenuItemComponentToAlignTables = new JMenuItem();
-  private JMenuItem jMenuItemComponentToConfigColors = new JMenuItem();
-  private JMenuItem jMenuItemComponentToCaptureImage = new JMenuItem();
-  private JMenuItem jMenuItemComponentToShowTips = new JMenuItem();
-  private JMenuItem jMenuItemComponentToWriteCSV = new JMenuItem();
-  private JMenuItem jMenuItemComponentToPrintImage = new JMenuItem();
-  private JMenuItem jMenuItemComponentToSetIOWebPage = new JMenuItem();
+  JPopupMenu jPopupMenuComponent = new JPopupMenu();
+  JMenuItem jMenuItemComponentToAdd = new JMenuItem();
+  JMenuItem jMenuItemComponentToAddIOPanel = new JMenuItem();
+  JMenuItem jMenuItemComponentToAddIOSpool = new JMenuItem();
+  JMenuItem jMenuItemComponentToAddIOWebPage = new JMenuItem();
+  JMenuItem jMenuItemComponentToAddFK = new JMenuItem();
+  JMenuItem jMenuItemComponentToAddSK = new JMenuItem();
+  JMenuItem jMenuItemComponentToAddIndex = new JMenuItem();
+  JMenuItem jMenuItemComponentToSetAscDesc = new JMenuItem();
+  JMenuItem jMenuItemComponentToCopy = new JMenuItem();
+  JMenuItem jMenuItemComponentToPaste = new JMenuItem();
+  JMenuItem jMenuItemComponentToDelete = new JMenuItem();
+  JMenuItem jMenuItemComponentToRemove = new JMenuItem();
+  JMenuItem jMenuItemComponentToMoveUp = new JMenuItem();
+  JMenuItem jMenuItemComponentToMoveDown = new JMenuItem();
+  JMenuItem jMenuItemComponentToMoveLeft = new JMenuItem();
+  JMenuItem jMenuItemComponentToMoveRight = new JMenuItem();
+  JMenuItem jMenuItemComponentToJump = new JMenuItem();
+  JMenuItem jMenuItemComponentToStartSlideShow = new JMenuItem();
+  JMenuItem jMenuItemComponentToShowInstance = new JMenuItem();
+  JMenuItem jMenuItemComponentToShowSlideNumber = new JMenuItem();
+  JMenuItem jMenuItemComponentToAlignTables = new JMenuItem();
+  JMenuItem jMenuItemComponentToConfigColors = new JMenuItem();
+  JMenuItem jMenuItemComponentToCaptureImage = new JMenuItem();
+  JMenuItem jMenuItemComponentToShowTips = new JMenuItem();
+  JMenuItem jMenuItemComponentToWriteCSV = new JMenuItem();
+  JMenuItem jMenuItemComponentToPrintImage = new JMenuItem();
+  JMenuItem jMenuItemComponentToSetIOWebPage = new JMenuItem();
   private String componentType_jPopupMenuComponent = "";
   /**
    * components for JTables
    */
-  private DefaultTableCellRenderer rendererAlignmentCenter = new DefaultTableCellRenderer();
-  private DefaultTableCellRenderer rendererAlignmentRight = new DefaultTableCellRenderer();
-  private DefaultTableCellRenderer rendererAlignmentLeft = new DefaultTableCellRenderer();
-  private DefaultTableCellRenderer rendererAlignmentCenterControlColor = new DefaultTableCellRenderer();
-  private DefaultTableCellRenderer rendererAlignmentRightControlColor = new DefaultTableCellRenderer();
-  private DefaultTableCellRenderer rendererAlignmentLeftControlColor = new DefaultTableCellRenderer();
-  private DefaultTableCellRenderer rendererTableHeader = null;
-  private TableColumn column0, column1, column2, column3, column4, column5, column6, column7, column8, column9, columnA, columnB, columnC, columnD, columnE;
+  DefaultTableCellRenderer rendererAlignmentCenter = new DefaultTableCellRenderer();
+  DefaultTableCellRenderer rendererAlignmentRight = new DefaultTableCellRenderer();
+  DefaultTableCellRenderer rendererAlignmentLeft = new DefaultTableCellRenderer();
+  DefaultTableCellRenderer rendererAlignmentCenterControlColor = new DefaultTableCellRenderer();
+  DefaultTableCellRenderer rendererAlignmentRightControlColor = new DefaultTableCellRenderer();
+  DefaultTableCellRenderer rendererAlignmentLeftControlColor = new DefaultTableCellRenderer();
+  DefaultTableCellRenderer rendererTableHeader = null;
+  TableColumn column0, column1, column2, column3, column4, column5, column6, column7, column8, column9, columnA, columnB, columnC, columnD, columnE;
   /**
    * customized key-map for text component
    */
@@ -506,201 +506,201 @@ public class Modeler extends JFrame {
   /**
    * Definition components for selection of elements of ERD and DFD
    */
-  private JPanel jPanelSelectionGuide = new JPanel();
-  private Point pointOfSelecterFrom = new Point();
+  JPanel jPanelSelectionGuide = new JPanel();
+  Point pointOfSelecterFrom = new Point();
   /**
    * Definition components on jPanelSystem
    */
-  private JPanel jPanelSystem = new JPanel();
-  private JPanel jPanelSystem6 = new JPanel();
-  private JLabel jLabelSystemName = new JLabel();
-  private KanjiTextField jTextFieldSystemName = new KanjiTextField();
-  private JLabel jLabelSystemVersion = new JLabel();
-  private JTextField jTextFieldSystemVersion = new JTextField();
-  private JLabel jLabelSystemReferingModelFiles = new JLabel();
-  private JTextField jTextFieldSystemReferingModelFiles = new JTextField();
-  private JLabel jLabelSystemDocFileFormat = new JLabel();
-  private JTextField jTextFieldSystemDocFileFormat = new JTextField();
-  private JTabbedPane jTabbedPaneSystem = new JTabbedPane();
-  private JScrollPane jScrollPaneSystemDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaSystemDescriptions = new KanjiTextArea();
+  JPanel jPanelSystem = new JPanel();
+  JPanel jPanelSystem6 = new JPanel();
+  JLabel jLabelSystemName = new JLabel();
+  KanjiTextField jTextFieldSystemName = new KanjiTextField();
+  JLabel jLabelSystemVersion = new JLabel();
+  JTextField jTextFieldSystemVersion = new JTextField();
+  JLabel jLabelSystemReferingModelFiles = new JLabel();
+  JTextField jTextFieldSystemReferingModelFiles = new JTextField();
+  JLabel jLabelSystemDocFileFormat = new JLabel();
+  JTextField jTextFieldSystemDocFileFormat = new JTextField();
+  JTabbedPane jTabbedPaneSystem = new JTabbedPane();
+  JScrollPane jScrollPaneSystemDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaSystemDescriptions = new KanjiTextArea();
   private int previousSelectedIndex_jTabbedPaneSystem = 0;
   //(SystemDepartmentList)//
   private boolean tableSystemDepartmentListSelectChangeActivated = false;
   private int selectedRow_jTableSystemDepartmentList;
-  private JSplitPane jSplitPaneSystemDepartment = new JSplitPane();
-  private JScrollPane jScrollPaneSystemDepartmentList = new JScrollPane();
-  private TableModelReadOnlyList tableModelSystemDepartmentList = new TableModelReadOnlyList();
-  private JTable jTableSystemDepartmentList = new JTable(tableModelSystemDepartmentList);
-  private JPanel jPanelSystemDepartment = new JPanel();
-  private JPanel jPanelSystemDepartment1 = new JPanel();
-  private JScrollPane jScrollPaneSystemDepartmentWhereUsedList = new JScrollPane();
-  private JLabel jLabelSystemDepartmentName = new JLabel();
-  private KanjiTextField jTextFieldSystemDepartmentName = new KanjiTextField();
-  private JLabel jLabelSystemDepartmentSortKey = new JLabel();
-  private JTextField jTextFieldSystemDepartmentSortKey = new JTextField();
-  private JLabel jLabelSystemDepartmentDescriptions = new JLabel();
-  private JScrollPane jScrollPaneSystemDepartmentDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaSystemDepartmentDescriptions = new KanjiTextArea();
-  private TableModelReadOnlyList tableModelSystemDepartmentWhereUsedList = new TableModelReadOnlyList();
-  private JTable jTableSystemDepartmentWhereUsedList = new JTable(
+  JSplitPane jSplitPaneSystemDepartment = new JSplitPane();
+  JScrollPane jScrollPaneSystemDepartmentList = new JScrollPane();
+  TableModelReadOnlyList tableModelSystemDepartmentList = new TableModelReadOnlyList();
+  JTable jTableSystemDepartmentList = new JTable(tableModelSystemDepartmentList);
+  JPanel jPanelSystemDepartment = new JPanel();
+  JPanel jPanelSystemDepartment1 = new JPanel();
+  JScrollPane jScrollPaneSystemDepartmentWhereUsedList = new JScrollPane();
+  JLabel jLabelSystemDepartmentName = new JLabel();
+  KanjiTextField jTextFieldSystemDepartmentName = new KanjiTextField();
+  JLabel jLabelSystemDepartmentSortKey = new JLabel();
+  JTextField jTextFieldSystemDepartmentSortKey = new JTextField();
+  JLabel jLabelSystemDepartmentDescriptions = new JLabel();
+  JScrollPane jScrollPaneSystemDepartmentDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaSystemDepartmentDescriptions = new KanjiTextArea();
+  TableModelReadOnlyList tableModelSystemDepartmentWhereUsedList = new TableModelReadOnlyList();
+  JTable jTableSystemDepartmentWhereUsedList = new JTable(
       tableModelSystemDepartmentWhereUsedList);
   //(SystemTaskTypeList)//
   private boolean tableSystemTaskTypeListSelectChangeActivated = false;
   private int selectedRow_jTableSystemTaskTypeList;
-  private JSplitPane jSplitPaneSystemTaskType = new JSplitPane();
-  private JScrollPane jScrollPaneSystemTaskTypeList = new JScrollPane();
-  private TableModelReadOnlyList tableModelSystemTaskTypeList = new TableModelReadOnlyList();
-  private JTable jTableSystemTaskTypeList = new JTable(tableModelSystemTaskTypeList);
-  private JPanel jPanelSystemTaskType = new JPanel();
-  private JPanel jPanelSystemTaskType1 = new JPanel();
-  private JScrollPane jScrollPaneSystemTaskTypeWhereUsedList = new JScrollPane();
-  private JLabel jLabelSystemTaskTypeName = new JLabel();
-  private KanjiTextField jTextFieldSystemTaskTypeName = new KanjiTextField();
-  private JLabel jLabelSystemTaskTypeSortKey = new JLabel();
-  private JTextField jTextFieldSystemTaskTypeSortKey = new JTextField();
-  private JLabel jLabelSystemTaskTypeDescriptions = new JLabel();
-  private JScrollPane jScrollPaneSystemTaskTypeDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaSystemTaskTypeDescriptions = new KanjiTextArea();
-  private TableModelReadOnlyList tableModelSystemTaskTypeWhereUsedList = new TableModelReadOnlyList();
-  private JTable jTableSystemTaskTypeWhereUsedList = new JTable(
+  JSplitPane jSplitPaneSystemTaskType = new JSplitPane();
+  JScrollPane jScrollPaneSystemTaskTypeList = new JScrollPane();
+  TableModelReadOnlyList tableModelSystemTaskTypeList = new TableModelReadOnlyList();
+  JTable jTableSystemTaskTypeList = new JTable(tableModelSystemTaskTypeList);
+  JPanel jPanelSystemTaskType = new JPanel();
+  JPanel jPanelSystemTaskType1 = new JPanel();
+  JScrollPane jScrollPaneSystemTaskTypeWhereUsedList = new JScrollPane();
+  JLabel jLabelSystemTaskTypeName = new JLabel();
+  KanjiTextField jTextFieldSystemTaskTypeName = new KanjiTextField();
+  JLabel jLabelSystemTaskTypeSortKey = new JLabel();
+  JTextField jTextFieldSystemTaskTypeSortKey = new JTextField();
+  JLabel jLabelSystemTaskTypeDescriptions = new JLabel();
+  JScrollPane jScrollPaneSystemTaskTypeDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaSystemTaskTypeDescriptions = new KanjiTextArea();
+  TableModelReadOnlyList tableModelSystemTaskTypeWhereUsedList = new TableModelReadOnlyList();
+  JTable jTableSystemTaskTypeWhereUsedList = new JTable(
       tableModelSystemTaskTypeWhereUsedList);
   //(SystemTableTypeList)//
   private boolean tableSystemTableTypeListSelectChangeActivated = false;
   private int selectedRow_jTableSystemTableTypeList;
-  private JSplitPane jSplitPaneSystemTableType = new JSplitPane();
-  private JScrollPane jScrollPaneSystemTableTypeList = new JScrollPane();
-  private TableModelReadOnlyList tableModelSystemTableTypeList = new TableModelReadOnlyList();
-  private JTable jTableSystemTableTypeList = new JTable(tableModelSystemTableTypeList);
-  private JPanel jPanelSystemTableType = new JPanel();
-  private JPanel jPanelSystemTableType1 = new JPanel();
-  private JScrollPane jScrollPaneSystemTableTypeWhereUsedList = new JScrollPane();
-  private JLabel jLabelSystemTableTypeName = new JLabel();
-  private KanjiTextField jTextFieldSystemTableTypeName = new KanjiTextField();
-  private JLabel jLabelSystemTableTypeSortKey = new JLabel();
-  private JTextField jTextFieldSystemTableTypeSortKey = new JTextField();
-  private JLabel jLabelSystemTableTypeDescriptions = new JLabel();
-  private JScrollPane jScrollPaneSystemTableTypeDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaSystemTableTypeDescriptions = new KanjiTextArea();
-  private TableModelReadOnlyList tableModelSystemTableTypeWhereUsedList = new TableModelReadOnlyList();
-  private JTable jTableSystemTableTypeWhereUsedList = new JTable(
+  JSplitPane jSplitPaneSystemTableType = new JSplitPane();
+  JScrollPane jScrollPaneSystemTableTypeList = new JScrollPane();
+  TableModelReadOnlyList tableModelSystemTableTypeList = new TableModelReadOnlyList();
+  JTable jTableSystemTableTypeList = new JTable(tableModelSystemTableTypeList);
+  JPanel jPanelSystemTableType = new JPanel();
+  JPanel jPanelSystemTableType1 = new JPanel();
+  JScrollPane jScrollPaneSystemTableTypeWhereUsedList = new JScrollPane();
+  JLabel jLabelSystemTableTypeName = new JLabel();
+  KanjiTextField jTextFieldSystemTableTypeName = new KanjiTextField();
+  JLabel jLabelSystemTableTypeSortKey = new JLabel();
+  JTextField jTextFieldSystemTableTypeSortKey = new JTextField();
+  JLabel jLabelSystemTableTypeDescriptions = new JLabel();
+  JScrollPane jScrollPaneSystemTableTypeDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaSystemTableTypeDescriptions = new KanjiTextArea();
+  TableModelReadOnlyList tableModelSystemTableTypeWhereUsedList = new TableModelReadOnlyList();
+  JTable jTableSystemTableTypeWhereUsedList = new JTable(
       tableModelSystemTableTypeWhereUsedList);
   //(SystemDataTypeList)//
   private boolean tableSystemDataTypeListSelectChangeActivated = false;
   private int selectedRow_jTableSystemDataTypeList;
-  private JSplitPane jSplitPaneSystemDataType = new JSplitPane();
-  private JScrollPane jScrollPaneSystemDataTypeList = new JScrollPane();
-  private TableModelReadOnlyList tableModelSystemDataTypeList = new TableModelReadOnlyList();
-  private JTable jTableSystemDataTypeList = new JTable(tableModelSystemDataTypeList);
-  private JPanel jPanelSystemDataType = new JPanel();
-  private JPanel jPanelSystemDataType1 = new JPanel();
-  private JScrollPane jScrollPaneSystemDataTypeWhereUsedList = new JScrollPane();
-  private JLabel jLabelSystemDataTypeName = new JLabel();
-  private KanjiTextField jTextFieldSystemDataTypeName = new KanjiTextField();
-  private JLabel jLabelSystemDataTypeSortKey = new JLabel();
-  private JTextField jTextFieldSystemDataTypeSortKey = new JTextField();
-  private JLabel jLabelSystemDataTypeBasicType = new JLabel();
-  private DefaultComboBoxModel comboBoxModelDataTypeBasicType = new DefaultComboBoxModel();
-  private JComboBox jComboBoxSystemDataTypeBasicType = new JComboBox(
+  JSplitPane jSplitPaneSystemDataType = new JSplitPane();
+  JScrollPane jScrollPaneSystemDataTypeList = new JScrollPane();
+  TableModelReadOnlyList tableModelSystemDataTypeList = new TableModelReadOnlyList();
+  JTable jTableSystemDataTypeList = new JTable(tableModelSystemDataTypeList);
+  JPanel jPanelSystemDataType = new JPanel();
+  JPanel jPanelSystemDataType1 = new JPanel();
+  JScrollPane jScrollPaneSystemDataTypeWhereUsedList = new JScrollPane();
+  JLabel jLabelSystemDataTypeName = new JLabel();
+  KanjiTextField jTextFieldSystemDataTypeName = new KanjiTextField();
+  JLabel jLabelSystemDataTypeSortKey = new JLabel();
+  JTextField jTextFieldSystemDataTypeSortKey = new JTextField();
+  JLabel jLabelSystemDataTypeBasicType = new JLabel();
+  DefaultComboBoxModel comboBoxModelDataTypeBasicType = new DefaultComboBoxModel();
+  JComboBox jComboBoxSystemDataTypeBasicType = new JComboBox(
       comboBoxModelDataTypeBasicType);
-  private JLabel jLabelSystemDataTypeLength = new JLabel();
-  private JTextField jTextFieldSystemDataTypeLength = new JTextField();
-  private JLabel jLabelSystemDataTypeDecimal = new JLabel();
-  private JTextField jTextFieldSystemDataTypeDecimal = new JTextField();
-  private JLabel jLabelSystemSQLExpression = new JLabel();
-  private JTextField jTextFieldSystemSQLExpression = new JTextField();
-  private TableModelReadOnlyList tableModelSystemDataTypeWhereUsedList = new TableModelReadOnlyList();
-  private JTable jTableSystemDataTypeWhereUsedList = new JTable(
+  JLabel jLabelSystemDataTypeLength = new JLabel();
+  JTextField jTextFieldSystemDataTypeLength = new JTextField();
+  JLabel jLabelSystemDataTypeDecimal = new JLabel();
+  JTextField jTextFieldSystemDataTypeDecimal = new JTextField();
+  JLabel jLabelSystemSQLExpression = new JLabel();
+  JTextField jTextFieldSystemSQLExpression = new JTextField();
+  TableModelReadOnlyList tableModelSystemDataTypeWhereUsedList = new TableModelReadOnlyList();
+  JTable jTableSystemDataTypeWhereUsedList = new JTable(
       tableModelSystemDataTypeWhereUsedList);
   private HashMap<String, DataType> dataTypeElementMap = new HashMap<String, DataType>();
   //(SystemFunctionTypeList)//
   private boolean tableSystemFunctionTypeListSelectChangeActivated = false;
   private int selectedRow_jTableSystemFunctionTypeList;
-  private JSplitPane jSplitPaneSystemFunctionType = new JSplitPane();
-  private JScrollPane jScrollPaneSystemFunctionTypeList = new JScrollPane();
-  private TableModelReadOnlyList tableModelSystemFunctionTypeList = new TableModelReadOnlyList();
-  private JTable jTableSystemFunctionTypeList = new JTable(tableModelSystemFunctionTypeList);
-  private JPanel jPanelSystemFunctionType = new JPanel();
-  private JPanel jPanelSystemFunctionType1 = new JPanel();
-  private JScrollPane jScrollPaneSystemFunctionTypeWhereUsedList = new JScrollPane();
-  private JLabel jLabelSystemFunctionTypeName = new JLabel();
-  private KanjiTextField jTextFieldSystemFunctionTypeName = new KanjiTextField();
-  private JLabel jLabelSystemFunctionTypeSortKey = new JLabel();
-  private JTextField jTextFieldSystemFunctionTypeSortKey = new JTextField();
-  private JLabel jLabelSystemFunctionTypeDescriptions = new JLabel();
-  private JScrollPane jScrollPaneSystemFunctionTypeDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaSystemFunctionTypeDescriptions = new KanjiTextArea();
-  private TableModelReadOnlyList tableModelSystemFunctionTypeWhereUsedList = new TableModelReadOnlyList();
-  private JTable jTableSystemFunctionTypeWhereUsedList = new JTable(
+  JSplitPane jSplitPaneSystemFunctionType = new JSplitPane();
+  JScrollPane jScrollPaneSystemFunctionTypeList = new JScrollPane();
+  TableModelReadOnlyList tableModelSystemFunctionTypeList = new TableModelReadOnlyList();
+  JTable jTableSystemFunctionTypeList = new JTable(tableModelSystemFunctionTypeList);
+  JPanel jPanelSystemFunctionType = new JPanel();
+  JPanel jPanelSystemFunctionType1 = new JPanel();
+  JScrollPane jScrollPaneSystemFunctionTypeWhereUsedList = new JScrollPane();
+  JLabel jLabelSystemFunctionTypeName = new JLabel();
+  KanjiTextField jTextFieldSystemFunctionTypeName = new KanjiTextField();
+  JLabel jLabelSystemFunctionTypeSortKey = new JLabel();
+  JTextField jTextFieldSystemFunctionTypeSortKey = new JTextField();
+  JLabel jLabelSystemFunctionTypeDescriptions = new JLabel();
+  JScrollPane jScrollPaneSystemFunctionTypeDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaSystemFunctionTypeDescriptions = new KanjiTextArea();
+  TableModelReadOnlyList tableModelSystemFunctionTypeWhereUsedList = new TableModelReadOnlyList();
+  JTable jTableSystemFunctionTypeWhereUsedList = new JTable(
       tableModelSystemFunctionTypeWhereUsedList);
   private HashMap<String, FunctionType> functionTypeElementMap = new HashMap<String, FunctionType>();
   //(SystemTermsList)//
   private boolean tableSystemTermsListSelectChangeActivated = false;
   private int selectedRow_jTableSystemTermsList;
-  private JSplitPane jSplitPaneSystemTermsList = new JSplitPane();
-  private JScrollPane jScrollPaneSystemTermsList = new JScrollPane();
-  private TableModelReadOnlyList tableModelSystemTermsList = new TableModelReadOnlyList();
-  private JTable jTableSystemTermsList = new JTable(tableModelSystemTermsList);
-  private JPanel jPanelSystemTermsList = new JPanel();
-  private JPanel jPanelSystemTermsList1 = new JPanel();
-  private JPanel jPanelSystemTermsList2 = new JPanel();
-  private JPanel jPanelSystemTermsList3 = new JPanel();
-  private JLabel jLabelSystemTermsHeadder = new JLabel();
-  private KanjiTextField jTextFieldSystemTermsHeadder = new KanjiTextField();
-  private JLabel jLabelSystemTermsSortKey = new JLabel();
-  private JTextField jTextFieldSystemTermsSortKey = new JTextField();
-  private JLabel jLabelSystemTermsHtmlFileName = new JLabel();
-  private JTextField jTextFieldSystemTermsHtmlFileName = new JTextField();
-  private JLabel jLabelSystemTermsDescriptions = new JLabel();
-  private JScrollPane jScrollPaneSystemTermsDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaSystemTermsDescriptions = new KanjiTextArea();
-  private JEditorPane jEditorPaneSystemTermsDescriptions = new JEditorPane();
+  JSplitPane jSplitPaneSystemTermsList = new JSplitPane();
+  JScrollPane jScrollPaneSystemTermsList = new JScrollPane();
+  TableModelReadOnlyList tableModelSystemTermsList = new TableModelReadOnlyList();
+  JTable jTableSystemTermsList = new JTable(tableModelSystemTermsList);
+  JPanel jPanelSystemTermsList = new JPanel();
+  JPanel jPanelSystemTermsList1 = new JPanel();
+  JPanel jPanelSystemTermsList2 = new JPanel();
+  JPanel jPanelSystemTermsList3 = new JPanel();
+  JLabel jLabelSystemTermsHeadder = new JLabel();
+  KanjiTextField jTextFieldSystemTermsHeadder = new KanjiTextField();
+  JLabel jLabelSystemTermsSortKey = new JLabel();
+  JTextField jTextFieldSystemTermsSortKey = new JTextField();
+  JLabel jLabelSystemTermsHtmlFileName = new JLabel();
+  JTextField jTextFieldSystemTermsHtmlFileName = new JTextField();
+  JLabel jLabelSystemTermsDescriptions = new JLabel();
+  JScrollPane jScrollPaneSystemTermsDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaSystemTermsDescriptions = new KanjiTextArea();
+  JEditorPane jEditorPaneSystemTermsDescriptions = new JEditorPane();
   //(SystemMaintenanceLogList)//
   private boolean tableSystemMaintenanceLogSelectChangeActivated = false;
   private int selectedRow_jTableSystemMaintenanceLog;
-  private JSplitPane jSplitPaneSystemMaintenanceLog = new JSplitPane();
-  private JScrollPane jScrollPaneSystemMaintenanceLog = new JScrollPane();
-  private TableModelReadOnlyList tableModelSystemMaintenanceLog = new TableModelReadOnlyList();
-  private JTable jTableSystemMaintenanceLog = new JTable(tableModelSystemMaintenanceLog);
-  private JPanel jPanelSystemMaintenanceLog = new JPanel();
-  private JPanel jPanelSystemMaintenanceLog1 = new JPanel();
-  private JPanel jPanelSystemMaintenanceLog2 = new JPanel();
-  private JPanel jPanelSystemMaintenanceLog3 = new JPanel();
-  private JLabel jLabelSystemMaintenanceLogHeadder = new JLabel();
-  private JTextField jTextFieldSystemMaintenanceLogHeadder = new JTextField();
-  private JLabel jLabelSystemMaintenanceLogSortKey = new JLabel();
-  private JTextField jTextFieldSystemMaintenanceLogSortKey = new JTextField();
-  private JLabel jLabelSystemMaintenanceLogDescriptions = new JLabel();
-  private JScrollPane jScrollPaneSystemMaintenanceLogDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaSystemMaintenanceLogDescriptions = new KanjiTextArea();
+  JSplitPane jSplitPaneSystemMaintenanceLog = new JSplitPane();
+  JScrollPane jScrollPaneSystemMaintenanceLog = new JScrollPane();
+  TableModelReadOnlyList tableModelSystemMaintenanceLog = new TableModelReadOnlyList();
+  JTable jTableSystemMaintenanceLog = new JTable(tableModelSystemMaintenanceLog);
+  JPanel jPanelSystemMaintenanceLog = new JPanel();
+  JPanel jPanelSystemMaintenanceLog1 = new JPanel();
+  JPanel jPanelSystemMaintenanceLog2 = new JPanel();
+  JPanel jPanelSystemMaintenanceLog3 = new JPanel();
+  JLabel jLabelSystemMaintenanceLogHeadder = new JLabel();
+  JTextField jTextFieldSystemMaintenanceLogHeadder = new JTextField();
+  JLabel jLabelSystemMaintenanceLogSortKey = new JLabel();
+  JTextField jTextFieldSystemMaintenanceLogSortKey = new JTextField();
+  JLabel jLabelSystemMaintenanceLogDescriptions = new JLabel();
+  JScrollPane jScrollPaneSystemMaintenanceLogDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaSystemMaintenanceLogDescriptions = new KanjiTextArea();
   /**
    * Definition components on jPanelSubjectAreaList
    */
-  private JPanel jPanelSubjectAreaList = new JPanel();
-  private JScrollPane jScrollPaneSubjectAreaList = new JScrollPane();
-  private TableModelReadOnlyList tableModelSubjectAreaList = new TableModelReadOnlyList();
-  private JTable jTableSubjectAreaList = new JTable(tableModelSubjectAreaList);
+  JPanel jPanelSubjectAreaList = new JPanel();
+  JScrollPane jScrollPaneSubjectAreaList = new JScrollPane();
+  TableModelReadOnlyList tableModelSubjectAreaList = new TableModelReadOnlyList();
+  JTable jTableSubjectAreaList = new JTable(tableModelSubjectAreaList);
   private int selectedRow_jTableSubjectAreaList;
   /**
    * Definition components on jPanelSubjectArea
    */
-  private JPanel jPanelSubjectArea = new JPanel();
-  private JSplitPane jSplitPaneSubjectArea = new JSplitPane();
-  private JScrollPane jScrollPaneSubjectArea = new JScrollPane();
-  private JPanel jPanelSubjectArea1 = new JPanel();
-  private JPanel jPanelSubjectArea2 = new JPanel();
-  private JPanel jPanelSubjectArea4 = new JPanel();
-  private JLabel jLabelSubjectAreaName = new JLabel();
-  private JLabel jLabelSubjectAreaDescriptions = new JLabel();
-  private JPanel jPanelSubjectArea3 = new JPanel();
-  private KanjiTextField jTextFieldSubjectAreaName = new KanjiTextField();
-  private JScrollPane jScrollPaneSubjectAreaDescriptions = new JScrollPane();
-  private JLabel jLabelSubjectAreaSortKey = new JLabel();
-  private JTextField jTextFieldSubjectAreaSortKey = new JTextField();
-  private JLabel jLabelSubjectAreaBoundarySetting = new JLabel();
-  private JComboBox jComboBoxSubjectAreaBoundarySetting = new JComboBox();
+  JPanel jPanelSubjectArea = new JPanel();
+  JSplitPane jSplitPaneSubjectArea = new JSplitPane();
+  JScrollPane jScrollPaneSubjectArea = new JScrollPane();
+  JPanel jPanelSubjectArea1 = new JPanel();
+  JPanel jPanelSubjectArea2 = new JPanel();
+  JPanel jPanelSubjectArea4 = new JPanel();
+  JLabel jLabelSubjectAreaName = new JLabel();
+  JLabel jLabelSubjectAreaDescriptions = new JLabel();
+  JPanel jPanelSubjectArea3 = new JPanel();
+  KanjiTextField jTextFieldSubjectAreaName = new KanjiTextField();
+  JScrollPane jScrollPaneSubjectAreaDescriptions = new JScrollPane();
+  JLabel jLabelSubjectAreaSortKey = new JLabel();
+  JTextField jTextFieldSubjectAreaSortKey = new JTextField();
+  JLabel jLabelSubjectAreaBoundarySetting = new JLabel();
+  JComboBox jComboBoxSubjectAreaBoundarySetting = new JComboBox();
   private boolean isChangedByUser = false;
-  private KanjiTextArea jTextAreaSubjectAreaDescriptions = new KanjiTextArea();
+  KanjiTextArea jTextAreaSubjectAreaDescriptions = new KanjiTextArea();
   //private JPanel jPanelSubjectAreaDataflowEditor1 = new JPanel();
   public JPanel jPanelSubjectAreaDataflowEditor1 = new JPanel() {
     private static final long serialVersionUID = 1L;
@@ -733,7 +733,7 @@ public class Modeler extends JFrame {
   private ArrayList<DataflowLine> dataflowLineSlideShowArray = new ArrayList<DataflowLine>();
   private ArrayList<DataflowNode> dataflowNodeEditorArray = new ArrayList<DataflowNode>();
   private ArrayList<DataflowNode> dataflowNodeSlideShowArray = new ArrayList<DataflowNode>();
-  private JPanel jPanelSubjectAreaDataflowEditor2 = new JPanel() {
+  JPanel jPanelSubjectAreaDataflowEditor2 = new JPanel() {
     private static final long serialVersionUID = 1L;
 
     public void paintComponent(Graphics g) {
@@ -747,13 +747,13 @@ public class Modeler extends JFrame {
       g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     }
   };
-  private JLabel jLabelSlideShowEnd = new JLabel();
-  private JDialog jDialogDataflowSlideShow = new JDialog(this, true);
+  JLabel jLabelSlideShowEnd = new JLabel();
+  JDialog jDialogDataflowSlideShow = new JDialog(this, true);
   private int dataflowSlideNumber = 0;
   private int dataflowSlideTotalNumber = 0;
-  private JPanel jPanelSubjectAreaDataflowSlideShow = new JPanel();
-  private JPanel jPanelSubjectAreaDataflowSlideShow1 = new JPanel();
-  private JPanel jPanelSubjectAreaDataflowSlideShow2 = new JPanel() {
+  JPanel jPanelSubjectAreaDataflowSlideShow = new JPanel();
+  JPanel jPanelSubjectAreaDataflowSlideShow1 = new JPanel();
+  JPanel jPanelSubjectAreaDataflowSlideShow2 = new JPanel() {
     private static final long serialVersionUID = 1L;
 
     public void paintComponent(Graphics g) {
@@ -769,267 +769,267 @@ public class Modeler extends JFrame {
       g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
     }
   };
-  private JLabel jLabelDataflowSlideShowPageGuide = new JLabel();
+  JLabel jLabelDataflowSlideShowPageGuide = new JLabel();
   private String dataflowPageTitle;
-  private Point dataflowNodePosition;
-  private JPanel jPanelBoundaryResizeGuide = new JPanel();
-  private JPanel jPanelBoundaryMoveGuide = new JPanel();
+  Point dataflowNodePosition;
+  JPanel jPanelBoundaryResizeGuide = new JPanel();
+  JPanel jPanelBoundaryMoveGuide = new JPanel();
   private String boundaryResizeMode = "";
-  private Point boundaryResizeStartPoint;
-  private Rectangle boundaryResizeGuideRec;
+  Point boundaryResizeStartPoint;
+  Rectangle boundaryResizeGuideRec;
   public boolean isToShowGridsOnSubjectArea = true;
   public boolean isNormalColorConfigOnSubjectArea = true;
   /**
    * Definition components on jPanelRoleList
    */
-  private JPanel jPanelRoleList = new JPanel();
-  private JScrollPane jScrollPaneRoleList = new JScrollPane();
-  private TableModelReadOnlyList tableModelRoleList = new TableModelReadOnlyList();
-  private JTable jTableRoleList = new JTable(tableModelRoleList);
+  JPanel jPanelRoleList = new JPanel();
+  JScrollPane jScrollPaneRoleList = new JScrollPane();
+  TableModelReadOnlyList tableModelRoleList = new TableModelReadOnlyList();
+  JTable jTableRoleList = new JTable(tableModelRoleList);
   private int selectedRow_jTableRoleList;
   /**
    * Definition components on jPanelRole(with Task List)
    */
-  private JPanel jPanelRole = new JPanel();
-  private JSplitPane jSplitPaneRole = new JSplitPane();
-  private JScrollPane jScrollPaneTaskList = new JScrollPane();
-  private JViewport jViewportTaskList = new JViewport();
-  private JPanel jPanelRole5 = new JPanel();
-  private JPanel jPanelRole2 = new JPanel();
-  private JPanel jPanelRole4 = new JPanel();
-  private JLabel jLabelRoleDescriptions = new JLabel();
-  private JPanel jPanelRole3 = new JPanel();
-  private JLabel jLabelRoleName = new JLabel();
-  private KanjiTextField jTextFieldRoleName = new KanjiTextField();
-  private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelDepartment = new SortableXeadTreeNodeComboBoxModel();
-  private JComboBox jComboBoxDepartment = new JComboBox(sortableComboBoxModelDepartment);
-  private TableModelReadOnlyList tableModelTaskList = new TableModelReadOnlyList();
-  private JTable jTableTaskList = new JTable(tableModelTaskList);
+  JPanel jPanelRole = new JPanel();
+  JSplitPane jSplitPaneRole = new JSplitPane();
+  JScrollPane jScrollPaneTaskList = new JScrollPane();
+  JViewport jViewportTaskList = new JViewport();
+  JPanel jPanelRole5 = new JPanel();
+  JPanel jPanelRole2 = new JPanel();
+  JPanel jPanelRole4 = new JPanel();
+  JLabel jLabelRoleDescriptions = new JLabel();
+  JPanel jPanelRole3 = new JPanel();
+  JLabel jLabelRoleName = new JLabel();
+  KanjiTextField jTextFieldRoleName = new KanjiTextField();
+  SortableXeadTreeNodeComboBoxModel sortableComboBoxModelDepartment = new SortableXeadTreeNodeComboBoxModel();
+  JComboBox jComboBoxDepartment = new JComboBox(sortableComboBoxModelDepartment);
+  TableModelReadOnlyList tableModelTaskList = new TableModelReadOnlyList();
+  JTable jTableTaskList = new JTable(tableModelTaskList);
   private int selectedRow_jTableTaskList;
-  private JLabel jLabelRoleSortKey = new JLabel();
-  private JTextField jTextFieldRoleSortKey = new JTextField();
-  private JScrollPane jScrollPaneRoleDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaRoleDescriptions = new KanjiTextArea();
-  private JLabel jLabelDepartment = new JLabel();
-  private JLabel jLabelTaskSortKey = new JLabel();
+  JLabel jLabelRoleSortKey = new JLabel();
+  JTextField jTextFieldRoleSortKey = new JTextField();
+  JScrollPane jScrollPaneRoleDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaRoleDescriptions = new KanjiTextArea();
+  JLabel jLabelDepartment = new JLabel();
+  JLabel jLabelTaskSortKey = new JLabel();
   /**
    * Definition components on jPanelTask
    */
-  private JPanel jPanelTask = new JPanel();
-  private JSplitPane jSplitPaneTask = new JSplitPane();
-  private JScrollPane jScrollPaneTask1 = new JScrollPane();
-  private JPanel jPanelTask1 = new JPanel();
-  private JPanel jPanelTask2 = new JPanel();
-  private JPanel jPanelTask3 = new JPanel();
-  private JPanel jPanelTask4 = new JPanel();
-  private JPanel jPanelTask5 = new JPanel();
-  private JPanel jPanelTask6 = new JPanel();
-  private JLabel jLabelTaskEvent = new JLabel();
-  private KanjiTextField jTextFieldTaskEvent = new KanjiTextField();
-  private JLabel jLabelTaskType = new JLabel();
-  private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTaskType = new SortableXeadTreeNodeComboBoxModel();
-  private JComboBox jComboBoxTaskType = new JComboBox(sortableComboBoxModelTaskType);
-  private JLabel jLabelTaskDescriptions = new JLabel();
-  private JLabel jLabelTaskName = new JLabel();
-  private KanjiTextField jTextFieldTaskName = new KanjiTextField();
-  private JTextField jTextFieldTaskSortKey = new JTextField();
-  private JLabel jLabelSubjectAreaWithThisTask = new JLabel();
-  private DefaultListModel listModelSubjectAreaWithThisTask = new DefaultListModel();
-  private JList jListSubjectAreaWithThisTask = new JList(listModelSubjectAreaWithThisTask);
-  private JScrollPane jScrollPaneSubjectAreaWithThisTask = new JScrollPane();
+  JPanel jPanelTask = new JPanel();
+  JSplitPane jSplitPaneTask = new JSplitPane();
+  JScrollPane jScrollPaneTask1 = new JScrollPane();
+  JPanel jPanelTask1 = new JPanel();
+  JPanel jPanelTask2 = new JPanel();
+  JPanel jPanelTask3 = new JPanel();
+  JPanel jPanelTask4 = new JPanel();
+  JPanel jPanelTask5 = new JPanel();
+  JPanel jPanelTask6 = new JPanel();
+  JLabel jLabelTaskEvent = new JLabel();
+  KanjiTextField jTextFieldTaskEvent = new KanjiTextField();
+  JLabel jLabelTaskType = new JLabel();
+  SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTaskType = new SortableXeadTreeNodeComboBoxModel();
+  JComboBox jComboBoxTaskType = new JComboBox(sortableComboBoxModelTaskType);
+  JLabel jLabelTaskDescriptions = new JLabel();
+  JLabel jLabelTaskName = new JLabel();
+  KanjiTextField jTextFieldTaskName = new KanjiTextField();
+  JTextField jTextFieldTaskSortKey = new JTextField();
+  JLabel jLabelSubjectAreaWithThisTask = new JLabel();
+  DefaultListModel listModelSubjectAreaWithThisTask = new DefaultListModel();
+  JList jListSubjectAreaWithThisTask = new JList(listModelSubjectAreaWithThisTask);
+  JScrollPane jScrollPaneSubjectAreaWithThisTask = new JScrollPane();
   private ArrayList<String> subjectAreaIDList = new ArrayList<String>();
-  private JScrollPane jScrollPaneTaskDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaTaskDescriptions = new KanjiTextArea();
-  private JSplitPane jSplitPaneTask2 = new JSplitPane();
-  private JSplitPane jSplitPaneTask3 = new JSplitPane();
-  private JSplitPane jSplitPaneTask4 = new JSplitPane();
-  private JSplitPane jSplitPaneTask5 = new JSplitPane();
+  JScrollPane jScrollPaneTaskDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaTaskDescriptions = new KanjiTextArea();
+  JSplitPane jSplitPaneTask2 = new JSplitPane();
+  JSplitPane jSplitPaneTask3 = new JSplitPane();
+  JSplitPane jSplitPaneTask4 = new JSplitPane();
+  JSplitPane jSplitPaneTask5 = new JSplitPane();
   private boolean isToCopySingleTaskAction = true;
-  private JScrollPane jScrollPaneTaskActions = new JScrollPane();
-  private JTree jTreeTaskActions = new JTree();
-  private DefaultTreeModel treeModelTaskActions;
-  private JLabel jLabelTaskActions = new JLabel();
-  private JTextPane jTextPaneTaskFunctionIOImage = new JTextPane();
-  private JLabel jLabelTaskFunctionIOImage = new JLabel();
-  private JScrollPane jScrollPaneTaskFunctionIOImage = new JScrollPane();
-  private JEditorPane jEditorPaneTaskFunctionIOImage = new JEditorPane();
-  private JPanel jPanelTaskFunctionIOImageSurface = new JPanel();
-  private JPanel jPanelTaskFunctionIOImage = new JPanel();
-  private JPanel jPanelTask15 = new JPanel();
-  private JPanel jPanelTask16 = new JPanel();
-  private JPanel jPanelTask17 = new JPanel();
-  private JPanel jPanelTask18 = new JPanel();
-  private JPanel jPanelTask19 = new JPanel();
-  private JScrollPane jScrollPaneTaskActionDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaTaskActionDescriptions = new KanjiTextArea();
-  private JLabel jLabelTaskActionDescriptions = new JLabel();
-  private JLabel jLabelTaskActionExecuteIf = new JLabel();
-  private JLabel jLabelTaskActionLabel = new JLabel();
-  private KanjiTextField jTextFieldTaskActionExecuteIf = new KanjiTextField();
-  private KanjiTextField jTextFieldTaskActionLabel = new KanjiTextField();
-  private JPanel jPanelTask20 = new JPanel();
-  private JPanel jPanelTask21 = new JPanel();
-  private JPanel jPanelTask22 = new JPanel();
-  private JPanel jPanelTask23 = new JPanel();
-  private JLabel jLabelTaskFunctionIOSortKey = new JLabel();
-  private JLabel jLabelTaskFunctionIOOperations = new JLabel();
-  private JScrollPane jScrollPaneTaskFunctionIOOperations = new JScrollPane();
-  private KanjiTextArea jTextAreaTaskFunctionIOOperations = new KanjiTextArea();
-  private JLabel jLabelTaskFunctionIODescriptions = new JLabel();
-  private JScrollPane jScrollPaneTaskFunctionIODescriptions = new JScrollPane();
-  private JTextArea jTextAreaTaskFunctionIODescriptions = new JTextArea();
-  private JTabbedPane jTabbedPaneTaskFunctionIO = new JTabbedPane();
+  JScrollPane jScrollPaneTaskActions = new JScrollPane();
+  JTree jTreeTaskActions = new JTree();
+  DefaultTreeModel treeModelTaskActions;
+  JLabel jLabelTaskActions = new JLabel();
+  JTextPane jTextPaneTaskFunctionIOImage = new JTextPane();
+  JLabel jLabelTaskFunctionIOImage = new JLabel();
+  JScrollPane jScrollPaneTaskFunctionIOImage = new JScrollPane();
+  JEditorPane jEditorPaneTaskFunctionIOImage = new JEditorPane();
+  JPanel jPanelTaskFunctionIOImageSurface = new JPanel();
+  JPanel jPanelTaskFunctionIOImage = new JPanel();
+  JPanel jPanelTask15 = new JPanel();
+  JPanel jPanelTask16 = new JPanel();
+  JPanel jPanelTask17 = new JPanel();
+  JPanel jPanelTask18 = new JPanel();
+  JPanel jPanelTask19 = new JPanel();
+  JScrollPane jScrollPaneTaskActionDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaTaskActionDescriptions = new KanjiTextArea();
+  JLabel jLabelTaskActionDescriptions = new JLabel();
+  JLabel jLabelTaskActionExecuteIf = new JLabel();
+  JLabel jLabelTaskActionLabel = new JLabel();
+  KanjiTextField jTextFieldTaskActionExecuteIf = new KanjiTextField();
+  KanjiTextField jTextFieldTaskActionLabel = new KanjiTextField();
+  JPanel jPanelTask20 = new JPanel();
+  JPanel jPanelTask21 = new JPanel();
+  JPanel jPanelTask22 = new JPanel();
+  JPanel jPanelTask23 = new JPanel();
+  JLabel jLabelTaskFunctionIOSortKey = new JLabel();
+  JLabel jLabelTaskFunctionIOOperations = new JLabel();
+  JScrollPane jScrollPaneTaskFunctionIOOperations = new JScrollPane();
+  KanjiTextArea jTextAreaTaskFunctionIOOperations = new KanjiTextArea();
+  JLabel jLabelTaskFunctionIODescriptions = new JLabel();
+  JScrollPane jScrollPaneTaskFunctionIODescriptions = new JScrollPane();
+  JTextArea jTextAreaTaskFunctionIODescriptions = new JTextArea();
+  JTabbedPane jTabbedPaneTaskFunctionIO = new JTabbedPane();
   private int selectedTab_jTabbedPaneTaskFunctionIO;
-  private JPanel jPanelTaskFunctionIODummy = new JPanel();
+  JPanel jPanelTaskFunctionIODummy = new JPanel();
   private String htmlFileNameForFunctionIO = "";
   private Object elementOfTaskActionToBeFocused = null;
   private Object elementOfFunctionIOToBeFocused = null;
-  private JLabel jLabelTaskFunctionIOImageFunction = new JLabel();
-  private JTextField jTextFieldTaskFunctionIOImageFunction = new JTextField();
-  private JLabel jLabelTaskFunctionIOImageFunctionRemarks = new JLabel();
-  private JTextField jTextFieldTaskFunctionIOImageFunctionSummary = new JTextField();
-  private JLabel jLabelTaskFunctionIOImageTable = new JLabel();
-  private JTextField jTextFieldTaskFunctionIOImageTable = new JTextField();
-  private JLabel jLabelTaskFunctionIOImageTableRemarks = new JLabel();
-  private JScrollPane jScrollPaneTaskFunctionIOImageTableRemarks = new JScrollPane();
-  private JTextArea jTextAreaTaskFunctionIOImageTableRemarks = new JTextArea();
-  private JLabel jLabelTaskFunctionIOImageFunctionParms = new JLabel();
-  private JTextField jTextFieldTaskFunctionIOImageFunctionParms = new JTextField();
-  private JLabel jLabelTaskFunctionIOImageFunctionReturn = new JLabel();
-  private JTextField jTextFieldTaskFunctionIOImageFunctionReturn = new JTextField();
-  private JScrollPane jScrollPaneFunctionIOImageIOList = new JScrollPane();
-  private TableModelReadOnlyList tableModelFunctionIOImageIOList = new TableModelReadOnlyList();
-  private JTable jTableFunctionIOImageIOList = new JTable(tableModelFunctionIOImageIOList);
+  JLabel jLabelTaskFunctionIOImageFunction = new JLabel();
+  JTextField jTextFieldTaskFunctionIOImageFunction = new JTextField();
+  JLabel jLabelTaskFunctionIOImageFunctionRemarks = new JLabel();
+  JTextField jTextFieldTaskFunctionIOImageFunctionSummary = new JTextField();
+  JLabel jLabelTaskFunctionIOImageTable = new JLabel();
+  JTextField jTextFieldTaskFunctionIOImageTable = new JTextField();
+  JLabel jLabelTaskFunctionIOImageTableRemarks = new JLabel();
+  JScrollPane jScrollPaneTaskFunctionIOImageTableRemarks = new JScrollPane();
+  JTextArea jTextAreaTaskFunctionIOImageTableRemarks = new JTextArea();
+  JLabel jLabelTaskFunctionIOImageFunctionParms = new JLabel();
+  JTextField jTextFieldTaskFunctionIOImageFunctionParms = new JTextField();
+  JLabel jLabelTaskFunctionIOImageFunctionReturn = new JLabel();
+  JTextField jTextFieldTaskFunctionIOImageFunctionReturn = new JTextField();
+  JScrollPane jScrollPaneFunctionIOImageIOList = new JScrollPane();
+  TableModelReadOnlyList tableModelFunctionIOImageIOList = new TableModelReadOnlyList();
+  JTable jTableFunctionIOImageIOList = new JTable(tableModelFunctionIOImageIOList);
 
   /**
    * Definition components on jPanelSubsystemList
    */
-  private JPanel jPanelSubsystemList = new JPanel();
-  private JTabbedPane jTabbedPaneSubsystemList = new JTabbedPane();
-  private JScrollPane jScrollPaneSubsystemList = new JScrollPane();
-  private TableModelReadOnlyList tableModelSubsystemList = new TableModelReadOnlyList();
-  private JTable jTableSubsystemList = new JTable(tableModelSubsystemList);
+  JPanel jPanelSubsystemList = new JPanel();
+  JTabbedPane jTabbedPaneSubsystemList = new JTabbedPane();
+  JScrollPane jScrollPaneSubsystemList = new JScrollPane();
+  TableModelReadOnlyList tableModelSubsystemList = new TableModelReadOnlyList();
+  JTable jTableSubsystemList = new JTable(tableModelSubsystemList);
   private int selectedRow_jTableSubsystemList;
   private int selectedRow_jTableFunctionsStructureTableIOList;
-  private JSplitPane jSplitPaneFunctionsStructure1 = new JSplitPane();
-  private JSplitPane jSplitPaneFunctionsStructure2 = new JSplitPane();
-  private JPanel jPanelFunctionsStructure = new JPanel();
-  private JTabbedPane jTabbedPaneFunctionsStructureIO = new JTabbedPane();
-  private JScrollPane jScrollPaneFunctionsStructure = new JScrollPane();
-  private JTree jTreeFunctionsStructure = new JTree();
-  private DefaultTreeModel treeModelFunctionsStructure;
-  private boolean isRequiredToSetupFunctionsStructre;
-  private JLabel jLabelFunctionsStructure1 = new JLabel();
-  private JLabel jLabelFunctionsStructure2 = new JLabel();
-  private JLabel jLabelFunctionsStructure3 = new JLabel();
-  private JLabel jLabelFunctionsStructure4 = new JLabel();
-  private JLabel jLabelFunctionsStructure5 = new JLabel();
-  private JLabel jLabelFunctionsStructure6 = new JLabel();
-  private JTextField jTextFieldFunctionsStructureLaunchEvent = new JTextField();
-  private JTextField jTextFieldFunctionsStructureSubsystemName = new JTextField();
-  private JTextField jTextFieldFunctionsStructureFunctionName = new JTextField();
-  private JTextField jTextFieldFunctionsStructureFunctionType = new JTextField();
-  private JTextField jTextFieldFunctionsStructureFunctionSummary = new JTextField();
-  private JTextField jTextFieldFunctionsStructureFunctionParameters = new JTextField();
-  private JTextField jTextFieldFunctionsStructureFunctionReturn = new JTextField();
-  private JScrollPane[] jScrollPaneFunctionsStructureIOImageArray = new JScrollPane[10];
-  private JPanel[] jPanelFunctionsStructureIOImageArray = new JPanel[10];
-  private JTextPane[] jTextPaneFunctionsStructureIOImageArray = new JTextPane[10];
-  private JEditorPane[] jEditorPaneFunctionsStructureIOImageArray = new JEditorPane[10];
+  JSplitPane jSplitPaneFunctionsStructure1 = new JSplitPane();
+  JSplitPane jSplitPaneFunctionsStructure2 = new JSplitPane();
+  JPanel jPanelFunctionsStructure = new JPanel();
+  JTabbedPane jTabbedPaneFunctionsStructureIO = new JTabbedPane();
+  JScrollPane jScrollPaneFunctionsStructure = new JScrollPane();
+  JTree jTreeFunctionsStructure = new JTree();
+  DefaultTreeModel treeModelFunctionsStructure;
+  boolean isRequiredToSetupFunctionsStructre;
+  JLabel jLabelFunctionsStructure1 = new JLabel();
+  JLabel jLabelFunctionsStructure2 = new JLabel();
+  JLabel jLabelFunctionsStructure3 = new JLabel();
+  JLabel jLabelFunctionsStructure4 = new JLabel();
+  JLabel jLabelFunctionsStructure5 = new JLabel();
+  JLabel jLabelFunctionsStructure6 = new JLabel();
+  JTextField jTextFieldFunctionsStructureLaunchEvent = new JTextField();
+  JTextField jTextFieldFunctionsStructureSubsystemName = new JTextField();
+  JTextField jTextFieldFunctionsStructureFunctionName = new JTextField();
+  JTextField jTextFieldFunctionsStructureFunctionType = new JTextField();
+  JTextField jTextFieldFunctionsStructureFunctionSummary = new JTextField();
+  JTextField jTextFieldFunctionsStructureFunctionParameters = new JTextField();
+  JTextField jTextFieldFunctionsStructureFunctionReturn = new JTextField();
+  JScrollPane[] jScrollPaneFunctionsStructureIOImageArray = new JScrollPane[10];
+  JPanel[] jPanelFunctionsStructureIOImageArray = new JPanel[10];
+  JTextPane[] jTextPaneFunctionsStructureIOImageArray = new JTextPane[10];
+  JEditorPane[] jEditorPaneFunctionsStructureIOImageArray = new JEditorPane[10];
   private String[] htmlFileNameForFunctionsStructureIOImageArray = new String[10];
-  private JLabel[] jLabelFunctionsStructureIOImageArray = new JLabel[10];
-  private JScrollPane jScrollPaneFunctionsStructureIOImage0 = new JScrollPane();
-  private JPanel jPanelFunctionsStructureIOImage0 = new JPanel();
-  private JTextPane jTextPaneFunctionsStructureIOImage0 = new JTextPane();
-  private JEditorPane jEditorPaneFunctionsStructureIOImage0 = new JEditorPane();
-  private JLabel jLabelFunctionsStructureIOImage0 = new JLabel();
-  private JScrollPane jScrollPaneFunctionsStructureIOImage1 = new JScrollPane();
-  private JPanel jPanelFunctionsStructureIOImage1 = new JPanel();
-  private JTextPane jTextPaneFunctionsStructureIOImage1 = new JTextPane();
-  private JEditorPane jEditorPaneFunctionsStructureIOImage1 = new JEditorPane();
-  private JLabel jLabelFunctionsStructureIOImage1 = new JLabel();
-  private JScrollPane jScrollPaneFunctionsStructureIOImage2 = new JScrollPane();
-  private JPanel jPanelFunctionsStructureIOImage2 = new JPanel();
-  private JTextPane jTextPaneFunctionsStructureIOImage2 = new JTextPane();
-  private JEditorPane jEditorPaneFunctionsStructureIOImage2 = new JEditorPane();
-  private JLabel jLabelFunctionsStructureIOImage2 = new JLabel();
-  private JScrollPane jScrollPaneFunctionsStructureIOImage3 = new JScrollPane();
-  private JPanel jPanelFunctionsStructureIOImage3 = new JPanel();
-  private JTextPane jTextPaneFunctionsStructureIOImage3 = new JTextPane();
-  private JEditorPane jEditorPaneFunctionsStructureIOImage3 = new JEditorPane();
-  private JLabel jLabelFunctionsStructureIOImage3 = new JLabel();
-  private JScrollPane jScrollPaneFunctionsStructureIOImage4 = new JScrollPane();
-  private JPanel jPanelFunctionsStructureIOImage4 = new JPanel();
-  private JTextPane jTextPaneFunctionsStructureIOImage4 = new JTextPane();
-  private JEditorPane jEditorPaneFunctionsStructureIOImage4 = new JEditorPane();
-  private JLabel jLabelFunctionsStructureIOImage4 = new JLabel();
-  private JScrollPane jScrollPaneFunctionsStructureIOImage5 = new JScrollPane();
-  private JPanel jPanelFunctionsStructureIOImage5 = new JPanel();
-  private JTextPane jTextPaneFunctionsStructureIOImage5 = new JTextPane();
-  private JEditorPane jEditorPaneFunctionsStructureIOImage5 = new JEditorPane();
-  private JLabel jLabelFunctionsStructureIOImage5 = new JLabel();
-  private JScrollPane jScrollPaneFunctionsStructureIOImage6 = new JScrollPane();
-  private JPanel jPanelFunctionsStructureIOImage6 = new JPanel();
-  private JTextPane jTextPaneFunctionsStructureIOImage6 = new JTextPane();
-  private JEditorPane jEditorPaneFunctionsStructureIOImage6 = new JEditorPane();
-  private JLabel jLabelFunctionsStructureIOImage6 = new JLabel();
-  private JScrollPane jScrollPaneFunctionsStructureIOImage7 = new JScrollPane();
-  private JPanel jPanelFunctionsStructureIOImage7 = new JPanel();
-  private JTextPane jTextPaneFunctionsStructureIOImage7 = new JTextPane();
-  private JEditorPane jEditorPaneFunctionsStructureIOImage7 = new JEditorPane();
-  private JLabel jLabelFunctionsStructureIOImage7 = new JLabel();
-  private JScrollPane jScrollPaneFunctionsStructureIOImage8 = new JScrollPane();
-  private JPanel jPanelFunctionsStructureIOImage8 = new JPanel();
-  private JTextPane jTextPaneFunctionsStructureIOImage8 = new JTextPane();
-  private JEditorPane jEditorPaneFunctionsStructureIOImage8 = new JEditorPane();
-  private JLabel jLabelFunctionsStructureIOImage8 = new JLabel();
-  private JScrollPane jScrollPaneFunctionsStructureIOImage9 = new JScrollPane();
-  private JPanel jPanelFunctionsStructureIOImage9 = new JPanel();
-  private JTextPane jTextPaneFunctionsStructureIOImage9 = new JTextPane();
-  private JEditorPane jEditorPaneFunctionsStructureIOImage9 = new JEditorPane();
-  private JLabel jLabelFunctionsStructureIOImage9 = new JLabel();
-  private JScrollPane jScrollPaneFunctionsStructureTableIOList = new JScrollPane();
-  private TableModelReadOnlyList tableModelFunctionsStructureTableIOList = new TableModelReadOnlyList();
-  private JTable jTableFunctionsStructureTableIOList = new JTable(
+  JLabel[] jLabelFunctionsStructureIOImageArray = new JLabel[10];
+  JScrollPane jScrollPaneFunctionsStructureIOImage0 = new JScrollPane();
+  JPanel jPanelFunctionsStructureIOImage0 = new JPanel();
+  JTextPane jTextPaneFunctionsStructureIOImage0 = new JTextPane();
+  JEditorPane jEditorPaneFunctionsStructureIOImage0 = new JEditorPane();
+  JLabel jLabelFunctionsStructureIOImage0 = new JLabel();
+  JScrollPane jScrollPaneFunctionsStructureIOImage1 = new JScrollPane();
+  JPanel jPanelFunctionsStructureIOImage1 = new JPanel();
+  JTextPane jTextPaneFunctionsStructureIOImage1 = new JTextPane();
+  JEditorPane jEditorPaneFunctionsStructureIOImage1 = new JEditorPane();
+  JLabel jLabelFunctionsStructureIOImage1 = new JLabel();
+  JScrollPane jScrollPaneFunctionsStructureIOImage2 = new JScrollPane();
+  JPanel jPanelFunctionsStructureIOImage2 = new JPanel();
+  JTextPane jTextPaneFunctionsStructureIOImage2 = new JTextPane();
+  JEditorPane jEditorPaneFunctionsStructureIOImage2 = new JEditorPane();
+  JLabel jLabelFunctionsStructureIOImage2 = new JLabel();
+  JScrollPane jScrollPaneFunctionsStructureIOImage3 = new JScrollPane();
+  JPanel jPanelFunctionsStructureIOImage3 = new JPanel();
+  JTextPane jTextPaneFunctionsStructureIOImage3 = new JTextPane();
+  JEditorPane jEditorPaneFunctionsStructureIOImage3 = new JEditorPane();
+  JLabel jLabelFunctionsStructureIOImage3 = new JLabel();
+  JScrollPane jScrollPaneFunctionsStructureIOImage4 = new JScrollPane();
+  JPanel jPanelFunctionsStructureIOImage4 = new JPanel();
+  JTextPane jTextPaneFunctionsStructureIOImage4 = new JTextPane();
+  JEditorPane jEditorPaneFunctionsStructureIOImage4 = new JEditorPane();
+  JLabel jLabelFunctionsStructureIOImage4 = new JLabel();
+  JScrollPane jScrollPaneFunctionsStructureIOImage5 = new JScrollPane();
+  JPanel jPanelFunctionsStructureIOImage5 = new JPanel();
+  JTextPane jTextPaneFunctionsStructureIOImage5 = new JTextPane();
+  JEditorPane jEditorPaneFunctionsStructureIOImage5 = new JEditorPane();
+  JLabel jLabelFunctionsStructureIOImage5 = new JLabel();
+  JScrollPane jScrollPaneFunctionsStructureIOImage6 = new JScrollPane();
+  JPanel jPanelFunctionsStructureIOImage6 = new JPanel();
+  JTextPane jTextPaneFunctionsStructureIOImage6 = new JTextPane();
+  JEditorPane jEditorPaneFunctionsStructureIOImage6 = new JEditorPane();
+  JLabel jLabelFunctionsStructureIOImage6 = new JLabel();
+  JScrollPane jScrollPaneFunctionsStructureIOImage7 = new JScrollPane();
+  JPanel jPanelFunctionsStructureIOImage7 = new JPanel();
+  JTextPane jTextPaneFunctionsStructureIOImage7 = new JTextPane();
+  JEditorPane jEditorPaneFunctionsStructureIOImage7 = new JEditorPane();
+  JLabel jLabelFunctionsStructureIOImage7 = new JLabel();
+  JScrollPane jScrollPaneFunctionsStructureIOImage8 = new JScrollPane();
+  JPanel jPanelFunctionsStructureIOImage8 = new JPanel();
+  JTextPane jTextPaneFunctionsStructureIOImage8 = new JTextPane();
+  JEditorPane jEditorPaneFunctionsStructureIOImage8 = new JEditorPane();
+  JLabel jLabelFunctionsStructureIOImage8 = new JLabel();
+  JScrollPane jScrollPaneFunctionsStructureIOImage9 = new JScrollPane();
+  JPanel jPanelFunctionsStructureIOImage9 = new JPanel();
+  JTextPane jTextPaneFunctionsStructureIOImage9 = new JTextPane();
+  JEditorPane jEditorPaneFunctionsStructureIOImage9 = new JEditorPane();
+  JLabel jLabelFunctionsStructureIOImage9 = new JLabel();
+  JScrollPane jScrollPaneFunctionsStructureTableIOList = new JScrollPane();
+  TableModelReadOnlyList tableModelFunctionsStructureTableIOList = new TableModelReadOnlyList();
+  JTable jTableFunctionsStructureTableIOList = new JTable(
       tableModelFunctionsStructureTableIOList);
   private boolean taskFunctionIOTabSelectChangeActivated = true;
   /**
    * Definition components on jPanelSubsystem
    */
-  private JPanel jPanelSubsystem = new JPanel();
-  private JPanel jPanelSubsystem1 = new JPanel();
-  private JPanel jPanelSubsystem2 = new JPanel();
-  private JPanel jPanelSubsystem3 = new JPanel();
-  private KanjiTextField jTextFieldSubsystemName = new KanjiTextField();
-  private JLabel jLabelSubsystemDescriptions1 = new JLabel();
-  private JLabel jLabelSubsystemName = new JLabel();
-  private JLabel jLabelSubsysytemSortKey = new JLabel();
-  private JTextField jTextFieldSubsystemSortKey = new JTextField();
-  private JScrollPane jScrollPaneSubsystemDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaSubsystemDescriptions = new KanjiTextArea();
+  JPanel jPanelSubsystem = new JPanel();
+  JPanel jPanelSubsystem1 = new JPanel();
+  JPanel jPanelSubsystem2 = new JPanel();
+  JPanel jPanelSubsystem3 = new JPanel();
+  KanjiTextField jTextFieldSubsystemName = new KanjiTextField();
+  JLabel jLabelSubsystemDescriptions1 = new JLabel();
+  JLabel jLabelSubsystemName = new JLabel();
+  JLabel jLabelSubsysytemSortKey = new JLabel();
+  JTextField jTextFieldSubsystemSortKey = new JTextField();
+  JScrollPane jScrollPaneSubsystemDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaSubsystemDescriptions = new KanjiTextArea();
   /**
    * Definition components on jPanelTableList
    */
-  private JPanel jPanelTableList = new JPanel();
-  private JScrollPane jScrollPaneNativeTableList = new JScrollPane();
-  private JViewport jViewportNativeTableList = new JViewport();
+  JPanel jPanelTableList = new JPanel();
+  JScrollPane jScrollPaneNativeTableList = new JScrollPane();
+  JViewport jViewportNativeTableList = new JViewport();
   public JTabbedPane jTabbedPaneTableList = new JTabbedPane();
   private int previousSelectedIndex_jTabbedPaneTableList = 0;
-  private TableModelNativeTableList tableModelNativeTableList = new TableModelNativeTableList();
+  TableModelNativeTableList tableModelNativeTableList = new TableModelNativeTableList();
   public JTable jTableNativeTableList = new JTable(tableModelNativeTableList);
   private int selectedRow_jTableNativeTableList;
-  private JScrollPane jScrollPaneForeignTableList = new JScrollPane();
-  private JViewport jViewportForeignTableList = new JViewport();
-  private TableModelForeignTableList tableModelForeignTableList = new TableModelForeignTableList();
+  JScrollPane jScrollPaneForeignTableList = new JScrollPane();
+  JViewport jViewportForeignTableList = new JViewport();
+  TableModelForeignTableList tableModelForeignTableList = new TableModelForeignTableList();
   public JTable jTableForeignTableList = new JTable(tableModelForeignTableList);
   private int selectedRow_jTableForeignTableList;
-  private JSplitPane jSplitPaneDatamodel = new JSplitPane();
-  private JPanel jPanelDatamodelTop = new JPanel();
-  private JPanel jPanelDatamodelDescriptions = new JPanel();
-  private JLabel jLabelDatamodelDescriptions = new JLabel();
-  private JScrollPane jScrollPaneDatamodelDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaDatamodelDescriptions = new KanjiTextArea();
-  private JScrollPane jScrollPaneDatamodel = new JScrollPane();
+  JSplitPane jSplitPaneDatamodel = new JSplitPane();
+  JPanel jPanelDatamodelTop = new JPanel();
+  JPanel jPanelDatamodelDescriptions = new JPanel();
+  JLabel jLabelDatamodelDescriptions = new JLabel();
+  JScrollPane jScrollPaneDatamodelDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaDatamodelDescriptions = new KanjiTextArea();
+  JScrollPane jScrollPaneDatamodel = new JScrollPane();
   private ArrayList<DatamodelEntityBox> datamodelEntityBoxArray = new ArrayList<DatamodelEntityBox>();
   private ArrayList<DatamodelRelationshipLine> datamodelRelationshipLineArray = new ArrayList<DatamodelRelationshipLine>();
   private ArrayList<Object> relationshipElementArray = new ArrayList<Object>();
@@ -1133,9 +1133,9 @@ public class Modeler extends JFrame {
   };
   private boolean sizeOfTableOnModelChanged = false;
   private xeadModeler.model.json.TableKey draggingKeyElement = null;
-  private DialogAddRelationshipOnDatamodel dialogAddRelationshipOnDatamodel = new DialogAddRelationshipOnDatamodel(
+  DialogAddRelationshipOnDatamodel dialogAddRelationshipOnDatamodel = new DialogAddRelationshipOnDatamodel(
       this);
-  private DialogEditInstanceOnDatamodel dialogEditInstanceOnDatamodel = new DialogEditInstanceOnDatamodel(
+  DialogEditInstanceOnDatamodel dialogEditInstanceOnDatamodel = new DialogEditInstanceOnDatamodel(
       this);
   private ArrayList<DatamodelEntityBox> datamodelEntityBoxSlideShowArray = new ArrayList<DatamodelEntityBox>();
   private ArrayList<DatamodelRelationshipLine> datamodelRelationshipLineSlideShowArray = new ArrayList<DatamodelRelationshipLine>();
@@ -1143,7 +1143,7 @@ public class Modeler extends JFrame {
   private int datamodelSlideNumber = 0;
   private int datamodelSlideTotalNumber = 0;
   private boolean isShowingInstance = false;
-  private JPanel jPanelDatamodelSlideShow1 = new JPanel();
+  JPanel jPanelDatamodelSlideShow1 = new JPanel();
   public JPanel jPanelDatamodelSlideShow2 = new JPanel() {
     private static final long serialVersionUID = 1L;
 
@@ -1175,7 +1175,7 @@ public class Modeler extends JFrame {
       }
     }
   };
-  private JLabel jLabelDatamodelSlideShowPageGuide = new JLabel();
+  JLabel jLabelDatamodelSlideShowPageGuide = new JLabel();
   private String datamodelPageTitle;
   public String initialModelSize = "M";
   public String modelSize = "M";
@@ -1184,51 +1184,51 @@ public class Modeler extends JFrame {
   /**
    * Definition components on jPanelTable
    */
-  private JScrollPane jScrollPaneTable1 = new JScrollPane();
-  private JPanel jPanelTable = new JPanel();
-  private JSplitPane jSplitPaneTable = new JSplitPane();
+  JScrollPane jScrollPaneTable1 = new JScrollPane();
+  JPanel jPanelTable = new JPanel();
+  JSplitPane jSplitPaneTable = new JSplitPane();
   public xeadModeler.view.SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTableType = new xeadModeler.view.SortableXeadTreeNodeComboBoxModel();
   public TableModelReadOnlyList tableModelTableUsageList = new TableModelReadOnlyList();
   public TableModelReadOnlyList tableModelTableForeignUsageList = new TableModelReadOnlyList();
   public TableModelReadOnlyList tableModelTableReferringFileList = new TableModelReadOnlyList();
-  private JLabel jLabelTableDescriptions = new JLabel();
-  private JPanel jPanelTable4 = new JPanel();
-  private JTextField jTextFieldTablePK = new JTextField();
-  private JLabel jLabelTableType = new JLabel();
-  private JLabel jLabelTableName = new JLabel();
-  private JLabel jLabelTableAlias = new JLabel();
-  private JPanel jPanelTable2 = new JPanel();
-  private JComboBox jComboBoxTableType = new JComboBox(sortableComboBoxModelTableType);
-  private JLabel jLabelTablePK = new JLabel();
-  private KanjiTextField jTextFieldTableName = new KanjiTextField();
-  private JTextField jTextFieldTableAlias = new JTextField();
-  private JLabel jLabelTableSynchronize = new JLabel();
-  private JTextField jTextFieldTableSynchronize = new JTextField();
-  private JButton jButtonTableSynchronize = new JButton();
-  private JPanel jPanelTable1 = new JPanel();
-  private JPanel jPanelTable3 = new JPanel();
+  JLabel jLabelTableDescriptions = new JLabel();
+  JPanel jPanelTable4 = new JPanel();
+  JTextField jTextFieldTablePK = new JTextField();
+  JLabel jLabelTableType = new JLabel();
+  JLabel jLabelTableName = new JLabel();
+  JLabel jLabelTableAlias = new JLabel();
+  JPanel jPanelTable2 = new JPanel();
+  JComboBox jComboBoxTableType = new JComboBox(sortableComboBoxModelTableType);
+  JLabel jLabelTablePK = new JLabel();
+  KanjiTextField jTextFieldTableName = new KanjiTextField();
+  JTextField jTextFieldTableAlias = new JTextField();
+  JLabel jLabelTableSynchronize = new JLabel();
+  JTextField jTextFieldTableSynchronize = new JTextField();
+  JButton jButtonTableSynchronize = new JButton();
+  JPanel jPanelTable1 = new JPanel();
+  JPanel jPanelTable3 = new JPanel();
   public JTable jTableTableUsageList = new JTable(tableModelTableUsageList);
   private int selectedRow_jTableTableUsageList;
-  private JScrollPane jScrollPaneTableForeignUsageList = new JScrollPane();
+  JScrollPane jScrollPaneTableForeignUsageList = new JScrollPane();
   public JTable jTableTableReferringFileList = new JTable(tableModelTableReferringFileList);
-  private JScrollPane jScrollPaneTableReferringFileList = new JScrollPane();
-  private JTabbedPane jTabbedPaneTable = new JTabbedPane();
+  JScrollPane jScrollPaneTableReferringFileList = new JScrollPane();
+  JTabbedPane jTabbedPaneTable = new JTabbedPane();
   public JTable jTableTableForeignUsageList = new JTable(tableModelTableForeignUsageList);
   private int selectedRow_jTableTableForeignUsageList;
-  private JScrollPane jScrollPaneTableUsageList = new JScrollPane();
-  private JScrollPane jScrollPaneTableDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaTableDescriptions = new KanjiTextArea();
-  private JLabel jLabelTableSortKey = new JLabel();
-  private JTextField jTextFieldTableSortKey = new JTextField();
-  private JScrollPane jScrollPaneTableCreateStatement = new JScrollPane();
-  private JTextArea jTextAreaTableCreateStatement = new JTextArea();
+  JScrollPane jScrollPaneTableUsageList = new JScrollPane();
+  JScrollPane jScrollPaneTableDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaTableDescriptions = new KanjiTextArea();
+  JLabel jLabelTableSortKey = new JLabel();
+  JTextField jTextFieldTableSortKey = new JTextField();
+  JScrollPane jScrollPaneTableCreateStatement = new JScrollPane();
+  JTextArea jTextAreaTableCreateStatement = new JTextArea();
   /**
    * Definition components on jPanelTableFieldList
    */
-  private JPanel jPanelTableFieldList = new JPanel();
-  private JScrollPane jScrollPaneTableFieldList = new JScrollPane();
-  private JViewport jViewportTableFieldList = new JViewport();
-  private TableModelTableFieldList tableModelTableFieldList = new TableModelTableFieldList();
+  JPanel jPanelTableFieldList = new JPanel();
+  JScrollPane jScrollPaneTableFieldList = new JScrollPane();
+  JViewport jViewportTableFieldList = new JViewport();
+  TableModelTableFieldList tableModelTableFieldList = new TableModelTableFieldList();
   public JTable jTableTableFieldList = new JTable(tableModelTableFieldList);
   private int selectedRow_jTableTableFieldList;
   private int targetRow_jTableTableFieldList;
@@ -1236,117 +1236,117 @@ public class Modeler extends JFrame {
    * Definition components on jPanelTableField
    */
   private ArrayList<XeadTreeNode> fieldListNodeToBeRenumbered = new ArrayList<XeadTreeNode>();
-  private JPanel jPanelTableField = new JPanel();
-  private JSplitPane jSplitPaneTableField1 = new JSplitPane();
+  JPanel jPanelTableField = new JPanel();
+  JSplitPane jSplitPaneTableField1 = new JSplitPane();
   public TableModelReadOnlyList tableModelTableFieldUsageList = new TableModelReadOnlyList();
   public TableModelReadOnlyList tableModelTableFieldForeignUsageList = new TableModelReadOnlyList();
   public JTable jTableTableFieldUsageList = new JTable(tableModelTableFieldUsageList);
   private int selectedRow_jTableTableFieldUsageList;
-  private JScrollPane jScrollPaneTableFieldForeignUsageList = new JScrollPane();
-  private JTabbedPane jTabbedPaneTableField = new JTabbedPane();
+  JScrollPane jScrollPaneTableFieldForeignUsageList = new JScrollPane();
+  JTabbedPane jTabbedPaneTableField = new JTabbedPane();
   public JTable jTableTableFieldForeignUsageList = new JTable(
       tableModelTableFieldForeignUsageList);
   private int selectedRow_jTableTableFieldForeignUsageList;
-  private JScrollPane jScrollPaneTableFieldUsageList = new JScrollPane();
-  private JLabel jLabelTableFieldDescriptions = new JLabel();
-  private JScrollPane jScrollPaneTableField1 = new JScrollPane();
-  private JPanel jPanelTableField1 = new JPanel();
-  private JPanel jPanelTableField2 = new JPanel();
-  private JPanel jPanelTableField3 = new JPanel();
-  private JPanel jPanelTableField4 = new JPanel();
-  private JPanel jPanelTableField5 = new JPanel();
-  private JPanel jPanelTableField6 = new JPanel();
-  private JLabel jLabelTableFieldName = new JLabel();
-  private KanjiTextField jTextFieldTableFieldName = new KanjiTextField();
-  private JScrollPane jScrollPaneTableFieldDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaTableFieldDescriptions = new KanjiTextArea();
-  private ButtonGroup buttonGroupTableFieldAttributeType = new ButtonGroup();
-  private JLabel jLabelTableFieldAlias = new JLabel();
+  JScrollPane jScrollPaneTableFieldUsageList = new JScrollPane();
+  JLabel jLabelTableFieldDescriptions = new JLabel();
+  JScrollPane jScrollPaneTableField1 = new JScrollPane();
+  JPanel jPanelTableField1 = new JPanel();
+  JPanel jPanelTableField2 = new JPanel();
+  JPanel jPanelTableField3 = new JPanel();
+  JPanel jPanelTableField4 = new JPanel();
+  JPanel jPanelTableField5 = new JPanel();
+  JPanel jPanelTableField6 = new JPanel();
+  JLabel jLabelTableFieldName = new JLabel();
+  KanjiTextField jTextFieldTableFieldName = new KanjiTextField();
+  JScrollPane jScrollPaneTableFieldDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaTableFieldDescriptions = new KanjiTextArea();
+  ButtonGroup buttonGroupTableFieldAttributeType = new ButtonGroup();
+  JLabel jLabelTableFieldAlias = new JLabel();
   public JTextField jTextFieldTableFieldAlias = new JTextField();
-  private JLabel jLabelTableFieldAttributeType = new JLabel();
-  private JLabel jLabelTableFieldDataType = new JLabel();
-  private JRadioButton jRadioButtonTableFieldAttributeTypeINHERITED = new JRadioButton();
-  private JRadioButton jRadioButtonTableFieldAttributeTypeNATIVE = new JRadioButton();
-  private JRadioButton jRadioButtonTableFieldAttributeTypeDERIVABLE = new JRadioButton();
-  private JCheckBox jCheckBoxTableFieldNoUpdate = new JCheckBox();
-  private JCheckBox jCheckBoxTableFieldShowOnModel = new JCheckBox();
-  private JLabel jLabelTableFieldDefault = new JLabel();
-  private JTextField jTextFieldTableFieldDefault = new JTextField();
-  private JCheckBox jCheckBoxTableFieldNotNull = new JCheckBox();
+  JLabel jLabelTableFieldAttributeType = new JLabel();
+  JLabel jLabelTableFieldDataType = new JLabel();
+  JRadioButton jRadioButtonTableFieldAttributeTypeINHERITED = new JRadioButton();
+  JRadioButton jRadioButtonTableFieldAttributeTypeNATIVE = new JRadioButton();
+  JRadioButton jRadioButtonTableFieldAttributeTypeDERIVABLE = new JRadioButton();
+  JCheckBox jCheckBoxTableFieldNoUpdate = new JCheckBox();
+  JCheckBox jCheckBoxTableFieldShowOnModel = new JCheckBox();
+  JLabel jLabelTableFieldDefault = new JLabel();
+  JTextField jTextFieldTableFieldDefault = new JTextField();
+  JCheckBox jCheckBoxTableFieldNotNull = new JCheckBox();
   public JButton jButtonTableFieldDataTypeChange = new JButton();
   private DataTypePopupMenu dataTypePopupMenu = new DataTypePopupMenu();
   public JTextField jTextFieldTableFieldDataType = new JTextField();
   public String tableFieldDataTypeID = "";
-  private JMenuItem jMenuItemAddDataType = new JMenuItem();
+  JMenuItem jMenuItemAddDataType = new JMenuItem();
   private ArrayList<Object> newlyAddedDataTypeElementList = new ArrayList<Object>();
   /**
    * Definition components on jPanelTableKeyList
    */
-  private JPanel jPanelTableKeyList = new JPanel();
-  private JScrollPane jScrollPaneTableKeyList = new JScrollPane();
-  private TableModelReadOnlyList tableModelTableKeyList = new TableModelReadOnlyList();
-  private JTable jTableTableKeyList = new JTable(tableModelTableKeyList);
+  JPanel jPanelTableKeyList = new JPanel();
+  JScrollPane jScrollPaneTableKeyList = new JScrollPane();
+  TableModelReadOnlyList tableModelTableKeyList = new TableModelReadOnlyList();
+  JTable jTableTableKeyList = new JTable(tableModelTableKeyList);
   private int selectedRow_jTableTableKeyList;
   /**
    * Definition components on jPanelTableKey
    */
-  private JPanel jPanelTableKey = new JPanel();
-  private JPanel jPanelTableKey1 = new JPanel();
-  private JLabel jLabelKeyType = new JLabel();
-  private JTextField jTextFieldTableKeyType = new JTextField();
-  private JLabel jLabelTableKeySortKey = new JLabel();
-  private JTextField jTextFieldTableKeySortKey = new JTextField();
-  private JPanel jPanelTableKey6 = new JPanel();
-  private JSplitPane jSplitPaneTableKey = new JSplitPane();
-  private JScrollPane jScrollPaneTableKeyFieldList = new JScrollPane();
-  private JViewport jViewportTableKeyFieldList = new JViewport();
-  private JPanel jPanelTableKey2 = new JPanel();
+  JPanel jPanelTableKey = new JPanel();
+  JPanel jPanelTableKey1 = new JPanel();
+  JLabel jLabelKeyType = new JLabel();
+  JTextField jTextFieldTableKeyType = new JTextField();
+  JLabel jLabelTableKeySortKey = new JLabel();
+  JTextField jTextFieldTableKeySortKey = new JTextField();
+  JPanel jPanelTableKey6 = new JPanel();
+  JSplitPane jSplitPaneTableKey = new JSplitPane();
+  JScrollPane jScrollPaneTableKeyFieldList = new JScrollPane();
+  JViewport jViewportTableKeyFieldList = new JViewport();
+  JPanel jPanelTableKey2 = new JPanel();
   public TableModelReadOnlyList tableModelTableKeyFieldList = new TableModelReadOnlyList();
   public JTable jTableTableKeyFieldList = new JTable(tableModelTableKeyFieldList);
   private int selectedRow_jTableTableKeyFieldList;
   private int targetRow_jTableTableKeyFieldList;
-  private JLabel jLabelTableKeyFieldList = new JLabel();
-  private JPanel jPanelTableKey4 = new JPanel();
-  private JPanel jPanelTableKey5 = new JPanel();
-  private JLabel jLabelRelationshipList = new JLabel();
-  private JScrollPane jScrollPaneRelationshipList = new JScrollPane();
-  private JViewport jViewportRelationshipList = new JViewport();
+  JLabel jLabelTableKeyFieldList = new JLabel();
+  JPanel jPanelTableKey4 = new JPanel();
+  JPanel jPanelTableKey5 = new JPanel();
+  JLabel jLabelRelationshipList = new JLabel();
+  JScrollPane jScrollPaneRelationshipList = new JScrollPane();
+  JViewport jViewportRelationshipList = new JViewport();
   public TableModelRelationshipList tableModelRelationshipList = new TableModelRelationshipList(this);
   public JTable jTableRelationshipList = new JTable(tableModelRelationshipList);
   private int selectedRow_jTableRelationshipList;
-  private JPanel jPanelTableKey3 = new JPanel();
+  JPanel jPanelTableKey3 = new JPanel();
   public XeadTreeNode tableKeyNode;
   private int lastIDOfRelationship;
   public boolean isWarningAcceptedForDataTypeUnmatch = false;
   /**
    * Definition components on jPanelFunctionList
    */
-  private JPanel jPanelFunctionList = new JPanel();
-  private JTabbedPane jTabbedPaneFunctionList = new JTabbedPane();
-  private JScrollPane jScrollPaneFunctionList = new JScrollPane();
-  private JViewport jViewportFunctionList = new JViewport();
-  private TableModelReadOnlyList tableModelFunctionList = new TableModelReadOnlyList();
-  private JTable jTableFunctionList = new JTable(tableModelFunctionList);
+  JPanel jPanelFunctionList = new JPanel();
+  JTabbedPane jTabbedPaneFunctionList = new JTabbedPane();
+  JScrollPane jScrollPaneFunctionList = new JScrollPane();
+  JViewport jViewportFunctionList = new JViewport();
+  TableModelReadOnlyList tableModelFunctionList = new TableModelReadOnlyList();
+  JTable jTableFunctionList = new JTable(tableModelFunctionList);
   private int selectedRow_jTableFunctionList;
-  private JScrollPane jScrollPaneForeignFunctionList = new JScrollPane();
-  private JViewport jViewportForeignFunctionList = new JViewport();
-  private TableModelReadOnlyList tableModelForeignFunctionList = new TableModelReadOnlyList();
-  private JTable jTableForeignFunctionList = new JTable(tableModelForeignFunctionList);
+  JScrollPane jScrollPaneForeignFunctionList = new JScrollPane();
+  JViewport jViewportForeignFunctionList = new JViewport();
+  TableModelReadOnlyList tableModelForeignFunctionList = new TableModelReadOnlyList();
+  JTable jTableForeignFunctionList = new JTable(tableModelForeignFunctionList);
   private int selectedRow_jTableForeignFunctionList;
   /**
    * Definition components on jPanelFunction
    */
-  private JScrollPane jScrollPaneFunction1 = new JScrollPane();
-  private JPanel jPanelFunction = new JPanel();
-  private JPanel jPanelFunction1 = new JPanel();
-  private JPanel jPanelFunction2 = new JPanel();
-  private JPanel jPanelFunction3 = new JPanel();
-  private JPanel jPanelFunction4 = new JPanel();
+  JScrollPane jScrollPaneFunction1 = new JScrollPane();
+  JPanel jPanelFunction = new JPanel();
+  JPanel jPanelFunction1 = new JPanel();
+  JPanel jPanelFunction2 = new JPanel();
+  JPanel jPanelFunction3 = new JPanel();
+  JPanel jPanelFunction4 = new JPanel();
   public TableModelReadOnlyList tableModelFunctionIOList = new TableModelReadOnlyList();
-  private TableModelFunctionsUsedByThis tableModelFunctionsUsedByThis = new TableModelFunctionsUsedByThis();
+  TableModelFunctionsUsedByThis tableModelFunctionsUsedByThis = new TableModelFunctionsUsedByThis();
   public TableModelReadOnlyList tableModelFunctionsUsingThis = new TableModelReadOnlyList();
   public TableModelReadOnlyList tableModelTasksUsingThis = new TableModelReadOnlyList();
-  private JSplitPane jSplitPaneFunction = new JSplitPane();
+  JSplitPane jSplitPaneFunction = new JSplitPane();
   public JTable jTableFunctionIOList = new JTable(tableModelFunctionIOList);
   private int selectedRow_jTableFunctionIOList;
   private int targetRow_jTableFunctionIOList;
@@ -1354,98 +1354,98 @@ public class Modeler extends JFrame {
   private int selectedRow_jTableFunctionsUsingThis;
   public JTable jTableTasksUsingThis = new JTable(tableModelTasksUsingThis);
   private int selectedRow_jTableTasksUsingThis;
-  private JScrollPane jScrollPaneTasksUsingThis = new JScrollPane();
+  JScrollPane jScrollPaneTasksUsingThis = new JScrollPane();
   public JTable jTableFunctionsUsedByThis = new JTable(tableModelFunctionsUsedByThis);
   private int selectedRow_jTableFunctionsUsedByThis;
   private int targetRow_jTableFunctionsUsedByThis;
-  private JTabbedPane jTabbedPaneFunction = new JTabbedPane();
-  private JScrollPane jScrollPaneFunctionsUsedByThis = new JScrollPane();
-  private JViewport jViewportFunctionsUsedByThis = new JViewport();
-  private JScrollPane jScrollPaneFunctionsUsingThis = new JScrollPane();
-  private JScrollPane jScrollPaneFunctionIOList = new JScrollPane();
-  private JViewport jViewportFunctionIOList = new JViewport();
-  private JScrollPane jScrollPaneFunctionDescriptions = new JScrollPane();
-  private KanjiTextArea jTextAreaFunctionDescriptions = new KanjiTextArea();
-  private JLabel jLabelFunctionSortKey = new JLabel();
-  private KanjiTextField jTextFieldFunctionParameters = new KanjiTextField();
-  private KanjiTextField jTextFieldFunctionReturn = new KanjiTextField();
-  private JTextField jTextFieldFunctionSortKey = new JTextField();
-  private JComboBox jComboBoxFunctionDocFile = new JComboBox();
+  JTabbedPane jTabbedPaneFunction = new JTabbedPane();
+  JScrollPane jScrollPaneFunctionsUsedByThis = new JScrollPane();
+  JViewport jViewportFunctionsUsedByThis = new JViewport();
+  JScrollPane jScrollPaneFunctionsUsingThis = new JScrollPane();
+  JScrollPane jScrollPaneFunctionIOList = new JScrollPane();
+  JViewport jViewportFunctionIOList = new JViewport();
+  JScrollPane jScrollPaneFunctionDescriptions = new JScrollPane();
+  KanjiTextArea jTextAreaFunctionDescriptions = new KanjiTextArea();
+  JLabel jLabelFunctionSortKey = new JLabel();
+  KanjiTextField jTextFieldFunctionParameters = new KanjiTextField();
+  KanjiTextField jTextFieldFunctionReturn = new KanjiTextField();
+  JTextField jTextFieldFunctionSortKey = new JTextField();
+  JComboBox jComboBoxFunctionDocFile = new JComboBox();
   private String functionDocFile = "";
   private ArrayList<String> functionDocFileList = new ArrayList<String>();
   private ArrayList<String> functionDocFileDefaultList = new ArrayList<String>();
-  private JButton jButtonFunctionDocFile = new JButton();
+  JButton jButtonFunctionDocFile = new JButton();
   public xeadModeler.view.SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType = new xeadModeler.view.SortableXeadTreeNodeComboBoxModel();
-  private JComboBox jComboBoxFunctionType = new JComboBox(sortableComboBoxModelFunctionType);
-  private KanjiTextField jTextFieldFunctionName = new KanjiTextField();
-  private KanjiTextField jTextFieldFunctionSummary = new KanjiTextField();
-  private JLabel jLabelFunctionType = new JLabel();
-  private JLabel jLabelFunctionName = new JLabel();
-  private JLabel jLabelFunctionParameters = new JLabel();
-  private JLabel jLabelFunctionSummary = new JLabel();
-  private JLabel jLabelFunctionDocFile = new JLabel();
-  private JLabel jLabelFunctionDescriptions = new JLabel();
+  JComboBox jComboBoxFunctionType = new JComboBox(sortableComboBoxModelFunctionType);
+  KanjiTextField jTextFieldFunctionName = new KanjiTextField();
+  KanjiTextField jTextFieldFunctionSummary = new KanjiTextField();
+  JLabel jLabelFunctionType = new JLabel();
+  JLabel jLabelFunctionName = new JLabel();
+  JLabel jLabelFunctionParameters = new JLabel();
+  JLabel jLabelFunctionSummary = new JLabel();
+  JLabel jLabelFunctionDocFile = new JLabel();
+  JLabel jLabelFunctionDescriptions = new JLabel();
   /**
    * Definition components on jPanelIOPanel
    */
-  private JPanel jPanelIOPanel = new JPanel();
-  private JSplitPane jSplitPaneIOPanel1 = new JSplitPane();
-  private JSplitPane jSplitPaneIOPanel2 = new JSplitPane();
-  private JLabel jLabelIOPanelName = new JLabel();
-  private JPanel jPanelIOPanel1 = new JPanel();
-  private JPanel jPanelIOPanel3 = new JPanel();
-  private JPanel jPanelIOPanel2 = new JPanel();
+  JPanel jPanelIOPanel = new JPanel();
+  JSplitPane jSplitPaneIOPanel1 = new JSplitPane();
+  JSplitPane jSplitPaneIOPanel2 = new JSplitPane();
+  JLabel jLabelIOPanelName = new JLabel();
+  JPanel jPanelIOPanel1 = new JPanel();
+  JPanel jPanelIOPanel3 = new JPanel();
+  JPanel jPanelIOPanel2 = new JPanel();
   //private JTextField jTextFieldIOPanelSortKey = new JTextField();
-  private JScrollPane jScrollPaneIOPanelDescriptions = new JScrollPane();
+  JScrollPane jScrollPaneIOPanelDescriptions = new JScrollPane();
   //private JLabel jLabelIOPanelSortKey = new JLabel();
-  private KanjiTextField jTextFieldIOPanelName = new KanjiTextField();
-  private JPanel jPanelIOPanel4 = new JPanel();
-  private JLabel jLabelIOPanelDescriptions = new JLabel();
-  private KanjiTextArea jTextAreaIOPanelDescriptions = new KanjiTextArea();
-  private TableModelEditableList tableModelIOPanelFieldList = new TableModelEditableList();
+  KanjiTextField jTextFieldIOPanelName = new KanjiTextField();
+  JPanel jPanelIOPanel4 = new JPanel();
+  JLabel jLabelIOPanelDescriptions = new JLabel();
+  KanjiTextArea jTextAreaIOPanelDescriptions = new KanjiTextArea();
+  TableModelEditableList tableModelIOPanelFieldList = new TableModelEditableList();
   public JTable jTableIOPanelFieldList = new JTable(tableModelIOPanelFieldList);
   private int selectedRow_jTableIOPanelFieldList;
-  private JScrollPane jScrollPaneIOPanelFieldList = new JScrollPane();
-  private JPanel jPanelIOPanel5 = new JPanel();
+  JScrollPane jScrollPaneIOPanelFieldList = new JScrollPane();
+  JPanel jPanelIOPanel5 = new JPanel();
   public JTextPane jTextPaneIOPanelImage = new JTextPane();
   public ImageIcon imageFunctionIO = null;
   public JLabel jLabelIOImageIcon = new JLabel();
-  private JScrollPane jScrollPaneIOPanelImage1 = new JScrollPane();
-  private JScrollPane jScrollPaneIOPanelImage2 = new JScrollPane();
-  private JPanel jPanelIOPanelImage = new JPanel();
-  private JPanel jPanelIOPanel6 = new JPanel();
-  private JLabel jLabelIOPanelImage = new JLabel();
-  private JLabel jLabelIOPanelCaretPosition = new JLabel();
+  JScrollPane jScrollPaneIOPanelImage1 = new JScrollPane();
+  JScrollPane jScrollPaneIOPanelImage2 = new JScrollPane();
+  JPanel jPanelIOPanelImage = new JPanel();
+  JPanel jPanelIOPanel6 = new JPanel();
+  JLabel jLabelIOPanelImage = new JLabel();
+  JLabel jLabelIOPanelCaretPosition = new JLabel();
   private int iOPanelCharLengthX, iOPanelCharLengthY;
-  private Action actionUndoIOPanelImage = new AbstractAction() {
+  Action actionUndoIOPanelImage = new AbstractAction() {
     private static final long serialVersionUID = 1L;
 
     public void actionPerformed(ActionEvent e) {
       undoAction.actionPerformed(e);
     }
   };
-  private Action actionRedoIOPanelImage = new AbstractAction() {
+  Action actionRedoIOPanelImage = new AbstractAction() {
     private static final long serialVersionUID = 1L;
 
     public void actionPerformed(ActionEvent e) {
       redoAction.actionPerformed(e);
     }
   };
-  private Action actionUnderlineIOPanelImage = new AbstractAction() {
+  Action actionUnderlineIOPanelImage = new AbstractAction() {
     private static final long serialVersionUID = 1L;
 
     public void actionPerformed(ActionEvent e) {
       jMenuItemIOImageUnderlineSelectedChar_actionPerformed(null);
     }
   };
-  private Action actionResetAttrIOPanelImage = new AbstractAction() {
+  Action actionResetAttrIOPanelImage = new AbstractAction() {
     private static final long serialVersionUID = 1L;
 
     public void actionPerformed(ActionEvent e) {
       jMenuItemIOImageCancelSelectedCharStyle_actionPerformed(null);
     }
   };
-  private Action actionChangeBackgroundToWhite = new AbstractAction() {
+  Action actionChangeBackgroundToWhite = new AbstractAction() {
     private static final long serialVersionUID = 1L;
 
     public void actionPerformed(ActionEvent e) {
@@ -1455,42 +1455,42 @@ public class Modeler extends JFrame {
   /**
    * Definition components on jPanelIOSpool
    */
-  private JPanel jPanelIOSpool = new JPanel();
-  private JSplitPane jSplitPaneIOSpool1 = new JSplitPane();
-  private JSplitPane jSplitPaneIOSpool2 = new JSplitPane();
-  private JLabel jLabelIOSpoolName = new JLabel();
-  private JPanel jPanelIOSpool1 = new JPanel();
-  private JPanel jPanelIOSpool3 = new JPanel();
+  JPanel jPanelIOSpool = new JPanel();
+  JSplitPane jSplitPaneIOSpool1 = new JSplitPane();
+  JSplitPane jSplitPaneIOSpool2 = new JSplitPane();
+  JLabel jLabelIOSpoolName = new JLabel();
+  JPanel jPanelIOSpool1 = new JPanel();
+  JPanel jPanelIOSpool3 = new JPanel();
   //private JTextField jTextFieldIOSpoolSortKey = new JTextField();
-  private JScrollPane jScrollPaneIOSpoolDescriptions = new JScrollPane();
-  private JPanel jPanelIOSpool2 = new JPanel();
+  JScrollPane jScrollPaneIOSpoolDescriptions = new JScrollPane();
+  JPanel jPanelIOSpool2 = new JPanel();
   //private JLabel jLabelIOSpoolSortKey = new JLabel();
-  private KanjiTextField jTextFieldIOSpoolName = new KanjiTextField();
-  private JPanel jPanelIOSpool4 = new JPanel();
-  private KanjiTextArea jTextAreaIOSpoolDescriptions = new KanjiTextArea();
-  private JLabel jLabelIOSpoolDescriptions = new JLabel();
-  private TableModelEditableList tableModelIOSpoolFieldList = new TableModelEditableList();
+  KanjiTextField jTextFieldIOSpoolName = new KanjiTextField();
+  JPanel jPanelIOSpool4 = new JPanel();
+  KanjiTextArea jTextAreaIOSpoolDescriptions = new KanjiTextArea();
+  JLabel jLabelIOSpoolDescriptions = new JLabel();
+  TableModelEditableList tableModelIOSpoolFieldList = new TableModelEditableList();
   public JTable jTableIOSpoolFieldList = new JTable(tableModelIOSpoolFieldList);
   private int selectedRow_jTableIOSpoolFieldList;
-  private JScrollPane jScrollPaneIOSpoolFieldList = new JScrollPane();
-  private JPanel jPanelIOSpool6 = new JPanel();
-  private JScrollPane jScrollPaneIOSpoolImage1 = new JScrollPane();
-  private JScrollPane jScrollPaneIOSpoolImage2 = new JScrollPane();
-  private JLabel jLabelIOSpoolImage = new JLabel();
-  private JPanel jPanelIOSpool5 = new JPanel();
+  JScrollPane jScrollPaneIOSpoolFieldList = new JScrollPane();
+  JPanel jPanelIOSpool6 = new JPanel();
+  JScrollPane jScrollPaneIOSpoolImage1 = new JScrollPane();
+  JScrollPane jScrollPaneIOSpoolImage2 = new JScrollPane();
+  JLabel jLabelIOSpoolImage = new JLabel();
+  JPanel jPanelIOSpool5 = new JPanel();
   public JTextPane jTextPaneIOSpoolImage = new JTextPane();
-  private Border borderOriginal4;
-  private JLabel jLabelIOSpoolCaretPosition = new JLabel();
-  private JPanel jPanelIOSpoolImage = new JPanel();
+  Border borderOriginal4;
+  JLabel jLabelIOSpoolCaretPosition = new JLabel();
+  JPanel jPanelIOSpoolImage = new JPanel();
   private int iOSpoolCharLengthX, iOSpoolCharLengthY;
-  private Action actionUndoIOSpoolImage = new AbstractAction() {
+  public Action actionUndoIOSpoolImage = new AbstractAction() {
     private static final long serialVersionUID = 1L;
 
     public void actionPerformed(ActionEvent e) {
       undoAction.actionPerformed(e);
     }
   };
-  private Action actionRedoIOSpoolImage = new AbstractAction() {
+  public Action actionRedoIOSpoolImage = new AbstractAction() {
     private static final long serialVersionUID = 1L;
 
     public void actionPerformed(ActionEvent e) {
@@ -1500,128 +1500,128 @@ public class Modeler extends JFrame {
   /**
    * Definition components on jPanelIOTable
    */
-  private JPanel jPanelIOTable = new JPanel();
-  private JSplitPane jSplitPaneIOTable = new JSplitPane();
-  private JScrollPane jScrollPaneIOTableDescriptions = new JScrollPane();
-  private JPanel jPanelIOTable2 = new JPanel();
-  private JLabel jTextFieldIOTableName = new JLabel();
-  private JPanel jPanelIOTable1 = new JPanel();
+  JPanel jPanelIOTable = new JPanel();
+  JSplitPane jSplitPaneIOTable = new JSplitPane();
+  JScrollPane jScrollPaneIOTableDescriptions = new JScrollPane();
+  JPanel jPanelIOTable2 = new JPanel();
+  JLabel jTextFieldIOTableName = new JLabel();
+  JPanel jPanelIOTable1 = new JPanel();
   //private JLabel jLabelIOTableSortKey = new JLabel();
   //private JTextField jTextFieldIOTableSortKey = new JTextField();
-  private JLabel jLabelIOTablePK = new JLabel();
-  private JTextField jTextFieldIOTablePK = new JTextField();
-  private JLabel jLabelIOTablePosition = new JLabel();
-  private JComboBox jComboBoxIOTablePosition = new JComboBox();
-  private JLabel jLabelIOTableDescriptions = new JLabel();
-  private KanjiTextArea jTextAreaIOTableDescriptions = new KanjiTextArea();
-  private JPanel jPanelIOTable3 = new JPanel();
-  private JPanel jPanelIOTable5 = new JPanel();
-  private JLabel jLabelIOTableName = new JLabel();
-  private JScrollPane jScrollPaneIOTableFieldList = new JScrollPane();
-  private TableModelIOTableFieldList tableModelIOTableFieldList = new TableModelIOTableFieldList();
+  JLabel jLabelIOTablePK = new JLabel();
+  JTextField jTextFieldIOTablePK = new JTextField();
+  JLabel jLabelIOTablePosition = new JLabel();
+  JComboBox jComboBoxIOTablePosition = new JComboBox();
+  JLabel jLabelIOTableDescriptions = new JLabel();
+  KanjiTextArea jTextAreaIOTableDescriptions = new KanjiTextArea();
+  JPanel jPanelIOTable3 = new JPanel();
+  JPanel jPanelIOTable5 = new JPanel();
+  JLabel jLabelIOTableName = new JLabel();
+  JScrollPane jScrollPaneIOTableFieldList = new JScrollPane();
+  TableModelIOTableFieldList tableModelIOTableFieldList = new TableModelIOTableFieldList();
   public JTable jTableIOTableFieldList = new JTable(tableModelIOTableFieldList);
   //private JLabel jLabelIOTableID = new JLabel();
   //private JTextField jTextFieldIOTableID = new JTextField();
-  private JLabel jLabelIOTableNameExtension = new JLabel();
-  private JTextField jTextFieldIOTableNameExtension = new JTextField();
-  private JLabel jLabelIOTableCRUD = new JLabel();
-  private JPanel jPanelIOTable4 = new JPanel();
-  private JCheckBox jCheckBoxIOTableC = new JCheckBox();
-  private JCheckBox jCheckBoxIOTableR = new JCheckBox();
-  private JCheckBox jCheckBoxIOTableU = new JCheckBox();
-  private JCheckBox jCheckBoxIOTableD = new JCheckBox();
+  JLabel jLabelIOTableNameExtension = new JLabel();
+  JTextField jTextFieldIOTableNameExtension = new JTextField();
+  JLabel jLabelIOTableCRUD = new JLabel();
+  JPanel jPanelIOTable4 = new JPanel();
+  JCheckBox jCheckBoxIOTableC = new JCheckBox();
+  JCheckBox jCheckBoxIOTableR = new JCheckBox();
+  JCheckBox jCheckBoxIOTableU = new JCheckBox();
+  JCheckBox jCheckBoxIOTableD = new JCheckBox();
   private boolean isWarningAcceptedForExternalTable = false;
   //private JButton jButtonIOTableJump = new JButton();
   private int selectedRow_jTableIOTableFieldList;
   /**
    * PopUp-Menu for editing IO Image(IOPanel and IOSpool)
    */
-  private JPopupMenu jPopupMenuIOImage = new JPopupMenu();
-  private JMenuItem jMenuItemIOImageUndo = new JMenuItem();
-  private JMenuItem jMenuItemIOImageRedo = new JMenuItem();
-  private JMenuItem jMenuItemIOImageCut = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeFormSize = new JMenuItem();
-  private JMenuItem jMenuItemIOImageCopy = new JMenuItem();
-  private JMenuItem jMenuItemIOImagePaste = new JMenuItem();
-  private JMenuItem jMenuItemIOImageDelete = new JMenuItem();
-  private JMenuItem jMenuItemIOImageSelectAll = new JMenuItem();
-  private JMenuItem jMenuItemIOImageUnderlineSelectedChar = new JMenuItem();
-  private JMenuItem jMenuItemIOImageCancelUnderline = new JMenuItem();
-  private JMenuItem jMenuItemIOImageBlockSelect = new JMenuItem();
-  private JMenuItem jMenuItemIOImageCancelSelectedCharStyle = new JMenuItem();
-  private JMenu jMenuIOImageChangeBackgroundColor = new JMenu();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToBlack = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToWhite = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToLightGray = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToGray = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToControlColor = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToRed = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToPink = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToOrange = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToYellow = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToGreen = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToBlue = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToCyan = new JCheckBoxMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToMagenta = new JCheckBoxMenuItem();
-  private JMenu jMenuIOImageChangeSelectedBackgroundColor = new JMenu();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToBlack = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToWhite = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToLightGray = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToGray = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToControlColor = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToRed = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToPink = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToOrange = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToYellow = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToGreen = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToBlue = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToCyan = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToMagenta = new JMenuItem();
-  private JMenu jMenuIOImageChangeSelectedCharColor = new JMenu();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToBlack = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToWhite = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToLightGray = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToGray = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToControlColor = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToRed = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToPink = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToOrange = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToYellow = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToGreen = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToBlue = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToCyan = new JMenuItem();
-  private JMenuItem jMenuItemIOImageChangeSelectedCharColorToMagenta = new JMenuItem();
-  private JCheckBoxMenuItem jMenuItemIOImageSearchImageFile = new JCheckBoxMenuItem();
-  private JMenuItem jMenuItemIOImageCaptureImage = new JMenuItem();
-  private JMenuItem jMenuItemIOImagePrintImage = new JMenuItem();
+  JPopupMenu jPopupMenuIOImage = new JPopupMenu();
+  JMenuItem jMenuItemIOImageUndo = new JMenuItem();
+  JMenuItem jMenuItemIOImageRedo = new JMenuItem();
+  JMenuItem jMenuItemIOImageCut = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeFormSize = new JMenuItem();
+  JMenuItem jMenuItemIOImageCopy = new JMenuItem();
+  JMenuItem jMenuItemIOImagePaste = new JMenuItem();
+  JMenuItem jMenuItemIOImageDelete = new JMenuItem();
+  JMenuItem jMenuItemIOImageSelectAll = new JMenuItem();
+  JMenuItem jMenuItemIOImageUnderlineSelectedChar = new JMenuItem();
+  JMenuItem jMenuItemIOImageCancelUnderline = new JMenuItem();
+  JMenuItem jMenuItemIOImageBlockSelect = new JMenuItem();
+  JMenuItem jMenuItemIOImageCancelSelectedCharStyle = new JMenuItem();
+  JMenu jMenuIOImageChangeBackgroundColor = new JMenu();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToBlack = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToWhite = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToLightGray = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToGray = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToControlColor = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToRed = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToPink = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToOrange = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToYellow = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToGreen = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToBlue = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToCyan = new JCheckBoxMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageChangeBackgroundColorToMagenta = new JCheckBoxMenuItem();
+  JMenu jMenuIOImageChangeSelectedBackgroundColor = new JMenu();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToBlack = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToWhite = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToLightGray = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToGray = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToControlColor = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToRed = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToPink = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToOrange = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToYellow = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToGreen = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToBlue = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToCyan = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedBackgroundColorToMagenta = new JMenuItem();
+  JMenu jMenuIOImageChangeSelectedCharColor = new JMenu();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToBlack = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToWhite = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToLightGray = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToGray = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToControlColor = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToRed = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToPink = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToOrange = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToYellow = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToGreen = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToBlue = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToCyan = new JMenuItem();
+  JMenuItem jMenuItemIOImageChangeSelectedCharColorToMagenta = new JMenuItem();
+  JCheckBoxMenuItem jMenuItemIOImageSearchImageFile = new JCheckBoxMenuItem();
+  JMenuItem jMenuItemIOImageCaptureImage = new JMenuItem();
+  JMenuItem jMenuItemIOImagePrintImage = new JMenuItem();
   /**
    * Definition components on jPanelIOWebPage
    */
-  private JPanel jPanelIOWebPage = new JPanel();
-  private JSplitPane jSplitPaneIOWebPage1 = new JSplitPane();
-  private JSplitPane jSplitPaneIOWebPage2 = new JSplitPane();
-  private JLabel jLabelIOWebPageName = new JLabel();
-  private JPanel jPanelIOWebPage1 = new JPanel();
-  private JPanel jPanelIOWebPage3 = new JPanel();
-  private JPanel jPanelIOWebPage2 = new JPanel();
+  JPanel jPanelIOWebPage = new JPanel();
+  JSplitPane jSplitPaneIOWebPage1 = new JSplitPane();
+  JSplitPane jSplitPaneIOWebPage2 = new JSplitPane();
+  JLabel jLabelIOWebPageName = new JLabel();
+  JPanel jPanelIOWebPage1 = new JPanel();
+  JPanel jPanelIOWebPage3 = new JPanel();
+  JPanel jPanelIOWebPage2 = new JPanel();
   //private JTextField jTextFieldIOWebPageSortKey = new JTextField();
-  private JTextField jTextFieldIOWebPageFileName = new JTextField();
-  private JScrollPane jScrollPaneIOWebPageDescriptions = new JScrollPane();
+  JTextField jTextFieldIOWebPageFileName = new JTextField();
+  JScrollPane jScrollPaneIOWebPageDescriptions = new JScrollPane();
   //private JLabel jLabelIOWebPageSortKey = new JLabel();
-  private JLabel jLabelIOWebPageFileName = new JLabel();
-  private KanjiTextField jTextFieldIOWebPageName = new KanjiTextField();
-  private JPanel jPanelIOWebPage4 = new JPanel();
-  private JLabel jLabelIOWebPageDescriptions = new JLabel();
-  private KanjiTextArea jTextAreaIOWebPageDescriptions = new KanjiTextArea();
-  private TableModelEditableList tableModelIOWebPageFieldList = new TableModelEditableList();
+  JLabel jLabelIOWebPageFileName = new JLabel();
+  KanjiTextField jTextFieldIOWebPageName = new KanjiTextField();
+  JPanel jPanelIOWebPage4 = new JPanel();
+  JLabel jLabelIOWebPageDescriptions = new JLabel();
+  KanjiTextArea jTextAreaIOWebPageDescriptions = new KanjiTextArea();
+  TableModelEditableList tableModelIOWebPageFieldList = new TableModelEditableList();
   public JTable jTableIOWebPageFieldList = new JTable(tableModelIOWebPageFieldList);
   private int selectedRow_jTableIOWebPageFieldList;
-  private JScrollPane jScrollPaneIOWebPageFieldList = new JScrollPane();
-  private JPanel jPanelIOWebPage5 = new JPanel();
+  JScrollPane jScrollPaneIOWebPageFieldList = new JScrollPane();
+  JPanel jPanelIOWebPage5 = new JPanel();
   public JEditorPane jEditorPaneIOWebPageImage = new JEditorPane();
-  private JScrollPane jScrollPaneIOWebPageImage = new JScrollPane();
-  private JPanel jPanelIOWebPage6 = new JPanel();
-  private JLabel jLabelIOWebPageImage = new JLabel();
+  JScrollPane jScrollPaneIOWebPageImage = new JScrollPane();
+  JPanel jPanelIOWebPage6 = new JPanel();
+  JLabel jLabelIOWebPageImage = new JLabel();
   private String htmlFileName = "";
   /**
    * undo handler for JTextPane
@@ -1645,6 +1645,10 @@ public class Modeler extends JFrame {
   private TreeView treeView;
   private ContentView contentView;
   private SystemView systemView;
+  private RoleView roleView;
+  private TaskView taskView;
+  private FunctionView functionView;
+  private SubjectAreaView subjectAreaView;
   private TreeController treeController;
 
   /**
@@ -2404,3704 +2408,132 @@ public class Modeler extends JFrame {
    * Initialize component for node of System (deprecated - use initSystemView instead)
    */
   void jbInitComponentsForSystem() {
-    jTabbedPaneSystem.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTabbedPaneSystem.addChangeListener(new TabbedPaneChangeListener(this));
-    jPanelSystem.setLayout(new BorderLayout());
-    jPanelSystem6.setBorder(BorderFactory.createEtchedBorder());
-    //jPanelSystem6.setPreferredSize(new Dimension(10, 43));
-    jPanelSystem6.setPreferredSize(new Dimension(10, 74));
-    jPanelSystem6.setToolTipText("");
-    jPanelSystem6.setLayout(null);
-    jLabelSystemName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemName.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemName.setText(res.getString("S189"));
-    jLabelSystemName.setBounds(new Rectangle(5, 12, 130, 20));
-    jTextFieldSystemName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemName.setBounds(new Rectangle(140, 9, 330, 25));
-    jLabelSystemVersion.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemVersion.setRequestFocusEnabled(true);
-    jLabelSystemVersion.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemVersion.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemVersion.setText(res.getString("S192"));
-    jLabelSystemVersion.setBounds(new Rectangle(475, 12, 130, 20));
-    jTextFieldSystemVersion.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemVersion.setBounds(new Rectangle(610, 9, 105, 25));
-    jLabelSystemReferingModelFiles.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemReferingModelFiles.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemReferingModelFiles.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemReferingModelFiles.setText(res.getString("S193"));
-    jLabelSystemReferingModelFiles.setBounds(new Rectangle(5, 43, 130, 20));
-    jTextFieldSystemReferingModelFiles.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemReferingModelFiles.setBounds(new Rectangle(140, 40, 470, 25));
-    jLabelSystemDocFileFormat.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemDocFileFormat.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemDocFileFormat.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemDocFileFormat.setText(res.getString("S194"));
-    jLabelSystemDocFileFormat.setBounds(new Rectangle(615, 43, 170, 20));
-    jTextFieldSystemDocFileFormat.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemDocFileFormat.setBounds(new Rectangle(790, 40, 500, 25));
-    jPanelSystem.add(jPanelSystem6, BorderLayout.NORTH);
-    jPanelSystem6.add(jLabelSystemName, null);
-    jPanelSystem6.add(jLabelSystemVersion, null);
-    jPanelSystem6.add(jLabelSystemReferingModelFiles, null);
-    jPanelSystem6.add(jLabelSystemDocFileFormat, null);
-    jPanelSystem6.add(jTextFieldSystemName, null);
-    jPanelSystem6.add(jTextFieldSystemVersion, null);
-    jPanelSystem6.add(jTextFieldSystemReferingModelFiles, null);
-    jPanelSystem6.add(jTextFieldSystemDocFileFormat, null);
-    jPanelSystem.add(jTabbedPaneSystem, BorderLayout.CENTER);
-    //(SystemDescriptions)//
-    jTextAreaSystemDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaSystemDescriptions.setLineWrap(true);
-    jTabbedPaneSystem.add(jScrollPaneSystemDescriptions, res.getString("S195"));
-    jTabbedPaneSystem.setIconAt(0, imageIconSystem);
-    jScrollPaneSystemDescriptions.getViewport().add(jTextAreaSystemDescriptions, null);
-    //(SystemDepartmentList)//
-    selectedRow_jTableSystemDepartmentList = -1;
-    jTabbedPaneSystem.add(jSplitPaneSystemDepartment, res.getString("S196"));
-    jTabbedPaneSystem.setIconAt(1, imageIconRoleList);
-    jSplitPaneSystemDepartment.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneSystemDepartment.setDividerLocation(200);
-    jSplitPaneSystemDepartment.setBorder(BorderFactory.createLoweredBevelBorder());
-    jSplitPaneSystemDepartment.setFocusable(false);
-    jScrollPaneSystemDepartmentList.setBorder(null);
-    jScrollPaneSystemDepartmentList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemDepartmentList_mouseClicked(e); } });
-    jPanelSystemDepartment.setLayout(new BorderLayout());
-    jPanelSystemDepartment.setBorder(null);
-    jPanelSystemDepartment1.setLayout(null);
-    jPanelSystemDepartment1.setPreferredSize(new Dimension(10, 98));
-    jPanelSystemDepartment1.setBorder(BorderFactory.createEtchedBorder());
-    jLabelSystemDepartmentName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemDepartmentName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemDepartmentName.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemDepartmentName.setText(res.getString("S198"));
-    jLabelSystemDepartmentName.setBounds(new Rectangle(5, 12, 130, 20));
-    jTextFieldSystemDepartmentName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemDepartmentName.setBounds(new Rectangle(140, 9, 300, 25));
-    jLabelSystemDepartmentSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemDepartmentSortKey.setRequestFocusEnabled(true);
-    jLabelSystemDepartmentSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemDepartmentSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemDepartmentSortKey.setText(res.getString("S201"));
-    jLabelSystemDepartmentSortKey.setBounds(new Rectangle(450, 12, 130, 20));
-    jTextFieldSystemDepartmentSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemDepartmentSortKey.setBounds(new Rectangle(585, 9, 105, 25));
-    jLabelSystemDepartmentDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemDepartmentDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemDepartmentDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemDepartmentDescriptions.setText(res.getString("S204"));
-    jLabelSystemDepartmentDescriptions.setBounds(new Rectangle(5, 43, 130, 20));
-    jTextAreaSystemDepartmentDescriptions.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaSystemDepartmentDescriptions.setLineWrap(true);
-    jScrollPaneSystemDepartmentDescriptions.setBounds(new Rectangle(140, 40, 700, 48));
-    jScrollPaneSystemDepartmentDescriptions.getViewport()
-        .add(jTextAreaSystemDepartmentDescriptions, null);
-    jPanelSystemDepartment1.add(jLabelSystemDepartmentName, null);
-    jPanelSystemDepartment1.add(jTextFieldSystemDepartmentName, null);
-    jPanelSystemDepartment1.add(jLabelSystemDepartmentSortKey, null);
-    jPanelSystemDepartment1.add(jTextFieldSystemDepartmentSortKey, null);
-    jPanelSystemDepartment1.add(jLabelSystemDepartmentDescriptions, null);
-    jPanelSystemDepartment1.add(jScrollPaneSystemDepartmentDescriptions, null);
-    jSplitPaneSystemDepartment.add(jScrollPaneSystemDepartmentList, JSplitPane.TOP);
-    jSplitPaneSystemDepartment.add(jPanelSystemDepartment, JSplitPane.BOTTOM);
-    jPanelSystemDepartment.add(jPanelSystemDepartment1, BorderLayout.NORTH);
-    jPanelSystemDepartment.add(jScrollPaneSystemDepartmentWhereUsedList, BorderLayout.CENTER);
-    jScrollPaneSystemDepartmentList.getViewport().add(jTableSystemDepartmentList, null);
-    jScrollPaneSystemDepartmentList.setBorder(null);
-    jScrollPaneSystemDepartmentWhereUsedList.getViewport()
-        .add(jTableSystemDepartmentWhereUsedList, null);
-    jScrollPaneSystemDepartmentWhereUsedList.setBorder(null);
-    //(SystemTaskTypeList)//
-    selectedRow_jTableSystemTaskTypeList = -1;
-    jTabbedPaneSystem.add(jSplitPaneSystemTaskType, res.getString("S209"));
-    jTabbedPaneSystem.setIconAt(2, imageIconTask);
-    jSplitPaneSystemTaskType.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneSystemTaskType.setDividerLocation(200);
-    jSplitPaneSystemTaskType.setBorder(BorderFactory.createLoweredBevelBorder());
-    jSplitPaneSystemTaskType.setFocusable(false);
-    jScrollPaneSystemTaskTypeList.setBorder(null);
-    jScrollPaneSystemTaskTypeList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemTaskTypeList_mouseClicked(e); } });
-    jPanelSystemTaskType.setLayout(new BorderLayout());
-    jPanelSystemTaskType.setBorder(null);
-    jPanelSystemTaskType1.setLayout(null);
-    jPanelSystemTaskType1.setPreferredSize(new Dimension(10, 98));
-    jPanelSystemTaskType1.setBorder(BorderFactory.createEtchedBorder());
-    jLabelSystemTaskTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemTaskTypeName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemTaskTypeName.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemTaskTypeName.setText(res.getString("S210"));
-    jLabelSystemTaskTypeName.setBounds(new Rectangle(5, 12, 130, 20));
-    jTextFieldSystemTaskTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemTaskTypeName.setBounds(new Rectangle(140, 9, 300, 25));
-    jLabelSystemTaskTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemTaskTypeSortKey.setRequestFocusEnabled(true);
-    jLabelSystemTaskTypeSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemTaskTypeSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemTaskTypeSortKey.setText(res.getString("S201"));
-    jLabelSystemTaskTypeSortKey.setBounds(new Rectangle(450, 12, 130, 20));
-    jTextFieldSystemTaskTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemTaskTypeSortKey.setBounds(new Rectangle(585, 9, 105, 25));
-    jLabelSystemTaskTypeDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemTaskTypeDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemTaskTypeDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemTaskTypeDescriptions.setText(res.getString("S204"));
-    jLabelSystemTaskTypeDescriptions.setBounds(new Rectangle(5, 43, 130, 20));
-    jTextAreaSystemTaskTypeDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaSystemTaskTypeDescriptions.setLineWrap(true);
-    jScrollPaneSystemTaskTypeDescriptions.setBounds(new Rectangle(140, 40, 700, 48));
-    jScrollPaneSystemTaskTypeDescriptions.getViewport()
-        .add(jTextAreaSystemTaskTypeDescriptions, null);
-    jPanelSystemTaskType1.add(jLabelSystemTaskTypeName, null);
-    jPanelSystemTaskType1.add(jTextFieldSystemTaskTypeName, null);
-    jPanelSystemTaskType1.add(jLabelSystemTaskTypeSortKey, null);
-    jPanelSystemTaskType1.add(jTextFieldSystemTaskTypeSortKey, null);
-    jPanelSystemTaskType1.add(jLabelSystemTaskTypeDescriptions, null);
-    jPanelSystemTaskType1.add(jScrollPaneSystemTaskTypeDescriptions, null);
-    jSplitPaneSystemTaskType.add(jScrollPaneSystemTaskTypeList, JSplitPane.TOP);
-    jSplitPaneSystemTaskType.add(jPanelSystemTaskType, JSplitPane.BOTTOM);
-    jPanelSystemTaskType.add(jPanelSystemTaskType1, BorderLayout.NORTH);
-    jPanelSystemTaskType.add(jScrollPaneSystemTaskTypeWhereUsedList, BorderLayout.CENTER);
-    jScrollPaneSystemTaskTypeList.getViewport().add(jTableSystemTaskTypeList, null);
-    jScrollPaneSystemTaskTypeList.setBorder(null);
-    jScrollPaneSystemTaskTypeWhereUsedList.getViewport()
-        .add(jTableSystemTaskTypeWhereUsedList, null);
-    jScrollPaneSystemTaskTypeWhereUsedList.setBorder(null);
-    //(SystemTableTypeList)//
-    jTabbedPaneSystem.add(jSplitPaneSystemTableType, res.getString("S206"));
-    jTabbedPaneSystem.setIconAt(3, imageIconTable);
-    jSplitPaneSystemTableType.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneSystemTableType.setBorder(BorderFactory.createLoweredBevelBorder());
-    jSplitPaneSystemTableType.setDividerLocation(200);
-    jSplitPaneSystemTableType.setFocusable(false);
-    jScrollPaneSystemTableTypeList.setBorder(null);
-    jScrollPaneSystemTableTypeList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemTableTypeList_mouseClicked(e); } });
-    jPanelSystemTableType.setLayout(new BorderLayout());
-    jPanelSystemTableType.setBorder(null);
-    jPanelSystemTableType1.setLayout(null);
-    jPanelSystemTableType1.setPreferredSize(new Dimension(10, 98));
-    jPanelSystemTableType1.setBorder(BorderFactory.createEtchedBorder());
-    jLabelSystemTableTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemTableTypeName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemTableTypeName.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemTableTypeName.setText(res.getString("S208"));
-    jLabelSystemTableTypeName.setBounds(new Rectangle(5, 12, 130, 20));
-    jTextFieldSystemTableTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemTableTypeName.setBounds(new Rectangle(140, 9, 300, 25));
-    jLabelSystemTableTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemTableTypeSortKey.setRequestFocusEnabled(true);
-    jLabelSystemTableTypeSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemTableTypeSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemTableTypeSortKey.setText(res.getString("S201"));
-    jLabelSystemTableTypeSortKey.setBounds(new Rectangle(450, 12, 130, 20));
-    jTextFieldSystemTableTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemTableTypeSortKey.setBounds(new Rectangle(585, 9, 105, 25));
-    jLabelSystemTableTypeDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemTableTypeDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemTableTypeDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemTableTypeDescriptions.setText(res.getString("S204"));
-    jLabelSystemTableTypeDescriptions.setBounds(new Rectangle(5, 43, 130, 20));
-    jTextAreaSystemTableTypeDescriptions.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaSystemTableTypeDescriptions.setLineWrap(true);
-    jScrollPaneSystemTableTypeDescriptions.setBounds(new Rectangle(140, 40, 700, 48));
-    jScrollPaneSystemTableTypeDescriptions.getViewport()
-        .add(jTextAreaSystemTableTypeDescriptions, null);
-    jPanelSystemTableType1.add(jLabelSystemTableTypeName, null);
-    jPanelSystemTableType1.add(jTextFieldSystemTableTypeName, null);
-    jPanelSystemTableType1.add(jLabelSystemTableTypeSortKey, null);
-    jPanelSystemTableType1.add(jTextFieldSystemTableTypeSortKey, null);
-    jPanelSystemTableType1.add(jLabelSystemTableTypeDescriptions, null);
-    jPanelSystemTableType1.add(jScrollPaneSystemTableTypeDescriptions, null);
-    jSplitPaneSystemTableType.add(jScrollPaneSystemTableTypeList, JSplitPane.TOP);
-    jSplitPaneSystemTableType.add(jPanelSystemTableType, JSplitPane.BOTTOM);
-    jPanelSystemTableType.add(jPanelSystemTableType1, BorderLayout.NORTH);
-    jPanelSystemTableType.add(jScrollPaneSystemTableTypeWhereUsedList, BorderLayout.CENTER);
-    jScrollPaneSystemTableTypeList.getViewport().add(jTableSystemTableTypeList, null);
-    jScrollPaneSystemTableTypeList.setBorder(null);
-    jScrollPaneSystemTableTypeWhereUsedList.getViewport()
-        .add(jTableSystemTableTypeWhereUsedList, null);
-    jScrollPaneSystemTableTypeWhereUsedList.setBorder(null);
-    //(SystemDataTypeList)//
-    jTabbedPaneSystem.add(jSplitPaneSystemDataType, res.getString("S216"));
-    jTabbedPaneSystem.setIconAt(4, imageIconField);
-    jSplitPaneSystemDataType.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneSystemDataType.setBorder(BorderFactory.createLoweredBevelBorder());
-    jSplitPaneSystemDataType.setDividerLocation(200);
-    jSplitPaneSystemDataType.setFocusable(false);
-    jScrollPaneSystemDataTypeList.setBorder(null);
-    jScrollPaneSystemDataTypeList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemDataTypeList_mouseClicked(e); } });
-    jPanelSystemDataType.setLayout(new BorderLayout());
-    jPanelSystemDataType.setBorder(null);
-    jPanelSystemDataType1.setLayout(null);
-    jPanelSystemDataType1.setPreferredSize(new Dimension(10, 74));
-    jPanelSystemDataType1.setBorder(BorderFactory.createEtchedBorder());
-    jLabelSystemDataTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemDataTypeName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemDataTypeName.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemDataTypeName.setText(res.getString("S218"));
-    jLabelSystemDataTypeName.setBounds(new Rectangle(5, 12, 130, 20));
-    jTextFieldSystemDataTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemDataTypeName.setBounds(new Rectangle(140, 9, 300, 25));
-    jLabelSystemDataTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemDataTypeSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemDataTypeSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemDataTypeSortKey.setText(res.getString("S201"));
-    jLabelSystemDataTypeSortKey.setBounds(new Rectangle(450, 12, 130, 20));
-    jTextFieldSystemDataTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemDataTypeSortKey.setBounds(new Rectangle(585, 9, 105, 25));
-    jLabelSystemSQLExpression.setText(res.getString("S223"));
-    jLabelSystemSQLExpression.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemSQLExpression.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemSQLExpression.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemSQLExpression.setBounds(new Rectangle(700, 12, 130, 20));
-    jTextFieldSystemSQLExpression.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemSQLExpression.setBounds(new Rectangle(835, 9, 105, 25));
-    jLabelSystemDataTypeBasicType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemDataTypeBasicType.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemDataTypeBasicType.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemDataTypeBasicType.setText(res.getString("S227"));
-    jLabelSystemDataTypeBasicType.setBounds(new Rectangle(5, 43, 130, 20));
-    jComboBoxSystemDataTypeBasicType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jComboBoxSystemDataTypeBasicType.setActionCommand("comboBoxChanged");
-    jComboBoxSystemDataTypeBasicType.setBounds(new Rectangle(140, 40, 180, 25));
-    comboBoxModelDataTypeBasicType.addElement("SignedNumber");
-    comboBoxModelDataTypeBasicType.addElement("UnsignedNumber");
-    comboBoxModelDataTypeBasicType.addElement("String");
-    comboBoxModelDataTypeBasicType.addElement("Date");
-    comboBoxModelDataTypeBasicType.addElement("Boolean");
-    comboBoxModelDataTypeBasicType.addElement("Object");
-    jLabelSystemDataTypeLength.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemDataTypeLength.setRequestFocusEnabled(true);
-    jLabelSystemDataTypeLength.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemDataTypeLength.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemDataTypeLength.setText(res.getString("S237"));
-    jLabelSystemDataTypeLength.setBounds(new Rectangle(450, 43, 130, 20));
-    jTextFieldSystemDataTypeLength.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemDataTypeLength.setBounds(new Rectangle(585, 40, 40, 25));
-    jTextFieldSystemDataTypeLength.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemDataTypeDecimal.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemDataTypeDecimal.setRequestFocusEnabled(true);
-    jLabelSystemDataTypeDecimal.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemDataTypeDecimal.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemDataTypeDecimal.setText(res.getString("S240"));
-    jLabelSystemDataTypeDecimal.setBounds(new Rectangle(700, 43, 130, 20));
-    jTextFieldSystemDataTypeDecimal.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemDataTypeDecimal.setBounds(new Rectangle(835, 40, 40, 25));
-    jTextFieldSystemDataTypeDecimal.setHorizontalAlignment(SwingConstants.RIGHT);
-    jPanelSystemDataType1.add(jLabelSystemDataTypeName, null);
-    jPanelSystemDataType1.add(jTextFieldSystemDataTypeName, null);
-    jPanelSystemDataType1.add(jLabelSystemDataTypeSortKey, null);
-    jPanelSystemDataType1.add(jTextFieldSystemDataTypeSortKey, null);
-    jPanelSystemDataType1.add(jLabelSystemSQLExpression, null);
-    jPanelSystemDataType1.add(jTextFieldSystemSQLExpression, null);
-    jPanelSystemDataType1.add(jLabelSystemDataTypeBasicType, null);
-    jPanelSystemDataType1.add(jComboBoxSystemDataTypeBasicType, null);
-    jPanelSystemDataType1.add(jLabelSystemDataTypeLength, null);
-    jPanelSystemDataType1.add(jTextFieldSystemDataTypeLength, null);
-    jPanelSystemDataType1.add(jLabelSystemDataTypeDecimal, null);
-    jPanelSystemDataType1.add(jTextFieldSystemDataTypeDecimal, null);
-    jSplitPaneSystemDataType.add(jScrollPaneSystemDataTypeList, JSplitPane.TOP);
-    jSplitPaneSystemDataType.add(jPanelSystemDataType, JSplitPane.BOTTOM);
-    jPanelSystemDataType.add(jPanelSystemDataType1, BorderLayout.NORTH);
-    jPanelSystemDataType.add(jScrollPaneSystemDataTypeWhereUsedList, BorderLayout.CENTER);
-    jScrollPaneSystemDataTypeList.getViewport().add(jTableSystemDataTypeList, null);
-    jScrollPaneSystemDataTypeList.setBorder(null);
-    jScrollPaneSystemDataTypeWhereUsedList.getViewport()
-        .add(jTableSystemDataTypeWhereUsedList, null);
-    jScrollPaneSystemDataTypeWhereUsedList.setBorder(null);
-    //(SystemFunctionTypeList)//
-    jTabbedPaneSystem.add(jSplitPaneSystemFunctionType, res.getString("S242"));
-    jTabbedPaneSystem.setIconAt(5, imageIconFunction);
-    jSplitPaneSystemFunctionType.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneSystemFunctionType.setBorder(BorderFactory.createLoweredBevelBorder());
-    jSplitPaneSystemFunctionType.setDividerLocation(200);
-    jSplitPaneSystemFunctionType.setFocusable(false);
-    jScrollPaneSystemFunctionTypeList.setBorder(null);
-    jScrollPaneSystemFunctionTypeList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemFunctionTypeList_mouseClicked(e); } });
-    jPanelSystemFunctionType.setLayout(new BorderLayout());
-    jPanelSystemFunctionType.setBorder(null);
-    jPanelSystemFunctionType1.setLayout(null);
-    jPanelSystemFunctionType1.setPreferredSize(new Dimension(10, 98));
-    jPanelSystemFunctionType1.setBorder(BorderFactory.createEtchedBorder());
-    jLabelSystemFunctionTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemFunctionTypeName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemFunctionTypeName.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemFunctionTypeName.setText(res.getString("S244"));
-    jLabelSystemFunctionTypeName.setBounds(new Rectangle(5, 12, 130, 20));
-    jTextFieldSystemFunctionTypeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemFunctionTypeName.setBounds(new Rectangle(140, 9, 300, 25));
-    jLabelSystemFunctionTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemFunctionTypeSortKey.setRequestFocusEnabled(true);
-    jLabelSystemFunctionTypeSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemFunctionTypeSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemFunctionTypeSortKey.setText(res.getString("S201"));
-    jLabelSystemFunctionTypeSortKey.setBounds(new Rectangle(450, 12, 130, 20));
-    jTextFieldSystemFunctionTypeSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemFunctionTypeSortKey.setBounds(new Rectangle(585, 9, 105, 25));
-    jLabelSystemFunctionTypeDescriptions.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemFunctionTypeDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemFunctionTypeDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemFunctionTypeDescriptions.setText(res.getString("S204"));
-    jLabelSystemFunctionTypeDescriptions.setBounds(new Rectangle(5, 43, 130, 20));
-    jTextAreaSystemFunctionTypeDescriptions.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaSystemFunctionTypeDescriptions.setLineWrap(true);
-    jScrollPaneSystemFunctionTypeDescriptions.setBounds(new Rectangle(140, 40, 700, 48));
-    jScrollPaneSystemFunctionTypeDescriptions.getViewport()
-        .add(jTextAreaSystemFunctionTypeDescriptions, null);
-    jPanelSystemFunctionType1.add(jLabelSystemFunctionTypeName, null);
-    jPanelSystemFunctionType1.add(jTextFieldSystemFunctionTypeName, null);
-    jPanelSystemFunctionType1.add(jLabelSystemFunctionTypeSortKey, null);
-    jPanelSystemFunctionType1.add(jTextFieldSystemFunctionTypeSortKey, null);
-    jPanelSystemFunctionType1.add(jLabelSystemFunctionTypeDescriptions, null);
-    jPanelSystemFunctionType1.add(jScrollPaneSystemFunctionTypeDescriptions, null);
-    jSplitPaneSystemFunctionType.add(jScrollPaneSystemFunctionTypeList, JSplitPane.TOP);
-    jSplitPaneSystemFunctionType.add(jPanelSystemFunctionType, JSplitPane.BOTTOM);
-    jPanelSystemFunctionType.add(jPanelSystemFunctionType1, BorderLayout.NORTH);
-    jPanelSystemFunctionType.add(jScrollPaneSystemFunctionTypeWhereUsedList, BorderLayout.CENTER);
-    jScrollPaneSystemFunctionTypeList.getViewport().add(jTableSystemFunctionTypeList, null);
-    jScrollPaneSystemFunctionTypeList.setBorder(null);
-    jScrollPaneSystemFunctionTypeWhereUsedList.getViewport()
-        .add(jTableSystemFunctionTypeWhereUsedList, null);
-    jScrollPaneSystemFunctionTypeWhereUsedList.setBorder(null);
-    //(SystemTermsList)//
-    jTabbedPaneSystem.add(jSplitPaneSystemTermsList, res.getString("S245"));
-    jTabbedPaneSystem.setIconAt(6, imageIconBook);
-    jSplitPaneSystemTermsList.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneSystemTermsList.setBorder(null);
-    jSplitPaneSystemTermsList.setDividerLocation(200);
-    jSplitPaneSystemTermsList.setFocusable(false);
-    jScrollPaneSystemTermsList.setBorder(null);
-    jScrollPaneSystemTermsList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemTermsList_mouseClicked(e); } });
-    jPanelSystemTermsList.setLayout(new BorderLayout());
-    jPanelSystemTermsList.setBorder(BorderFactory.createEtchedBorder());
-    jPanelSystemTermsList1.setLayout(null);
-    jPanelSystemTermsList1.setBorder(null);
-    jPanelSystemTermsList1.setPreferredSize(new Dimension(10, 42));
-    jPanelSystemTermsList2.setLayout(new BorderLayout());
-    jPanelSystemTermsList2.setBorder(null);
-    jPanelSystemTermsList3.setLayout(null);
-    jPanelSystemTermsList3.setBorder(null);
-    jPanelSystemTermsList3.setPreferredSize(new Dimension(140, 10));
-    jLabelSystemTermsSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemTermsSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemTermsSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemTermsSortKey.setText(res.getString("S248"));
-    jLabelSystemTermsSortKey.setBounds(new Rectangle(460, 12, 130, 20));
-    jTextFieldSystemTermsSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemTermsSortKey.setBounds(new Rectangle(595, 9, 150, 25));
-    jLabelSystemTermsHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemTermsHeadder.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemTermsHeadder.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemTermsHeadder.setText(res.getString("S246"));
-    jLabelSystemTermsHeadder.setBounds(new Rectangle(5, 12, 130, 20));
-    jTextFieldSystemTermsHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemTermsHeadder.setBounds(new Rectangle(140, 9, 300, 25));
-    jLabelSystemTermsHtmlFileName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemTermsHtmlFileName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemTermsHtmlFileName.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemTermsHtmlFileName.setText(res.getString("S249"));
-    jLabelSystemTermsHtmlFileName.setBounds(new Rectangle(750, 12, 130, 20));
-    jTextFieldSystemTermsHtmlFileName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemTermsHtmlFileName.setBounds(new Rectangle(885, 9, 300, 25));
-    jLabelSystemTermsDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemTermsDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemTermsDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemTermsDescriptions.setText(res.getString("S247"));
-    jLabelSystemTermsDescriptions.setBounds(new Rectangle(5, 2, 130, 20));
-    jTextAreaSystemTermsDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaSystemTermsDescriptions.setLineWrap(true);
-    jEditorPaneSystemTermsDescriptions.setBorder(BorderFactory.createRaisedBevelBorder());
-    jEditorPaneSystemTermsDescriptions.setEditable(false);
-    jEditorPaneSystemTermsDescriptions.setContentType("text/html");
-    jScrollPaneSystemTermsDescriptions.setBounds(new Rectangle(140, 40, 600, 42));
-    jScrollPaneSystemTermsDescriptions.getViewport().add(jTextAreaSystemTermsDescriptions, null);
-    jPanelSystemTermsList.add(jPanelSystemTermsList1, BorderLayout.NORTH);
-    jPanelSystemTermsList.add(jPanelSystemTermsList2, BorderLayout.CENTER);
-    jPanelSystemTermsList1.add(jLabelSystemTermsHeadder, null);
-    jPanelSystemTermsList1.add(jTextFieldSystemTermsHeadder, null);
-    jPanelSystemTermsList1.add(jLabelSystemTermsSortKey, null);
-    jPanelSystemTermsList1.add(jTextFieldSystemTermsSortKey, null);
-    jPanelSystemTermsList1.add(jLabelSystemTermsHtmlFileName, null);
-    jPanelSystemTermsList1.add(jTextFieldSystemTermsHtmlFileName, null);
-    jPanelSystemTermsList2.add(jPanelSystemTermsList3, BorderLayout.WEST);
-    jPanelSystemTermsList2.add(jScrollPaneSystemTermsDescriptions, BorderLayout.CENTER);
-    jPanelSystemTermsList3.add(jLabelSystemTermsDescriptions, null);
-    jScrollPaneSystemTermsList.getViewport().add(jTableSystemTermsList, null);
-    jSplitPaneSystemTermsList.add(jScrollPaneSystemTermsList, JSplitPane.TOP);
-    jSplitPaneSystemTermsList.add(jPanelSystemTermsList, JSplitPane.BOTTOM);
-    //(SystemMaintenanceLog)//
-    jTabbedPaneSystem.add(jSplitPaneSystemMaintenanceLog, res.getString("S252"));
-    jTabbedPaneSystem.setIconAt(7, imageIconText);
-    jSplitPaneSystemMaintenanceLog.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneSystemMaintenanceLog.setBorder(null);
-    jSplitPaneSystemMaintenanceLog.setDividerLocation(200);
-    jSplitPaneSystemMaintenanceLog.setFocusable(false);
-    jScrollPaneSystemMaintenanceLog.setBorder(null);
-    jScrollPaneSystemMaintenanceLog.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemMaintenanceLog_mouseClicked(e); } });
-    jPanelSystemMaintenanceLog.setLayout(new BorderLayout());
-    jPanelSystemMaintenanceLog.setBorder(BorderFactory.createEtchedBorder());
-    jPanelSystemMaintenanceLog1.setLayout(null);
-    jPanelSystemMaintenanceLog1.setBorder(null);
-    jPanelSystemMaintenanceLog1.setPreferredSize(new Dimension(10, 42));
-    jPanelSystemMaintenanceLog2.setLayout(new BorderLayout());
-    jPanelSystemMaintenanceLog2.setBorder(null);
-    jPanelSystemMaintenanceLog3.setLayout(null);
-    jPanelSystemMaintenanceLog3.setBorder(null);
-    jPanelSystemMaintenanceLog3.setPreferredSize(new Dimension(140, 10));
-    jLabelSystemMaintenanceLogHeadder.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemMaintenanceLogHeadder.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemMaintenanceLogHeadder.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemMaintenanceLogHeadder.setText(res.getString("S254"));
-    jLabelSystemMaintenanceLogHeadder.setBounds(new Rectangle(5, 12, 130, 20));
-    jTextFieldSystemMaintenanceLogHeadder.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemMaintenanceLogHeadder.setBounds(new Rectangle(140, 9, 300, 25));
-    jLabelSystemMaintenanceLogSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemMaintenanceLogSortKey.setRequestFocusEnabled(true);
-    jLabelSystemMaintenanceLogSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemMaintenanceLogSortKey.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemMaintenanceLogSortKey.setText(res.getString("S257"));
-    jLabelSystemMaintenanceLogSortKey.setBounds(new Rectangle(450, 12, 150, 20));
-    jTextFieldSystemMaintenanceLogSortKey.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSystemMaintenanceLogSortKey.setBounds(new Rectangle(605, 9, 180, 25));
-    jLabelSystemMaintenanceLogDescriptions.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSystemMaintenanceLogDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSystemMaintenanceLogDescriptions.setHorizontalTextPosition(SwingConstants.LEADING);
-    jLabelSystemMaintenanceLogDescriptions.setText(res.getString("S260"));
-    jLabelSystemMaintenanceLogDescriptions.setBounds(new Rectangle(5, 2, 130, 20));
-    jTextAreaSystemMaintenanceLogDescriptions.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaSystemMaintenanceLogDescriptions.setLineWrap(true);
-    jScrollPaneSystemMaintenanceLogDescriptions.setBounds(new Rectangle(140, 40, 600, 42));
-    jScrollPaneSystemMaintenanceLogDescriptions.getViewport()
-        .add(jTextAreaSystemMaintenanceLogDescriptions, null);
-    jPanelSystemMaintenanceLog.add(jPanelSystemMaintenanceLog1, BorderLayout.NORTH);
-    jPanelSystemMaintenanceLog.add(jPanelSystemMaintenanceLog2, BorderLayout.CENTER);
-    jPanelSystemMaintenanceLog1.add(jLabelSystemMaintenanceLogHeadder, null);
-    jPanelSystemMaintenanceLog1.add(jTextFieldSystemMaintenanceLogHeadder, null);
-    jPanelSystemMaintenanceLog1.add(jLabelSystemMaintenanceLogSortKey, null);
-    jPanelSystemMaintenanceLog1.add(jTextFieldSystemMaintenanceLogSortKey, null);
-    jPanelSystemMaintenanceLog2.add(jPanelSystemMaintenanceLog3, BorderLayout.WEST);
-    jPanelSystemMaintenanceLog2.add(jScrollPaneSystemMaintenanceLogDescriptions,
-        BorderLayout.CENTER);
-    jPanelSystemMaintenanceLog3.add(jLabelSystemMaintenanceLogDescriptions, null);
-    jScrollPaneSystemMaintenanceLog.getViewport().add(jTableSystemMaintenanceLog, null);
-    jSplitPaneSystemMaintenanceLog.add(jScrollPaneSystemMaintenanceLog, JSplitPane.TOP);
-    jSplitPaneSystemMaintenanceLog.add(jPanelSystemMaintenanceLog, JSplitPane.BOTTOM);
-    //(jTableSystemDepartmentList)//
-    jTableSystemDepartmentList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemDepartmentList.setBackground(SystemColor.control);
-    jTableSystemDepartmentList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemDepartmentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemDepartmentList.getSelectionModel().addListSelectionListener(
-        e -> this.jTableSystemDepartmentList_valueChanged(e));
-    jTableSystemDepartmentList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemDepartmentList_mouseClicked(e); } });
-    jTableSystemDepartmentList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemDepartmentList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableSystemDepartmentList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelSystemDepartmentList.addColumn("No.");
-    tableModelSystemDepartmentList.addColumn(res.getString("S201"));
-    tableModelSystemDepartmentList.addColumn(res.getString("S265"));
-    tableModelSystemDepartmentList.addColumn(res.getString("S204"));
-    column0 = jTableSystemDepartmentList.getColumnModel().getColumn(0);
-    column1 = jTableSystemDepartmentList.getColumnModel().getColumn(1);
-    column2 = jTableSystemDepartmentList.getColumnModel().getColumn(2);
-    column3 = jTableSystemDepartmentList.getColumnModel().getColumn(3);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(100);
-    column2.setPreferredWidth(200);
-    column3.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemDepartmentList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemDepartmentList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemDepartmentWhereUsedList)//
-    jTableSystemDepartmentWhereUsedList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemDepartmentWhereUsedList.setBackground(SystemColor.control);
-    jTableSystemDepartmentWhereUsedList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemDepartmentWhereUsedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemDepartmentWhereUsedList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemDepartmentWhereUsedList_mouseClicked(e); } });
-    jTableSystemDepartmentWhereUsedList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemDepartmentWhereUsedList.setRowHeight(TABLE_ROW_HEIGHT);
-    jScrollPaneSystemDepartmentWhereUsedList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemDepartmentWhereUsedList_mouseClicked(e); } });
-    tableModelSystemDepartmentWhereUsedList.addColumn("No.");
-    tableModelSystemDepartmentWhereUsedList.addColumn("ID");
-    tableModelSystemDepartmentWhereUsedList.addColumn(res.getString("S271"));
-    tableModelSystemDepartmentWhereUsedList.addColumn(res.getString("S204"));
-    column0 = jTableSystemDepartmentWhereUsedList.getColumnModel().getColumn(0);
-    column1 = jTableSystemDepartmentWhereUsedList.getColumnModel().getColumn(1);
-    column2 = jTableSystemDepartmentWhereUsedList.getColumnModel().getColumn(2);
-    column3 = jTableSystemDepartmentWhereUsedList.getColumnModel().getColumn(3);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(60);
-    column2.setPreferredWidth(200);
-    column3.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemDepartmentWhereUsedList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemDepartmentWhereUsedList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemTaskTypeList)//
-    jTableSystemTaskTypeList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemTaskTypeList.setBackground(SystemColor.control);
-    jTableSystemTaskTypeList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemTaskTypeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemTaskTypeList.getSelectionModel()
-        .addListSelectionListener(e -> this.jTableSystemTaskTypeList_valueChanged(e));
-    jTableSystemTaskTypeList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemTaskTypeList_mouseClicked(e); } });
-    jTableSystemTaskTypeList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemTaskTypeList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableSystemTaskTypeList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelSystemTaskTypeList.addColumn("No.");
-    tableModelSystemTaskTypeList.addColumn(res.getString("S201"));
-    tableModelSystemTaskTypeList.addColumn(res.getString("S362"));
-    tableModelSystemTaskTypeList.addColumn(res.getString("S204"));
-    column0 = jTableSystemTaskTypeList.getColumnModel().getColumn(0);
-    column1 = jTableSystemTaskTypeList.getColumnModel().getColumn(1);
-    column2 = jTableSystemTaskTypeList.getColumnModel().getColumn(2);
-    column3 = jTableSystemTaskTypeList.getColumnModel().getColumn(3);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(100);
-    column2.setPreferredWidth(200);
-    column3.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemTaskTypeList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemTaskTypeList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemTaskTypeWhereUsedList)//
-    jTableSystemTaskTypeWhereUsedList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemTaskTypeWhereUsedList.setBackground(SystemColor.control);
-    jTableSystemTaskTypeWhereUsedList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemTaskTypeWhereUsedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemTaskTypeWhereUsedList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemTaskTypeWhereUsedList_mouseClicked(e); } });
-    jTableSystemTaskTypeWhereUsedList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemTaskTypeWhereUsedList.setRowHeight(TABLE_ROW_HEIGHT);
-    jScrollPaneSystemTaskTypeWhereUsedList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemTaskTypeWhereUsedList_mouseClicked(e); } });
-    tableModelSystemTaskTypeWhereUsedList.addColumn("No.");
-    tableModelSystemTaskTypeWhereUsedList.addColumn("ID");
-    tableModelSystemTaskTypeWhereUsedList.addColumn(res.getString("S363"));
-    tableModelSystemTaskTypeWhereUsedList.addColumn(res.getString("S340"));
-    tableModelSystemTaskTypeWhereUsedList.addColumn(res.getString("S204"));
-    column0 = jTableSystemTaskTypeWhereUsedList.getColumnModel().getColumn(0);
-    column1 = jTableSystemTaskTypeWhereUsedList.getColumnModel().getColumn(1);
-    column2 = jTableSystemTaskTypeWhereUsedList.getColumnModel().getColumn(2);
-    column3 = jTableSystemTaskTypeWhereUsedList.getColumnModel().getColumn(3);
-    column4 = jTableSystemTaskTypeWhereUsedList.getColumnModel().getColumn(4);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(60);
-    column2.setPreferredWidth(250);
-    column3.setPreferredWidth(250);
-    column4.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemTaskTypeWhereUsedList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemTaskTypeWhereUsedList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemTableTypeList)//
-    jTableSystemTableTypeList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemTableTypeList.setBackground(SystemColor.control);
-    jTableSystemTableTypeList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemTableTypeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemTableTypeList.getSelectionModel()
-        .addListSelectionListener(e -> this.jTableSystemTableTypeList_valueChanged(e));
-    jTableSystemTableTypeList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemTableTypeList_mouseClicked(e); } });
-    jTableSystemTableTypeList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemTableTypeList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableSystemTableTypeList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelSystemTableTypeList.addColumn("No.");
-    tableModelSystemTableTypeList.addColumn(res.getString("S201"));
-    tableModelSystemTableTypeList.addColumn(res.getString("S277"));
-    tableModelSystemTableTypeList.addColumn(res.getString("S204"));
-    column0 = jTableSystemTableTypeList.getColumnModel().getColumn(0);
-    column1 = jTableSystemTableTypeList.getColumnModel().getColumn(1);
-    column2 = jTableSystemTableTypeList.getColumnModel().getColumn(2);
-    column3 = jTableSystemTableTypeList.getColumnModel().getColumn(3);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(100);
-    column2.setPreferredWidth(200);
-    column3.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemTableTypeList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemTableTypeList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemTableTypeWhereUsedList)//
-    jTableSystemTableTypeWhereUsedList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemTableTypeWhereUsedList.setBackground(SystemColor.control);
-    jTableSystemTableTypeWhereUsedList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemTableTypeWhereUsedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemTableTypeWhereUsedList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemTableTypeWhereUsedList_mouseClicked(e); } });
-    jTableSystemTableTypeWhereUsedList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemTableTypeWhereUsedList.setRowHeight(TABLE_ROW_HEIGHT);
-    jScrollPaneSystemTableTypeWhereUsedList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemTableTypeWhereUsedList_mouseClicked(e); } });
-    tableModelSystemTableTypeWhereUsedList.addColumn("No.");
-    tableModelSystemTableTypeWhereUsedList.addColumn("ID");
-    tableModelSystemTableTypeWhereUsedList.addColumn(res.getString("S283"));
-    tableModelSystemTableTypeWhereUsedList.addColumn(res.getString("S284"));
-    column0 = jTableSystemTableTypeWhereUsedList.getColumnModel().getColumn(0);
-    column1 = jTableSystemTableTypeWhereUsedList.getColumnModel().getColumn(1);
-    column2 = jTableSystemTableTypeWhereUsedList.getColumnModel().getColumn(2);
-    column3 = jTableSystemTableTypeWhereUsedList.getColumnModel().getColumn(3);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(100);
-    column2.setPreferredWidth(250);
-    column3.setPreferredWidth(350);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemTableTypeWhereUsedList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemTableTypeWhereUsedList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemDataTypeList)//
-    jTableSystemDataTypeList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemDataTypeList.setBackground(SystemColor.control);
-    jTableSystemDataTypeList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemDataTypeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemDataTypeList.getSelectionModel()
-        .addListSelectionListener(e -> this.jTableSystemDataTypeList_valueChanged(e));
-    jTableSystemDataTypeList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemDataTypeList_mouseClicked(e); } });
-    jTableSystemDataTypeList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemDataTypeList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableSystemDataTypeList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelSystemDataTypeList.addColumn("No.");
-    tableModelSystemDataTypeList.addColumn(res.getString("S201"));
-    tableModelSystemDataTypeList.addColumn(res.getString("S289"));
-    tableModelSystemDataTypeList.addColumn(res.getString("S290"));
-    tableModelSystemDataTypeList.addColumn(res.getString("S291"));
-    tableModelSystemDataTypeList.addColumn(res.getString("S292"));
-    tableModelSystemDataTypeList.addColumn(res.getString("S293"));
-    column0 = jTableSystemDataTypeList.getColumnModel().getColumn(0);
-    column1 = jTableSystemDataTypeList.getColumnModel().getColumn(1);
-    column2 = jTableSystemDataTypeList.getColumnModel().getColumn(2);
-    column3 = jTableSystemDataTypeList.getColumnModel().getColumn(3);
-    column4 = jTableSystemDataTypeList.getColumnModel().getColumn(4);
-    column5 = jTableSystemDataTypeList.getColumnModel().getColumn(5);
-    column6 = jTableSystemDataTypeList.getColumnModel().getColumn(6);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(130);
-    column2.setPreferredWidth(200);
-    column3.setPreferredWidth(150);
-    column4.setPreferredWidth(50);
-    column5.setPreferredWidth(65);
-    column6.setPreferredWidth(150);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentRight);
-    column5.setCellRenderer(rendererAlignmentRight);
-    column6.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemDataTypeList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemDataTypeList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemDataTypeWhereUsedList)//
-    jTableSystemDataTypeWhereUsedList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemDataTypeWhereUsedList.setBackground(SystemColor.control);
-    jTableSystemDataTypeWhereUsedList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemDataTypeWhereUsedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemDataTypeWhereUsedList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemDataTypeWhereUsedList_mouseClicked(e); } });
-    jTableSystemDataTypeWhereUsedList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemDataTypeWhereUsedList.setRowHeight(TABLE_ROW_HEIGHT);
-    jScrollPaneSystemDataTypeWhereUsedList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemDataTypeWhereUsedList_mouseClicked(e); } });
-    tableModelSystemDataTypeWhereUsedList.addColumn("No.");
-    tableModelSystemDataTypeWhereUsedList.addColumn(res.getString("S297"));
-    tableModelSystemDataTypeWhereUsedList.addColumn(res.getString("S298"));
-    tableModelSystemDataTypeWhereUsedList.addColumn(res.getString("S299"));
-    tableModelSystemDataTypeWhereUsedList.addColumn(res.getString("S300"));
-    column0 = jTableSystemDataTypeWhereUsedList.getColumnModel().getColumn(0);
-    column1 = jTableSystemDataTypeWhereUsedList.getColumnModel().getColumn(1);
-    column2 = jTableSystemDataTypeWhereUsedList.getColumnModel().getColumn(2);
-    column3 = jTableSystemDataTypeWhereUsedList.getColumnModel().getColumn(3);
-    column4 = jTableSystemDataTypeWhereUsedList.getColumnModel().getColumn(4);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(130);
-    column2.setPreferredWidth(150);
-    column3.setPreferredWidth(300);
-    column4.setPreferredWidth(250);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemDataTypeWhereUsedList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemDataTypeWhereUsedList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemFunctionTypeList)//
-    jTableSystemFunctionTypeList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemFunctionTypeList.setBackground(SystemColor.control);
-    jTableSystemFunctionTypeList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemFunctionTypeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemFunctionTypeList.getSelectionModel().addListSelectionListener(
-        e -> this.jTableSystemFunctionTypeList_valueChanged(e));
-    jTableSystemFunctionTypeList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemFunctionTypeList_mouseClicked(e); } });
-    jTableSystemFunctionTypeList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemFunctionTypeList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableSystemFunctionTypeList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelSystemFunctionTypeList.addColumn("No.");
-    tableModelSystemFunctionTypeList.addColumn(res.getString("S201"));
-    tableModelSystemFunctionTypeList.addColumn(res.getString("S305"));
-    tableModelSystemFunctionTypeList.addColumn(res.getString("S204"));
-    column0 = jTableSystemFunctionTypeList.getColumnModel().getColumn(0);
-    column1 = jTableSystemFunctionTypeList.getColumnModel().getColumn(1);
-    column2 = jTableSystemFunctionTypeList.getColumnModel().getColumn(2);
-    column3 = jTableSystemFunctionTypeList.getColumnModel().getColumn(3);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(100);
-    column2.setPreferredWidth(200);
-    column3.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemFunctionTypeList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemFunctionTypeList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemFunctionTypeWhereUsedList)//
-    jTableSystemFunctionTypeWhereUsedList.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemFunctionTypeWhereUsedList.setBackground(SystemColor.control);
-    jTableSystemFunctionTypeWhereUsedList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemFunctionTypeWhereUsedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemFunctionTypeWhereUsedList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemFunctionTypeWhereUsedList_mouseClicked(e); } });
-    jTableSystemFunctionTypeWhereUsedList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemFunctionTypeWhereUsedList.setRowHeight(TABLE_ROW_HEIGHT);
-    jScrollPaneSystemFunctionTypeWhereUsedList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSystemFunctionTypeWhereUsedList_mouseClicked(e); } });
-    tableModelSystemFunctionTypeWhereUsedList.addColumn("No.");
-    tableModelSystemFunctionTypeWhereUsedList.addColumn("ID");
-    tableModelSystemFunctionTypeWhereUsedList.addColumn(res.getString("S311"));
-    tableModelSystemFunctionTypeWhereUsedList.addColumn(res.getString("S312"));
-    tableModelSystemFunctionTypeWhereUsedList.addColumn(res.getString("S313"));
-    column0 = jTableSystemFunctionTypeWhereUsedList.getColumnModel().getColumn(0);
-    column1 = jTableSystemFunctionTypeWhereUsedList.getColumnModel().getColumn(1);
-    column2 = jTableSystemFunctionTypeWhereUsedList.getColumnModel().getColumn(2);
-    column3 = jTableSystemFunctionTypeWhereUsedList.getColumnModel().getColumn(3);
-    column4 = jTableSystemFunctionTypeWhereUsedList.getColumnModel().getColumn(4);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(90);
-    column2.setPreferredWidth(350);
-    column3.setPreferredWidth(250);
-    column4.setPreferredWidth(600);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemFunctionTypeWhereUsedList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemFunctionTypeWhereUsedList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemTermsList)//
-    jTableSystemTermsList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemTermsList.setBackground(SystemColor.control);
-    jTableSystemTermsList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemTermsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemTermsList.getSelectionModel()
-        .addListSelectionListener(e -> this.jTableSystemTermsList_valueChanged(e));
-    jTableSystemTermsList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemTermsList_mouseClicked(e); } });
-    jTableSystemTermsList.addFocusListener(new Modeler_FocusListener());
-    jTableSystemTermsList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableSystemTermsList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelSystemTermsList.addColumn("No.");
-    tableModelSystemTermsList.addColumn(res.getString("S248"));
-    tableModelSystemTermsList.addColumn(res.getString("S246"));
-    tableModelSystemTermsList.addColumn(res.getString("S247"));
-    tableModelSystemTermsList.addColumn(res.getString("S249"));
-    column0 = jTableSystemTermsList.getColumnModel().getColumn(0);
-    column1 = jTableSystemTermsList.getColumnModel().getColumn(1);
-    column2 = jTableSystemTermsList.getColumnModel().getColumn(2);
-    column3 = jTableSystemTermsList.getColumnModel().getColumn(3);
-    column4 = jTableSystemTermsList.getColumnModel().getColumn(4);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(150);
-    column2.setPreferredWidth(300);
-    column3.setPreferredWidth(550);
-    column4.setPreferredWidth(300);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemTermsList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemTermsList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableSystemMaintenanceLog)//
-    jTableSystemMaintenanceLog.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSystemMaintenanceLog.setBackground(SystemColor.control);
-    jTableSystemMaintenanceLog.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSystemMaintenanceLog.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSystemMaintenanceLog.getSelectionModel().addListSelectionListener(
-        e -> this.jTableSystemMaintenanceLog_valueChanged(e));
-    jTableSystemMaintenanceLog.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSystemMaintenanceLog_mouseClicked(e); } });
-    jTableSystemMaintenanceLog.addFocusListener(new Modeler_FocusListener());
-    jTableSystemMaintenanceLog.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableSystemMaintenanceLog.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelSystemMaintenanceLog.addColumn("No.");
-    tableModelSystemMaintenanceLog.addColumn(res.getString("S317"));
-    tableModelSystemMaintenanceLog.addColumn(res.getString("S318"));
-    tableModelSystemMaintenanceLog.addColumn(res.getString("S319"));
-    column0 = jTableSystemMaintenanceLog.getColumnModel().getColumn(0);
-    column1 = jTableSystemMaintenanceLog.getColumnModel().getColumn(1);
-    column2 = jTableSystemMaintenanceLog.getColumnModel().getColumn(2);
-    column3 = jTableSystemMaintenanceLog.getColumnModel().getColumn(3);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(150);
-    column2.setPreferredWidth(130);
-    column3.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    jTableSystemMaintenanceLog.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSystemMaintenanceLog.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    if (systemView != null) {
+      systemView.initComponents(this);
+    }
   }
-
   /**
    * Initialize component for node of SubjectAreaList
    */
   void jbInitComponentsForSubjectAreaList() {
-    jPanelSubjectAreaList.setLayout(new BorderLayout());
-    jPanelSubjectAreaList.setBackground(SystemColor.control);
-    jPanelSubjectAreaList.add(jScrollPaneSubjectAreaList, BorderLayout.CENTER);
-    jScrollPaneSubjectAreaList.setBorder(null);
-    jScrollPaneSubjectAreaList.getViewport().add(jTableSubjectAreaList, null);
-    jScrollPaneSubjectAreaList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSubjectAreaList_mouseClicked(e); } });
-    jTableSubjectAreaList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSubjectAreaList_mouseClicked(e); } });
-    jTableSubjectAreaList.addFocusListener(new Modeler_FocusListener());
-    jTableSubjectAreaList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableSubjectAreaList.setRowHeight(TABLE_ROW_HEIGHT);
-    //(jTableSubjectAreaList)//
-    jTableSubjectAreaList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSubjectAreaList.setBackground(SystemColor.control);
-    jTableSubjectAreaList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSubjectAreaList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    tableModelSubjectAreaList.addColumn("No.");
-    tableModelSubjectAreaList.addColumn(res.getString("S201"));
-    tableModelSubjectAreaList.addColumn(res.getString("S324"));
-    tableModelSubjectAreaList.addColumn(res.getString("S204"));
-    column0 = jTableSubjectAreaList.getColumnModel().getColumn(0);
-    column1 = jTableSubjectAreaList.getColumnModel().getColumn(1);
-    column2 = jTableSubjectAreaList.getColumnModel().getColumn(2);
-    column3 = jTableSubjectAreaList.getColumnModel().getColumn(3);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(100);
-    column2.setPreferredWidth(300);
-    column3.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    jTableSubjectAreaList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSubjectAreaList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    SubjectAreaListView.initComponents(this);
   }
-
   /**
    * Initialize component for node of SubjectArea
    */
   void jbInitComponentsForSubjectArea() {
-    jSplitPaneSubjectArea.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneSubjectArea.setBorder(null);
-    jSplitPaneSubjectArea.setDividerLocation(90);
-    jPanelSubjectArea.setLayout(new BorderLayout());
-    jPanelSubjectArea.setBackground(SystemColor.control);
-    jPanelSubjectArea1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelSubjectArea1.setPreferredSize(new Dimension(10, 100));
-    jPanelSubjectArea1.setMinimumSize(new Dimension(128, 0));
-    jPanelSubjectArea1.setLayout(new BorderLayout());
-    jScrollPaneSubjectArea.setBorder(null);
-    jPanelSubjectArea4.setMinimumSize(new Dimension(100, 10));
-    jPanelSubjectArea4.setPreferredSize(new Dimension(140, 90));
-    jPanelSubjectArea4.setLayout(null);
-    jLabelSubjectAreaName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSubjectAreaName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSubjectAreaName.setText(res.getString("S324"));
-    jLabelSubjectAreaName.setBounds(new Rectangle(5, 6, 130, 20));
-    jLabelSubjectAreaDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSubjectAreaDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSubjectAreaDescriptions.setText(res.getString("S204"));
-    jLabelSubjectAreaDescriptions.setBounds(new Rectangle(5, 37, 130, 20));
-    jPanelSubjectArea2.setLayout(new BorderLayout());
-    jPanelSubjectArea3.setPreferredSize(new Dimension(10, 38));
-    jPanelSubjectArea3.setLayout(null);
-    jPanelSubjectAreaDataflowEditor1.setBorder(null);
-    jPanelSubjectAreaDataflowEditor1.setLayout(null);
-    jPanelSubjectAreaDataflowEditor1.setBackground(DESKTOP_COLOR);
-    jPanelSubjectAreaDataflowEditor2.setLayout(null);
-    jPanelSubjectAreaDataflowEditor2.setOpaque(false);
-    jPanelSubjectAreaDataflowEditor2.setBounds(new Rectangle(0, 0, 2000, 1500));
-    jPanelSubjectAreaDataflowEditor2.addMouseListener(
-        new MouseAdapter() { public void mousePressed(MouseEvent e) { Modeler.this.jPanelSubjectAreaDataflowEditor2_mousePressed(e); } public void mouseReleased(MouseEvent e) { Modeler.this.jPanelSubjectAreaDataflowEditor2_mouseReleased(e); } public void mouseClicked(MouseEvent e) { Modeler.this.jPanelSubjectAreaDataflowEditor2_mouseClicked(e); } });
-    jPanelSubjectAreaDataflowEditor2.addMouseMotionListener(
-        new MouseMotionAdapter() { public void mouseMoved(MouseEvent e) { Modeler.this.jPanelSubjectAreaDataflowEditor2_mouseMoved(e); } public void mouseDragged(MouseEvent e) { Modeler.this.jPanelSubjectAreaDataflowEditor2_mouseDragged(e); } });
-    jTextFieldSubjectAreaName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSubjectAreaName.setBounds(new Rectangle(0, 6, 300, 25));
-    jLabelSubjectAreaSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSubjectAreaSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSubjectAreaSortKey.setText(res.getString("S201"));
-    jLabelSubjectAreaSortKey.setBounds(new Rectangle(310, 10, 130, 20));
-    jTextFieldSubjectAreaSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSubjectAreaSortKey.setBounds(new Rectangle(445, 6, 100, 25));
-    jLabelSubjectAreaBoundarySetting.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSubjectAreaBoundarySetting.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSubjectAreaBoundarySetting.setText(res.getString("S381"));
-    jLabelSubjectAreaBoundarySetting.setBounds(new Rectangle(555, 10, 160, 20));
-    jComboBoxSubjectAreaBoundarySetting.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jComboBoxSubjectAreaBoundarySetting.setBounds(new Rectangle(720, 6, 170, 25));
-    jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S382")); //0:Hidden//
-    jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S383")); //1:Top-Left//
-    jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S384")); //2:Top-Right//
-    jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S385")); //3:Bottom-Left//
-    jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S386")); //4:Bottom-Right//
-    jComboBoxSubjectAreaBoundarySetting.addItem(res.getString("S387")); //H:Border-Hidden//
-    jComboBoxSubjectAreaBoundarySetting.addItemListener(
-        e -> this.jComboBoxSubjectAreaBoundarySetting_itemChanged(e));
-    jTextAreaSubjectAreaDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaSubjectAreaDescriptions.setLineWrap(true);
-    jPanelSubjectArea.add(jSplitPaneSubjectArea, BorderLayout.CENTER);
-    jSplitPaneSubjectArea.add(jScrollPaneSubjectArea, JSplitPane.BOTTOM);
-    jSplitPaneSubjectArea.add(jPanelSubjectArea1, JSplitPane.TOP);
-    jPanelSubjectArea1.add(jPanelSubjectArea2, BorderLayout.CENTER);
-    jPanelSubjectArea1.add(jPanelSubjectArea4, BorderLayout.WEST);
-    jPanelSubjectArea2.add(jScrollPaneSubjectAreaDescriptions, BorderLayout.CENTER);
-    jPanelSubjectArea2.add(jPanelSubjectArea3, BorderLayout.NORTH);
-    jPanelSubjectArea3.add(jTextFieldSubjectAreaName, null);
-    jPanelSubjectArea3.add(jLabelSubjectAreaSortKey, null);
-    jPanelSubjectArea3.add(jTextFieldSubjectAreaSortKey, null);
-    jPanelSubjectArea3.add(jLabelSubjectAreaBoundarySetting, null);
-    jPanelSubjectArea3.add(jComboBoxSubjectAreaBoundarySetting, null);
-    jScrollPaneSubjectAreaDescriptions.getViewport().add(jTextAreaSubjectAreaDescriptions, null);
-    jScrollPaneSubjectArea.getViewport().add(jPanelSubjectAreaDataflowEditor1, null);
-    jScrollPaneSubjectArea.getVerticalScrollBar().setUnitIncrement(25);
-    jPanelSubjectAreaDataflowEditor1.add(jPanelSubjectAreaDataflowEditor2, null);
-    jPanelSubjectArea4.add(jLabelSubjectAreaName, null);
-    jPanelSubjectArea4.add(jLabelSubjectAreaDescriptions, null);
-    jPanelBoundaryResizeGuide.setLayout(null);
-    jPanelBoundaryResizeGuide.setBackground(Color.black);
-    jPanelBoundaryMoveGuide.setLayout(null);
-    jPanelBoundaryMoveGuide.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-    jPanelBoundaryMoveGuide.setOpaque(false);
-    //(Slide Show Screen Dialog)//
-    jDialogDataflowSlideShow.setResizable(false);
-    jDialogDataflowSlideShow.setFocusable(true);
-    jDialogDataflowSlideShow.setUndecorated(true);
-    jDialogDataflowSlideShow.addKeyListener(new KeyAdapter() { public void keyPressed(KeyEvent e) { Modeler.this.jDialogDataflowSlideShow_keyPressed(e); } });
-    jPanelSubjectAreaDataflowSlideShow.setLayout(null);
-    jPanelSubjectAreaDataflowSlideShow.setBounds(new Rectangle(0, 0, 2000, 1500));
-    jPanelSubjectAreaDataflowSlideShow.setBackground(DESKTOP_COLOR);
-    jPanelSubjectAreaDataflowSlideShow.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jPanelSubjectAreaDataflowSlideShow2_mouseClicked(e); } });
-    jPanelSubjectAreaDataflowSlideShow1.setBackground(DESKTOP_COLOR);
-    jPanelSubjectAreaDataflowSlideShow1.setBounds(new Rectangle(10, 50, 2000, 1500));
-    jPanelSubjectAreaDataflowSlideShow1.setLayout(null);
-    jPanelSubjectAreaDataflowSlideShow2.setOpaque(false);
-    jPanelSubjectAreaDataflowSlideShow2.setBounds(new Rectangle(0, 0, 2000, 1500));
-    jPanelSubjectAreaDataflowSlideShow2.setLayout(null);
-    jPanelSubjectAreaDataflowSlideShow2.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jPanelSubjectAreaDataflowSlideShow2_mouseClicked(e); } });
-    jLabelDataflowSlideShowPageGuide.setFont(new java.awt.Font(mainFontName, 0, 17));
-    jLabelDataflowSlideShowPageGuide.setForeground(Color.lightGray);
-    jLabelDataflowSlideShowPageGuide.setBounds(new Rectangle(15, 15, 600, 20));
-    jDialogDataflowSlideShow.getContentPane().add(jPanelSubjectAreaDataflowSlideShow, null);
-    jPanelSubjectAreaDataflowSlideShow.add(jLabelDataflowSlideShowPageGuide, null);
-    jPanelSubjectAreaDataflowSlideShow.add(jPanelSubjectAreaDataflowSlideShow1, null);
-    jPanelSubjectAreaDataflowSlideShow1.add(jPanelSubjectAreaDataflowSlideShow2, null);
+    if (subjectAreaView != null) {
+      subjectAreaView.initComponents(this);
+    }
   }
-
   /**
    * Initialize component for node of RoleList
    */
   void jbInitComponentsForRoleList() {
-    jPanelRoleList.setLayout(new BorderLayout());
-    jScrollPaneRoleList.setBorder(null);
-    jPanelRoleList.add(jScrollPaneRoleList, BorderLayout.CENTER);
-    jScrollPaneRoleList.getViewport().add(jTableRoleList, null);
-    jScrollPaneRoleList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneRoleList_mouseClicked(e); } });
-    jTableRoleList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableRoleList_mouseClicked(e); } });
-    jTableRoleList.addFocusListener(new Modeler_FocusListener());
-    jTableRoleList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableRoleList.setRowHeight(TABLE_ROW_HEIGHT);
-    //(jTableRoleList)//
-    jTableRoleList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableRoleList.setBackground(SystemColor.control);
-    jTableRoleList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableRoleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    tableModelRoleList.addColumn("No.");
-    tableModelRoleList.addColumn(res.getString("S201"));
-    tableModelRoleList.addColumn(res.getString("S340"));
-    tableModelRoleList.addColumn(res.getString("S341"));
-    tableModelRoleList.addColumn(res.getString("S342"));
-    tableModelRoleList.addColumn(res.getString("S204"));
-    column0 = jTableRoleList.getColumnModel().getColumn(0);
-    column1 = jTableRoleList.getColumnModel().getColumn(1);
-    column2 = jTableRoleList.getColumnModel().getColumn(2);
-    column3 = jTableRoleList.getColumnModel().getColumn(3);
-    column4 = jTableRoleList.getColumnModel().getColumn(4);
-    column5 = jTableRoleList.getColumnModel().getColumn(5);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(100);
-    column2.setPreferredWidth(250);
-    column3.setPreferredWidth(150);
-    column4.setPreferredWidth(40);
-    column5.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentCenter);
-    column5.setCellRenderer(rendererAlignmentLeft);
-    jTableRoleList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableRoleList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    RoleListView.initComponents(this);
   }
-
   /**
    * Initialize component for node of Role
    */
   void jbInitComponentsForRole() {
-    jPanelRole.setLayout(new BorderLayout());
-    jSplitPaneRole.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneRole.setBorder(null);
-    jSplitPaneRole.setDividerLocation(100);
-    jScrollPaneTaskList.setBorder(null);
-    jPanelRole5.setLayout(null);
-    jPanelRole5.setPreferredSize(new Dimension(140, 80));
-    jPanelRole5.setMinimumSize(new Dimension(100, 10));
-    jPanelRole2.setBorder(BorderFactory.createEtchedBorder());
-    jPanelRole2.setPreferredSize(new Dimension(10, 100));
-    jPanelRole2.setLayout(new BorderLayout());
-    jPanelRole4.setPreferredSize(new Dimension(10, 38));
-    jPanelRole4.setLayout(null);
-    jPanelRole3.setLayout(new BorderLayout());
-    jLabelRoleName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelRoleName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelRoleName.setText(res.getString("S348"));
-    jLabelRoleName.setBounds(new Rectangle(5, 6, 130, 20));
-    jTextFieldRoleName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldRoleName.setBounds(new Rectangle(0, 6, 300, 25));
-    jLabelRoleSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelRoleSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelRoleSortKey.setText(res.getString("S201"));
-    jLabelRoleSortKey.setBounds(new Rectangle(310, 6, 130, 20));
-    jTextFieldRoleSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldRoleSortKey.setBounds(new Rectangle(445, 6, 100, 25));
-    jLabelDepartment.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelDepartment.setRequestFocusEnabled(true);
-    jLabelDepartment.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelDepartment.setText(res.getString("S356"));
-    jLabelDepartment.setBounds(new Rectangle(555, 6, 130, 20));
-    jComboBoxDepartment.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jComboBoxDepartment.setActionCommand("comboBoxChanged");
-    jComboBoxDepartment.setBounds(new Rectangle(690, 6, 200, 25));
-    jLabelRoleDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelRoleDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelRoleDescriptions.setText(res.getString("S204"));
-    jLabelRoleDescriptions.setBounds(new Rectangle(5, 37, 130, 20));
-    jTextAreaRoleDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaRoleDescriptions.setLineWrap(true);
-    jPanelRole.add(jSplitPaneRole, BorderLayout.CENTER);
-    jSplitPaneRole.add(jScrollPaneTaskList, JSplitPane.BOTTOM);
-    jSplitPaneRole.add(jPanelRole2, JSplitPane.TOP);
-    jPanelRole2.add(jPanelRole5, BorderLayout.WEST);
-    jPanelRole2.add(jPanelRole3, BorderLayout.CENTER);
-    jViewportTaskList.add(jTableTaskList, null);
-    jScrollPaneTaskList.setViewport(jViewportTaskList);
-    jScrollPaneTaskList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneTaskList_mouseClicked(e); } });
-    jTableTaskList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableTaskList_mouseClicked(e); } });
-    jPanelRole3.add(jPanelRole4, BorderLayout.NORTH);
-    jPanelRole3.add(jScrollPaneRoleDescriptions, BorderLayout.CENTER);
-    jPanelRole3.setPreferredSize(new Dimension(1000, 60));
-    jScrollPaneRoleDescriptions.getViewport().add(jTextAreaRoleDescriptions, null);
-    jPanelRole4.add(jTextFieldRoleName, null);
-    jPanelRole4.add(jTextFieldRoleSortKey, null);
-    jPanelRole4.add(jComboBoxDepartment, null);
-    jPanelRole4.add(jLabelRoleSortKey, null);
-    jPanelRole4.add(jLabelDepartment, null);
-    jPanelRole5.add(jLabelRoleName, null);
-    jPanelRole5.add(jLabelRoleDescriptions, null);
-    //(jTableTaskList)//
-    jTableTaskList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTaskList.setBackground(SystemColor.control);
-    jTableTaskList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableTaskList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableTaskList.addFocusListener(new Modeler_FocusListener());
-    jTableTaskList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableTaskList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelTaskList.addColumn("No.");
-    tableModelTaskList.addColumn(res.getString("S201"));
-    tableModelTaskList.addColumn(res.getString("S360"));
-    tableModelTaskList.addColumn(res.getString("S361"));
-    tableModelTaskList.addColumn(res.getString("S362"));
-    tableModelTaskList.addColumn(res.getString("S204"));
-    column0 = jTableTaskList.getColumnModel().getColumn(0);
-    column1 = jTableTaskList.getColumnModel().getColumn(1);
-    column2 = jTableTaskList.getColumnModel().getColumn(2);
-    column3 = jTableTaskList.getColumnModel().getColumn(3);
-    column4 = jTableTaskList.getColumnModel().getColumn(4);
-    column5 = jTableTaskList.getColumnModel().getColumn(5);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(100);
-    column2.setPreferredWidth(250);
-    column3.setPreferredWidth(200);
-    column4.setPreferredWidth(200);
-    column5.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    column5.setCellRenderer(rendererAlignmentLeft);
-    jTableTaskList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableTaskList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    if (roleView != null) {
+      roleView.initComponents(this);
+    }
   }
-
   /**
    * Initialize component for node of Task
    */
   void jbInitComponentsForTask() {
-    jPanelTask.setLayout(new BorderLayout());
-    jSplitPaneTask.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneTask.setBorder(null);
-    jSplitPaneTask.setDividerLocation(120);
-    jPanelTask4.setLayout(null);
-    jPanelTask4.setPreferredSize(new Dimension(140, 80));
-    jPanelTask4.setMinimumSize(new Dimension(100, 10));
-    jScrollPaneTask1.setBorder(null);
-    jScrollPaneTask1.getViewport().add(jPanelTask1);
-    jPanelTask1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelTask1.setPreferredSize(new Dimension(1230, 120));
-    jPanelTask1.setLayout(new BorderLayout());
-    jPanelTask3.setPreferredSize(new Dimension(10, 69));
-    jPanelTask3.setLayout(null);
-    jLabelTaskName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTaskName.setText(res.getString("S372"));
-    jLabelTaskName.setBounds(new Rectangle(5, 6, 130, 20));
-    jTextFieldTaskName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskName.setBounds(new Rectangle(0, 6, 300, 25));
-    jLabelTaskSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTaskSortKey.setText(res.getString("S201"));
-    jLabelTaskSortKey.setBounds(new Rectangle(310, 6, 130, 20));
-    jTextFieldTaskSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskSortKey.setBounds(new Rectangle(445, 6, 100, 25));
-    jLabelTaskEvent.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskEvent.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTaskEvent.setText(res.getString("S361"));
-    jLabelTaskEvent.setToolTipText(res.getString("S368"));
-    jLabelTaskEvent.setBounds(new Rectangle(5, 37, 130, 20));
-    jTextFieldTaskEvent.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskEvent.setBounds(new Rectangle(0, 37, 300, 25));
-    jTextFieldTaskEvent.setToolTipText(res.getString("S368"));
-    jLabelTaskType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskType.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTaskType.setText(res.getString("S362"));
-    jLabelTaskType.setBounds(new Rectangle(310, 37, 130, 20));
-    jComboBoxTaskType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jComboBoxTaskType.setActionCommand("comboBoxChanged");
-    jComboBoxTaskType.setBounds(new Rectangle(445, 37, 200, 25));
-    jLabelSubjectAreaWithThisTask.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSubjectAreaWithThisTask.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSubjectAreaWithThisTask.setText(res.getString("S380"));
-    jLabelSubjectAreaWithThisTask.setBounds(new Rectangle(575, 6, 200, 20));
-    jListSubjectAreaWithThisTask.setBorder(null);
-    jListSubjectAreaWithThisTask.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jListSubjectAreaWithThisTask.setSelectionBackground(jPanelTask.getBackground());
-    jListSubjectAreaWithThisTask.setBackground(jPanelTask.getBackground());
-    jListSubjectAreaWithThisTask.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jListSubjectAreaWithThisTask_mouseClicked(e); } public void mouseExited(MouseEvent e) { Modeler.this.jListSubjectAreaWithThisTask_mouseExited(e); } });
-    jListSubjectAreaWithThisTask.addMouseMotionListener(
-        new MouseMotionAdapter() { public void mouseMoved(MouseEvent e) { Modeler.this.jListSubjectAreaWithThisTask_mouseMoved(e); } });
-    jScrollPaneSubjectAreaWithThisTask.setBorder(BorderFactory.createEtchedBorder());
-    jScrollPaneSubjectAreaWithThisTask.setBounds(new Rectangle(780, 6, 300, 56));
-    jScrollPaneSubjectAreaWithThisTask.getViewport().add(jListSubjectAreaWithThisTask, null);
-    jLabelTaskDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTaskDescriptions.setText(res.getString("S204"));
-    jLabelTaskDescriptions.setBounds(new Rectangle(5, 68, 130, 25));
-    jTextAreaTaskDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaTaskDescriptions.setLineWrap(true);
-    jPanelTask2.setLayout(new BorderLayout());
-    jSplitPaneTask2.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneTask3.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-    jSplitPaneTask4.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneTask5.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-    jPanelTask5.setPreferredSize(new Dimension(10, 10));
-    jPanelTask5.setLayout(new BorderLayout());
-    jPanelTask6.setLayout(null);
-    jPanelTask6.setPreferredSize(new Dimension(1, 20));
-    jLabelTaskActions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskActions.setText(res.getString("S375"));
-    jLabelTaskActions.setBounds(new Rectangle(5, 0, 130, 20));
-    jSplitPaneTask2.setDividerLocation(150);
-    jSplitPaneTask3.setDividerLocation(800);
-    jSplitPaneTask4.setDividerLocation(200);
-    jSplitPaneTask4.setMinimumSize(new Dimension(50, 10));
-    jSplitPaneTask5.setDividerLocation(950);
-    jPanelTaskFunctionIOImage.setLayout(null);
-    jPanelTaskFunctionIOImage.setBorder(null);
-    jPanelTaskFunctionIOImage.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jPanelTaskFunctionIOImage_mouseClicked(e); } });
-    jPanelTaskFunctionIODummy.setBorder(BorderFactory.createLoweredBevelBorder());
-    jPanelTaskFunctionIODummy.setBackground(SystemColor.control);
-    jPanelTaskFunctionIODummy.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jPanelTaskFunctionIODummy_mouseClicked(e); } });
-    jTextPaneTaskFunctionIOImage.setBorder(BorderFactory.createRaisedBevelBorder());
-    jTextPaneTaskFunctionIOImage.setPreferredSize(new Dimension(500, 400));
-    jTextPaneTaskFunctionIOImage.setBackground(SystemColor.control);
-    jTextPaneTaskFunctionIOImage.setFont(new java.awt.Font(ioImageFontName, 0, 12));
-    jTextPaneTaskFunctionIOImage.setContentType("text/plain");
-    jTextPaneTaskFunctionIOImage.setEditable(false);
-    jTextPaneTaskFunctionIOImage.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneTaskFunctionIOImage_mouseClicked(e); } });
-    jTextPaneTaskFunctionIOImage.addKeyListener(
-        new KeyAdapter() { public void keyTyped(KeyEvent e) { Modeler.this.jTextPaneTaskFunctionIOImage_keyTyped(e); } });
-    jLabelTaskFunctionIOImage.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jLabelTaskFunctionIOImage_mouseClicked(e); } });
-    jEditorPaneTaskFunctionIOImage.setBorder(BorderFactory.createRaisedBevelBorder());
-    jEditorPaneTaskFunctionIOImage.setEditable(false);
-    jEditorPaneTaskFunctionIOImage.setContentType("text/html");
-    jEditorPaneTaskFunctionIOImage.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jEditorPaneTaskFunctionIOImage_mouseClicked(e); } });
-    jPanelTaskFunctionIOImageSurface.setOpaque(false);
-    jTreeTaskActions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTreeTaskActions.setRowHeight(TREE_ROW_HEIGHT);
-    jTreeTaskActions.setShowsRootHandles(true);
-    jTreeTaskActions.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-    jSplitPaneTask2.setBorder(null);
-    jSplitPaneTask3.setBorder(null);
-    jSplitPaneTask4.setBorder(null);
-    jSplitPaneTask5.setBorder(null);
-    jPanelTask15.setBorder(BorderFactory.createEtchedBorder());
-    jPanelTask15.setLayout(new BorderLayout());
-    jPanelTask19.setLayout(new BorderLayout());
-    jPanelTask16.setLayout(null);
-    jPanelTask16.setPreferredSize(new Dimension(1, 69));
-    jPanelTask17.setLayout(new BorderLayout());
-    jPanelTask18.setPreferredSize(new Dimension(140, 10));
-    jPanelTask18.setLayout(null);
-    jPanelTask22.setLayout(new BorderLayout());
-    jTextAreaTaskActionDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaTaskActionDescriptions.setLineWrap(true);
-    jLabelTaskActionDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskActionDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTaskActionDescriptions.setText(res.getString("S390"));
-    jLabelTaskActionDescriptions.setBounds(new Rectangle(5, 0, 130, 20));
-    jLabelTaskActionExecuteIf.setBounds(new Rectangle(5, 9, 130, 20));
-    jLabelTaskActionExecuteIf.setText(res.getString("S391"));
-    jLabelTaskActionExecuteIf.setToolTipText(res.getString("S392"));
-    jLabelTaskActionExecuteIf.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTaskActionExecuteIf.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskActionLabel.setBounds(new Rectangle(5, 40, 130, 20));
-    jLabelTaskActionLabel.setText(res.getString("S394"));
-    jLabelTaskActionLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTaskActionLabel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskActionExecuteIf.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskActionExecuteIf.setBounds(new Rectangle(140, 6, 600, 25));
-    jTextFieldTaskActionExecuteIf.setToolTipText(res.getString("S392"));
-    jTextFieldTaskActionExecuteIf.addFocusListener(new TaskActionTextFieldListener(this));
-    jTextFieldTaskActionLabel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskActionLabel.setBounds(new Rectangle(140, 37, 600, 25));
-    jTextFieldTaskActionLabel.addFocusListener(new TaskActionTextFieldListener(this));
-    jPanelTask20.setPreferredSize(new Dimension(10, 20));
-    jPanelTask20.setLayout(null);
-    jPanelTask19.setBorder(BorderFactory.createEtchedBorder());
-    jLabelTaskFunctionIOSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskFunctionIOSortKey.setOpaque(false);
-    jLabelTaskFunctionIOSortKey.setForeground(Color.WHITE);
-    jLabelTaskFunctionIOOperations.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskFunctionIOOperations.setText(res.getString("S400"));
-    jLabelTaskFunctionIOOperations.setBounds(new Rectangle(5, 0, 180, 20));
-    jTextAreaTaskFunctionIOOperations.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaTaskFunctionIOOperations.setLineWrap(true);
-    jPanelTask22.setBorder(BorderFactory.createEtchedBorder());
-    jPanelTask23.setPreferredSize(new Dimension(10, 20));
-    jPanelTask23.setLayout(null);
-    jLabelTaskFunctionIODescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskFunctionIODescriptions.setText(res.getString("S403"));
-    jLabelTaskFunctionIODescriptions.setBounds(new Rectangle(5, 0, 200, 20));
-    jTextAreaTaskFunctionIODescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaTaskFunctionIODescriptions.setLineWrap(true);
-    jTextAreaTaskFunctionIODescriptions.setEditable(false);
-    jTextAreaTaskFunctionIODescriptions.setBackground(SystemColor.control);
-    jTreeTaskActions.addMouseListener(new MouseAdapter() { public void mouseReleased(MouseEvent e) { Modeler.this.jTreeTaskActions_mouseReleased(e); } });
-    jTreeTaskActions.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTreeTaskActions_keyReleased(e); } });
-    jTabbedPaneTaskFunctionIO.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTabbedPaneTaskFunctionIO.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-    jTabbedPaneTaskFunctionIO.addChangeListener(
-        e -> this.jTabbedPaneTaskFunctionIO_stateChanged(e));
-    jTabbedPaneTaskFunctionIO.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTabbedPaneTaskFunctionIO_mouseClicked(e); } });
-    //
-    jPanelTask.add(jSplitPaneTask, BorderLayout.CENTER);
-    jSplitPaneTask.add(jScrollPaneTask1, JSplitPane.TOP);
-    jSplitPaneTask.add(jSplitPaneTask2, JSplitPane.BOTTOM);
-    jPanelTask3.add(jTextFieldTaskName);
-    jPanelTask3.add(jLabelTaskSortKey);
-    jPanelTask3.add(jTextFieldTaskSortKey);
-    jPanelTask3.add(jLabelSubjectAreaWithThisTask);
-    jPanelTask3.add(jScrollPaneSubjectAreaWithThisTask);
-    jPanelTask1.add(jPanelTask4, BorderLayout.WEST);
-    jPanelTask1.add(jPanelTask2, BorderLayout.CENTER);
-    jPanelTask4.add(jLabelTaskName);
-    jPanelTask4.add(jLabelTaskDescriptions);
-    jPanelTask4.add(jLabelTaskEvent);
-    jPanelTask3.add(jLabelTaskType);
-    jPanelTask2.add(jPanelTask3, BorderLayout.NORTH);
-    jPanelTask2.add(jScrollPaneTaskDescriptions, BorderLayout.CENTER);
-    jScrollPaneTaskDescriptions.getViewport().add(jTextAreaTaskDescriptions);
-    jScrollPaneTaskActions.getViewport().add(jTreeTaskActions);
-    jPanelTask3.add(jTextFieldTaskEvent);
-    jPanelTask3.add(jComboBoxTaskType);
-    jSplitPaneTask2.add(jSplitPaneTask3, JSplitPane.TOP);
-    jSplitPaneTask2.add(jTabbedPaneTaskFunctionIO, JSplitPane.BOTTOM);
-    jSplitPaneTask3.add(jPanelTask5, JSplitPane.LEFT);
-    jSplitPaneTask3.add(jPanelTask15, JSplitPane.RIGHT);
-    jPanelTask15.add(jPanelTask16, BorderLayout.NORTH);
-    jSplitPaneTask5.add(jScrollPaneTaskFunctionIOImage, JSplitPane.LEFT);
-    jSplitPaneTask5.add(jSplitPaneTask4, JSplitPane.RIGHT);
-    jSplitPaneTask4.add(jPanelTask22, JSplitPane.TOP);
-    jSplitPaneTask4.add(jPanelTask19, JSplitPane.BOTTOM);
-    jPanelTask5.add(jPanelTask6, BorderLayout.NORTH);
-    jPanelTask5.add(jScrollPaneTaskActions, BorderLayout.CENTER);
-    jPanelTask6.add(jLabelTaskActions);
-    //
-    jPanelTask15.add(jPanelTask17, BorderLayout.CENTER);
-    jPanelTask17.add(jPanelTask18, BorderLayout.WEST);
-    jPanelTask18.add(jLabelTaskActionDescriptions);
-    jPanelTask17.add(jScrollPaneTaskActionDescriptions, BorderLayout.CENTER);
-    jScrollPaneTaskActionDescriptions.getViewport().add(jTextAreaTaskActionDescriptions);
-    jPanelTask16.add(jLabelTaskActionExecuteIf);
-    jPanelTask16.add(jLabelTaskActionLabel);
-    jPanelTask16.add(jTextFieldTaskActionExecuteIf);
-    jPanelTask16.add(jTextFieldTaskActionLabel);
-    jPanelTask19.add(jPanelTask20, BorderLayout.NORTH);
-    jPanelTask20.add(jLabelTaskFunctionIOOperations);
-    jPanelTask19.add(jScrollPaneTaskFunctionIOOperations, BorderLayout.CENTER);
-    jScrollPaneTaskFunctionIOOperations.getViewport().add(jTextAreaTaskFunctionIOOperations);
-    jPanelTask22.add(jPanelTask23, BorderLayout.NORTH);
-    jPanelTask23.add(jLabelTaskFunctionIODescriptions);
-    jPanelTask22.add(jScrollPaneTaskFunctionIODescriptions, BorderLayout.CENTER);
-    jScrollPaneTaskFunctionIODescriptions.getViewport().add(jTextAreaTaskFunctionIODescriptions);
-    //
-    jLabelTaskFunctionIOImageFunction.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskFunctionIOImageFunction.setBounds(new Rectangle(5, 6, 130, 20));
-    jLabelTaskFunctionIOImageFunction.setText(res.getString("S643"));
-    jLabelTaskFunctionIOImageFunction.setHorizontalAlignment(SwingConstants.RIGHT);
-    jTextFieldTaskFunctionIOImageFunction.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskFunctionIOImageFunction.setBounds(new Rectangle(140, 6, 720, 25));
-    jTextFieldTaskFunctionIOImageFunction.setOpaque(false);
-    jTextFieldTaskFunctionIOImageFunction.setEditable(false);
-    jTextFieldTaskFunctionIOImageFunction.setFocusable(false);
-    jTextFieldTaskFunctionIOImageFunction.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneTaskFunctionIOImage_mouseClicked(e); } });
-    jLabelTaskFunctionIOImageFunctionRemarks.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskFunctionIOImageFunctionRemarks.setBounds(new Rectangle(5, 37, 130, 20));
-    jLabelTaskFunctionIOImageFunctionRemarks.setText(res.getString("S644"));
-    jLabelTaskFunctionIOImageFunctionRemarks.setHorizontalAlignment(SwingConstants.RIGHT);
-    jTextFieldTaskFunctionIOImageFunctionSummary.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskFunctionIOImageFunctionSummary.setBounds(new Rectangle(140, 37, 720, 25));
-    jTextFieldTaskFunctionIOImageFunctionSummary.setOpaque(false);
-    jTextFieldTaskFunctionIOImageFunctionSummary.setEditable(false);
-    jTextFieldTaskFunctionIOImageFunctionSummary.setFocusable(false);
-    jTextFieldTaskFunctionIOImageFunctionSummary.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneTaskFunctionIOImage_mouseClicked(e); } });
-    jLabelTaskFunctionIOImageTable.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskFunctionIOImageTable.setBounds(new Rectangle(5, 68, 130, 20));
-    jLabelTaskFunctionIOImageTable.setText(res.getString("S645"));
-    jLabelTaskFunctionIOImageTable.setHorizontalAlignment(SwingConstants.RIGHT);
-    jTextFieldTaskFunctionIOImageTable.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskFunctionIOImageTable.setBounds(new Rectangle(140, 68, 720, 25));
-    jTextFieldTaskFunctionIOImageTable.setOpaque(false);
-    jTextFieldTaskFunctionIOImageTable.setEditable(false);
-    jTextFieldTaskFunctionIOImageTable.setFocusable(false);
-    jTextFieldTaskFunctionIOImageTable.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneTaskFunctionIOImage_mouseClicked(e); } });
-    jLabelTaskFunctionIOImageTableRemarks.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskFunctionIOImageTableRemarks.setBounds(new Rectangle(5, 99, 130, 20));
-    jLabelTaskFunctionIOImageTableRemarks.setText(res.getString("S646"));
-    jLabelTaskFunctionIOImageTableRemarks.setHorizontalAlignment(SwingConstants.RIGHT);
-    jScrollPaneTaskFunctionIOImageTableRemarks.setBounds(new Rectangle(140, 99, 720, 150));
-    jScrollPaneTaskFunctionIOImageTableRemarks.getViewport()
-        .add(jTextAreaTaskFunctionIOImageTableRemarks, null);
-    jScrollPaneTaskFunctionIOImageTableRemarks.setOpaque(false);
-    jTextAreaTaskFunctionIOImageTableRemarks.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaTaskFunctionIOImageTableRemarks.setOpaque(false);
-    jTextAreaTaskFunctionIOImageTableRemarks.setLineWrap(true);
-    jTextAreaTaskFunctionIOImageTableRemarks.setEditable(false);
-    jTextAreaTaskFunctionIOImageTableRemarks.setFocusable(false);
-    jTextAreaTaskFunctionIOImageTableRemarks.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneTaskFunctionIOImage_mouseClicked(e); } });
-    //
-    jLabelTaskFunctionIOImageFunctionParms.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskFunctionIOImageFunctionParms.setBounds(new Rectangle(5, 68, 130, 20));
-    jLabelTaskFunctionIOImageFunctionParms.setText(res.getString("S313"));
-    jLabelTaskFunctionIOImageFunctionParms.setHorizontalAlignment(SwingConstants.RIGHT);
-    jTextFieldTaskFunctionIOImageFunctionParms.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskFunctionIOImageFunctionParms.setBounds(new Rectangle(140, 68, 720, 25));
-    jTextFieldTaskFunctionIOImageFunctionParms.setOpaque(false);
-    jTextFieldTaskFunctionIOImageFunctionParms.setEditable(false);
-    jTextFieldTaskFunctionIOImageFunctionParms.setFocusable(false);
-    jTextFieldTaskFunctionIOImageFunctionParms.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneTaskFunctionIOImage_mouseClicked(e); } });
-    jLabelTaskFunctionIOImageFunctionReturn.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTaskFunctionIOImageFunctionReturn.setBounds(new Rectangle(5, 99, 130, 20));
-    jLabelTaskFunctionIOImageFunctionReturn.setText(res.getString("S642"));
-    jLabelTaskFunctionIOImageFunctionReturn.setHorizontalAlignment(SwingConstants.RIGHT);
-    jTextFieldTaskFunctionIOImageFunctionReturn.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTaskFunctionIOImageFunctionReturn.setBounds(new Rectangle(140, 99, 720, 25));
-    jTextFieldTaskFunctionIOImageFunctionReturn.setOpaque(false);
-    jTextFieldTaskFunctionIOImageFunctionReturn.setEditable(false);
-    jTextFieldTaskFunctionIOImageFunctionReturn.setFocusable(false);
-    jTextFieldTaskFunctionIOImageFunctionReturn.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneTaskFunctionIOImage_mouseClicked(e); } });
-    //
-    jTableFunctionIOImageIOList.setBackground(SystemColor.control);
-    jTableFunctionIOImageIOList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableFunctionIOImageIOList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableFunctionIOImageIOList.setRowHeight(TABLE_ROW_HEIGHT);
-    jTableFunctionIOImageIOList.setRowSelectionAllowed(false);
-    jTableFunctionIOImageIOList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneTaskFunctionIOImage_mouseClicked(e); } });
-    tableModelFunctionIOImageIOList.addColumn("No.");
-    tableModelFunctionIOImageIOList.addColumn(res.getString("S680"));
-    tableModelFunctionIOImageIOList.addColumn(res.getString("S204"));
-    column0 = jTableFunctionIOImageIOList.getColumnModel().getColumn(0);
-    column1 = jTableFunctionIOImageIOList.getColumnModel().getColumn(1);
-    column2 = jTableFunctionIOImageIOList.getColumnModel().getColumn(2);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(285);
-    column2.setPreferredWidth(497);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    jTableFunctionIOImageIOList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableFunctionIOImageIOList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    jScrollPaneFunctionIOImageIOList.setBorder(null);
-    jScrollPaneFunctionIOImageIOList.getViewport().add(jTableFunctionIOImageIOList);
-    jScrollPaneFunctionIOImageIOList.setBounds(5, 130, 855, 200);
-    jScrollPaneFunctionIOImageIOList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneTaskFunctionIOImage_mouseClicked(e); } });
+    if (taskView != null) {
+      taskView.initComponents(this);
+    }
   }
-
   /**
    * Initialize component for node of SubsystemList
    */
   void jbInitComponentsForSubsystemList() {
-    jPanelSubsystemList.setLayout(new BorderLayout());
-    jPanelSubsystemList.setBackground(SystemColor.control);
-    jScrollPaneSubsystemList.setBorder(null);
-    jTreeFunctionsStructure.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTreeFunctionsStructure.setShowsRootHandles(true);
-    jTreeFunctionsStructure.addTreeWillExpandListener(
-        new TreeWillExpandListener() { public void treeWillExpand(TreeExpansionEvent e) { Modeler.this.jTreeFunctionsStructure_treeWillExpand(e); } public void treeWillCollapse(TreeExpansionEvent e) {} });
-    jTreeFunctionsStructure.addTreeSelectionListener(
-        e -> this.jTreeFunctionsStructure_valueChanged(e));
-    jTreeFunctionsStructure.addMouseListener(
-        new MouseAdapter() { public void mouseReleased(MouseEvent e) { Modeler.this.jTreeFunctionsStructure_mouseReleased(e); } });
-    jTreeFunctionsStructure.getSelectionModel()
-        .setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-    jTreeFunctionsStructure.setRowHeight(TREE_ROW_HEIGHT);
-    jScrollPaneFunctionsStructure.getViewport().add(jTreeFunctionsStructure, null);
-    jPanelSubsystemList.add(jTabbedPaneSubsystemList, BorderLayout.CENTER);
-    jScrollPaneSubsystemList.getViewport().add(jTableSubsystemList, null);
-    jScrollPaneSubsystemList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneSubsystemList_mouseClicked(e); } });
-    jTableSubsystemList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableSubsystemList_mouseClicked(e); } });
-    jTableSubsystemList.addFocusListener(new Modeler_FocusListener());
-    jTableSubsystemList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableFunctionsStructureTableIOList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableFunctionsStructureTableIOList_mouseClicked(e); } });
-    jTableFunctionsStructureTableIOList.addFocusListener(new Modeler_FocusListener());
-    jTabbedPaneSubsystemList.addTab(res.getString("S407"), imageIconSubsystem,
-        jScrollPaneSubsystemList);
-    jTabbedPaneSubsystemList.addTab(res.getString("S408"), imageIconTree,
-        jSplitPaneFunctionsStructure1);
-    jTabbedPaneSubsystemList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    isRequiredToSetupFunctionsStructre = true;
-    jPanelFunctionsStructure.setLayout(null);
-    jLabelFunctionsStructure1.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionsStructure1.setText(res.getString("S411"));
-    jLabelFunctionsStructure1.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionsStructure1.setBounds(new Rectangle(7, 9, 130, 20));
-    jLabelFunctionsStructure2.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionsStructure2.setText(res.getString("S413"));
-    jLabelFunctionsStructure2.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionsStructure2.setBounds(new Rectangle(7, 40, 130, 20));
-    jLabelFunctionsStructure3.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionsStructure3.setText(res.getString("S415"));
-    jLabelFunctionsStructure3.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionsStructure3.setBounds(new Rectangle(7, 71, 130, 20));
-    jLabelFunctionsStructure4.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionsStructure4.setText(res.getString("S417"));
-    jLabelFunctionsStructure4.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionsStructure4.setBounds(new Rectangle(7, 102, 130, 20));
-    jLabelFunctionsStructure5.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionsStructure5.setText(res.getString("S419"));
-    jLabelFunctionsStructure5.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionsStructure5.setBounds(new Rectangle(7, 133, 130, 20));
-    jLabelFunctionsStructure6.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionsStructure6.setText(res.getString("S421"));
-    jLabelFunctionsStructure6.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionsStructure6.setBounds(new Rectangle(7, 164, 130, 20));
-    jTextFieldFunctionsStructureLaunchEvent.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionsStructureLaunchEvent.setBounds(new Rectangle(143, 8, 600, 25));
-    jTextFieldFunctionsStructureLaunchEvent.setBackground(SystemColor.control);
-    jTextFieldFunctionsStructureLaunchEvent.setEditable(false);
-    jTextFieldFunctionsStructureSubsystemName.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionsStructureSubsystemName.setBounds(new Rectangle(143, 39, 400, 25));
-    jTextFieldFunctionsStructureSubsystemName.setBackground(SystemColor.control);
-    jTextFieldFunctionsStructureSubsystemName.setEditable(false);
-    jTextFieldFunctionsStructureFunctionName.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionsStructureFunctionName.setBounds(new Rectangle(143, 70, 400, 25));
-    jTextFieldFunctionsStructureFunctionName.setBackground(SystemColor.control);
-    jTextFieldFunctionsStructureFunctionName.setEditable(false);
-    jTextFieldFunctionsStructureFunctionType.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionsStructureFunctionType.setBounds(new Rectangle(143, 101, 300, 25));
-    jTextFieldFunctionsStructureFunctionType.setBackground(SystemColor.control);
-    jTextFieldFunctionsStructureFunctionType.setEditable(false);
-    jTextFieldFunctionsStructureFunctionSummary.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionsStructureFunctionSummary.setBounds(new Rectangle(143, 132, 757, 25));
-    jTextFieldFunctionsStructureFunctionSummary.setBackground(SystemColor.control);
-    jTextFieldFunctionsStructureFunctionSummary.setEditable(false);
-    jTextFieldFunctionsStructureFunctionParameters.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionsStructureFunctionParameters.setBounds(new Rectangle(143, 163, 500, 25));
-    jTextFieldFunctionsStructureFunctionParameters.setBackground(SystemColor.control);
-    jTextFieldFunctionsStructureFunctionParameters.setEditable(false);
-    jTextFieldFunctionsStructureFunctionReturn.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionsStructureFunctionReturn.setBounds(new Rectangle(650, 163, 250, 25));
-    jTextFieldFunctionsStructureFunctionReturn.setBackground(SystemColor.control);
-    jTextFieldFunctionsStructureFunctionReturn.setEditable(false);
-    jSplitPaneFunctionsStructure1.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-    jSplitPaneFunctionsStructure1.setDividerLocation(350);
-    jSplitPaneFunctionsStructure2.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneFunctionsStructure2.setDividerLocation(196);
-    jSplitPaneFunctionsStructure2.setBorder(null);
-    jPanelFunctionsStructure.setBorder(BorderFactory.createEtchedBorder());
-    jSplitPaneFunctionsStructure1.add(jScrollPaneFunctionsStructure, JSplitPane.LEFT);
-    jSplitPaneFunctionsStructure1.add(jSplitPaneFunctionsStructure2, JSplitPane.RIGHT);
-    jSplitPaneFunctionsStructure2.add(jPanelFunctionsStructure, JSplitPane.TOP);
-    jSplitPaneFunctionsStructure2.add(jTabbedPaneFunctionsStructureIO, JSplitPane.BOTTOM);
-    jPanelFunctionsStructure.add(jLabelFunctionsStructure1, null);
-    jPanelFunctionsStructure.add(jLabelFunctionsStructure2, null);
-    jPanelFunctionsStructure.add(jLabelFunctionsStructure3, null);
-    jPanelFunctionsStructure.add(jLabelFunctionsStructure4, null);
-    jPanelFunctionsStructure.add(jLabelFunctionsStructure5, null);
-    jPanelFunctionsStructure.add(jLabelFunctionsStructure6, null);
-    jPanelFunctionsStructure.add(jTextFieldFunctionsStructureLaunchEvent, null);
-    jPanelFunctionsStructure.add(jTextFieldFunctionsStructureSubsystemName, null);
-    jPanelFunctionsStructure.add(jTextFieldFunctionsStructureFunctionName, null);
-    jPanelFunctionsStructure.add(jTextFieldFunctionsStructureFunctionType, null);
-    jPanelFunctionsStructure.add(jTextFieldFunctionsStructureFunctionSummary, null);
-    jPanelFunctionsStructure.add(jTextFieldFunctionsStructureFunctionParameters, null);
-    jPanelFunctionsStructure.add(jTextFieldFunctionsStructureFunctionReturn, null);
-    jTabbedPaneFunctionsStructureIO.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTabbedPaneFunctionsStructureIO.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-    jTextPaneFunctionsStructureIOImageArray[0] = jTextPaneFunctionsStructureIOImage0;
-    jTextPaneFunctionsStructureIOImageArray[1] = jTextPaneFunctionsStructureIOImage1;
-    jTextPaneFunctionsStructureIOImageArray[2] = jTextPaneFunctionsStructureIOImage2;
-    jTextPaneFunctionsStructureIOImageArray[3] = jTextPaneFunctionsStructureIOImage3;
-    jTextPaneFunctionsStructureIOImageArray[4] = jTextPaneFunctionsStructureIOImage4;
-    jTextPaneFunctionsStructureIOImageArray[5] = jTextPaneFunctionsStructureIOImage5;
-    jTextPaneFunctionsStructureIOImageArray[6] = jTextPaneFunctionsStructureIOImage6;
-    jTextPaneFunctionsStructureIOImageArray[7] = jTextPaneFunctionsStructureIOImage7;
-    jTextPaneFunctionsStructureIOImageArray[8] = jTextPaneFunctionsStructureIOImage8;
-    jTextPaneFunctionsStructureIOImageArray[9] = jTextPaneFunctionsStructureIOImage9;
-    jEditorPaneFunctionsStructureIOImageArray[0] = jEditorPaneFunctionsStructureIOImage0;
-    jEditorPaneFunctionsStructureIOImageArray[1] = jEditorPaneFunctionsStructureIOImage1;
-    jEditorPaneFunctionsStructureIOImageArray[2] = jEditorPaneFunctionsStructureIOImage2;
-    jEditorPaneFunctionsStructureIOImageArray[3] = jEditorPaneFunctionsStructureIOImage3;
-    jEditorPaneFunctionsStructureIOImageArray[4] = jEditorPaneFunctionsStructureIOImage4;
-    jEditorPaneFunctionsStructureIOImageArray[5] = jEditorPaneFunctionsStructureIOImage5;
-    jEditorPaneFunctionsStructureIOImageArray[6] = jEditorPaneFunctionsStructureIOImage6;
-    jEditorPaneFunctionsStructureIOImageArray[7] = jEditorPaneFunctionsStructureIOImage7;
-    jEditorPaneFunctionsStructureIOImageArray[8] = jEditorPaneFunctionsStructureIOImage8;
-    jEditorPaneFunctionsStructureIOImageArray[9] = jEditorPaneFunctionsStructureIOImage9;
-    jPanelFunctionsStructureIOImageArray[0] = jPanelFunctionsStructureIOImage0;
-    jPanelFunctionsStructureIOImageArray[1] = jPanelFunctionsStructureIOImage1;
-    jPanelFunctionsStructureIOImageArray[2] = jPanelFunctionsStructureIOImage2;
-    jPanelFunctionsStructureIOImageArray[3] = jPanelFunctionsStructureIOImage3;
-    jPanelFunctionsStructureIOImageArray[4] = jPanelFunctionsStructureIOImage4;
-    jPanelFunctionsStructureIOImageArray[5] = jPanelFunctionsStructureIOImage5;
-    jPanelFunctionsStructureIOImageArray[6] = jPanelFunctionsStructureIOImage6;
-    jPanelFunctionsStructureIOImageArray[7] = jPanelFunctionsStructureIOImage7;
-    jPanelFunctionsStructureIOImageArray[8] = jPanelFunctionsStructureIOImage8;
-    jPanelFunctionsStructureIOImageArray[9] = jPanelFunctionsStructureIOImage9;
-    jLabelFunctionsStructureIOImageArray[0] = jLabelFunctionsStructureIOImage0;
-    jLabelFunctionsStructureIOImageArray[1] = jLabelFunctionsStructureIOImage1;
-    jLabelFunctionsStructureIOImageArray[2] = jLabelFunctionsStructureIOImage2;
-    jLabelFunctionsStructureIOImageArray[3] = jLabelFunctionsStructureIOImage3;
-    jLabelFunctionsStructureIOImageArray[4] = jLabelFunctionsStructureIOImage4;
-    jLabelFunctionsStructureIOImageArray[5] = jLabelFunctionsStructureIOImage5;
-    jLabelFunctionsStructureIOImageArray[6] = jLabelFunctionsStructureIOImage6;
-    jLabelFunctionsStructureIOImageArray[7] = jLabelFunctionsStructureIOImage7;
-    jLabelFunctionsStructureIOImageArray[8] = jLabelFunctionsStructureIOImage8;
-    jLabelFunctionsStructureIOImageArray[9] = jLabelFunctionsStructureIOImage9;
-    jScrollPaneFunctionsStructureIOImageArray[0] = jScrollPaneFunctionsStructureIOImage0;
-    jScrollPaneFunctionsStructureIOImageArray[1] = jScrollPaneFunctionsStructureIOImage1;
-    jScrollPaneFunctionsStructureIOImageArray[2] = jScrollPaneFunctionsStructureIOImage2;
-    jScrollPaneFunctionsStructureIOImageArray[3] = jScrollPaneFunctionsStructureIOImage3;
-    jScrollPaneFunctionsStructureIOImageArray[4] = jScrollPaneFunctionsStructureIOImage4;
-    jScrollPaneFunctionsStructureIOImageArray[5] = jScrollPaneFunctionsStructureIOImage5;
-    jScrollPaneFunctionsStructureIOImageArray[6] = jScrollPaneFunctionsStructureIOImage6;
-    jScrollPaneFunctionsStructureIOImageArray[7] = jScrollPaneFunctionsStructureIOImage7;
-    jScrollPaneFunctionsStructureIOImageArray[8] = jScrollPaneFunctionsStructureIOImage8;
-    jScrollPaneFunctionsStructureIOImageArray[9] = jScrollPaneFunctionsStructureIOImage9;
-    for (int i = 0; i < 10; i++) {
-      jTextPaneFunctionsStructureIOImageArray[i].setBorder(BorderFactory.createRaisedBevelBorder());
-      jTextPaneFunctionsStructureIOImageArray[i].setPreferredSize(new Dimension(500, 400));
-      jTextPaneFunctionsStructureIOImageArray[i].setBackground(SystemColor.control);
-      jTextPaneFunctionsStructureIOImageArray[i].setFont(new java.awt.Font(ioImageFontName, 0, 12));
-      jTextPaneFunctionsStructureIOImageArray[i].setContentType("text/plain");
-      jTextPaneFunctionsStructureIOImageArray[i].setEditable(false);
-      jTextPaneFunctionsStructureIOImageArray[i].setBounds(10, 10, 500, 400);
-      jEditorPaneFunctionsStructureIOImageArray[i].setBorder(
-          BorderFactory.createRaisedBevelBorder());
-      jEditorPaneFunctionsStructureIOImageArray[i].setEditable(false);
-      jEditorPaneFunctionsStructureIOImageArray[i].setContentType("text/html");
-      jPanelFunctionsStructureIOImageArray[i].setBackground(DESKTOP_COLOR);
-      jPanelFunctionsStructureIOImageArray[i].setLayout(null);
-      jPanelFunctionsStructureIOImageArray[i].setPreferredSize(new Dimension(520, 420));
-      jScrollPaneFunctionsStructureIOImageArray[i].getViewport()
-          .add(jPanelFunctionsStructureIOImageArray[i], null);
-      jTextPaneFunctionsStructureIOImageArray[i].addMouseListener(
-          new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneFunctionsStructureIOImage_mouseClicked(e); } });
-      jEditorPaneFunctionsStructureIOImageArray[i].addMouseListener(
-          new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneFunctionsStructureIOImage_mouseClicked(e); } });
-      jLabelFunctionsStructureIOImageArray[i].addMouseListener(
-          new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jLabelFunctionsStructureIOImage_mouseClicked(e); } });
-    }
-    jScrollPaneFunctionsStructureTableIOList.getViewport()
-        .add(jTableFunctionsStructureTableIOList, null);
-    //(jTableSubsystemList)//
-    jTableSubsystemList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableSubsystemList.setBackground(SystemColor.control);
-    jTableSubsystemList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableSubsystemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableSubsystemList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelSubsystemList.addColumn("No.");
-    tableModelSubsystemList.addColumn(res.getString("S201"));
-    tableModelSubsystemList.addColumn(res.getString("S436"));
-    tableModelSubsystemList.addColumn(res.getString("S437"));
-    tableModelSubsystemList.addColumn(res.getString("S438"));
-    tableModelSubsystemList.addColumn(res.getString("S439"));
-    tableModelSubsystemList.addColumn(res.getString("S440"));
-    tableModelSubsystemList.addColumn(res.getString("S441"));
-    tableModelSubsystemList.addColumn(res.getString("S442"));
-    tableModelSubsystemList.addColumn(res.getString("S443"));
-    tableModelSubsystemList.addColumn(res.getString("S204"));
-    column0 = jTableSubsystemList.getColumnModel().getColumn(0);
-    column1 = jTableSubsystemList.getColumnModel().getColumn(1);
-    column2 = jTableSubsystemList.getColumnModel().getColumn(2);
-    column3 = jTableSubsystemList.getColumnModel().getColumn(3);
-    column4 = jTableSubsystemList.getColumnModel().getColumn(4);
-    column5 = jTableSubsystemList.getColumnModel().getColumn(5);
-    column6 = jTableSubsystemList.getColumnModel().getColumn(6);
-    column7 = jTableSubsystemList.getColumnModel().getColumn(7);
-    column8 = jTableSubsystemList.getColumnModel().getColumn(8);
-    column9 = jTableSubsystemList.getColumnModel().getColumn(9);
-    columnA = jTableSubsystemList.getColumnModel().getColumn(10);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(100);
-    column2.setPreferredWidth(250);
-    column3.setPreferredWidth(35);
-    column4.setPreferredWidth(35);
-    column5.setPreferredWidth(42);
-    column6.setPreferredWidth(42);
-    column7.setPreferredWidth(42);
-    column8.setPreferredWidth(42);
-    column9.setPreferredWidth(47);
-    columnA.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentCenter);
-    column4.setCellRenderer(rendererAlignmentCenter);
-    column5.setCellRenderer(rendererAlignmentCenter);
-    column6.setCellRenderer(rendererAlignmentCenter);
-    column7.setCellRenderer(rendererAlignmentCenter);
-    column8.setCellRenderer(rendererAlignmentCenter);
-    column9.setCellRenderer(rendererAlignmentCenter);
-    columnA.setCellRenderer(rendererAlignmentLeft);
-    jTableSubsystemList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableSubsystemList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableFunctionsStructureTableIOList)//
-    jTableFunctionsStructureTableIOList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableFunctionsStructureTableIOList.setBackground(SystemColor.control);
-    jTableFunctionsStructureTableIOList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableFunctionsStructureTableIOList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableFunctionsStructureTableIOList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelFunctionsStructureTableIOList.addColumn("No.");
-    tableModelFunctionsStructureTableIOList.addColumn(res.getString("S448"));
-    tableModelFunctionsStructureTableIOList.addColumn(res.getString("S449"));
-    tableModelFunctionsStructureTableIOList.addColumn(res.getString("S750"));
-    tableModelFunctionsStructureTableIOList.addColumn("C");
-    tableModelFunctionsStructureTableIOList.addColumn("R");
-    tableModelFunctionsStructureTableIOList.addColumn("U");
-    tableModelFunctionsStructureTableIOList.addColumn("D");
-    column0 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(0);
-    column1 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(1);
-    column2 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(2);
-    column3 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(3);
-    column4 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(4);
-    column5 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(5);
-    column6 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(6);
-    column7 = jTableFunctionsStructureTableIOList.getColumnModel().getColumn(7);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(100);
-    column2.setPreferredWidth(300);
-    column3.setPreferredWidth(130);
-    column4.setPreferredWidth(30);
-    column5.setPreferredWidth(30);
-    column6.setPreferredWidth(30);
-    column7.setPreferredWidth(30);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentCenter);
-    column5.setCellRenderer(rendererAlignmentCenter);
-    column6.setCellRenderer(rendererAlignmentCenter);
-    column7.setCellRenderer(rendererAlignmentCenter);
-    jTableFunctionsStructureTableIOList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableFunctionsStructureTableIOList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    SubsystemListView.initComponents(this);
   }
-
   /**
    * Initialize component for node of Subsystem
    */
   void jbInitComponentsForSubsystem() {
-    jPanelSubsystem.setLayout(new BorderLayout());
-    jPanelSubsystem3.setLayout(null);
-    jTextFieldSubsystemName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSubsystemName.setBounds(new Rectangle(150, 6, 350, 25));
-    jLabelSubsystemDescriptions1.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSubsystemDescriptions1.setMaximumSize(new Dimension(70, 15));
-    jLabelSubsystemDescriptions1.setMinimumSize(new Dimension(70, 15));
-    jLabelSubsystemDescriptions1.setPreferredSize(new Dimension(70, 15));
-    jLabelSubsystemDescriptions1.setHorizontalAlignment(SwingConstants.LEFT);
-    jLabelSubsystemDescriptions1.setText(res.getString("S204"));
-    jLabelSubsystemDescriptions1.setBounds(new Rectangle(7, 0, 130, 22));
-    jLabelSubsystemName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSubsystemName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSubsystemName.setText(res.getString("S436"));
-    jLabelSubsystemName.setBounds(new Rectangle(5, 9, 140, 20));
-    jPanelSubsystem3.setPreferredSize(new Dimension(10, 37));
-    jPanelSubsystem1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelSubsystem1.setPreferredSize(new Dimension(10, 80));
-    jPanelSubsystem1.setLayout(new BorderLayout());
-    jPanelSubsystem2.setLayout(null);
-    jPanelSubsystem2.setPreferredSize(new Dimension(10, 22));
-    jPanelSubsystem2.setMinimumSize(new Dimension(100, 10));
-    jPanelSubsystem.add(jPanelSubsystem3, BorderLayout.NORTH);
-    jPanelSubsystem3.add(jTextFieldSubsystemName, null);
-    jPanelSubsystem3.add(jLabelSubsystemName, null);
-    jPanelSubsystem3.add(jTextFieldSubsystemSortKey, null);
-    jPanelSubsystem3.add(jLabelSubsysytemSortKey, null);
-    jPanelSubsystem1.add(jPanelSubsystem2, BorderLayout.NORTH);
-    jPanelSubsystem2.add(jLabelSubsystemDescriptions1, null);
-    jPanelSubsystem.add(jPanelSubsystem1, BorderLayout.CENTER);
-    jLabelSubsysytemSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelSubsysytemSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelSubsysytemSortKey.setText(res.getString("S201"));
-    jLabelSubsysytemSortKey.setBounds(new Rectangle(510, 9, 130, 20));
-    jTextFieldSubsystemSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldSubsystemSortKey.setBounds(new Rectangle(645, 6, 100, 25));
-    jTextAreaSubsystemDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaSubsystemDescriptions.setLineWrap(true);
-    jPanelSubsystem1.add(jScrollPaneSubsystemDescriptions, BorderLayout.CENTER);
-    jScrollPaneSubsystemDescriptions.getViewport().add(jTextAreaSubsystemDescriptions, null);
+    SubsystemView.initComponents(this);
   }
-
   /**
    * Initialize component for node of TableList
    */
   void jbInitComponentsForTableList() {
-    jPanelTableList.setMinimumSize(new Dimension(103, 70));
-    jPanelTableList.setPreferredSize(new Dimension(459, 430));
-    jPanelTableList.setLayout(new BorderLayout());
-    jPanelDatamodel.setBackground(DESKTOP_COLOR);
-    jPanelDatamodel.setBorder(null);
-    jPanelDatamodel.setLayout(null);
-    jPanelDatamodel.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jPanelDatamodel_mouseClicked(e); } public void mousePressed(MouseEvent e) { Modeler.this.jPanelDatamodel_mousePressed(e); } public void mouseReleased(MouseEvent e) { Modeler.this.jPanelDatamodel_mouseReleased(e); } });
-    jPanelDatamodel.addMouseMotionListener(new MouseMotionAdapter() { public void mouseDragged(MouseEvent e) { Modeler.this.jPanelDatamodel_mouseDragged(e); } });
-    jPanelDatamodel.addMouseWheelListener(e -> this.mouseWheelMoved(e));
-    jPanelTableList.add(jTabbedPaneTableList, BorderLayout.CENTER);
-    jTabbedPaneTableList.addTab(res.getString("S464"), imageIconTable, jScrollPaneNativeTableList);
-    jTabbedPaneTableList.addTab(res.getString("S465"), imageIconForeignTable,
-        jScrollPaneForeignTableList);
-    jTabbedPaneTableList.addTab(res.getString("S466"), imageIconModel, jSplitPaneDatamodel);
-    jTabbedPaneTableList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTabbedPaneTableList.addChangeListener(new TabbedPaneChangeListener(this));
-    jViewportNativeTableList.add(jTableNativeTableList, null);
-    jScrollPaneNativeTableList.setViewport(jViewportNativeTableList);
-    jScrollPaneNativeTableList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneNativeTableList_mouseClicked(e); } });
-    jTableNativeTableList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableNativeTableList_mouseClicked(e); } });
-    jTableNativeTableList.addFocusListener(new Modeler_FocusListener());
-    jTableNativeTableList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jViewportForeignTableList.add(jTableForeignTableList, null);
-    jScrollPaneForeignTableList.setViewport(jViewportForeignTableList);
-    jScrollPaneForeignTableList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneForeignTableList_mouseClicked(e); } });
-    jTableForeignTableList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableForeignTableList_mouseClicked(e); } });
-    jTableForeignTableList.addFocusListener(new Modeler_FocusListener());
-    jTableForeignTableList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    //(jTableNativeTableList)//
-    jTableNativeTableList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableNativeTableList.setBackground(SystemColor.control);
-    jTableNativeTableList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableNativeTableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableNativeTableList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelNativeTableList.addColumn("No.");
-    tableModelNativeTableList.addColumn(res.getString("S201"));
-    tableModelNativeTableList.addColumn(res.getString("S471"));
-    tableModelNativeTableList.addColumn(res.getString("S472"));
-    tableModelNativeTableList.addColumn("C");
-    tableModelNativeTableList.addColumn("R");
-    tableModelNativeTableList.addColumn("U");
-    tableModelNativeTableList.addColumn("D");
-    tableModelNativeTableList.addColumn(res.getString("S477"));
-    tableModelNativeTableList.addColumn(res.getString("S478"));
-    tableModelNativeTableList.addColumn("FLD");
-    tableModelNativeTableList.addColumn(res.getString("S479"));
-    tableModelNativeTableList.addColumn(res.getString("S480"));
-    tableModelNativeTableList.addColumn(res.getString("S481"));
-    tableModelNativeTableList.addColumn(res.getString("S482"));
-    column0 = jTableNativeTableList.getColumnModel().getColumn(0);
-    column1 = jTableNativeTableList.getColumnModel().getColumn(1);
-    column2 = jTableNativeTableList.getColumnModel().getColumn(2);
-    column3 = jTableNativeTableList.getColumnModel().getColumn(3);
-    column4 = jTableNativeTableList.getColumnModel().getColumn(4);
-    column5 = jTableNativeTableList.getColumnModel().getColumn(5);
-    column6 = jTableNativeTableList.getColumnModel().getColumn(6);
-    column7 = jTableNativeTableList.getColumnModel().getColumn(7);
-    column8 = jTableNativeTableList.getColumnModel().getColumn(8);
-    column9 = jTableNativeTableList.getColumnModel().getColumn(9);
-    columnA = jTableNativeTableList.getColumnModel().getColumn(10);
-    columnB = jTableNativeTableList.getColumnModel().getColumn(11);
-    columnC = jTableNativeTableList.getColumnModel().getColumn(12);
-    columnD = jTableNativeTableList.getColumnModel().getColumn(13);
-    columnE = jTableNativeTableList.getColumnModel().getColumn(14);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(120);
-    column2.setPreferredWidth(310);
-    column3.setPreferredWidth(75);
-    column4.setPreferredWidth(30);
-    column5.setPreferredWidth(30);
-    column6.setPreferredWidth(30);
-    column7.setPreferredWidth(30);
-    column8.setPreferredWidth(120);
-    column9.setPreferredWidth(350);
-    columnA.setPreferredWidth(45);
-    columnB.setPreferredWidth(42);
-    columnC.setPreferredWidth(42);
-    columnD.setPreferredWidth(42);
-    columnE.setPreferredWidth(42);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer(this);
-    column3.setCellRenderer(checkBoxRenderer);
-    DefaultCellEditor editorWithCheckBox = new DefaultCellEditor(
-        new JCheckBox(res.getString("S483")));
-    column3.setCellEditor(editorWithCheckBox);
-    column4.setCellRenderer(rendererAlignmentCenter);
-    column5.setCellRenderer(rendererAlignmentCenter);
-    column6.setCellRenderer(rendererAlignmentCenter);
-    column7.setCellRenderer(rendererAlignmentCenter);
-    column8.setCellRenderer(rendererAlignmentLeft);
-    column9.setCellRenderer(rendererAlignmentLeft);
-    columnA.setCellRenderer(rendererAlignmentCenter);
-    columnB.setCellRenderer(rendererAlignmentCenter);
-    columnC.setCellRenderer(rendererAlignmentCenter);
-    columnD.setCellRenderer(rendererAlignmentCenter);
-    columnE.setCellRenderer(rendererAlignmentCenter);
-    jTableNativeTableList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableNativeTableList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableForeignTableList)//
-    jTableForeignTableList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableForeignTableList.setBackground(SystemColor.control);
-    jTableForeignTableList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableForeignTableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableForeignTableList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelForeignTableList.addColumn("No.");
-    tableModelForeignTableList.addColumn(res.getString("S436"));
-    tableModelForeignTableList.addColumn(res.getString("S448"));
-    tableModelForeignTableList.addColumn(res.getString("S471"));
-    tableModelForeignTableList.addColumn(res.getString("S490"));
-    tableModelForeignTableList.addColumn("C");
-    tableModelForeignTableList.addColumn("R");
-    tableModelForeignTableList.addColumn("U");
-    tableModelForeignTableList.addColumn("D");
-    tableModelForeignTableList.addColumn(res.getString("S495"));
-    tableModelForeignTableList.addColumn(res.getString("S496"));
-    tableModelForeignTableList.addColumn("FLD");
-    column0 = jTableForeignTableList.getColumnModel().getColumn(0);
-    column1 = jTableForeignTableList.getColumnModel().getColumn(1);
-    column2 = jTableForeignTableList.getColumnModel().getColumn(2);
-    column3 = jTableForeignTableList.getColumnModel().getColumn(3);
-    column4 = jTableForeignTableList.getColumnModel().getColumn(4);
-    column5 = jTableForeignTableList.getColumnModel().getColumn(5);
-    column6 = jTableForeignTableList.getColumnModel().getColumn(6);
-    column7 = jTableForeignTableList.getColumnModel().getColumn(7);
-    column8 = jTableForeignTableList.getColumnModel().getColumn(8);
-    column9 = jTableForeignTableList.getColumnModel().getColumn(9);
-    columnA = jTableForeignTableList.getColumnModel().getColumn(10);
-    columnB = jTableForeignTableList.getColumnModel().getColumn(11);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(220);
-    column2.setPreferredWidth(120);
-    column3.setPreferredWidth(310);
-    column4.setPreferredWidth(75);
-    column5.setPreferredWidth(30);
-    column6.setPreferredWidth(30);
-    column7.setPreferredWidth(30);
-    column8.setPreferredWidth(30);
-    column9.setPreferredWidth(150);
-    columnA.setPreferredWidth(350);
-    columnB.setPreferredWidth(45);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(checkBoxRenderer);
-    column4.setCellEditor(editorWithCheckBox);
-    column5.setCellRenderer(rendererAlignmentCenter);
-    column6.setCellRenderer(rendererAlignmentCenter);
-    column7.setCellRenderer(rendererAlignmentCenter);
-    column8.setCellRenderer(rendererAlignmentCenter);
-    column9.setCellRenderer(rendererAlignmentLeft);
-    columnA.setCellRenderer(rendererAlignmentLeft);
-    columnB.setCellRenderer(rendererAlignmentCenter);
-    jTableForeignTableList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableForeignTableList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jSplitPaneDatamodel)//
-    jSplitPaneDatamodel.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneDatamodel.setBorder(null);
-    jSplitPaneDatamodel.setDividerLocation(80);
-    jSplitPaneDatamodel.add(jPanelDatamodelTop, JSplitPane.TOP);
-    jSplitPaneDatamodel.add(jScrollPaneDatamodel, JSplitPane.BOTTOM);
-    jPanelDatamodelTop.setBorder(BorderFactory.createEtchedBorder());
-    jPanelDatamodelTop.setMinimumSize(new Dimension(500, 0));
-    jPanelDatamodelTop.setLayout(new BorderLayout());
-    jPanelDatamodelTop.add(jPanelDatamodelDescriptions, BorderLayout.NORTH);
-    jPanelDatamodelTop.add(jScrollPaneDatamodelDescriptions, BorderLayout.CENTER);
-    jPanelDatamodelDescriptions.setLayout(null);
-    jPanelDatamodelDescriptions.setPreferredSize(new Dimension(500, 20));
-    jPanelDatamodelDescriptions.add(jLabelDatamodelDescriptions, null);
-    jLabelDatamodelDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelDatamodelDescriptions.setText(res.getString("S467"));
-    jLabelDatamodelDescriptions.setBounds(new Rectangle(5, 0, 300, 20));
-    jTextAreaDatamodelDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaDatamodelDescriptions.setLineWrap(true);
-    jScrollPaneDatamodelDescriptions.getViewport().add(jTextAreaDatamodelDescriptions, null);
-    jScrollPaneDatamodel.getViewport().add(jPanelDatamodel, null);
-    jScrollPaneDatamodel.getVerticalScrollBar().setUnitIncrement(25);
-    //(Slide Show Screen Dialog)//
-    jDialogDatamodelSlideShow.setResizable(false);
-    jDialogDatamodelSlideShow.setFocusable(true);
-    jDialogDatamodelSlideShow.setUndecorated(true);
-    jDialogDatamodelSlideShow.addKeyListener(
-        new KeyAdapter() { public void keyPressed(KeyEvent e) { Modeler.this.jDialogDatamodelSlideShow_keyPressed(e); } });
-    jPanelDatamodelSlideShow1.setLayout(null);
-    jPanelDatamodelSlideShow1.setBounds(new Rectangle(0, 0, 2000, 1500));
-    jPanelDatamodelSlideShow1.setBackground(DESKTOP_COLOR);
-    jPanelDatamodelSlideShow1.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jPanelDatamodelSlideShow2_mouseClicked(e); } });
-    jPanelDatamodelSlideShow2.setBackground(DESKTOP_COLOR);
-    jPanelDatamodelSlideShow2.setBounds(new Rectangle(0, 20, 2000, 1500));
-    jPanelDatamodelSlideShow2.setLayout(null);
-    jPanelDatamodelSlideShow2.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jPanelDatamodelSlideShow2_mouseClicked(e); } });
-    jLabelDatamodelSlideShowPageGuide.setFont(new java.awt.Font(mainFontName, 0, 17));
-    jLabelDatamodelSlideShowPageGuide.setForeground(Color.lightGray);
-    jLabelDatamodelSlideShowPageGuide.setBounds(new Rectangle(15, 15, 600, 20));
-    jDialogDatamodelSlideShow.getContentPane().add(jPanelDatamodelSlideShow1, null);
-    jPanelDatamodelSlideShow1.add(jLabelDatamodelSlideShowPageGuide, null);
-    jPanelDatamodelSlideShow1.add(jPanelDatamodelSlideShow2, null);
+    TableListView.initComponents(this);
   }
-
   /**
    * Initialize component for node of Table
    */
   void jbInitComponentsForTable() {
-    jPanelTable.setMinimumSize(new Dimension(103, 70));
-    jPanelTable.setPreferredSize(new Dimension(459, 430));
-    jPanelTable.setLayout(new BorderLayout());
-    jSplitPaneTable.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneTable.setBorder(null);
-    jSplitPaneTable.setDividerLocation(180);
-    jPanelTable2.setLayout(null);
-    jPanelTable2.setMinimumSize(new Dimension(100, 20));
-    jPanelTable2.setPreferredSize(new Dimension(140, 80));
-    jPanelTable4.setLayout(null);
-    jPanelTable4.setPreferredSize(new Dimension(10, 99));
-    jLabelTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableName.setText(res.getString("S471"));
-    jLabelTableName.setBounds(new Rectangle(5, 9, 130, 20));
-    jTextFieldTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTableName.setBounds(new Rectangle(0, 6, 350, 25));
-    jLabelTableSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableSortKey.setText(res.getString("S201"));
-    jLabelTableSortKey.setBounds(new Rectangle(360, 9, 130, 20));
-    jTextFieldTableSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTableSortKey.setBounds(new Rectangle(495, 6, 245, 25));
-    jLabelTableAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableAlias.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableAlias.setText(res.getString("S473"));
-    jLabelTableAlias.setBounds(new Rectangle(745, 9, 100, 20));
-    jTextFieldTableAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTableAlias.setBounds(new Rectangle(850, 6, 200, 25));
-    jLabelTableType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableType.setRequestFocusEnabled(true);
-    jLabelTableType.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableType.setText(res.getString("S502"));
-    jLabelTableType.setBounds(new Rectangle(745, 40, 100, 20));
-    jComboBoxTableType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jComboBoxTableType.setActionCommand("comboBoxChanged");
-    jComboBoxTableType.setBounds(new Rectangle(850, 37, 200, 25));
-    jLabelTablePK.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTablePK.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTablePK.setText(res.getString("S508"));
-    jLabelTablePK.setBounds(new Rectangle(5, 40, 130, 20));
-    jTextFieldTablePK.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTablePK.setEditable(false);
-    jTextFieldTablePK.setBounds(new Rectangle(0, 37, 740, 25));
-    jLabelTableSynchronize.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableSynchronize.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableSynchronize.setText(res.getString("S510"));
-    jLabelTableSynchronize.setBounds(new Rectangle(5, 71, 130, 20));
-    jTextFieldTableSynchronize.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTableSynchronize.setBounds(new Rectangle(0, 68, 740, 25));
-    jTextFieldTableSynchronize.addKeyListener(
-        new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTextFieldTableSynchronize_keyReleased(e); } });
-    jButtonTableSynchronize.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jButtonTableSynchronize.setText(res.getString("S511"));
-    jButtonTableSynchronize.setBounds(new Rectangle(745, 67, 180, 27));
-    jButtonTableSynchronize.addActionListener(
-        this::jButtonTableSynchronize_actionPerformed);
-    jLabelTableDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableDescriptions.setText(res.getString("S204"));
-    jLabelTableDescriptions.setBounds(new Rectangle(5, 99, 130, 20));
-    jTextAreaTableDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaTableDescriptions.setLineWrap(true);
-    jTextAreaTableCreateStatement.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaTableCreateStatement.setEditable(false);
-    jTextAreaTableCreateStatement.setBackground(SystemColor.control);
-    jScrollPaneTable1.setBorder(null);
-    jScrollPaneTable1.getViewport().add(jPanelTable1);
-    jPanelTable1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelTable1.setMinimumSize(new Dimension(100, 38));
-    jPanelTable1.setPreferredSize(new Dimension(1200, 140));
-    jPanelTable1.setLayout(new BorderLayout());
-    jPanelTable3.setLayout(new BorderLayout());
-    jTableTableUsageList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableTableUsageList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableTableUsageList.setBackground(SystemColor.control);
-    jTableTableUsageList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTableUsageList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableTableUsageList_mouseClicked(e); } });
-    jTableTableUsageList.addFocusListener(new Modeler_FocusListener());
-    jTableTableUsageList.setRowHeight(TABLE_ROW_HEIGHT);
-    jTabbedPaneTable.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTableForeignUsageList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableTableForeignUsageList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableTableForeignUsageList.setBackground(SystemColor.control);
-    jTableTableForeignUsageList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTableForeignUsageList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableTableForeignUsageList_mouseClicked(e); } });
-    jTableTableForeignUsageList.addFocusListener(new Modeler_FocusListener());
-    jTableTableForeignUsageList.setRowHeight(TABLE_ROW_HEIGHT);
-    jTableTableReferringFileList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableTableReferringFileList.setBackground(SystemColor.control);
-    jTableTableReferringFileList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTableReferringFileList.addFocusListener(new Modeler_FocusListener());
-    jTableTableReferringFileList.setRowHeight(TABLE_ROW_HEIGHT);
-    jPanelTable.add(jSplitPaneTable, BorderLayout.CENTER);
-    jSplitPaneTable.add(jTabbedPaneTable, JSplitPane.BOTTOM);
-    jSplitPaneTable.add(jScrollPaneTable1, JSplitPane.TOP);
-    jPanelTable1.add(jPanelTable2, BorderLayout.WEST);
-    jPanelTable1.add(jPanelTable3, BorderLayout.CENTER);
-    jPanelTable2.add(jLabelTableName);
-    jPanelTable2.add(jLabelTablePK);
-    jPanelTable2.add(jLabelTableSynchronize);
-    jPanelTable2.add(jLabelTableDescriptions);
-    jPanelTable3.add(jScrollPaneTableDescriptions, BorderLayout.CENTER);
-    jPanelTable3.add(jPanelTable4, BorderLayout.NORTH);
-    jPanelTable4.add(jTextFieldTableName);
-    jPanelTable4.add(jTextFieldTableAlias);
-    jPanelTable4.add(jTextFieldTablePK);
-    jPanelTable4.add(jTextFieldTableSynchronize);
-    jPanelTable4.add(jButtonTableSynchronize);
-    jPanelTable4.add(jLabelTableSortKey, null);
-    jPanelTable4.add(jLabelTableAlias);
-    jPanelTable4.add(jTextFieldTableSortKey, null);
-    jPanelTable4.add(jLabelTableType, null);
-    jPanelTable4.add(jComboBoxTableType, null);
-    jTabbedPaneTable.addTab(res.getString("S518"), imageIconTable, jScrollPaneTableCreateStatement);
-    jTabbedPaneTable.addTab(res.getString("S519"), imageIconFunction, jScrollPaneTableUsageList);
-    jTabbedPaneTable.addTab(res.getString("S520"), imageIconForeignFunction,
-        jScrollPaneTableForeignUsageList);
-    jTabbedPaneTable.addTab(res.getString("S521"), imageIconSystem,
-        jScrollPaneTableReferringFileList);
-    jScrollPaneTableForeignUsageList.getViewport().add(jTableTableForeignUsageList, null);
-    jScrollPaneTableForeignUsageList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneTableForeignUsageList_mouseClicked(e); } });
-    jScrollPaneTableReferringFileList.getViewport().add(jTableTableReferringFileList, null);
-    jScrollPaneTableReferringFileList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneTableReferringFileList_mouseClicked(e); } });
-    jScrollPaneTableUsageList.getViewport().add(jTableTableUsageList, null);
-    jScrollPaneTableUsageList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneTableUsageList_mouseClicked(e); } });
-    jScrollPaneTableDescriptions.getViewport().add(jTextAreaTableDescriptions, null);
-    jScrollPaneTableCreateStatement.getViewport().add(jTextAreaTableCreateStatement, null);
-    //(jTableTableUsageList)//
-    tableModelTableUsageList.addColumn("No.");
-    tableModelTableUsageList.addColumn("ID");
-    tableModelTableUsageList.addColumn(res.getString("S523"));
-    tableModelTableUsageList.addColumn(res.getString("S639"));
-    tableModelTableUsageList.addColumn(res.getString("S750"));
-    tableModelTableUsageList.addColumn("C");
-    tableModelTableUsageList.addColumn("R");
-    tableModelTableUsageList.addColumn("U");
-    tableModelTableUsageList.addColumn("D");
-    column0 = jTableTableUsageList.getColumnModel().getColumn(0);
-    column1 = jTableTableUsageList.getColumnModel().getColumn(1);
-    column2 = jTableTableUsageList.getColumnModel().getColumn(2);
-    column3 = jTableTableUsageList.getColumnModel().getColumn(3);
-    column4 = jTableTableUsageList.getColumnModel().getColumn(4);
-    column5 = jTableTableUsageList.getColumnModel().getColumn(5);
-    column6 = jTableTableUsageList.getColumnModel().getColumn(6);
-    column7 = jTableTableUsageList.getColumnModel().getColumn(7);
-    column8 = jTableTableUsageList.getColumnModel().getColumn(8);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(150);
-    column2.setPreferredWidth(350);
-    column3.setPreferredWidth(230);
-    column4.setPreferredWidth(160);
-    column5.setPreferredWidth(30);
-    column6.setPreferredWidth(30);
-    column7.setPreferredWidth(30);
-    column8.setPreferredWidth(30);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    column5.setCellRenderer(rendererAlignmentCenter);
-    column6.setCellRenderer(rendererAlignmentCenter);
-    column7.setCellRenderer(rendererAlignmentCenter);
-    column8.setCellRenderer(rendererAlignmentCenter);
-    jTableTableUsageList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableTableUsageList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableTableForeignUsageList)//
-    tableModelTableForeignUsageList.addColumn("No.");
-    tableModelTableForeignUsageList.addColumn(res.getString("S436"));
-    tableModelTableForeignUsageList.addColumn("ID");
-    tableModelTableForeignUsageList.addColumn(res.getString("S532"));
-    tableModelTableForeignUsageList.addColumn(res.getString("S639"));
-    tableModelTableForeignUsageList.addColumn(res.getString("S750"));
-    tableModelTableForeignUsageList.addColumn("C");
-    tableModelTableForeignUsageList.addColumn("R");
-    tableModelTableForeignUsageList.addColumn("U");
-    tableModelTableForeignUsageList.addColumn("D");
-    column0 = jTableTableForeignUsageList.getColumnModel().getColumn(0);
-    column1 = jTableTableForeignUsageList.getColumnModel().getColumn(1);
-    column2 = jTableTableForeignUsageList.getColumnModel().getColumn(2);
-    column3 = jTableTableForeignUsageList.getColumnModel().getColumn(3);
-    column4 = jTableTableForeignUsageList.getColumnModel().getColumn(4);
-    column5 = jTableTableForeignUsageList.getColumnModel().getColumn(5);
-    column6 = jTableTableForeignUsageList.getColumnModel().getColumn(6);
-    column7 = jTableTableForeignUsageList.getColumnModel().getColumn(7);
-    column8 = jTableTableForeignUsageList.getColumnModel().getColumn(8);
-    column9 = jTableTableForeignUsageList.getColumnModel().getColumn(9);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(350);
-    column2.setPreferredWidth(150);
-    column3.setPreferredWidth(350);
-    column4.setPreferredWidth(230);
-    column5.setPreferredWidth(160);
-    column6.setPreferredWidth(30);
-    column7.setPreferredWidth(30);
-    column8.setPreferredWidth(30);
-    column9.setPreferredWidth(30);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    column5.setCellRenderer(rendererAlignmentLeft);
-    column6.setCellRenderer(rendererAlignmentCenter);
-    column7.setCellRenderer(rendererAlignmentCenter);
-    column8.setCellRenderer(rendererAlignmentCenter);
-    column9.setCellRenderer(rendererAlignmentCenter);
-    jTableTableForeignUsageList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableTableForeignUsageList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableTableReferringFileList)//
-    tableModelTableReferringFileList.addColumn("No.");
-    tableModelTableReferringFileList.addColumn(res.getString("S435"));
-    tableModelTableReferringFileList.addColumn(res.getString("S49"));
-    tableModelTableReferringFileList.addColumn(res.getString("S436"));
-    tableModelTableReferringFileList.addColumn(res.getString("S434"));
-    column0 = jTableTableReferringFileList.getColumnModel().getColumn(0);
-    column1 = jTableTableReferringFileList.getColumnModel().getColumn(1);
-    column2 = jTableTableReferringFileList.getColumnModel().getColumn(2);
-    column3 = jTableTableReferringFileList.getColumnModel().getColumn(3);
-    column4 = jTableTableReferringFileList.getColumnModel().getColumn(4);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(250);
-    column2.setPreferredWidth(400);
-    column3.setPreferredWidth(400);
-    column4.setPreferredWidth(90);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentCenter);
-    jTableTableReferringFileList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableTableReferringFileList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    TableView.initComponents(this);
   }
-
   /**
    * Initialize component for node of TableFieldList
    */
   void jbInitComponentsForTableFieldList() {
-    jPanelTableFieldList.setLayout(new BorderLayout());
-    jPanelTableFieldList.setBackground(SystemColor.control);
-    jScrollPaneTableFieldList.setBorder(null);
-    jPanelTableFieldList.add(jScrollPaneTableFieldList, BorderLayout.CENTER);
-    jViewportTableFieldList.add(jTableTableFieldList, null);
-    jScrollPaneTableFieldList.setViewport(jViewportTableFieldList);
-    jScrollPaneTableFieldList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneTableFieldList_mouseClicked(e); } });
-    jTableTableFieldList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableTableFieldList_mouseClicked(e); } public void mousePressed(MouseEvent e) { Modeler.this.jTableTableFieldList_mousePressed(e); } public void mouseReleased(MouseEvent e) { Modeler.this.jTableTableFieldList_mouseReleased(e); } });
-    jTableTableFieldList.addMouseMotionListener(
-        new MouseMotionAdapter() { public void mouseDragged(MouseEvent e) { Modeler.this.jTableTableFieldList_mouseDragged(e); } });
-    jTableTableFieldList.addFocusListener(new Modeler_FocusListener());
-    jTableTableFieldList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableTableFieldList.setRowHeight(TABLE_ROW_HEIGHT);
-    //(jTableTableFieldList)//
-    jTableTableFieldList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTableFieldList.setBackground(SystemColor.control);
-    jTableTableFieldList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableTableFieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    tableModelTableFieldList.addColumn("No.");
-    tableModelTableFieldList.addColumn(res.getString("S297"));
-    tableModelTableFieldList.addColumn(res.getString("S542"));
-    tableModelTableFieldList.addColumn(res.getString("S547"));
-    tableModelTableFieldList.addColumn(res.getString("S543"));
-    tableModelTableFieldList.addColumn(res.getString("S544"));
-    tableModelTableFieldList.addColumn("Null");
-    tableModelTableFieldList.addColumn(res.getString("S581"));
-    tableModelTableFieldList.addColumn(res.getString("S546"));
-    tableModelTableFieldList.addColumn(res.getString("S204"));
-    column0 = jTableTableFieldList.getColumnModel().getColumn(0);
-    column1 = jTableTableFieldList.getColumnModel().getColumn(1);
-    column2 = jTableTableFieldList.getColumnModel().getColumn(2);
-    column3 = jTableTableFieldList.getColumnModel().getColumn(3);
-    column4 = jTableTableFieldList.getColumnModel().getColumn(4);
-    column5 = jTableTableFieldList.getColumnModel().getColumn(5);
-    column6 = jTableTableFieldList.getColumnModel().getColumn(6);
-    column7 = jTableTableFieldList.getColumnModel().getColumn(7);
-    column8 = jTableTableFieldList.getColumnModel().getColumn(8);
-    column9 = jTableTableFieldList.getColumnModel().getColumn(9);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(200);
-    column2.setPreferredWidth(200);
-    column3.setPreferredWidth(80);
-    column4.setPreferredWidth(93);
-    column5.setPreferredWidth(150);
-    column6.setPreferredWidth(45);
-    column7.setPreferredWidth(45);
-    column8.setPreferredWidth(70);
-    column9.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    CheckBoxHeaderRenderer checkBoxHeaderRenderer = new CheckBoxHeaderRenderer(
-        this, new CheckBoxHeaderListener(this));
-    column3.setHeaderRenderer(checkBoxHeaderRenderer);
-    CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer(this);
-    column3.setCellRenderer(checkBoxRenderer);
-    DefaultCellEditor editorWithCheckBox = new DefaultCellEditor(
-        new JCheckBox(res.getString("S483")));
-    column3.setCellEditor(editorWithCheckBox);
-    column4.setCellRenderer(rendererAlignmentCenter);
-    column5.setCellRenderer(rendererAlignmentLeft);
-    column6.setCellRenderer(rendererAlignmentCenter);
-    column7.setCellRenderer(rendererAlignmentCenter);
-    column8.setCellRenderer(rendererAlignmentCenter);
-    column9.setCellRenderer(rendererAlignmentLeft);
-    jTableTableFieldList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableTableFieldList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    TableFieldListView.initComponents(this);
   }
-
   /**
    * Initialize component for node of TableField
    */
   void jbInitComponentsForTableField() {
-    jSplitPaneTableField1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneTableField1.setBorder(null);
-    jSplitPaneTableField1.setDividerLocation(190);
-    //jScrollPaneTask1.setBorder(null);
-    //jScrollPaneTask1.getViewport().add(jPanelTask1);
-    jLabelTableFieldName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableFieldName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableFieldName.setText(res.getString("S577"));
-    jLabelTableFieldName.setBounds(new Rectangle(5, 9, 130, 20));
-    jTextFieldTableFieldName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTableFieldName.setBounds(new Rectangle(140, 6, 250, 25));
-    jLabelTableFieldAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableFieldAlias.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableFieldAlias.setText(res.getString("S297"));
-    jLabelTableFieldAlias.setBounds(new Rectangle(465, 9, 130, 20));
-    jTextFieldTableFieldAlias.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTableFieldAlias.setBounds(new Rectangle(600, 6, 300, 25));
-    jCheckBoxTableFieldNotNull.setBounds(new Rectangle(920, 8, 120, 25));
-    jCheckBoxTableFieldNotNull.setText("Not Null");
-    jCheckBoxTableFieldNotNull.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jCheckBoxTableFieldNoUpdate.setBounds(new Rectangle(1060, 8, 130, 25));
-    jCheckBoxTableFieldNoUpdate.setText(res.getString("S582"));
-    jCheckBoxTableFieldNoUpdate.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jCheckBoxTableFieldShowOnModel.setBounds(new Rectangle(1190, 8, 160, 25));
-    jCheckBoxTableFieldShowOnModel.setText(res.getString("S583"));
-    jCheckBoxTableFieldShowOnModel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jCheckBoxTableFieldShowOnModel.setToolTipText(res.getString("S585"));
-    jLabelTableFieldDataType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableFieldDataType.setRequestFocusEnabled(true);
-    jLabelTableFieldDataType.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableFieldDataType.setText(res.getString("S556"));
-    jLabelTableFieldDataType.setBounds(new Rectangle(5, 40, 130, 20));
-    jTextFieldTableFieldDataType.setBounds(new Rectangle(140, 37, 250, 25));
-    jTextFieldTableFieldDataType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTableFieldDataType.setBackground(SystemColor.control);
-    jTextFieldTableFieldDataType.setEditable(false);
-    jButtonTableFieldDataTypeChange.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jButtonTableFieldDataTypeChange.setText("Edit");
-    jButtonTableFieldDataTypeChange.setBounds(new Rectangle(390, 36, 70, 27));
-    jButtonTableFieldDataTypeChange.addActionListener(
-        this::jButtonTableFieldDataTypeChange_actionPerformed);
-    jMenuItemAddDataType.setText(res.getString("S550"));
-    jMenuItemAddDataType.addActionListener(this::jMenuItemAddDataType_actionPerformed);
-    jLabelTableFieldAttributeType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableFieldAttributeType.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableFieldAttributeType.setText(res.getString("S554"));
-    jLabelTableFieldAttributeType.setBounds(new Rectangle(465, 40, 130, 20));
-    jPanelTableField3.setBorder(BorderFactory.createEtchedBorder());
-    jPanelTableField3.setBounds(new Rectangle(600, 36, 410, 27));
-    jPanelTableField3.setLayout(null);
-    jRadioButtonTableFieldAttributeTypeNATIVE.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jRadioButtonTableFieldAttributeTypeNATIVE.setText(res.getString("S558"));
-    jRadioButtonTableFieldAttributeTypeNATIVE.setToolTipText(res.getString("S559"));
-    jRadioButtonTableFieldAttributeTypeNATIVE.setBounds(new Rectangle(2, 2, 130, 22));
-    jRadioButtonTableFieldAttributeTypeINHERITED.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jRadioButtonTableFieldAttributeTypeINHERITED.setText(res.getString("S561"));
-    jRadioButtonTableFieldAttributeTypeINHERITED.setToolTipText(res.getString("S562"));
-    jRadioButtonTableFieldAttributeTypeINHERITED.setBounds(new Rectangle(135, 2, 130, 22));
-    jRadioButtonTableFieldAttributeTypeDERIVABLE.setFont(
-        new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jRadioButtonTableFieldAttributeTypeDERIVABLE.setText(res.getString("S564"));
-    jRadioButtonTableFieldAttributeTypeDERIVABLE.setToolTipText(res.getString("S565"));
-    jRadioButtonTableFieldAttributeTypeDERIVABLE.setBounds(new Rectangle(268, 2, 130, 22));
-    buttonGroupTableFieldAttributeType.add(jRadioButtonTableFieldAttributeTypeNATIVE);
-    buttonGroupTableFieldAttributeType.add(jRadioButtonTableFieldAttributeTypeINHERITED);
-    buttonGroupTableFieldAttributeType.add(jRadioButtonTableFieldAttributeTypeDERIVABLE);
-    jLabelTableFieldDefault.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableFieldDefault.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableFieldDefault.setText(res.getString("S569"));
-    jLabelTableFieldDefault.setBounds(new Rectangle(1010, 40, 100, 20));
-    jTextFieldTableFieldDefault.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTableFieldDefault.setBounds(new Rectangle(1115, 37, 70, 25));
-    jLabelTableFieldDescriptions.setText(res.getString("S204"));
-    jLabelTableFieldDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableFieldDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaTableFieldDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaTableFieldDescriptions.setLineWrap(true);
-    jPanelTableField4.setLayout(new BorderLayout());
-    jPanelTableField4.setBorder(null);
-    jPanelTableField4.setMinimumSize(new Dimension(100, 50));
-    jPanelTableField5.setBorder(null);
-    jPanelTableField5.setPreferredSize(new Dimension(140, 80));
-    jPanelTableField5.setLayout(null);
-    jPanelTableField6.setLayout(new BorderLayout());
-    jPanelTableField6.setBorder(null);
-    jLabelTableFieldDescriptions.setBounds(new Rectangle(5, 2, 130, 20));
-    jPanelTableField.setLayout(new BorderLayout());
-    jTableTableFieldUsageList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTableFieldUsageList.setBackground(SystemColor.control);
-    jTableTableFieldUsageList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableTableFieldUsageList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableTableFieldUsageList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableTableFieldUsageList_mouseClicked(e); } });
-    jTableTableFieldUsageList.addFocusListener(new Modeler_FocusListener());
-    jTableTableFieldUsageList.setRowHeight(TABLE_ROW_HEIGHT);
-    jTabbedPaneTableField.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTableFieldForeignUsageList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableTableFieldForeignUsageList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableTableFieldForeignUsageList.setBackground(SystemColor.control);
-    jTableTableFieldForeignUsageList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTableFieldForeignUsageList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableTableFieldForeignUsageList_mouseClicked(e); } });
-    jTableTableFieldForeignUsageList.addFocusListener(new Modeler_FocusListener());
-    jTableTableFieldForeignUsageList.setRowHeight(TABLE_ROW_HEIGHT);
-    jPanelTableField2.setPreferredSize(new Dimension(10, 68));
-    jPanelTableField2.setLayout(null);
-    jScrollPaneTableField1.setBorder(null);
-    jScrollPaneTableField1.getViewport().add(jPanelTableField1);
-    jPanelTableField1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelTableField1.setMinimumSize(new Dimension(100, 38));
-    jPanelTableField1.setPreferredSize(new Dimension(1330, 130));
-    jPanelTableField1.setLayout(new BorderLayout());
-    jTabbedPaneTableField.addTab(res.getString("S519"), imageIconFunction,
-        jScrollPaneTableFieldUsageList);
-    jTabbedPaneTableField.addTab(res.getString("S520"), imageIconForeignFunction,
-        jScrollPaneTableFieldForeignUsageList);
-    jSplitPaneTableField1.add(jScrollPaneTableField1, JSplitPane.TOP);
-    jSplitPaneTableField1.add(jTabbedPaneTableField, JSplitPane.BOTTOM);
-    jPanelTableField.add(jSplitPaneTableField1, BorderLayout.CENTER);
-    jPanelTableField1.add(jPanelTableField2, BorderLayout.NORTH);
-    jPanelTableField1.add(jPanelTableField4, BorderLayout.CENTER);
-    jPanelTableField2.add(jLabelTableFieldName);
-    jPanelTableField2.add(jTextFieldTableFieldName);
-    jPanelTableField2.add(jLabelTableFieldDataType);
-    jPanelTableField2.add(jTextFieldTableFieldDataType);
-    jPanelTableField2.add(jLabelTableFieldAlias);
-    jPanelTableField2.add(jTextFieldTableFieldAlias);
-    jPanelTableField2.add(jButtonTableFieldDataTypeChange);
-    jPanelTableField2.add(jLabelTableFieldAttributeType);
-    jPanelTableField2.add(jCheckBoxTableFieldNotNull);
-    jPanelTableField2.add(jCheckBoxTableFieldNoUpdate);
-    jPanelTableField2.add(jCheckBoxTableFieldShowOnModel);
-    jPanelTableField2.add(jLabelTableFieldDefault);
-    jPanelTableField2.add(jTextFieldTableFieldDefault);
-    jPanelTableField2.add(jPanelTableField3);
-    jPanelTableField3.add(jRadioButtonTableFieldAttributeTypeDERIVABLE);
-    jPanelTableField3.add(jRadioButtonTableFieldAttributeTypeNATIVE);
-    jPanelTableField3.add(jRadioButtonTableFieldAttributeTypeINHERITED);
-    jPanelTableField4.add(jPanelTableField5, BorderLayout.WEST);
-    jPanelTableField4.add(jScrollPaneTableFieldDescriptions, BorderLayout.CENTER);
-    jPanelTableField5.add(jLabelTableFieldDescriptions);
-    jScrollPaneTableFieldUsageList.getViewport().add(jTableTableFieldUsageList);
-    jScrollPaneTableFieldUsageList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneTableFieldUsageList_mouseClicked(e); } });
-    jScrollPaneTableFieldForeignUsageList.getViewport().add(jTableTableFieldForeignUsageList, null);
-    jScrollPaneTableFieldForeignUsageList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneTableFieldForeignUsageList_mouseClicked(e); } });
-    jScrollPaneTableFieldDescriptions.getViewport().add(jTextAreaTableFieldDescriptions, null);
-    //(jTableTableFieldUsageList)//
-    tableModelTableFieldUsageList.addColumn("No.");
-    tableModelTableFieldUsageList.addColumn("ID");
-    tableModelTableFieldUsageList.addColumn(res.getString("S592"));
-    tableModelTableFieldUsageList.addColumn(res.getString("S750"));
-    tableModelTableFieldUsageList.addColumn("C");
-    tableModelTableFieldUsageList.addColumn("R");
-    tableModelTableFieldUsageList.addColumn("U");
-    tableModelTableFieldUsageList.addColumn("D");
-    tableModelTableFieldUsageList.addColumn(res.getString("S597"));
-    column0 = jTableTableFieldUsageList.getColumnModel().getColumn(0);
-    column1 = jTableTableFieldUsageList.getColumnModel().getColumn(1);
-    column2 = jTableTableFieldUsageList.getColumnModel().getColumn(2);
-    column3 = jTableTableFieldUsageList.getColumnModel().getColumn(3);
-    column4 = jTableTableFieldUsageList.getColumnModel().getColumn(4);
-    column5 = jTableTableFieldUsageList.getColumnModel().getColumn(5);
-    column6 = jTableTableFieldUsageList.getColumnModel().getColumn(6);
-    column7 = jTableTableFieldUsageList.getColumnModel().getColumn(7);
-    column8 = jTableTableFieldUsageList.getColumnModel().getColumn(8);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(150);
-    column2.setPreferredWidth(400);
-    column3.setPreferredWidth(130);
-    column4.setPreferredWidth(30);
-    column5.setPreferredWidth(30);
-    column6.setPreferredWidth(30);
-    column7.setPreferredWidth(30);
-    column8.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentCenter);
-    column5.setCellRenderer(rendererAlignmentCenter);
-    column6.setCellRenderer(rendererAlignmentCenter);
-    column7.setCellRenderer(rendererAlignmentCenter);
-    column8.setCellRenderer(rendererAlignmentLeft);
-    jTableTableFieldUsageList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableTableFieldUsageList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableTableFieldForeignUsageList)//
-    tableModelTableFieldForeignUsageList.addColumn("No.");
-    tableModelTableFieldForeignUsageList.addColumn(res.getString("S436"));
-    tableModelTableFieldForeignUsageList.addColumn("ID");
-    tableModelTableFieldForeignUsageList.addColumn(res.getString("S602"));
-    tableModelTableFieldForeignUsageList.addColumn(res.getString("S750"));
-    tableModelTableFieldForeignUsageList.addColumn("C");
-    tableModelTableFieldForeignUsageList.addColumn("R");
-    tableModelTableFieldForeignUsageList.addColumn("U");
-    tableModelTableFieldForeignUsageList.addColumn("D");
-    tableModelTableFieldForeignUsageList.addColumn(res.getString("S607"));
-    column0 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(0);
-    column1 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(1);
-    column2 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(2);
-    column3 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(3);
-    column4 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(4);
-    column5 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(5);
-    column6 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(6);
-    column7 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(7);
-    column8 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(8);
-    column9 = jTableTableFieldForeignUsageList.getColumnModel().getColumn(9);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(300);
-    column2.setPreferredWidth(150);
-    column3.setPreferredWidth(350);
-    column4.setPreferredWidth(130);
-    column5.setPreferredWidth(30);
-    column6.setPreferredWidth(30);
-    column7.setPreferredWidth(30);
-    column8.setPreferredWidth(30);
-    column9.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    column5.setCellRenderer(rendererAlignmentCenter);
-    column6.setCellRenderer(rendererAlignmentCenter);
-    column7.setCellRenderer(rendererAlignmentCenter);
-    column8.setCellRenderer(rendererAlignmentCenter);
-    column9.setCellRenderer(rendererAlignmentLeft);
-    jTableTableFieldForeignUsageList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableTableFieldForeignUsageList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    TableFieldView.initComponents(this);
   }
-
   /**
    * Initialize component for node of TableKeyList
    */
   void jbInitComponentsForTableKeyList() {
-    jPanelTableKeyList.setLayout(new BorderLayout());
-    jPanelTableKeyList.setBackground(SystemColor.control);
-    jScrollPaneTableKeyList.setBorder(null);
-    jPanelTableKeyList.add(jScrollPaneTableKeyList, BorderLayout.CENTER);
-    jScrollPaneTableKeyList.getViewport().add(jTableTableKeyList, null);
-    jScrollPaneTableKeyList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneTableKeyList_mouseClicked(e); } });
-    jTableTableKeyList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableTableKeyList_mouseClicked(e); } });
-    jTableTableKeyList.setRowHeight(TABLE_ROW_HEIGHT);
-    //(jTableKeyList)//
-    jTableTableKeyList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTableKeyList.setBackground(SystemColor.control);
-    jTableTableKeyList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableTableKeyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableTableKeyList.addFocusListener(new Modeler_FocusListener());
-    jTableTableKeyList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    tableModelTableKeyList.addColumn("No.");
-    tableModelTableKeyList.addColumn(res.getString("S540"));
-    tableModelTableKeyList.addColumn(res.getString("S612"));
-    tableModelTableKeyList.addColumn(res.getString("S613"));
-    column0 = jTableTableKeyList.getColumnModel().getColumn(0);
-    column1 = jTableTableKeyList.getColumnModel().getColumn(1);
-    column2 = jTableTableKeyList.getColumnModel().getColumn(2);
-    column3 = jTableTableKeyList.getColumnModel().getColumn(3);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(70);
-    column2.setPreferredWidth(70);
-    column3.setPreferredWidth(700);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentCenter);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    jTableTableKeyList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableTableKeyList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    TableKeyListView.initComponents(this);
   }
-
   /**
    * Initialize component for node of TableKey
    */
   void jbInitComponentsForTableKey() {
-    jPanelTableKey5.setBackground(SystemColor.control);
-    jScrollPaneTableKeyFieldList.getViewport().setBackground(SystemColor.control);
-    jScrollPaneRelationshipList.getViewport().setBackground(SystemColor.control);
-    jPanelTableKey.setLayout(new BorderLayout());
-    jPanelTableKey1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelTableKey1.setMinimumSize(new Dimension(10, 10));
-    jPanelTableKey1.setPreferredSize(new Dimension(10, 43));
-    jPanelTableKey1.setLayout(null);
-    jLabelKeyType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelKeyType.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelKeyType.setText(res.getString("S616"));
-    jLabelKeyType.setBounds(new Rectangle(5, 12, 130, 20));
-    jTextFieldTableKeyType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTableKeyType.setEditable(false);
-    jTextFieldTableKeyType.setBounds(new Rectangle(140, 10, 200, 25));
-    jLabelTableKeySortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableKeySortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelTableKeySortKey.setText(res.getString("S540"));
-    jLabelTableKeySortKey.setBounds(new Rectangle(350, 11, 130, 15));
-    jTextFieldTableKeySortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldTableKeySortKey.setBounds(new Rectangle(485, 10, 90, 25));
-    jScrollPaneTableKeyFieldList.setBorder(null);
-    jLabelTableKeyFieldList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelTableKeyFieldList.setText(res.getString("S613"));
-    jLabelTableKeyFieldList.setBounds(new Rectangle(5, 1, 130, 20));
-    jLabelRelationshipList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelRelationshipList.setText(res.getString("S624"));
-    jLabelRelationshipList.setBounds(new Rectangle(5, 1, 130, 20));
-    jScrollPaneRelationshipList.setBorder(null);
-    jSplitPaneTableKey.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneTableKey.setBorder(null);
-    jSplitPaneTableKey.setDividerLocation(300);
-    jPanelTableKey2.setLayout(new BorderLayout());
-    jPanelTableKey2.setBorder(BorderFactory.createEtchedBorder());
-    jPanelTableKey3.setBorder(BorderFactory.createEtchedBorder());
-    jPanelTableKey3.setPreferredSize(new Dimension(10, 300));
-    jPanelTableKey3.setLayout(new BorderLayout());
-    jPanelTableKey4.setLayout(null);
-    jPanelTableKey4.setPreferredSize(new Dimension(1, 22));
-    jPanelTableKey5.setPreferredSize(new Dimension(1, 22));
-    jPanelTableKey5.setLayout(null);
-    jPanelTableKey6.setLayout(new BorderLayout());
-    jSplitPaneTableKey.add(jPanelTableKey2, JSplitPane.TOP);
-    jSplitPaneTableKey.add(jPanelTableKey3, JSplitPane.BOTTOM);
-    jPanelTableKey.add(jPanelTableKey1, BorderLayout.NORTH);
-    jPanelTableKey1.add(jLabelKeyType, null);
-    jPanelTableKey1.add(jTextFieldTableKeyType, null);
-    jPanelTableKey1.add(jLabelTableKeySortKey, null);
-    jPanelTableKey1.add(jTextFieldTableKeySortKey, null);
-    jPanelTableKey.add(jPanelTableKey6, BorderLayout.CENTER);
-    jPanelTableKey6.add(jSplitPaneTableKey, BorderLayout.CENTER);
-    jPanelTableKey2.add(jPanelTableKey4, BorderLayout.NORTH);
-    jPanelTableKey4.add(jLabelTableKeyFieldList, null);
-    jPanelTableKey2.add(jScrollPaneTableKeyFieldList, BorderLayout.CENTER);
-    jPanelTableKey3.add(jPanelTableKey5, BorderLayout.NORTH);
-    jPanelTableKey5.add(jLabelRelationshipList, null);
-    jPanelTableKey3.add(jScrollPaneRelationshipList, BorderLayout.CENTER);
-    jViewportRelationshipList.add(jTableRelationshipList, null);
-    jScrollPaneRelationshipList.setViewport(jViewportRelationshipList);
-    jViewportTableKeyFieldList.add(jTableTableKeyFieldList, null);
-    jScrollPaneTableKeyFieldList.setViewport(jViewportTableKeyFieldList);
-    jScrollPaneTableKeyFieldList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneTableKeyFieldList_mouseClicked(e); } });
-    jTableTableKeyFieldList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableTableKeyFieldList_mouseClicked(e); } public void mousePressed(MouseEvent e) { Modeler.this.jTableTableKeyFieldList_mousePressed(e); } public void mouseReleased(MouseEvent e) { Modeler.this.jTableTableKeyFieldList_mouseReleased(e); } });
-    jTableTableKeyFieldList.addMouseMotionListener(
-        new MouseMotionAdapter() { public void mouseDragged(MouseEvent e) { Modeler.this.jTableTableKeyFieldList_mouseDragged(e); } });
-    jTableTableKeyFieldList.addFocusListener(new Modeler_FocusListener());
-    jTableTableKeyFieldList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableTableKeyFieldList.setRowHeight(TABLE_ROW_HEIGHT);
-    jScrollPaneRelationshipList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneRelationshipList_mouseClicked(e); } });
-    jTableRelationshipList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableRelationshipList_mouseClicked(e); } });
-    jTableRelationshipList.addFocusListener(new Modeler_FocusListener());
-    //(jTableKeyFieldList)//
-    jTableTableKeyFieldList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTableKeyFieldList.setBackground(SystemColor.control);
-    jTableTableKeyFieldList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableTableKeyFieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    tableModelTableKeyFieldList.addColumn("No.");
-    tableModelTableKeyFieldList.addColumn(res.getString("S297"));
-    tableModelTableKeyFieldList.addColumn(res.getString("S542"));
-    tableModelTableKeyFieldList.addColumn(res.getString("S544"));
-    tableModelTableKeyFieldList.addColumn("A/D");
-    column0 = jTableTableKeyFieldList.getColumnModel().getColumn(0);
-    column1 = jTableTableKeyFieldList.getColumnModel().getColumn(1);
-    column2 = jTableTableKeyFieldList.getColumnModel().getColumn(2);
-    column3 = jTableTableKeyFieldList.getColumnModel().getColumn(3);
-    column4 = jTableTableKeyFieldList.getColumnModel().getColumn(4);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(200);
-    column2.setPreferredWidth(250);
-    column3.setPreferredWidth(150);
-    column4.setPreferredWidth(50);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentCenter);
-    jTableTableKeyFieldList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableTableKeyFieldList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableRelationshipList)//
-    jTableRelationshipList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableRelationshipList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableRelationshipList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableRelationshipList.setRowHeight(TABLE_ROW_HEIGHT_EDITABLE);
-    jTableRelationshipList.getSelectionModel()
-        .addListSelectionListener(e -> this.jTableRelationshipList_valueChanged(e));
-    jTableRelationshipList.getColumnModel()
-        .addColumnModelListener(new TableColumnModelListener() { public void columnSelectionChanged(javax.swing.event.ListSelectionEvent e) { Modeler.this.jTableRelationshipList_columnSelectionChanged(e); } public void columnMarginChanged(javax.swing.event.ChangeEvent e) {} public void columnMoved(javax.swing.event.TableColumnModelEvent e) {} public void columnRemoved(javax.swing.event.TableColumnModelEvent e) {} public void columnAdded(javax.swing.event.TableColumnModelEvent e) {} });
+    TableKeyView.initComponents(this);
   }
-
   /**
    * Initialize component for node of FunctionList
    */
   void jbInitComponentsForFunctionList() {
-    jPanelFunctionList.setLayout(new BorderLayout());
-    jPanelFunctionList.setBackground(SystemColor.control);
-    jScrollPaneFunctionList.setBorder(null);
-    jScrollPaneForeignFunctionList.setBorder(null);
-    jPanelFunctionList.add(jTabbedPaneFunctionList, BorderLayout.CENTER);
-    jViewportFunctionList.add(jTableFunctionList, null);
-    jScrollPaneFunctionList.setViewport(jViewportFunctionList);
-    jScrollPaneFunctionList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneFunctionList_mouseClicked(e); } });
-    jTableFunctionList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableFunctionList_mouseClicked(e); } });
-    jTableFunctionList.addFocusListener(new Modeler_FocusListener());
-    jTableFunctionList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    jTableFunctionList.setRowHeight(TABLE_ROW_HEIGHT);
-    jViewportForeignFunctionList.add(jTableForeignFunctionList, null);
-    jScrollPaneForeignFunctionList.setViewport(jViewportForeignFunctionList);
-    jScrollPaneForeignFunctionList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneForeignFunctionList_mouseClicked(e); } });
-    jTableForeignFunctionList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableForeignFunctionList_mouseClicked(e); } });
-    jTableForeignFunctionList.addFocusListener(new Modeler_FocusListener());
-    jTableForeignFunctionList.setRowHeight(TABLE_ROW_HEIGHT);
-    jTabbedPaneFunctionList.addTab(res.getString("S632"), imageIconFunction,
-        jScrollPaneFunctionList);
-    jTabbedPaneFunctionList.addTab(res.getString("S633"), imageIconForeignFunction,
-        jScrollPaneForeignFunctionList);
-    jTabbedPaneFunctionList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //(jTableFunctionList)//
-    jTableFunctionList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableFunctionList.setBackground(SystemColor.control);
-    jTableFunctionList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableFunctionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    tableModelFunctionList.addColumn("No.");
-    tableModelFunctionList.addColumn(res.getString("S201"));
-    tableModelFunctionList.addColumn(res.getString("S638"));
-    tableModelFunctionList.addColumn(res.getString("S639"));
-    tableModelFunctionList.addColumn(res.getString("S640"));
-    tableModelFunctionList.addColumn(res.getString("S641"));
-    tableModelFunctionList.addColumn(res.getString("S642"));
-    tableModelFunctionList.addColumn(res.getString("S667"));
-    column0 = jTableFunctionList.getColumnModel().getColumn(0);
-    column1 = jTableFunctionList.getColumnModel().getColumn(1);
-    column2 = jTableFunctionList.getColumnModel().getColumn(2);
-    column3 = jTableFunctionList.getColumnModel().getColumn(3);
-    column4 = jTableFunctionList.getColumnModel().getColumn(4);
-    column5 = jTableFunctionList.getColumnModel().getColumn(5);
-    column6 = jTableFunctionList.getColumnModel().getColumn(6);
-    column7 = jTableFunctionList.getColumnModel().getColumn(7);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(150);
-    column2.setPreferredWidth(250);
-    column3.setPreferredWidth(230);
-    column4.setPreferredWidth(600);
-    column5.setPreferredWidth(250);
-    column6.setPreferredWidth(150);
-    column7.setPreferredWidth(150);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    column5.setCellRenderer(rendererAlignmentLeft);
-    column6.setCellRenderer(rendererAlignmentLeft);
-    column7.setCellRenderer(rendererAlignmentLeft);
-    jTableFunctionList.getTableHeader().setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableFunctionList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableForeignFunctionList)//
-    jTableForeignFunctionList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableForeignFunctionList.setBackground(SystemColor.control);
-    jTableForeignFunctionList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableForeignFunctionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    tableModelForeignFunctionList.addColumn("No.");
-    tableModelForeignFunctionList.addColumn(res.getString("S436"));
-    tableModelForeignFunctionList.addColumn(res.getString("S647"));
-    tableModelForeignFunctionList.addColumn(res.getString("S648"));
-    tableModelForeignFunctionList.addColumn(res.getString("S649"));
-    tableModelForeignFunctionList.addColumn(res.getString("S650"));
-    column0 = jTableForeignFunctionList.getColumnModel().getColumn(0);
-    column1 = jTableForeignFunctionList.getColumnModel().getColumn(1);
-    column2 = jTableForeignFunctionList.getColumnModel().getColumn(2);
-    column3 = jTableForeignFunctionList.getColumnModel().getColumn(3);
-    column4 = jTableForeignFunctionList.getColumnModel().getColumn(4);
-    column5 = jTableForeignFunctionList.getColumnModel().getColumn(5);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(250);
-    column2.setPreferredWidth(150);
-    column3.setPreferredWidth(250);
-    column4.setPreferredWidth(200);
-    column5.setPreferredWidth(600);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    column5.setCellRenderer(rendererAlignmentLeft);
-    jTableForeignFunctionList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableForeignFunctionList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    FunctionListView.initComponents(this);
   }
-
   /**
    * Initialize component for node of Function
    */
   void jbInitComponentsForFunction() {
-    jSplitPaneFunction.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneFunction.setBorder(null);
-    jSplitPaneFunction.setBottomComponent(jTabbedPaneFunction);
-    jSplitPaneFunction.setDividerLocation(300);
-    jPanelFunction4.setPreferredSize(new Dimension(140, 10));
-    jPanelFunction4.setLayout(null);
-    jPanelFunction2.setBorder(null);
-    jLabelFunctionName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionName.setText(res.getString("S664"));
-    jLabelFunctionName.setBounds(new Rectangle(5, 8, 130, 20));
-    jTextFieldFunctionName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionName.setBounds(new Rectangle(0, 5, 300, 25));
-    jLabelFunctionSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionSortKey.setText(res.getString("S201"));
-    jLabelFunctionSortKey.setBounds(new Rectangle(310, 8, 130, 20));
-    jTextFieldFunctionSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionSortKey.setBounds(new Rectangle(445, 5, 200, 25));
-    jLabelFunctionType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionType.setRequestFocusEnabled(true);
-    jLabelFunctionType.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionType.setText(res.getString("S662"));
-    jLabelFunctionType.setBounds(new Rectangle(650, 8, 110, 20));
-    jComboBoxFunctionType.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jComboBoxFunctionType.setActionCommand("comboBoxChanged");
-    jComboBoxFunctionType.setModel(sortableComboBoxModelFunctionType);
-    jComboBoxFunctionType.setBounds(new Rectangle(765, 6, 250, 25));
-    jComboBoxFunctionType.setMaximumRowCount(40);
-    jLabelFunctionSummary.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionSummary.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionSummary.setText(res.getString("S668"));
-    jLabelFunctionSummary.setBounds(new Rectangle(5, 39, 130, 20));
-    jTextFieldFunctionSummary.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionSummary.setBounds(new Rectangle(0, 36, 1015, 25));
-    jLabelFunctionParameters.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionParameters.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionParameters.setText(res.getString("S666"));
-    jLabelFunctionParameters.setBounds(new Rectangle(5, 70, 130, 20));
-    jTextFieldFunctionParameters.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionParameters.setBounds(new Rectangle(0, 67, 360, 25));
-    jTextFieldFunctionReturn.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldFunctionReturn.setBounds(new Rectangle(365, 67, 280, 25));
-    jLabelFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionDocFile.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionDocFile.setText(res.getString("S667"));
-    jLabelFunctionDocFile.setBounds(new Rectangle(650, 70, 110, 20));
-    jComboBoxFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, 12));
-    jComboBoxFunctionDocFile.setBounds(new Rectangle(765, 67, 340, 25));
-    jComboBoxFunctionDocFile.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jComboBoxFunctionDocFile_mouseClicked(e); } public void mouseEntered(MouseEvent e) { Modeler.this.jComboBoxFunctionDocFile_mouseEntered(e); } public void mouseExited(MouseEvent e) { Modeler.this.jComboBoxFunctionDocFile_mouseExited(e); } });
-    jButtonFunctionDocFile.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jButtonFunctionDocFile.setBounds(new Rectangle(1105, 66, 70, 27));
-    jButtonFunctionDocFile.setText("Edit");
-    jButtonFunctionDocFile.addActionListener(
-        this::jButtonFunctionDocFile_actionPerformed);
-    jPanelFunction3.setLayout(null);
-    jPanelFunction3.setMinimumSize(new Dimension(100, 99));
-    jPanelFunction3.setPreferredSize(new Dimension(10, 99));
-    jLabelFunctionDescriptions.setBounds(new Rectangle(5, 101, 130, 20));
-    jLabelFunctionDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelFunctionDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelFunctionDescriptions.setText(res.getString("S204"));
-    jTextAreaFunctionDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaFunctionDescriptions.setLineWrap(true);
-    jTabbedPaneFunction.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTabbedPaneFunction.setMinimumSize(new Dimension(100, 2));
-    jPanelFunction2.setLayout(new BorderLayout());
-    jPanelFunction2.setMinimumSize(new Dimension(100, 20));
-    jPanelFunction2.setPreferredSize(new Dimension(100, 80));
-    jScrollPaneFunction1.setBorder(null);
-    jScrollPaneFunction1.getViewport().add(jPanelFunction1);
-    jPanelFunction1.setLayout(new BorderLayout());
-    jPanelFunction1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelFunction1.setMinimumSize(new Dimension(100, 30));
-    jPanelFunction1.setPreferredSize(new Dimension(1330, 80));
-    jPanelFunction.setLayout(new BorderLayout());
-    jPanelFunction.add(jSplitPaneFunction, BorderLayout.CENTER);
-    jPanelFunction1.add(jPanelFunction4, BorderLayout.WEST);
-    jPanelFunction1.add(jPanelFunction2, BorderLayout.CENTER);
-    jSplitPaneFunction.add(jScrollPaneFunction1, JSplitPane.TOP);
-    jSplitPaneFunction.add(jTabbedPaneFunction, JSplitPane.BOTTOM);
-    jPanelFunction2.add(jPanelFunction3, BorderLayout.NORTH);
-    jPanelFunction2.add(jScrollPaneFunctionDescriptions, BorderLayout.CENTER);
-    jPanelFunction3.add(jLabelFunctionType, null);
-    jPanelFunction3.add(jComboBoxFunctionType, null);
-    jPanelFunction3.add(jTextFieldFunctionSummary, null);
-    jPanelFunction3.add(jTextFieldFunctionParameters, null);
-    jPanelFunction3.add(jTextFieldFunctionReturn, null);
-    jPanelFunction3.add(jComboBoxFunctionDocFile, null);
-    jPanelFunction3.add(jButtonFunctionDocFile, null);
-    jPanelFunction3.add(jTextFieldFunctionName, null);
-    jPanelFunction3.add(jLabelFunctionSortKey, null);
-    jPanelFunction3.add(jTextFieldFunctionSortKey, null);
-    jPanelFunction3.add(jLabelFunctionDocFile, null);
-    jPanelFunction4.add(jLabelFunctionName, null);
-    jPanelFunction4.add(jLabelFunctionParameters, null);
-    jPanelFunction4.add(jLabelFunctionSummary, null);
-    jPanelFunction4.add(jLabelFunctionDescriptions, null);
-    jTabbedPaneFunction.addTab(res.getString("S673"), imageIconIOPanel, jScrollPaneFunctionIOList);
-    jTabbedPaneFunction.addTab(res.getString("S674"), imageIconFunction,
-        jScrollPaneFunctionsUsedByThis);
-    jTabbedPaneFunction.addTab(res.getString("S675"), imageIconFunction,
-        jScrollPaneFunctionsUsingThis);
-    jTabbedPaneFunction.addTab(res.getString("S676"), imageIconTask, jScrollPaneTasksUsingThis);
-    jScrollPaneTasksUsingThis.getViewport().add(jTableTasksUsingThis, null);
-    jScrollPaneFunctionsUsingThis.getViewport().add(jTableFunctionsUsingThis, null);
-    jViewportFunctionsUsedByThis.add(jTableFunctionsUsedByThis, null);
-    jScrollPaneFunctionsUsedByThis.setViewport(jViewportFunctionsUsedByThis);
-    jScrollPaneFunctionsUsedByThis.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneFunctionsUsedByThis_mouseClicked(e); } });
-    jTableFunctionsUsedByThis.addMouseListener(
-        new MouseAdapter() { public void mouseReleased(MouseEvent e) { Modeler.this.jTableFunctionsUsedByThis_mouseReleased(e); } public void mousePressed(MouseEvent e) { Modeler.this.jTableFunctionsUsedByThis_mousePressed(e); } public void mouseClicked(MouseEvent e) { Modeler.this.jTableFunctionsUsedByThis_mouseClicked(e); } });
-    jTableFunctionsUsedByThis.addMouseMotionListener(
-        new MouseMotionAdapter() { public void mouseDragged(MouseEvent e) { Modeler.this.jTableFunctionsUsedByThis_mouseDragged(e); } });
-    jTableFunctionsUsedByThis.addFocusListener(new Modeler_FocusListener());
-    jViewportFunctionIOList.add(jTableFunctionIOList, null);
-    jScrollPaneFunctionIOList.setViewport(jViewportFunctionIOList);
-    jScrollPaneFunctionDescriptions.getViewport().add(jTextAreaFunctionDescriptions, null);
-    jScrollPaneFunctionIOList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneFunctionIOList_mouseClicked(e); } });
-    jTableFunctionIOList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableFunctionIOList_mouseClicked(e); } public void mousePressed(MouseEvent e) { Modeler.this.jTableFunctionIOList_mousePressed(e); } public void mouseReleased(MouseEvent e) { Modeler.this.jTableFunctionIOList_mouseReleased(e); } });
-    jTableFunctionIOList.addMouseMotionListener(
-        new MouseMotionAdapter() { public void mouseDragged(MouseEvent e) { Modeler.this.jTableFunctionIOList_mouseDragged(e); } });
-    jTableFunctionIOList.addFocusListener(new Modeler_FocusListener());
-    jTableFunctionIOList.addKeyListener(new KeyAdapter() { public void keyReleased(KeyEvent e) { Modeler.this.jTableKeyReleased(e); } });
-    //(jTableFunctionIOList)//
-    jTableFunctionIOList.setBackground(SystemColor.control);
-    jTableFunctionIOList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableFunctionIOList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableFunctionIOList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableFunctionIOList.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelFunctionIOList.addColumn("No.");
-    //tableModelFunctionIOList.addColumn(res.getString("S201"));
-    tableModelFunctionIOList.addColumn(res.getString("S680"));
-    tableModelFunctionIOList.addColumn(res.getString("S204"));
-    column0 = jTableFunctionIOList.getColumnModel().getColumn(0);
-    column1 = jTableFunctionIOList.getColumnModel().getColumn(1);
-    column2 = jTableFunctionIOList.getColumnModel().getColumn(2);
-    //column3 = jTableFunctionIOList.getColumnModel().getColumn(3);
-    column0.setPreferredWidth(40);
-    //column1.setPreferredWidth(90);
-    column1.setPreferredWidth(400);
-    column2.setPreferredWidth(450);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    //column3.setCellRenderer(rendererAlignmentLeft);
-    jTableFunctionIOList.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableFunctionIOList.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableFunctionsUsedByThis)//
-    jTableFunctionsUsedByThis.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableFunctionsUsedByThis.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableFunctionsUsedByThis.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableFunctionsUsedByThis.setRowHeight(TABLE_ROW_HEIGHT_EDITABLE);
-    jTableFunctionsUsedByThis.getSelectionModel()
-        .addListSelectionListener(e -> this.jTableFunctionsUsedByThis_valueChanged(e));
-    jTableFunctionsUsedByThis.getColumnModel()
-        .addColumnModelListener(new TableColumnModelListener() { public void columnSelectionChanged(javax.swing.event.ListSelectionEvent e) { Modeler.this.jTableFunctionsUsedByThis_columnSelectionChanged(e); } public void columnMarginChanged(javax.swing.event.ChangeEvent e) {} public void columnMoved(javax.swing.event.TableColumnModelEvent e) {} public void columnRemoved(javax.swing.event.TableColumnModelEvent e) {} public void columnAdded(javax.swing.event.TableColumnModelEvent e) {} });
-    jTableFunctionsUsedByThis.setRowHeight(TABLE_ROW_HEIGHT);
-    //(jTableFunctionsUsingThis)//
-    jScrollPaneFunctionsUsingThis.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneFunctionsUsingThis_mouseClicked(e); } });
-    jTableFunctionsUsingThis.setBackground(SystemColor.control);
-    jTableFunctionsUsingThis.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableFunctionsUsingThis.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableFunctionsUsingThis.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableFunctionsUsingThis.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableFunctionsUsingThis_mouseClicked(e); } });
-    jTableFunctionsUsingThis.addFocusListener(new Modeler_FocusListener());
-    jTableFunctionsUsingThis.setRowHeight(TABLE_ROW_HEIGHT);
-    tableModelFunctionsUsingThis.addColumn("No.");
-    tableModelFunctionsUsingThis.addColumn(res.getString("S436"));
-    tableModelFunctionsUsingThis.addColumn("ID");
-    tableModelFunctionsUsingThis.addColumn(res.getString("S688"));
-    tableModelFunctionsUsingThis.addColumn(res.getString("S689"));
-    column0 = jTableFunctionsUsingThis.getColumnModel().getColumn(0);
-    column1 = jTableFunctionsUsingThis.getColumnModel().getColumn(1);
-    column2 = jTableFunctionsUsingThis.getColumnModel().getColumn(2);
-    column3 = jTableFunctionsUsingThis.getColumnModel().getColumn(3);
-    column4 = jTableFunctionsUsingThis.getColumnModel().getColumn(4);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(300);
-    column2.setPreferredWidth(150);
-    column3.setPreferredWidth(300);
-    column4.setPreferredWidth(600);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    jTableFunctionsUsingThis.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableFunctionsUsingThis.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
-    //(jTableTasksUsingThis)//
-    jTableTasksUsingThis.setBackground(SystemColor.control);
-    jTableTasksUsingThis.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableTasksUsingThis.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableTasksUsingThis.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableTasksUsingThis.setRowHeight(TABLE_ROW_HEIGHT);
-    jScrollPaneTasksUsingThis.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneTasksUsingThis_mouseClicked(e); } });
-    jTableTasksUsingThis.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableTasksUsingThis_mouseClicked(e); } });
-    jTableTasksUsingThis.addFocusListener(new Modeler_FocusListener());
-    tableModelTasksUsingThis.addColumn("No.");
-    tableModelTasksUsingThis.addColumn(res.getString("S693"));
-    tableModelTasksUsingThis.addColumn(res.getString("S694"));
-    tableModelTasksUsingThis.addColumn("ID");
-    tableModelTasksUsingThis.addColumn(res.getString("S696"));
-    tableModelTasksUsingThis.addColumn(res.getString("S697"));
-    column0 = jTableTasksUsingThis.getColumnModel().getColumn(0);
-    column1 = jTableTasksUsingThis.getColumnModel().getColumn(1);
-    column2 = jTableTasksUsingThis.getColumnModel().getColumn(2);
-    column3 = jTableTasksUsingThis.getColumnModel().getColumn(3);
-    column4 = jTableTasksUsingThis.getColumnModel().getColumn(4);
-    column5 = jTableTasksUsingThis.getColumnModel().getColumn(5);
-    column0.setPreferredWidth(40);
-    column1.setPreferredWidth(200);
-    column2.setPreferredWidth(150);
-    column3.setPreferredWidth(100);
-    column4.setPreferredWidth(300);
-    column5.setPreferredWidth(600);
-    column0.setCellRenderer(rendererAlignmentCenter);
-    column1.setCellRenderer(rendererAlignmentLeft);
-    column2.setCellRenderer(rendererAlignmentLeft);
-    column3.setCellRenderer(rendererAlignmentLeft);
-    column4.setCellRenderer(rendererAlignmentLeft);
-    column5.setCellRenderer(rendererAlignmentLeft);
-    jTableTasksUsingThis.getTableHeader()
-        .setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    rendererTableHeader = (DefaultTableCellRenderer) jTableTasksUsingThis.getTableHeader()
-        .getDefaultRenderer();
-    rendererTableHeader.setHorizontalAlignment(2); //LEFT//
+    if (functionView != null) {
+      functionView.initComponents(this);
+    }
   }
-
   /**
    * Initialize component for node of IOPanel
    */
   void jbInitComponentsForIOPanel() {
-    jScrollPaneIOPanelFieldList.getViewport().setBackground(SystemColor.control);
-    jSplitPaneIOPanel2.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneIOPanel2.setBorder(null);
-    jSplitPaneIOPanel2.add(jPanelIOPanel1, JSplitPane.TOP);
-    jSplitPaneIOPanel2.add(jPanelIOPanel5, JSplitPane.BOTTOM);
-    jSplitPaneIOPanel2.setDividerLocation(110);
-    jPanelIOPanelImage.setBackground(DESKTOP_COLOR);
-    jPanelIOPanelImage.setLayout(null);
-    jPanelIOPanelImage.addMouseListener(new MouseAdapter() { public void mousePressed(MouseEvent e) { Modeler.this.jPanelIOPanelImage_mousePressed(e); } public void mouseClicked(MouseEvent e) { Modeler.this.jPanelIOPanelImage_mouseClicked(e); } public void mouseReleased(MouseEvent e) { Modeler.this.jPanelIOPanelImage_mouseReleased(e); } });
-    jPanelIOPanelImage.addMouseMotionListener(
-        new MouseMotionAdapter() { public void mouseMoved(MouseEvent e) { Modeler.this.jPanelIOPanelImage_mouseMoved(e); } public void mouseDragged(MouseEvent e) { Modeler.this.jPanelIOPanelImage_mouseDragged(e); } });
-    jScrollPaneIOPanelImage1.setBorder(null);
-    jScrollPaneIOPanelImage1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    jScrollPaneIOPanelImage1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-    InputMap inputMap = jScrollPaneIOPanelImage1.getInputMap(
-        JSplitPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-    inputMap.clear();
-    ActionMap actionMap = jScrollPaneIOPanelImage1.getActionMap();
-    actionMap.clear();
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), "UNDO");
-    actionMap.put("UNDO", actionUndoIOPanelImage);
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), "REDO");
-    actionMap.put("REDO", actionRedoIOPanelImage);
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_U, KeyEvent.CTRL_DOWN_MASK), "UNDERLINE");
-    actionMap.put("UNDERLINE", actionUnderlineIOPanelImage);
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "RESET");
-    actionMap.put("RESET", actionResetAttrIOPanelImage);
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK),
-        "BACKGROUND_WHITE");
-    actionMap.put("BACKGROUND_WHITE", actionChangeBackgroundToWhite);
-    jTextPaneIOPanelImage.setBorder(BorderFactory.createRaisedBevelBorder());
-    jTextPaneIOPanelImage.setBackground(SystemColor.control);
-    jTextPaneIOPanelImage.addKeyListener(new KeyAdapter() { public void keyPressed(KeyEvent e) { Modeler.this.jTextPaneIOPanelImage_keyPressed(e); } public void keyTyped(KeyEvent e) { Modeler.this.jTextPaneIOPanelImage_keyTyped(e); } public void keyReleased(KeyEvent e) { Modeler.this.jTextPaneIOPanelImage_keyReleased(e); } });
-    jTextPaneIOPanelImage.addMouseListener(new MouseAdapter() { public void mousePressed(MouseEvent e) { Modeler.this.jTextPaneIOPanelImage_mousePressed(e); } public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneIOPanelImage_mouseClicked(e); } public void mouseReleased(MouseEvent e) { Modeler.this.jTextPaneIOPanelImage_mouseReleased(e); } });
-    jTextPaneIOPanelImage.addMouseMotionListener(
-        new MouseMotionAdapter() { public void mouseDragged(MouseEvent e) { Modeler.this.jTextPaneIOPanelImage_mouseDragged(e); } });
-    jTextPaneIOPanelImage.addCaretListener(e -> this.jTextPaneIOPanelImage_caretUpdate(e));
-    jTextPaneIOPanelImage.setFont(new java.awt.Font(ioImageFontName, 0, 12));
-    Keymap keymapIOPanelImage = jTextPaneIOPanelImage.getKeymap();
-    JTextComponent.loadKeymap(keymapIOPanelImage, customBindings,
-        jTextPaneIOPanelImage.getActions());
-    jPanelIOPanel5.setBorder(BorderFactory.createEtchedBorder());
-    jPanelIOPanel5.setLayout(new BorderLayout());
-    jScrollPaneIOPanelImage2.setBorder(BorderFactory.createLoweredBevelBorder());
-    jPanelIOPanel6.setMinimumSize(new Dimension(10, 14));
-    jPanelIOPanel6.setPreferredSize(new Dimension(10, 21));
-    jPanelIOPanel6.setLayout(new BorderLayout());
-    jSplitPaneIOPanel1.setDividerLocation(750);
-    jPanelIOPanel.setLayout(new BorderLayout());
-    jLabelIOPanelName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOPanelName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOPanelName.setText(res.getString("S703"));
-    jLabelIOPanelName.setBounds(new Rectangle(5, 8, 130, 20));
-    jTextFieldIOPanelName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldIOPanelName.setBounds(new Rectangle(0, 5, 250, 25));
-    //jLabelIOPanelSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jLabelIOPanelSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    //jLabelIOPanelSortKey.setText(res.getString("S201"));
-    //jLabelIOPanelSortKey.setBounds(new Rectangle(260, 8, 130, 20));
-    //jTextFieldIOPanelSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jTextFieldIOPanelSortKey.setBounds(new Rectangle(395, 5, 100, 25));
-    jPanelIOPanel1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelIOPanel1.setPreferredSize(new Dimension(10, 100));
-    jPanelIOPanel1.setLayout(new BorderLayout());
-    jPanelIOPanel1.setMinimumSize(new Dimension(100, 34));
-    jPanelIOPanel3.setLayout(new BorderLayout());
-    jPanelIOPanel3.setPreferredSize(new Dimension(1000, 60));
-    jPanelIOPanel2.setLayout(null);
-    jPanelIOPanel2.setPreferredSize(new Dimension(140, 80));
-    jPanelIOPanel2.setMinimumSize(new Dimension(100, 10));
-    jPanelIOPanel4.setLayout(null);
-    jPanelIOPanel4.setPreferredSize(new Dimension(10, 37));
-    jLabelIOPanelDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOPanelDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOPanelDescriptions.setText(res.getString("S204"));
-    jLabelIOPanelDescriptions.setBounds(new Rectangle(5, 39, 130, 20));
-    jTextAreaIOPanelDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaIOPanelDescriptions.setLineWrap(true);
-    jScrollPaneIOPanelFieldList.setBorder(BorderFactory.createLoweredBevelBorder());
-    jSplitPaneIOPanel1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneIOPanel1.setBorder(null);
-    jPanelIOPanel.add(jSplitPaneIOPanel1, BorderLayout.CENTER);
-    jPanelIOPanel3.add(jScrollPaneIOPanelDescriptions, BorderLayout.CENTER);
-    jPanelIOPanel3.add(jPanelIOPanel4, BorderLayout.NORTH);
-    jScrollPaneIOPanelDescriptions.getViewport().add(jTextAreaIOPanelDescriptions, null);
-    jPanelIOPanel4.add(jTextFieldIOPanelName, null);
-    //jPanelIOPanel4.add(jTextFieldIOPanelSortKey, null);
-    //jPanelIOPanel4.add(jLabelIOPanelSortKey, null);
-    jPanelIOPanel1.add(jPanelIOPanel2, BorderLayout.WEST);
-    jPanelIOPanel1.add(jPanelIOPanel3, BorderLayout.CENTER);
-    jPanelIOPanel2.add(jLabelIOPanelName, null);
-    jPanelIOPanel2.add(jLabelIOPanelDescriptions, null);
-    jSplitPaneIOPanel1.add(jSplitPaneIOPanel2, JSplitPane.TOP);
-    jSplitPaneIOPanel1.add(jScrollPaneIOPanelFieldList, JSplitPane.BOTTOM);
-    jScrollPaneIOPanelFieldList.getViewport().add(jTableIOPanelFieldList, null);
-    jScrollPaneIOPanelFieldList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneIOPanelFieldList_mouseClicked(e); } });
-    jTableIOPanelFieldList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableIOPanelFieldList_mouseClicked(e); } });
-    jTableIOPanelFieldList.addFocusListener(new Modeler_FocusListener());
-    jPanelIOPanel5.add(jScrollPaneIOPanelImage2, BorderLayout.CENTER);
-    jScrollPaneIOPanelImage1.getViewport().add(jTextPaneIOPanelImage, null);
-    jScrollPaneIOPanelImage2.getViewport().add(jPanelIOPanelImage, null);
-    jPanelIOPanel5.add(jPanelIOPanel6, BorderLayout.NORTH);
-    jPanelIOPanel6.add(jLabelIOPanelImage, BorderLayout.CENTER);
-    jPanelIOPanel6.add(jLabelIOPanelCaretPosition, BorderLayout.EAST);
-    jLabelIOPanelImage.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOPanelImage.setText(res.getString("S701"));
-    jLabelIOPanelCaretPosition.setBorder(
-        BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.white,
-            UIManager.getColor("control"), Color.gray, UIManager.getColor("control")));
-    jLabelIOPanelCaretPosition.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOPanelCaretPosition.setPreferredSize(new Dimension(100, 18));
-    jLabelIOPanelCaretPosition.setHorizontalAlignment(SwingConstants.CENTER);
-    jLabelIOPanelCaretPosition.setText("0 - 0");
-    //(jTableIOPanelFieldList)//
-    jTableIOPanelFieldList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableIOPanelFieldList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableIOPanelFieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableIOPanelFieldList.setRowHeight(TABLE_ROW_HEIGHT_EDITABLE);
-    jTableIOPanelFieldList.getSelectionModel()
-        .addListSelectionListener(e -> this.jTableIOPanelFieldList_valueChanged(e));
-    jTableIOPanelFieldList.getColumnModel()
-        .addColumnModelListener(new TableColumnModelListener() { public void columnSelectionChanged(javax.swing.event.ListSelectionEvent e) { Modeler.this.jTableIOPanelFieldList_columnSelectionChanged(e); } public void columnMarginChanged(javax.swing.event.ChangeEvent e) {} public void columnMoved(javax.swing.event.TableColumnModelEvent e) {} public void columnRemoved(javax.swing.event.TableColumnModelEvent e) {} public void columnAdded(javax.swing.event.TableColumnModelEvent e) {} });
+    IOPanelView.initComponents(this);
   }
-
   /**
    * Initialize component for node of IOSpool
    */
   void jbInitComponentsForIOSpool() {
-    jSplitPaneIOSpool2.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneIOSpool2.setBorder(null);
-    jSplitPaneIOSpool2.add(jPanelIOSpool1, JSplitPane.TOP);
-    jSplitPaneIOSpool2.add(jPanelIOSpool5, JSplitPane.BOTTOM);
-    jSplitPaneIOSpool2.setDividerLocation(110);
-    jPanelIOSpoolImage.setBackground(DESKTOP_COLOR);
-    jPanelIOSpoolImage.setLayout(null);
-    jPanelIOSpoolImage.addMouseListener(new MouseAdapter() { public void mousePressed(MouseEvent e) { Modeler.this.jPanelIOSpoolImage_mousePressed(e); } public void mouseClicked(MouseEvent e) { Modeler.this.jPanelIOSpoolImage_mouseClicked(e); } public void mouseReleased(MouseEvent e) { Modeler.this.jPanelIOSpoolImage_mouseReleased(e); } });
-    jPanelIOSpoolImage.addMouseMotionListener(
-        new MouseMotionAdapter() { public void mouseMoved(MouseEvent e) { Modeler.this.jPanelIOSpoolImage_mouseMoved(e); } public void mouseDragged(MouseEvent e) { Modeler.this.jPanelIOSpoolImage_mouseDragged(e); } });
-    jTextPaneIOSpoolImage.setBackground(SystemColor.control);
-    jTextPaneIOSpoolImage.setBorder(null);
-    jTextPaneIOSpoolImage.setFont(new java.awt.Font(ioImageFontName, 0, 12));
-    jTextPaneIOSpoolImage.addKeyListener(new KeyAdapter() { public void keyPressed(KeyEvent e) { Modeler.this.jTextPaneIOSpoolImage_keyPressed(e); } public void keyTyped(KeyEvent e) { Modeler.this.jTextPaneIOSpoolImage_keyTyped(e); } public void keyReleased(KeyEvent e) { Modeler.this.jTextPaneIOSpoolImage_keyReleased(e); } });
-    jTextPaneIOSpoolImage.addMouseListener(new MouseAdapter() { public void mousePressed(MouseEvent e) { Modeler.this.jTextPaneIOSpoolImage_mousePressed(e); } public void mouseClicked(MouseEvent e) { Modeler.this.jTextPaneIOSpoolImage_mouseClicked(e); } public void mouseReleased(MouseEvent e) { Modeler.this.jTextPaneIOSpoolImage_mouseReleased(e); } });
-    jTextPaneIOSpoolImage.addMouseMotionListener(
-        new MouseMotionAdapter() { public void mouseDragged(MouseEvent e) { Modeler.this.jTextPaneIOSpoolImage_mouseDragged(e); } });
-    jTextPaneIOSpoolImage.addCaretListener(e -> this.jTextPaneIOSpoolImage_caretUpdate(e));
-    Keymap keymapIOSpoolImage = jTextPaneIOSpoolImage.getKeymap();
-    JTextComponent.loadKeymap(keymapIOSpoolImage, customBindings,
-        jTextPaneIOSpoolImage.getActions());
-    jPanelIOSpool.setLayout(new BorderLayout());
-    jLabelIOSpoolName.setBounds(new Rectangle(5, 8, 130, 25));
-    jLabelIOSpoolName.setText(res.getString("S717"));
-    jLabelIOSpoolName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOSpoolName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldIOSpoolName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldIOSpoolName.setBounds(new Rectangle(0, 5, 250, 25));
-    //jLabelIOSpoolSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jLabelIOSpoolSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    //jLabelIOSpoolSortKey.setText(res.getString("S201"));
-    //jLabelIOSpoolSortKey.setBounds(new Rectangle(260, 8, 130, 20));
-    //jTextFieldIOSpoolSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jTextFieldIOSpoolSortKey.setBounds(new Rectangle(395, 5, 100, 25));
-    jPanelIOSpool1.setLayout(new BorderLayout());
-    jPanelIOSpool1.setPreferredSize(new Dimension(10, 100));
-    jPanelIOSpool1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelIOSpool1.setMinimumSize(new Dimension(100, 34));
-    jPanelIOSpool3.setLayout(new BorderLayout());
-    jPanelIOSpool3.setPreferredSize(new Dimension(1000, 60));
-    jPanelIOSpool2.setLayout(null);
-    jPanelIOSpool2.setPreferredSize(new Dimension(140, 80));
-    jPanelIOSpool2.setMinimumSize(new Dimension(100, 10));
-    jPanelIOSpool4.setLayout(null);
-    jPanelIOSpool4.setPreferredSize(new Dimension(10, 37));
-    jLabelIOSpoolDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOSpoolDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOSpoolDescriptions.setText(res.getString("S204"));
-    jLabelIOSpoolDescriptions.setBounds(new Rectangle(5, 39, 130, 20));
-    jTextAreaIOSpoolDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaIOSpoolDescriptions.setLineWrap(true);
-    jScrollPaneIOSpoolFieldList.setBorder(BorderFactory.createLoweredBevelBorder());
-    jSplitPaneIOSpool1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneIOSpool1.setBorder(null);
-    jPanelIOSpool6.setMinimumSize(new Dimension(10, 14));
-    jPanelIOSpool6.setPreferredSize(new Dimension(10, 21));
-    jPanelIOSpool6.setLayout(new BorderLayout());
-    jScrollPaneIOSpoolImage1.setBorder(null);
-    jScrollPaneIOSpoolImage1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    jScrollPaneIOSpoolImage1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-    InputMap inputMap = jScrollPaneIOSpoolImage1.getInputMap(
-        JSplitPane.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-    inputMap.clear();
-    ActionMap actionMap = jScrollPaneIOSpoolImage1.getActionMap();
-    actionMap.clear();
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), "UNDO");
-    actionMap.put("UNDO", actionUndoIOSpoolImage);
-    inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), "REDO");
-    actionMap.put("REDO", actionRedoIOSpoolImage);
-    jScrollPaneIOSpoolImage2.setBorder(BorderFactory.createLoweredBevelBorder());
-    jLabelIOSpoolImage.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOSpoolImage.setText(res.getString("S727"));
-    jPanelIOSpool5.setBorder(BorderFactory.createEtchedBorder());
-    jPanelIOSpool5.setLayout(new BorderLayout());
-    jPanelIOSpool2.add(jLabelIOSpoolName, null);
-    jPanelIOSpool2.add(jLabelIOSpoolDescriptions, null);
-    jPanelIOSpool1.add(jPanelIOSpool3, BorderLayout.CENTER);
-    jPanelIOSpool1.add(jPanelIOSpool2, BorderLayout.WEST);
-    jPanelIOSpool3.add(jScrollPaneIOSpoolDescriptions, BorderLayout.CENTER);
-    jPanelIOSpool3.add(jPanelIOSpool4, BorderLayout.NORTH);
-    jScrollPaneIOSpoolDescriptions.getViewport().add(jTextAreaIOSpoolDescriptions, null);
-    jPanelIOSpool4.add(jTextFieldIOSpoolName, null);
-    //jPanelIOSpool4.add(jTextFieldIOSpoolSortKey, null);
-    //jPanelIOSpool4.add(jLabelIOSpoolSortKey, null);
-    jPanelIOSpool.add(jSplitPaneIOSpool1, BorderLayout.CENTER);
-    jSplitPaneIOSpool1.add(jSplitPaneIOSpool2, JSplitPane.TOP);
-    jSplitPaneIOSpool1.add(jScrollPaneIOSpoolFieldList, JSplitPane.BOTTOM);
-    jScrollPaneIOSpoolFieldList.getViewport().add(jTableIOSpoolFieldList, null);
-    jScrollPaneIOSpoolFieldList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneIOSpoolFieldList_mouseClicked(e); } });
-    jTableIOSpoolFieldList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableIOSpoolFieldList_mouseClicked(e); } });
-    jTableIOSpoolFieldList.addFocusListener(new Modeler_FocusListener());
-    jPanelIOSpool5.add(jScrollPaneIOSpoolImage2, BorderLayout.CENTER);
-    jScrollPaneIOSpoolImage1.getViewport().add(jTextPaneIOSpoolImage, null);
-    jScrollPaneIOSpoolImage2.getViewport().add(jPanelIOSpoolImage, null);
-    jPanelIOSpool5.add(jPanelIOSpool6, BorderLayout.NORTH);
-    jPanelIOSpool6.add(jLabelIOSpoolImage, BorderLayout.CENTER);
-    jPanelIOSpool6.add(jLabelIOSpoolCaretPosition, BorderLayout.EAST);
-    jSplitPaneIOSpool1.setDividerLocation(750);
-    borderOriginal4 = BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.white,
-        UIManager.getColor("control"), Color.gray, UIManager.getColor("control"));
-    jLabelIOSpoolCaretPosition.setBorder(borderOriginal4);
-    jLabelIOSpoolCaretPosition.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOSpoolCaretPosition.setPreferredSize(new Dimension(100, 19));
-    jLabelIOSpoolCaretPosition.setHorizontalAlignment(SwingConstants.CENTER);
-    jLabelIOSpoolCaretPosition.setText("0 - 0");
-    //(jTableIOSpoolFieldList)//
-    jTableIOSpoolFieldList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableIOSpoolFieldList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableIOSpoolFieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableIOSpoolFieldList.setRowHeight(TABLE_ROW_HEIGHT_EDITABLE);
-    jTableIOSpoolFieldList.getSelectionModel()
-        .addListSelectionListener(e -> this.jTableIOSpoolFieldList_valueChanged(e));
-    jTableIOSpoolFieldList.getColumnModel()
-        .addColumnModelListener(new TableColumnModelListener() { public void columnSelectionChanged(javax.swing.event.ListSelectionEvent e) { Modeler.this.jTableIOSpoolFieldList_columnSelectionChanged(e); } public void columnMarginChanged(javax.swing.event.ChangeEvent e) {} public void columnMoved(javax.swing.event.TableColumnModelEvent e) {} public void columnRemoved(javax.swing.event.TableColumnModelEvent e) {} public void columnAdded(javax.swing.event.TableColumnModelEvent e) {} });
+    IOSpoolView.initComponents(this);
   }
-
   /**
    * Initialize component for node of IOTable
    */
   void jbInitComponentsForIOTable() {
-    jSplitPaneIOTable.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneIOTable.setBorder(null);
-    jSplitPaneIOTable.add(jPanelIOTable1, JSplitPane.TOP);
-    jSplitPaneIOTable.add(jScrollPaneIOTableFieldList, JSplitPane.BOTTOM);
-    jSplitPaneIOTable.setDividerLocation(160);
-    jLabelIOTableName.setBounds(new Rectangle(5, 8, 130, 20));
-    jLabelIOTableName.setText(res.getString("S471"));
-    jLabelIOTableName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jTextFieldIOTableName.setEditable(false);
-    jTextFieldIOTableName.setBorder(jTextFieldIOTablePK.getBorder());
-    jTextFieldIOTableName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldIOTableName.setBounds(new Rectangle(0, 5, 535, 25));
-    jTextFieldIOTableName.addMouseListener(new MouseAdapter() { public void mouseEntered(MouseEvent e) { Modeler.this.jTextFieldIOTableName_mouseEntered(e); } public void mouseClicked(MouseEvent e) { Modeler.this.jTextFieldIOTableName_mouseClicked(e); } });
-    //jLabelIOTableID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jLabelIOTableID.setHorizontalAlignment(SwingConstants.RIGHT);
-    //jLabelIOTableID.setText("ID");
-    //jLabelIOTableID.setBounds(new Rectangle(360, 8, 70, 20));
-    //jTextFieldIOTableID.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jTextFieldIOTableID.setEditable(false);
-    //jTextFieldIOTableID.setBounds(new Rectangle(435, 5, 170, 25));
-    //jButtonIOTableJump.setBounds(new Rectangle(610, 4, 291, 26));
-    //jButtonIOTableJump.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jButtonIOTableJump.setText(res.getString("S761"));
-    //jButtonIOTableJump.addActionListener(this::jButtonIOTableJump_actionPerformed);
-    jLabelIOTablePK.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOTablePK.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOTablePK.setText(res.getString("S739"));
-    jLabelIOTablePK.setBounds(new Rectangle(5, 39, 130, 20));
-    jTextFieldIOTablePK.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldIOTablePK.setPreferredSize(new Dimension(81, 22));
-    jTextFieldIOTablePK.setEditable(false);
-    jTextFieldIOTablePK.setBounds(new Rectangle(0, 36, 685, 25));
-    jLabelIOTablePosition.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOTablePosition.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOTablePosition.setText(res.getString("S750"));
-    jLabelIOTablePosition.setBounds(new Rectangle(420, 70, 110, 20));
-    jComboBoxIOTablePosition.setBounds(new Rectangle(535, 67, 150, 25));
-    jComboBoxIOTablePosition.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jComboBoxIOTablePosition.addItem(res.getString("S751")); //0:Primary Table//
-    jComboBoxIOTablePosition.addItem(res.getString("S752")); //1:Header Table//
-    jComboBoxIOTablePosition.addItem(res.getString("S753")); //2:Detail Table//
-    jComboBoxIOTablePosition.addItem(res.getString("S754")); //3:Referred Table//
-    jComboBoxIOTablePosition.addItem(res.getString("S755")); //4: Other //
-    jLabelIOTableCRUD.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOTableCRUD.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOTableCRUD.setText(res.getString("S745"));
-    jLabelIOTableCRUD.setBounds(new Rectangle(5, 70, 130, 20));
-    jPanelIOTable4.setLayout(null);
-    jPanelIOTable4.setBounds(new Rectangle(0, 67, 417, 26));
-    jPanelIOTable4.setBorder(BorderFactory.createEtchedBorder());
-    jCheckBoxIOTableC.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jCheckBoxIOTableC.setText("Create");
-    jCheckBoxIOTableC.setBounds(new Rectangle(2, 1, 100, 23));
-    jCheckBoxIOTableC.addActionListener(this::jCheckBoxIOTableC_actionPerformed);
-    jCheckBoxIOTableR.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jCheckBoxIOTableR.setText("Read");
-    jCheckBoxIOTableR.setBounds(new Rectangle(102, 1, 100, 23));
-    jCheckBoxIOTableU.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jCheckBoxIOTableU.setText("Update");
-    jCheckBoxIOTableU.setBounds(new Rectangle(202, 1, 105, 23));
-    jCheckBoxIOTableU.addActionListener(this::jCheckBoxIOTableU_actionPerformed);
-    jCheckBoxIOTableD.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jCheckBoxIOTableD.setText("Delete");
-    jCheckBoxIOTableD.setBounds(new Rectangle(307, 1, 100, 23));
-    jCheckBoxIOTableD.addActionListener(this::jCheckBoxIOTableD_actionPerformed);
-    //jLabelIOTableSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jLabelIOTableSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    //jLabelIOTableSortKey.setText(res.getString("S540"));
-    //jLabelIOTableSortKey.setBounds(new Rectangle(420, 70, 90, 20));
-    //jTextFieldIOTableSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jTextFieldIOTableSortKey.setBounds(new Rectangle(515, 67, 80, 25));
-    jLabelIOTableNameExtension.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOTableNameExtension.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOTableNameExtension.setText(res.getString("S742"));
-    jLabelIOTableNameExtension.setBounds(new Rectangle(540, 8, 80, 20));
-    jTextFieldIOTableNameExtension.setBounds(new Rectangle(625, 5, 60, 25));
-    jTextFieldIOTableNameExtension.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOTableDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOTableDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOTableDescriptions.setText(res.getString("S204"));
-    jLabelIOTableDescriptions.setBounds(new Rectangle(5, 101, 130, 20));
-    jTextAreaIOTableDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaIOTableDescriptions.setLineWrap(true);
-    jScrollPaneIOTableDescriptions.getViewport().add(jTextAreaIOTableDescriptions, null);
-    jPanelIOTable5.setLayout(null);
-    jPanelIOTable5.setPreferredSize(new Dimension(140, 80));
-    jPanelIOTable5.setMinimumSize(new Dimension(140, 10));
-    jPanelIOTable5.add(jLabelIOTableName, null);
-    jPanelIOTable5.add(jLabelIOTablePK, null);
-    jPanelIOTable5.add(jLabelIOTableCRUD, null);
-    jPanelIOTable5.add(jLabelIOTableDescriptions, null);
-    jPanelIOTable.setLayout(new BorderLayout());
-    jPanelIOTable2.setLayout(new BorderLayout());
-    jPanelIOTable2.setPreferredSize(new Dimension(1000, 60));
-    jPanelIOTable1.setLayout(new BorderLayout());
-    jPanelIOTable1.setPreferredSize(new Dimension(10, 130));
-    jPanelIOTable1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelIOTable1.setMinimumSize(new Dimension(100, 34));
-    jPanelIOTable3.setLayout(null);
-    jPanelIOTable3.setPreferredSize(new Dimension(10, 98));
-    jScrollPaneIOTableFieldList.setBorder(BorderFactory.createLoweredBevelBorder());
-    jScrollPaneIOTableFieldList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneIOTableFieldList_mouseClicked(e); } });
-    jPanelIOTable2.add(jScrollPaneIOTableDescriptions, BorderLayout.CENTER);
-    jPanelIOTable2.add(jPanelIOTable3, BorderLayout.NORTH);
-    jPanelIOTable3.add(jTextFieldIOTableName, null);
-    jPanelIOTable1.add(jPanelIOTable5, BorderLayout.WEST);
-    jPanelIOTable1.add(jPanelIOTable2, BorderLayout.CENTER);
-    jPanelIOTable.add(jSplitPaneIOTable, BorderLayout.CENTER);
-    jScrollPaneIOTableFieldList.getViewport().add(jTableIOTableFieldList, null);
-    //jPanelIOTable3.add(jLabelIOTableID, null);
-    //jPanelIOTable3.add(jTextFieldIOTableID, null);
-    jPanelIOTable3.add(jTextFieldIOTablePK, null);
-    jPanelIOTable3.add(jComboBoxIOTablePosition, null);
-    jPanelIOTable3.add(jLabelIOTablePosition, null);
-    jPanelIOTable3.add(jTextFieldIOTableNameExtension, null);
-    jPanelIOTable3.add(jLabelIOTableNameExtension, null);
-    jPanelIOTable3.add(jPanelIOTable4, null);
-    jPanelIOTable4.add(jCheckBoxIOTableC, null);
-    jPanelIOTable4.add(jCheckBoxIOTableR, null);
-    jPanelIOTable4.add(jCheckBoxIOTableU, null);
-    jPanelIOTable4.add(jCheckBoxIOTableD, null);
-    //jPanelIOTable3.add(jLabelIOTableSortKey, null);
-    //jPanelIOTable3.add(jTextFieldIOTableSortKey, null);
-    //jPanelIOTable3.add(jButtonIOTableJump, null);
-    //(jTableIOTableFieldList)//
-    jTableIOTableFieldList.addFocusListener(new Modeler_FocusListener());
-    jTableIOTableFieldList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableIOTableFieldList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableIOTableFieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableIOTableFieldList.setRowHeight(TABLE_ROW_HEIGHT_EDITABLE);
-    jTableIOTableFieldList.getSelectionModel()
-        .addListSelectionListener(e -> this.jTableIOTableFieldList_valueChanged(e));
-    jTableIOTableFieldList.getColumnModel()
-        .addColumnModelListener(new TableColumnModelListener() { public void columnSelectionChanged(javax.swing.event.ListSelectionEvent e) { Modeler.this.jTableIOTableFieldList_columnSelectionChanged(e); } public void columnMarginChanged(javax.swing.event.ChangeEvent e) {} public void columnMoved(javax.swing.event.TableColumnModelEvent e) {} public void columnRemoved(javax.swing.event.TableColumnModelEvent e) {} public void columnAdded(javax.swing.event.TableColumnModelEvent e) {} });
-    jTableIOTableFieldList.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableIOTableFieldList_mouseClicked(e); } });
+    IOTableView.initComponents(this);
   }
-
   /**
    * Initialize component for node of IOWebPage
    */
   void jbInitComponentsForIOWebPage() {
-    jScrollPaneIOWebPageFieldList.getViewport().setBackground(SystemColor.control);
-    jSplitPaneIOWebPage2.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneIOWebPage2.setBorder(null);
-    jSplitPaneIOWebPage2.add(jPanelIOWebPage1, JSplitPane.TOP);
-    jSplitPaneIOWebPage2.add(jPanelIOWebPage5, JSplitPane.BOTTOM);
-    jSplitPaneIOWebPage2.setDividerLocation(110);
-    jEditorPaneIOWebPageImage.setBorder(BorderFactory.createRaisedBevelBorder());
-    jEditorPaneIOWebPageImage.addMouseListener(
-        new MouseAdapter() { public void mouseReleased(MouseEvent e) { Modeler.this.jEditorPaneIOWebPageImage_mouseReleased(e); } });
-    jEditorPaneIOWebPageImage.setEditable(false);
-    jEditorPaneIOWebPageImage.setContentType("text/html");
-    jPanelIOWebPage5.setBorder(BorderFactory.createEtchedBorder());
-    jPanelIOWebPage5.setLayout(new BorderLayout());
-    jScrollPaneIOWebPageImage.setBorder(BorderFactory.createLoweredBevelBorder());
-    jPanelIOWebPage6.setMinimumSize(new Dimension(10, 14));
-    jPanelIOWebPage6.setPreferredSize(new Dimension(10, 19));
-    jPanelIOWebPage6.setLayout(new BorderLayout());
-    jLabelIOWebPageImage.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOWebPageImage.setText(res.getString("S766"));
-    jSplitPaneIOWebPage1.setDividerLocation(750);
-    jPanelIOWebPage.setLayout(new BorderLayout());
-    jLabelIOWebPageName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOWebPageName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOWebPageName.setText(res.getString("S768"));
-    jLabelIOWebPageName.setBounds(new Rectangle(5, 8, 130, 25));
-    jTextFieldIOWebPageName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldIOWebPageName.setBounds(new Rectangle(0, 5, 250, 25));
-    //jLabelIOWebPageSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jLabelIOWebPageSortKey.setHorizontalAlignment(SwingConstants.RIGHT);
-    //jLabelIOWebPageSortKey.setText(res.getString("S201"));
-    //jLabelIOWebPageSortKey.setBounds(new Rectangle(260, 8, 130, 20));
-    //jTextFieldIOWebPageSortKey.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    //jTextFieldIOWebPageSortKey.setBounds(new Rectangle(395, 5, 100, 25));
-    jLabelIOWebPageFileName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOWebPageFileName.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOWebPageFileName.setText(res.getString("S774"));
-    jLabelIOWebPageFileName.setBounds(new Rectangle(505, 8, 130, 20));
-    jTextFieldIOWebPageFileName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextFieldIOWebPageFileName.setBounds(new Rectangle(640, 5, 250, 25));
-    jPanelIOWebPage1.setBorder(BorderFactory.createEtchedBorder());
-    jPanelIOWebPage1.setPreferredSize(new Dimension(10, 100));
-    jPanelIOWebPage1.setLayout(new BorderLayout());
-    jPanelIOWebPage1.setMinimumSize(new Dimension(100, 34));
-    jPanelIOWebPage3.setLayout(new BorderLayout());
-    jPanelIOWebPage3.setPreferredSize(new Dimension(1000, 60));
-    jPanelIOWebPage2.setLayout(null);
-    jPanelIOWebPage2.setPreferredSize(new Dimension(140, 80));
-    jPanelIOWebPage2.setMinimumSize(new Dimension(100, 10));
-    jPanelIOWebPage4.setLayout(null);
-    jPanelIOWebPage4.setPreferredSize(new Dimension(10, 37));
-    jLabelIOWebPageDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jLabelIOWebPageDescriptions.setHorizontalAlignment(SwingConstants.RIGHT);
-    jLabelIOWebPageDescriptions.setText(res.getString("S204"));
-    jLabelIOWebPageDescriptions.setBounds(new Rectangle(5, 39, 130, 20));
-    jTextAreaIOWebPageDescriptions.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTextAreaIOWebPageDescriptions.setLineWrap(true);
-    jScrollPaneIOWebPageFieldList.setBorder(BorderFactory.createLoweredBevelBorder());
-    jSplitPaneIOWebPage1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-    jSplitPaneIOWebPage1.setBorder(null);
-    jPanelIOWebPage.add(jSplitPaneIOWebPage1, BorderLayout.CENTER);
-    jPanelIOWebPage3.add(jScrollPaneIOWebPageDescriptions, BorderLayout.CENTER);
-    jPanelIOWebPage3.add(jPanelIOWebPage4, BorderLayout.NORTH);
-    jScrollPaneIOWebPageDescriptions.getViewport().add(jTextAreaIOWebPageDescriptions, null);
-    jPanelIOWebPage4.add(jTextFieldIOWebPageName, null);
-    //jPanelIOWebPage4.add(jTextFieldIOWebPageSortKey, null);
-    //jPanelIOWebPage4.add(jLabelIOWebPageSortKey, null);
-    jPanelIOWebPage4.add(jTextFieldIOWebPageFileName, null);
-    jPanelIOWebPage4.add(jLabelIOWebPageFileName, null);
-    jPanelIOWebPage1.add(jPanelIOWebPage2, BorderLayout.WEST);
-    jPanelIOWebPage1.add(jPanelIOWebPage3, BorderLayout.CENTER);
-    jPanelIOWebPage2.add(jLabelIOWebPageName, null);
-    jPanelIOWebPage2.add(jLabelIOWebPageDescriptions, null);
-    jSplitPaneIOWebPage1.add(jSplitPaneIOWebPage2, JSplitPane.TOP);
-    jSplitPaneIOWebPage1.add(jScrollPaneIOWebPageFieldList, JSplitPane.BOTTOM);
-    jScrollPaneIOWebPageFieldList.getViewport().add(jTableIOWebPageFieldList, null);
-    jScrollPaneIOWebPageFieldList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jScrollPaneIOWebPageFieldList_mouseClicked(e); } });
-    jTableIOWebPageFieldList.addMouseListener(
-        new MouseAdapter() { public void mouseClicked(MouseEvent e) { Modeler.this.jTableIOWebPageFieldList_mouseClicked(e); } });
-    jPanelIOWebPage5.add(jScrollPaneIOWebPageImage, BorderLayout.CENTER);
-    jScrollPaneIOWebPageImage.getViewport().add(jEditorPaneIOWebPageImage, null);
-    jPanelIOWebPage5.add(jPanelIOWebPage6, BorderLayout.NORTH);
-    jPanelIOWebPage6.add(jLabelIOWebPageImage, BorderLayout.CENTER);
-    //(jTableIOWebPageFieldList)//
-    jTableIOWebPageFieldList.addFocusListener(new Modeler_FocusListener());
-    jTableIOWebPageFieldList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTableIOWebPageFieldList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    jTableIOWebPageFieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    jTableIOWebPageFieldList.setRowHeight(TABLE_ROW_HEIGHT_EDITABLE);
-    jTableIOWebPageFieldList.getSelectionModel()
-        .addListSelectionListener(e -> this.jTableIOWebPageFieldList_valueChanged(e));
-    jTableIOWebPageFieldList.getColumnModel()
-        .addColumnModelListener(new TableColumnModelListener() { public void columnSelectionChanged(javax.swing.event.ListSelectionEvent e) { Modeler.this.jTableIOWebPageFieldList_columnSelectionChanged(e); } public void columnMarginChanged(javax.swing.event.ChangeEvent e) {} public void columnMoved(javax.swing.event.TableColumnModelEvent e) {} public void columnRemoved(javax.swing.event.TableColumnModelEvent e) {} public void columnAdded(javax.swing.event.TableColumnModelEvent e) {} });
+    IOWebPageView.initComponents(this);
   }
-
   /**
    * Process specific file
    *
@@ -12191,17 +8623,17 @@ public class Modeler extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private xeadModeler.model.json.DataflowNode dataflowNodePojo_;
-    private JLabel jLabelID = new JLabel();
-    private JLabel jTextFieldNodeName = new JLabel();
-    private JLabel jTextFieldNodeNameExt = new JLabel();
+    JLabel jLabelID = new JLabel();
+    JLabel jTextFieldNodeName = new JLabel();
+    JLabel jTextFieldNodeNameExt = new JLabel();
     private JLabel[] jLabelEvent = new JLabel[3];
-    private JLabel jLabelRole = new JLabel();
-    private JLabel jLabelNumber = new JLabel();
+    JLabel jLabelRole = new JLabel();
+    JLabel jLabelNumber = new JLabel();
     private String nodeType;
-    private JPanel jPanelCanvas2;
-    private JPanel jPanelMoveGuide = new JPanel();
-    private JPanel jPanelMouseActionSensor = new JPanel();
-    private JSpinner jSpinnerSlideNumber = new JSpinner();
+    JPanel jPanelCanvas2;
+    JPanel jPanelMoveGuide = new JPanel();
+    JPanel jPanelMouseActionSensor = new JPanel();
+    JSpinner jSpinnerSlideNumber = new JSpinner();
     private int NODE_WIDTH;
     private int NODE_HEIGHT;
     private int mousePosX = 0;
@@ -12212,12 +8644,12 @@ public class Modeler extends JFrame {
     private int originalGuidePosY = 0;
     private int slideNumber = 0;
     private String taskID = "";
-    private JPopupMenu jPopupMenuDataflowNode = new JPopupMenu();
-    private JMenuItem jMenuItemDataflowNodeJump = new JMenuItem(res.getString("S2870"));
-    private JMenuItem jMenuItemDataflowNodeAddFlow = new JMenuItem(res.getString("S2871"));
-    private JMenuItem jMenuItemDataflowNodeChange = new JMenuItem(res.getString("S2872"));
-    private JMenuItem jMenuItemDataflowNodeCopy = new JMenuItem(res.getString("S2873"));
-    private JMenuItem jMenuItemDataflowNodeRemove = new JMenuItem();
+    JPopupMenu jPopupMenuDataflowNode = new JPopupMenu();
+    JMenuItem jMenuItemDataflowNodeJump = new JMenuItem(res.getString("S2870"));
+    JMenuItem jMenuItemDataflowNodeAddFlow = new JMenuItem(res.getString("S2871"));
+    JMenuItem jMenuItemDataflowNodeChange = new JMenuItem(res.getString("S2872"));
+    JMenuItem jMenuItemDataflowNodeCopy = new JMenuItem(res.getString("S2873"));
+    JMenuItem jMenuItemDataflowNodeRemove = new JMenuItem();
     private boolean slideNumberIsShown = false;
     private boolean clickable_;
     private String eventPos = "";
@@ -14288,10 +10720,10 @@ public class Modeler extends JFrame {
     private int slideNumber;
     private Shape shapeOfArrow1 = null;
     private Shape shapeOfArrow2 = null;
-    private JPanel jPanelCanvas_;
-    private JTextField jTextFieldFlowName = new JTextField();
-    private JTextField jTextFieldFlowNameExt = new JTextField();
-    private JLabel jLabelArrow1 = new JLabel() {
+    JPanel jPanelCanvas_;
+    JTextField jTextFieldFlowName = new JTextField();
+    JTextField jTextFieldFlowNameExt = new JTextField();
+    JLabel jLabelArrow1 = new JLabel() {
       private static final long serialVersionUID = 1L;
 
       public void paintComponent(Graphics g) {
@@ -14309,7 +10741,7 @@ public class Modeler extends JFrame {
         }
       }
     };
-    private JLabel jLabelArrow2 = new JLabel() {
+    JLabel jLabelArrow2 = new JLabel() {
       private static final long serialVersionUID = 1L;
 
       public void paintComponent(Graphics g) {
@@ -14327,7 +10759,7 @@ public class Modeler extends JFrame {
         }
       }
     };
-    private JLabel jLabelFlowImage = new JLabel() {
+    JLabel jLabelFlowImage = new JLabel() {
       private static final long serialVersionUID = 1L;
 
       public void paintComponent(Graphics g) {
@@ -14337,12 +10769,12 @@ public class Modeler extends JFrame {
         drawImage(g2);
       }
     };
-    private JLabel jLabelArrowMoveGuide = new JLabel();
-    private JLabel jLabelPressed;
-    private JSpinner jSpinnerSlideNumber = new JSpinner();
+    JLabel jLabelArrowMoveGuide = new JLabel();
+    JLabel jLabelPressed;
+    JSpinner jSpinnerSlideNumber = new JSpinner();
     private int arrowDirection1 = 0;
     private int arrowDirection2 = 0;
-    private Point arrowLabelPoint1, arrowLabelPoint2;
+    Point arrowLabelPoint1, arrowLabelPoint2;
     private Point[] arrowCordinateArray = new Point[10];
     private Point[] arrowCordinateArray1 = new Point[10];
     private Point[] arrowCordinateArray2 = new Point[10];
@@ -14355,9 +10787,9 @@ public class Modeler extends JFrame {
     private boolean showArrow2 = false;
     private boolean slideNumberShown = false;
     private String imageType;
-    private JPopupMenu jPopupMenuDataflowLine = new JPopupMenu();
-    private JMenuItem jMenuItemDataflowLineChange = new JMenuItem(res.getString("S2872"));
-    private JMenuItem jMenuItemDataflowLineDelete = new JMenuItem(res.getString("S2874"));
+    JPopupMenu jPopupMenuDataflowLine = new JPopupMenu();
+    JMenuItem jMenuItemDataflowLineChange = new JMenuItem(res.getString("S2872"));
+    JMenuItem jMenuItemDataflowLineDelete = new JMenuItem(res.getString("S2874"));
     private boolean clickable_;
 
     /**
@@ -15391,7 +11823,7 @@ public class Modeler extends JFrame {
     private Object subsystemRelationshipPojo_;
     private Object relationshipPojo_;
     private DatamodelEntityBox entityBox1, entityBox2;
-    private JPanel jPanelCanvas;
+    JPanel jPanelCanvas;
     private int terminalIndex, terminalIndex1, terminalIndex2;
     private Line2D iconPart_11, iconPart_12, iconPart_13, iconPart_14;
     private Line2D iconPart_21, iconPart_22, iconPart_23, iconPart_24;
@@ -15400,10 +11832,10 @@ public class Modeler extends JFrame {
     private int arc2D_x, arc2D_y, arc2D_w, arc2D_h;
     private Line2D line2D_A, line2D_B;
     private int line2D_1x, line2D_1y, line2D_2x, line2D_2y;
-    private Point boxPoint, boxPoint1, boxPoint2;
-    private Point iconPoint1, iconPoint2;
-    private Point lineTerminalPoint1, lineTerminalPoint2;
-    private JLabel jLabelTerminal_1 = new JLabel() {
+    Point boxPoint, boxPoint1, boxPoint2;
+    Point iconPoint1, iconPoint2;
+    Point lineTerminalPoint1, lineTerminalPoint2;
+    JLabel jLabelTerminal_1 = new JLabel() {
       private static final long serialVersionUID = 1L;
 
       public void paintComponent(Graphics g) {
@@ -15428,7 +11860,7 @@ public class Modeler extends JFrame {
         }
       }
     };
-    private JLabel jLabelTerminal_2 = new JLabel() {
+    JLabel jLabelTerminal_2 = new JLabel() {
       private static final long serialVersionUID = 1L;
 
       public void paintComponent(Graphics g) {
@@ -15456,14 +11888,14 @@ public class Modeler extends JFrame {
         }
       }
     };
-    private JLabel jLabelPressed;
-    private Point iconGuidePoint = new Point();
+    JLabel jLabelPressed;
+    Point iconGuidePoint = new Point();
     private boolean terminal1Optional = false;
     private boolean terminal2Optional = false;
     private boolean positionChanged = false;
     private Point[] indexCordinates = new Point[41];
-    private JPopupMenu jPopupMenuRelationshipLine = new JPopupMenu();
-    private JMenuItem jMenuItemRelationshipLineHide = new JMenuItem(res.getString("S2875"));
+    JPopupMenu jPopupMenuRelationshipLine = new JPopupMenu();
+    JMenuItem jMenuItemRelationshipLineHide = new JMenuItem(res.getString("S2875"));
     private boolean showOnModel = true;
     private int terminalIconSize = 0;
     private int boxHeight = 0;
@@ -17128,19 +13560,19 @@ public class Modeler extends JFrame {
     private XeadTreeNode tableNode_;
 
     //Internal components//
-    private JPanel jPanelCanvas;
-    private Border normalBorder;
-    private Border draggingBorder;
-    private Border printBorder;
-    private JPanel jPanel1 = new JPanel();
+    JPanel jPanelCanvas;
+    Border normalBorder;
+    Border draggingBorder;
+    Border printBorder;
+    JPanel jPanel1 = new JPanel();
     private DropAcceptablePanel jPanel2 = null;
-    private JPanel jPanelElements = new JPanel();
-    private JLabel jLabelName = new JLabel();
-    private JLabel jLabelSynchFile = new JLabel();
-    private JLabel jLabelID = new JLabel();
-    private JLabel jLabelNo = new JLabel();
-    private JLabel jLabelCRUD = new JLabel();
-    private JPanel jPanelMoveGuide = new JPanel();
+    JPanel jPanelElements = new JPanel();
+    JLabel jLabelName = new JLabel();
+    JLabel jLabelSynchFile = new JLabel();
+    JLabel jLabelID = new JLabel();
+    JLabel jLabelNo = new JLabel();
+    JLabel jLabelCRUD = new JLabel();
+    JPanel jPanelMoveGuide = new JPanel();
     private int mousePosX = 0;
     private int mousePosY = 0;
     private int boxPosX = 0;
@@ -17150,20 +13582,20 @@ public class Modeler extends JFrame {
     private int jPanel2Width = 0;
     private int idFontSize = 0;
     private int nameFontSize = 0;
-    private Rectangle numberBounds = null;
-    private Rectangle idBounds = null;
-    private Rectangle nameBounds = null;
-    private Rectangle crudBounds = null;
-    private Rectangle synchFileBounds = null;
+    Rectangle numberBounds = null;
+    Rectangle idBounds = null;
+    Rectangle nameBounds = null;
+    Rectangle crudBounds = null;
+    Rectangle synchFileBounds = null;
     private int elementLabelPosY = 0;
     private int originalGuidePosX;
     private int originalGuidePosY;
-    private JPopupMenu jPopupMenuEntityBox = new JPopupMenu();
-    private JMenuItem jMenuItemEntityBoxJump = new JMenuItem(res.getString("S2870"));
-    private JMenuItem jMenuItemEntityBoxEditInstance = new JMenuItem(res.getString("S2876"));
-    private JMenuItem jMenuItemEntityBoxShowAllLines = new JMenuItem(res.getString("S2877"));
-    private JMenuItem jMenuItemEntityBoxHide = new JMenuItem(res.getString("S2875"));
-    private JTextArea jTextAreaShowInstance = new JTextArea();
+    JPopupMenu jPopupMenuEntityBox = new JPopupMenu();
+    JMenuItem jMenuItemEntityBoxJump = new JMenuItem(res.getString("S2870"));
+    JMenuItem jMenuItemEntityBoxEditInstance = new JMenuItem(res.getString("S2876"));
+    JMenuItem jMenuItemEntityBoxShowAllLines = new JMenuItem(res.getString("S2877"));
+    JMenuItem jMenuItemEntityBoxHide = new JMenuItem(res.getString("S2875"));
+    JTextArea jTextAreaShowInstance = new JTextArea();
     private boolean isVisibleOnModel = false;
     private boolean isSelected_ = false;
     private int heightOfInstanceArea;
