@@ -2,10 +2,8 @@ package xeadModeler.model;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilderFactory;
+import xeadModeler.model.json.TableField;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,46 +13,40 @@ import java.util.List;
 
 /**
  * XeadFieldElementのテスト
+ * JSON POJOを使用してテストします。
  */
 @DisplayName("XeadFieldElementテスト")
 public class XeadFieldElementTest {
     
-    private Document createDocument() throws Exception {
-        return DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-    }
-    
-    private Element createElement(Document doc, String tagName, String alias) {
-        Element element = doc.createElement(tagName);
-        element.setAttribute("Alias", alias);
-        return element;
+    private TableField createTableField(String alias) {
+        TableField field = new TableField();
+        field.setAlias(alias);
+        return field;
     }
     
     @Test
     @DisplayName("要素の作成と取得")
     public void testCreateAndGetElement() throws Exception {
         // Given
-        Document doc = createDocument();
-        Element element = createElement(doc, "Field", "name");
+        TableField field = createTableField("name");
         
         // When
-        XeadFieldElement xeadFieldElement = new XeadFieldElement(element);
+        XeadFieldElement xeadFieldElement = new XeadFieldElement(field);
         
         // Then
-        assertSame(element, xeadFieldElement.getElement());
-        assertEquals("Field", xeadFieldElement.getElement().getTagName());
-        assertEquals("name", xeadFieldElement.getElement().getAttribute("Alias"));
+        assertSame(field, xeadFieldElement.getPojo());
+        assertEquals("name", ((TableField) xeadFieldElement.getPojo()).getAlias());
     }
     
     @Test
     @DisplayName("Aliasによる比較 - 小さい場合")
     public void testCompareToLessThan() throws Exception {
         // Given
-        Document doc = createDocument();
-        Element element1 = createElement(doc, "Field", "aaa");
-        Element element2 = createElement(doc, "Field", "bbb");
+        TableField field1 = createTableField("aaa");
+        TableField field2 = createTableField("bbb");
         
-        XeadFieldElement xead1 = new XeadFieldElement(element1);
-        XeadFieldElement xead2 = new XeadFieldElement(element2);
+        XeadFieldElement xead1 = new XeadFieldElement(field1);
+        XeadFieldElement xead2 = new XeadFieldElement(field2);
         
         // When & Then
         assertTrue(xead1.compareTo(xead2) < 0);
@@ -64,12 +56,11 @@ public class XeadFieldElementTest {
     @DisplayName("Aliasによる比較 - 大きい場合")
     public void testCompareToGreaterThan() throws Exception {
         // Given
-        Document doc = createDocument();
-        Element element1 = createElement(doc, "Field", "zzz");
-        Element element2 = createElement(doc, "Field", "aaa");
+        TableField field1 = createTableField("zzz");
+        TableField field2 = createTableField("aaa");
         
-        XeadFieldElement xead1 = new XeadFieldElement(element1);
-        XeadFieldElement xead2 = new XeadFieldElement(element2);
+        XeadFieldElement xead1 = new XeadFieldElement(field1);
+        XeadFieldElement xead2 = new XeadFieldElement(field2);
         
         // When & Then
         assertTrue(xead1.compareTo(xead2) > 0);
@@ -79,12 +70,11 @@ public class XeadFieldElementTest {
     @DisplayName("Aliasによる比較 - 等しい場合")
     public void testCompareToEqual() throws Exception {
         // Given
-        Document doc = createDocument();
-        Element element1 = createElement(doc, "Field", "name");
-        Element element2 = createElement(doc, "Field", "name");
+        TableField field1 = createTableField("name");
+        TableField field2 = createTableField("name");
         
-        XeadFieldElement xead1 = new XeadFieldElement(element1);
-        XeadFieldElement xead2 = new XeadFieldElement(element2);
+        XeadFieldElement xead1 = new XeadFieldElement(field1);
+        XeadFieldElement xead2 = new XeadFieldElement(field2);
         
         // When & Then
         assertEquals(0, xead1.compareTo(xead2));
@@ -94,10 +84,9 @@ public class XeadFieldElementTest {
     @DisplayName("Aliasによるソート")
     public void testSorting() throws Exception {
         // Given
-        Document doc = createDocument();
-        XeadFieldElement xead1 = new XeadFieldElement(createElement(doc, "Field", "zzz"));
-        XeadFieldElement xead2 = new XeadFieldElement(createElement(doc, "Field", "aaa"));
-        XeadFieldElement xead3 = new XeadFieldElement(createElement(doc, "Field", "mmm"));
+        XeadFieldElement xead1 = new XeadFieldElement(createTableField("zzz"));
+        XeadFieldElement xead2 = new XeadFieldElement(createTableField("aaa"));
+        XeadFieldElement xead3 = new XeadFieldElement(createTableField("mmm"));
         
         List<XeadFieldElement> list = Arrays.asList(xead1, xead2, xead3);
         
@@ -105,26 +94,28 @@ public class XeadFieldElementTest {
         Collections.sort(list);
         
         // Then
-        assertEquals("aaa", list.get(0).getElement().getAttribute("Alias"));
-        assertEquals("mmm", list.get(1).getElement().getAttribute("Alias"));
-        assertEquals("zzz", list.get(2).getElement().getAttribute("Alias"));
+        TableField f1 = (TableField) list.get(0).getPojo();
+        TableField f2 = (TableField) list.get(1).getPojo();
+        TableField f3 = (TableField) list.get(2).getPojo();
+        assertEquals("aaa", f1.getAlias());
+        assertEquals("mmm", f2.getAlias());
+        assertEquals("zzz", f3.getAlias());
     }
     
     @Test
     @DisplayName("複数の属性を持つ要素")
     public void testElementWithMultipleAttributes() throws Exception {
         // Given
-        Document doc = createDocument();
-        Element element = createElement(doc, "Field", "name");
-        element.setAttribute("ID", "field-1");
-        element.setAttribute("DataType", "VARCHAR");
+        TableField field = createTableField("name");
+        field.setId("field-1");
+        field.setDataTypeId("VARCHAR");
         
         // When
-        XeadFieldElement xeadFieldElement = new XeadFieldElement(element);
+        XeadFieldElement xeadFieldElement = new XeadFieldElement(field);
         
         // Then
-        assertEquals("name", xeadFieldElement.getElement().getAttribute("Alias"));
-        assertEquals("field-1", xeadFieldElement.getElement().getAttribute("ID"));
-        assertEquals("VARCHAR", xeadFieldElement.getElement().getAttribute("DataType"));
+        assertEquals("name", ((TableField) xeadFieldElement.getPojo()).getAlias());
+        assertEquals("field-1", ((TableField) xeadFieldElement.getPojo()).getId());
+        assertEquals("VARCHAR", ((TableField) xeadFieldElement.getPojo()).getDataTypeId());
     }
 }
