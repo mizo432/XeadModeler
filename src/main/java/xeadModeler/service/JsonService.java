@@ -35,4 +35,11 @@ public interface JsonService {
      * @throws Exception 作成エラー
      */
     XeadSystem createNewSystem(String fileName, String formatVersion) throws Exception;
+    
+    /**
+     * JSON POJOオブジェクトをクローンします
+     * @param obj クローンするオブジェクト
+     * @return クローンされたオブジェクト
+     */
+    Object cloneObject(Object obj) throws Exception;
 }

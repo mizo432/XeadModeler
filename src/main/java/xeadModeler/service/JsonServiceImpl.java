@@ -241,4 +241,13 @@ public class JsonServiceImpl implements JsonService {
         
         return system;
     }
+    
+    @Override
+    public Object cloneObject(Object obj) throws Exception {
+        if (obj == null) {
+            return null;
+        }
+        String json = objectMapper.writeValueAsString(obj);
+        return objectMapper.readValue(json, obj.getClass());
+    }
 }

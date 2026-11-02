@@ -144,7 +144,7 @@ public class DialogTableSynchronize extends JDialog {
 		jButtonImport.setEnabled(false);
 
 		synchFileTable_ = null;
-		targetTable_ = (Table) tableNode.getJsonNode();
+		targetTable_ = (Table) tableNode.getPojo();
 		if (targetTable_ == null) {
 			return false;
 		}

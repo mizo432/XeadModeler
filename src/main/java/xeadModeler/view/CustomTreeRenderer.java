@@ -129,12 +129,12 @@ public class CustomTreeRenderer extends DefaultTreeCellRenderer {
         this.setIcon(modeler.imageIconActionFirst);
       }
       if (nodeType == "TaskAction") {
-        Object jsonNode = ((XeadTreeNode) treeNode).getJsonNode();
+        Object pojo = ((XeadTreeNode) treeNode).getPojo();
         String executeIf = "";
-        if (jsonNode != null) {
+        if (pojo != null) {
           try {
-            java.lang.reflect.Method method = jsonNode.getClass().getMethod("getExecuteIf");
-            Object result = method.invoke(jsonNode);
+            java.lang.reflect.Method method = pojo.getClass().getMethod("getExecuteIf");
+            Object result = method.invoke(pojo);
             executeIf = result != null ? result.toString() : "";
           } catch (Exception e) {
             // Ignore if method not found

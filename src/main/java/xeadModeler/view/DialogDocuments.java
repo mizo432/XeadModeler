@@ -140,10 +140,10 @@ public class DialogDocuments extends JDialog {
 	private String functionID = "";
 	private int currentRowNumber = 0;
 	private int countOfErrors = 0;
-	private JsonNode[] definitionArray = new JsonNode[200];
-	private JsonNode[] elementArray1 = new JsonNode[1000];
+	private Object[] definitionArray = new Object[200];
+	private Object[] elementArray1 = new Object[1000];
 	private int countOfElementArray1 = -1;
-	private JsonNode[] elementArray2 = new JsonNode[1000];
+	private Object[] elementArray2 = new Object[1000];
 	private int countOfElementArray2 = -1;
 
 	private XSSFFont fontTitle = null;
@@ -280,7 +280,7 @@ public class DialogDocuments extends JDialog {
 	}
 
 	public String request(String fileName) {
-		JsonNode node;
+		Object node;
 		fileName_ = fileName;
 		xlsFileName = "";
 
@@ -292,8 +292,7 @@ public class DialogDocuments extends JDialog {
 		}
 		subsystemList = xeadSystem.getSubsystems();
 		for (int i = 0; i < subsystemList.size(); i++) {
-			node = new JsonNode("Subsystem", subsystemList.get(i));
-			comboBoxModelSubsystems.addElement((Object)node);
+			comboBoxModelSubsystems.addElement(subsystemList.get(i));
 		}
 		comboBoxModelSubsystems.sortElements();
 		comboBoxModelSubsystems.insertElementAt(res.getString("DialogDocuments10"), 0);
@@ -322,7 +321,7 @@ public class DialogDocuments extends JDialog {
 
 	void jButtonStart_actionPerformed(ActionEvent e) {
 		Object workPojo = null;
-		JsonNode workNode = null;
+		Object workNode = null;
 		int countOfDefinitions = 0;
 
 		try{
@@ -332,59 +331,57 @@ public class DialogDocuments extends JDialog {
 			subsystemID = "";
 			countOfErrors = 0;
 
-			if (jComboBoxSubsystems.getSelectedIndex() > 0) {
-				workNode = (JsonNode)comboBoxModelSubsystems.getSelectedItem();
-				subsystemElement = (Subsystem)workNode.getPojo();
-				subsystemID = subsystemElement.getId();
+ 		if (jComboBoxSubsystems.getSelectedIndex() > 0) {
+ 			workNode = comboBoxModelSubsystems.getSelectedItem();
+ 			subsystemElement = (Subsystem)workNode;
+ 			subsystemID = subsystemElement.getId();
 
 				File file = new File(fileName_);
 
 				if (jRadioButtonTable.isSelected()) {
-					if (jComboBoxTables.getSelectedIndex() > 0) {
-						workNode = (JsonNode)comboBoxModelTables.getSelectedItem();
-						workPojo = workNode.getPojo();
-						tableID = ((Table)workPojo).getId();
-					}
+  			if (jComboBoxTables.getSelectedIndex() > 0) {
+  				workNode = comboBoxModelTables.getSelectedItem();
+  				workPojo = workNode;
+  				tableID = ((Table)workPojo).getId();
+  			}
 
 					countOfDefinitions = 0;
 					for (int m = 0; m < tableList.size(); m++) {
 						Table table = tableList.get(m);
 						if (table.getSubsystemId().equals(subsystemID)) {
-							if (table.getId().equals(tableID) || tableID.equals("")) {
-								workNode = new JsonNode("Table", table);
-								definitionArray[countOfDefinitions] = workNode;
-								countOfDefinitions++;
-							}
+  					if (table.getId().equals(tableID) || tableID.equals("")) {
+  						definitionArray[countOfDefinitions] = table;
+  						countOfDefinitions++;
+  					}
 						}
 					}
-					if (countOfDefinitions > 1) {
-						Arrays.sort(definitionArray, 0, countOfDefinitions);
-					}
-					xlsFileName = file.getParent() + File.separator + "TableDoc" + getStringValueOfDateAndTime() + ".xlsx";
-				}
+ 				if (countOfDefinitions > 1) {
+ 					Arrays.sort(definitionArray, 0, countOfDefinitions, new TableComparator());
+ 				}
+ 				xlsFileName = file.getParent() + File.separator + "TableDoc" + getStringValueOfDateAndTime() + ".xlsx";
+ 			}
 
-				if (jRadioButtonFunction.isSelected()) {
-					if (jComboBoxFunctions.getSelectedIndex() > 0) {
-						workNode = (JsonNode)comboBoxModelFunctions.getSelectedItem();
-						workPojo = workNode.getPojo();
-						functionID = ((Function)workPojo).getId();
-					}
+ 			if (jRadioButtonFunction.isSelected()) {
+  			if (jComboBoxFunctions.getSelectedIndex() > 0) {
+  				workNode = comboBoxModelFunctions.getSelectedItem();
+  				workPojo = workNode;
+  				functionID = ((Function)workPojo).getId();
+  			}
 
 					countOfDefinitions = 0;
 					for (int m = 0; m < functionList.size(); m++) {
 						Function func = functionList.get(m);
 						if (func.getSubsystemId().equals(subsystemID)) {
-							if (func.getId().equals(functionID) || functionID.equals("")) {
-								workNode = new JsonNode("Function", func);
-								definitionArray[countOfDefinitions] = workNode;
-								countOfDefinitions++;
-							}
+  					if (func.getId().equals(functionID) || functionID.equals("")) {
+  						definitionArray[countOfDefinitions] = func;
+  						countOfDefinitions++;
+  					}
 						}
 					}
-					if (countOfDefinitions > 1) {
-						Arrays.sort(definitionArray, 0, countOfDefinitions);
-					}
-					xlsFileName = file.getParent() + File.separator + "FunctionDoc" + getStringValueOfDateAndTime() + ".xlsx";
+ 				if (countOfDefinitions > 1) {
+ 					Arrays.sort(definitionArray, 0, countOfDefinitions, new FunctionComparator());
+ 				}
+ 				xlsFileName = file.getParent() + File.separator + "FunctionDoc" + getStringValueOfDateAndTime() + ".xlsx";
 				}
 
 				jProgressBar.setValue(0);
@@ -395,7 +392,7 @@ public class DialogDocuments extends JDialog {
 
 				if (jRadioButtonTable.isSelected()) {
 					for (int m = 0; m < countOfDefinitions; m++) {
-						Table table = (Table)definitionArray[m].getPojo();
+						Table table = (Table)definitionArray[m];
 						if (table.getSubsystemId().equals(subsystemID)) {
 							if (table.getId().equals(tableID) || tableID.equals("")) {
 								jProgressBar.setValue(jProgressBar.getValue() + 1);
@@ -408,7 +405,7 @@ public class DialogDocuments extends JDialog {
 
 				if (jRadioButtonFunction.isSelected()) {
 					for (int m = 0; m < countOfDefinitions; m++) {
-						Function func = (Function)definitionArray[m].getPojo();
+						Function func = (Function)definitionArray[m];
 						if (func.getSubsystemId().equals(subsystemID)) {
 							if (func.getId().equals(functionID) || functionID.equals("")) {
 								jProgressBar.setValue(jProgressBar.getValue() + 1);
@@ -885,7 +882,7 @@ public class DialogDocuments extends JDialog {
 	void setupFunctionIOList(XSSFSheet sheet, Function func) {
 		String workString = "";
 		int rowSequence = 0;
-		JsonNode node = null;
+		Object node = null;
 
 		//Label IOList
 		currentRowNumber++;
@@ -939,44 +936,40 @@ public class DialogDocuments extends JDialog {
 		cellF1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 		sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 5, 8));
 
-		countOfElementArray1 = -1;
+ 	countOfElementArray1 = -1;
 		if (func.getIOPanels() != null) {
 			for (IOPanel ioPanel : func.getIOPanels()) {
 				countOfElementArray1++;
-				node = new JsonNode("IOPanel", ioPanel);
-				elementArray1[countOfElementArray1] = node;
+				elementArray1[countOfElementArray1] = ioPanel;
 			}
 		}
 		if (func.getIOSpools() != null) {
 			for (IOSpool ioSpool : func.getIOSpools()) {
 				countOfElementArray1++;
-				node = new JsonNode("IOSpool", ioSpool);
-				elementArray1[countOfElementArray1] = node;
+				elementArray1[countOfElementArray1] = ioSpool;
 			}
 		}
 		if (func.getIOWebPages() != null) {
 			for (IOWebPage ioWebPage : func.getIOWebPages()) {
 				countOfElementArray1++;
-				node = new JsonNode("IOWebPage", ioWebPage);
-				elementArray1[countOfElementArray1] = node;
+				elementArray1[countOfElementArray1] = ioWebPage;
 			}
 		}
 		if (func.getIOTables() != null) {
 			for (IOTable ioTable : func.getIOTables()) {
 				countOfElementArray1++;
-				node = new JsonNode("IOTable", ioTable);
-				elementArray1[countOfElementArray1] = node;
+				elementArray1[countOfElementArray1] = ioTable;
 			}
 		}
 		if (countOfElementArray1 > 0) {
-			Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
+			Arrays.sort(elementArray1, 0, countOfElementArray1 + 1, new IOObjectComparator());
 		}
 
 		rowSequence = 0;
 		for (int i = 0; i <= countOfElementArray1; i++) {
 			currentRowNumber++;
 			XSSFRow nextRow = sheet.createRow(currentRowNumber);
-			Object ioPojo = elementArray1[i].getPojo();
+			Object ioPojo = elementArray1[i];
 			rowSequence++;
 			XSSFCell cellA = nextRow.createCell(0);
 			cellA.setCellStyle(styleValueNumber);
@@ -988,7 +981,7 @@ public class DialogDocuments extends JDialog {
 			XSSFCell cellD = nextRow.createCell(3);
 			cellD.setCellStyle(styleValue);
 			workString = "";
-			if (elementArray1[i].getType().equals("IOTable")) {
+			if (ioPojo instanceof IOTable) {
 				IOTable ioTable = (IOTable)ioPojo;
 				for (Table table : tableList) {
 					if (table.getId().equals(ioTable.getTableId())) {
@@ -1001,23 +994,23 @@ public class DialogDocuments extends JDialog {
 					}
 				}
 			} else {
-				workString = elementArray1[i].getName();
+				workString = getIOObjectName(ioPojo);
 			}
 			cellB.setCellValue(new XSSFRichTextString(workString));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 1, 3));
 			XSSFCell cellE = nextRow.createCell(4);
 			cellE.setCellStyle(styleValue);
 			workString = "";
-			if (elementArray1[i].getType().equals("IOPanel")) {
+			if (ioPojo instanceof IOPanel) {
 				workString = res.getString("DialogDocuments27");
 			}
-			if (elementArray1[i].getType().equals("IOSpool")) {
+			if (ioPojo instanceof IOSpool) {
 				workString = res.getString("DialogDocuments28");
 			}
-			if (elementArray1[i].getType().equals("IOWebPage")) {
+			if (ioPojo instanceof IOWebPage) {
 				workString = res.getString("DialogDocuments29");
 			}
-			if (elementArray1[i].getType().equals("IOTable")) {
+			if (ioPojo instanceof IOTable) {
 				IOTable ioTable = (IOTable)ioPojo;
 				workString = "[";
 				if ("+".equals(ioTable.getOpC())) workString = workString + "C";
@@ -1463,7 +1456,7 @@ public class DialogDocuments extends JDialog {
 		int end = 0;
 
 		for (int i = 0; i <= countOfElementArray1; i++) {
-			Object ioPojo = elementArray1[i].getPojo();
+			Object ioPojo = elementArray1[i];
 			sectionNumber++;
 
 			currentRowNumber++;
@@ -1531,7 +1524,7 @@ public class DialogDocuments extends JDialog {
 			XSSFCell cellG2 = rowValue1.createCell(6);
 			cellG2.setCellStyle(styleValue);
 			workString1 = "";
-			if (elementArray1[i].getType().equals("IOTable")) {
+			if (ioPojo instanceof IOTable) {
 				IOTable ioTable = (IOTable)ioPojo;
 				for (Table table : tableList) {
 					if (table.getId().equals(ioTable.getTableId())) {
@@ -1540,7 +1533,7 @@ public class DialogDocuments extends JDialog {
 					}
 				}
 			} else {
-				workString1 = elementArray1[i].getName();
+				workString1 = getIOObjectName(ioPojo);
 			}
 			cellA2.setCellValue(new XSSFRichTextString(workString1));
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 6));
@@ -1549,16 +1542,16 @@ public class DialogDocuments extends JDialog {
 			XSSFCell cellI2 = rowValue1.createCell(8);
 			cellI2.setCellStyle(styleValue);
 			workString1 = "";
-			if (elementArray1[i].getType().equals("IOPanel")) {
+			if (ioPojo instanceof IOPanel) {
 				workString1 = res.getString("DialogDocuments27");
 			}
-			if (elementArray1[i].getType().equals("IOSpool")) {
+			if (ioPojo instanceof IOSpool) {
 				workString1 = res.getString("DialogDocuments28");
 			}
-			if (elementArray1[i].getType().equals("IOWebPage")) {
+			if (ioPojo instanceof IOWebPage) {
 				workString1 = res.getString("DialogDocuments29");
 			}
-			if (elementArray1[i].getType().equals("IOTable")) {
+			if (ioPojo instanceof IOTable) {
 				IOTable ioTable = (IOTable)ioPojo;
 				workString1 = "Table[";
 				if ("+".equals(ioTable.getOpC())) workString1 = workString1 + "C";
@@ -1623,7 +1616,7 @@ public class DialogDocuments extends JDialog {
 			sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 			rowValueDescriptions.setHeight((short)1000);
 
-			if (elementArray1[i].getType().equals("IOPanel") || elementArray1[i].getType().equals("IOSpool") || elementArray1[i].getType().equals("IOWebPage")) {
+			if (ioPojo instanceof IOPanel || ioPojo instanceof IOSpool || ioPojo instanceof IOWebPage) {
 				currentRowNumber++;
 				XSSFRow rowLabelImage = sheet.createRow(currentRowNumber);
 				XSSFCell cellA5 = rowLabelImage.createCell(0);
@@ -1668,13 +1661,13 @@ public class DialogDocuments extends JDialog {
 				XSSFCell cellI6 = rowValueImage.createCell(8);
 				cellI6.setCellStyle(styleImage);
 				XSSFRichTextString valueImage = null;
-				if (elementArray1[i].getType().equals("IOWebPage")) {
+				if (ioPojo instanceof IOWebPage) {
 					IOWebPage ioWebPage = (IOWebPage)ioPojo;
 					workString1 = res.getString("DialogDocuments40a") + (ioWebPage.getFileName() != null ? ioWebPage.getFileName() : "") + res.getString("DialogDocuments40b");
 					valueImage = new XSSFRichTextString(workString1);
 					cellA6.setCellValue(valueImage);
 				}
-				if (elementArray1[i].getType().equals("IOPanel") || elementArray1[i].getType().equals("IOSpool")) {
+				if (ioPojo instanceof IOPanel || ioPojo instanceof IOSpool) {
 					int imageType = -1;
 					File file = new File(fileName_);
 					String sortKey = func.getSortKey();
@@ -1764,7 +1757,7 @@ public class DialogDocuments extends JDialog {
 				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 0, 8));
 				rowValueImage.setHeight((short)3500);
 
-				if (elementArray1[i].getType().equals("IOPanel") || elementArray1[i].getType().equals("IOWebPage")) {
+				if (ioPojo instanceof IOPanel || ioPojo instanceof IOWebPage) {
 					currentRowNumber++;
 					XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
 					XSSFCell cellA7 = rowColumnHeading.createCell(0);
@@ -1797,32 +1790,30 @@ public class DialogDocuments extends JDialog {
 					//Rows of Field
 					rowSequence = 0;
 					countOfElementArray2 = -1;
-					JsonNode node = null;
-					if (elementArray1[i].getType().equals("IOPanel")) {
+					Object node = null;
+					if (ioPojo instanceof IOPanel) {
 						IOPanel ioPanel = (IOPanel)ioPojo;
 						if (ioPanel.getIopanelFields() != null) {
 							for (IOPanelField field : ioPanel.getIopanelFields()) {
 								countOfElementArray2++;
-								node = new JsonNode("IOPanelField", field);
-								elementArray2[countOfElementArray2] = node;
+								elementArray2[countOfElementArray2] = field;
 							}
 						}
 					}
-					if (elementArray1[i].getType().equals("IOWebPage")) {
+					if (ioPojo instanceof IOWebPage) {
 						IOWebPage ioWebPage = (IOWebPage)ioPojo;
 						if (ioWebPage.getIowebpageFields() != null) {
 							for (IOWebPageField field : ioWebPage.getIowebpageFields()) {
 								countOfElementArray2++;
-								node = new JsonNode("IOWebPageField", field);
-								elementArray2[countOfElementArray2] = node;
+								elementArray2[countOfElementArray2] = field;
 							}
 						}
 					}
 					if (countOfElementArray2 > 0) {
-						Arrays.sort(elementArray2, 0, countOfElementArray2 + 1);
+						Arrays.sort(elementArray2, 0, countOfElementArray2 + 1, new IOFieldComparator());
 					}
 					for (int j = 0; j <= countOfElementArray2; j++) {
-						Object fieldPojo = elementArray2[j].getPojo();
+						Object fieldPojo = elementArray2[j];
 						currentRowNumber++;
 						XSSFRow rowValue2 = sheet.createRow(currentRowNumber);
 						XSSFCell cellA = rowValue2.createCell(0);
@@ -1898,7 +1889,7 @@ public class DialogDocuments extends JDialog {
 						sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 					}
 				}
-				if (elementArray1[i].getType().equals("IOSpool")) {
+				if (ioPojo instanceof IOSpool) {
 					currentRowNumber++;
 					XSSFRow rowColumnHeading = sheet.createRow(currentRowNumber);
 					XSSFCell cellA7 = rowColumnHeading.createCell(0);
@@ -1929,20 +1920,19 @@ public class DialogDocuments extends JDialog {
 					//Rows of Field
 					rowSequence = 0;
 					countOfElementArray2 = -1;
-					JsonNode node = null;
+					Object node = null;
 					IOSpool ioSpool = (IOSpool)ioPojo;
 					if (ioSpool.getIospoolFields() != null) {
 						for (IOSpoolField field : ioSpool.getIospoolFields()) {
 							countOfElementArray2++;
-							node = new JsonNode("IOSpoolField", field);
-							elementArray2[countOfElementArray2] = node;
+							elementArray2[countOfElementArray2] = field;
 						}
 					}
 					if (countOfElementArray2 > 0) {
-						Arrays.sort(elementArray2, 0, countOfElementArray2 + 1);
+						Arrays.sort(elementArray2, 0, countOfElementArray2 + 1, new IOFieldComparator());
 					}
 					for (int j = 0; j <= countOfElementArray2; j++) {
-						IOSpoolField field = (IOSpoolField)elementArray2[j].getPojo();
+						IOSpoolField field = (IOSpoolField)elementArray2[j];
 						currentRowNumber++;
 						XSSFRow rowValue2 = sheet.createRow(currentRowNumber);
 						XSSFCell cellA = rowValue2.createCell(0);
@@ -1999,7 +1989,7 @@ public class DialogDocuments extends JDialog {
 					}
 				}
 			}
-			if (elementArray1[i].getType().equals("IOTable")) {
+			if (ioPojo instanceof IOTable) {
 				IOTable ioTable = (IOTable)ioPojo;
 				for (Table table : tableList) {
 					if (table.getId().equals(ioTable.getTableId())) {
@@ -2048,20 +2038,19 @@ public class DialogDocuments extends JDialog {
 
 						rowSequence = 0;
 						countOfElementArray2 = -1;
-						JsonNode node = null;
-						List<TableField> tableFields = table.getTableFields();
-						if (tableFields != null) {
-							for (TableField tf : tableFields) {
-								countOfElementArray2++;
-								node = new JsonNode("TableField", tf);
-								elementArray2[countOfElementArray2] = node;
-							}
-						}
-						if (countOfElementArray2 > 0) {
-							Arrays.sort(elementArray2, 0, countOfElementArray2 + 1);
-						}
-						for (int k = 0; k <= countOfElementArray2; k++) {
-							TableField tf = (TableField)elementArray2[k].getPojo();
+ 					Object node = null;
+ 					List<TableField> tableFields = table.getTableFields();
+ 					if (tableFields != null) {
+ 						for (TableField tf : tableFields) {
+ 							countOfElementArray2++;
+ 							elementArray2[countOfElementArray2] = tf;
+ 						}
+ 					}
+ 					if (countOfElementArray2 > 0) {
+ 						Arrays.sort(elementArray2, 0, countOfElementArray2 + 1, new TableFieldComparator());
+ 					}
+ 					for (int k = 0; k <= countOfElementArray2; k++) {
+ 						TableField tf = (TableField)elementArray2[k];
 							currentRowNumber++;
 							XSSFRow rowValue2 = sheet.createRow(currentRowNumber);
 							XSSFCell cellA = rowValue2.createCell(0);
@@ -2323,7 +2312,7 @@ public class DialogDocuments extends JDialog {
 	void setupTableFieldList(XSSFSheet sheet, Table table) {
 		String workString1 = "";
 		int rowSequence = 0;
-		JsonNode node = null;
+		Object node = null;
 
 		//Label FieldList
 		currentRowNumber++;
@@ -2383,17 +2372,16 @@ public class DialogDocuments extends JDialog {
 		countOfElementArray1 = -1;
 		List<TableField> tableFields = table.getTableFields();
 		if (tableFields != null) {
-			for (TableField tf : tableFields) {
+ 		for (TableField tf : tableFields) {
 				countOfElementArray1++;
-				node = new JsonNode("TableField", tf);
-				elementArray1[countOfElementArray1] = node;
+				elementArray1[countOfElementArray1] = tf;
 			}
 		}
 		if (countOfElementArray1 > 0) {
-			Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
+			Arrays.sort(elementArray1, 0, countOfElementArray1 + 1, new TableFieldComparator());
 		}
 		for (int i = 0; i <= countOfElementArray1; i++) {
-			TableField tf = (TableField)elementArray1[i].getPojo();
+			TableField tf = (TableField)elementArray1[i];
 			currentRowNumber++;
 			XSSFRow nextRow = sheet.createRow(currentRowNumber);
 			XSSFCell cellA = nextRow.createCell(0);
@@ -2510,7 +2498,7 @@ public class DialogDocuments extends JDialog {
 	void setupTableKeyList(XSSFSheet sheet, Table table) {
 		String workString1 = "";
 		int rowSequence = 0;
-		JsonNode node = null;
+		Object node = null;
 
 		//Label KeyList
 		currentRowNumber++;
@@ -2601,15 +2589,14 @@ public class DialogDocuments extends JDialog {
 				if (tkfList != null) {
 					for (TableKeyField tkf : tkfList) {
 						countOfElementArray1++;
-						node = new JsonNode("TableKeyField", tkf);
-						elementArray1[countOfElementArray1] = node;
+						elementArray1[countOfElementArray1] = tkf;
 					}
 				}
 				if (countOfElementArray1 > 0) {
-					Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
+					Arrays.sort(elementArray1, 0, countOfElementArray1 + 1, new TableKeyFieldComparator());
 				}
 				for (int j = 0; j <= countOfElementArray1; j++) {
-					TableKeyField tkf = (TableKeyField)elementArray1[j].getPojo();
+					TableKeyField tkf = (TableKeyField)elementArray1[j];
 					if (fieldList != null) {
 						for (TableField tf : fieldList) {
 							if (tkf.getFieldId().equals(tf.getId())) {
@@ -2642,7 +2629,7 @@ public class DialogDocuments extends JDialog {
 	void setupTableUsageList(XSSFSheet sheet, Table table) {
 		String workString1 = "";
 		int rowSequence = 0;
-		JsonNode node = null;
+		Object node = null;
 
 		//Label FieldList
 		currentRowNumber++;
@@ -2781,7 +2768,7 @@ public class DialogDocuments extends JDialog {
 		int rowSequence = 0;
 		int sectionNumber = 0;
 		int totalSectionNumber = 0;
-		JsonNode node = null;
+		Object node = null;
 
 		//Count TableKey
 		List<TableKey> tableKeys = table.getTableKeys();
@@ -2849,22 +2836,21 @@ public class DialogDocuments extends JDialog {
 				cellG1.setCellValue(new XSSFRichTextString(res.getString("DialogDocuments23")));
 				sheet.addMergedRegion(new CellRangeAddress(currentRowNumber, currentRowNumber, 6, 8));
 
-				rowSequence = 0;
-				countOfElementArray1 = -1;
-				List<TableKeyField> tkfList = tk.getTableKeyFields();
-				if (tkfList != null) {
-					for (TableKeyField tkf : tkfList) {
-						countOfElementArray1++;
-						node = new JsonNode("TableKeyField", tkf);
-						elementArray1[countOfElementArray1] = node;
-					}
-				}
-				if (countOfElementArray1 > 0) {
-					Arrays.sort(elementArray1, 0, countOfElementArray1 + 1);
-				}
-				for (int i = 0; i <= countOfElementArray1; i++) {
-					TableKeyField tkf = (TableKeyField)elementArray1[i].getPojo();
-					currentRowNumber++;
+ 			rowSequence = 0;
+ 			countOfElementArray1 = -1;
+ 			List<TableKeyField> tkfList = tk.getTableKeyFields();
+ 			if (tkfList != null) {
+ 				for (TableKeyField tkf : tkfList) {
+ 					countOfElementArray1++;
+ 					elementArray1[countOfElementArray1] = tkf;
+ 				}
+ 			}
+ 			if (countOfElementArray1 > 0) {
+ 				Arrays.sort(elementArray1, 0, countOfElementArray1 + 1, new TableKeyFieldComparator());
+ 			}
+ 			for (int i = 0; i <= countOfElementArray1; i++) {
+ 				TableKeyField tkf = (TableKeyField)elementArray1[i];
+ 				currentRowNumber++;
 					XSSFRow nextRow = sheet.createRow(currentRowNumber);
 					XSSFCell cellA = nextRow.createCell(0);
 					cellA.setCellStyle(styleValueNumber);
@@ -3015,14 +3001,13 @@ public class DialogDocuments extends JDialog {
 		comboBoxModelFunctions.removeAllElements();
 
 		if (jComboBoxSubsystems.getSelectedIndex() > 0) {
-			JsonNode workNode = (JsonNode)comboBoxModelSubsystems.getSelectedItem();
-			Subsystem ss = (Subsystem)workNode.getPojo();
+			Subsystem ss = (Subsystem)comboBoxModelSubsystems.getSelectedItem();
 			subsystemID = ss.getId();
 
 			comboBoxModelTables.insertElementAt(res.getString("DialogDocuments68"), 0);
 			for (Table table : tableList) {
 				if (table.getSubsystemId().equals(subsystemID)) {
-					comboBoxModelTables.addElement(new JsonNode("Table", table));
+					comboBoxModelTables.addElement(table);
 				}
 			}
 			comboBoxModelTables.sortElements();
@@ -3031,7 +3016,7 @@ public class DialogDocuments extends JDialog {
 			comboBoxModelFunctions.insertElementAt(res.getString("DialogDocuments69"), 0);
 			for (Function func : functionList) {
 				if (func.getSubsystemId().equals(subsystemID)) {
-					comboBoxModelFunctions.addElement(new JsonNode("Function", func));
+					comboBoxModelFunctions.addElement(func);
 				}
 			}
 			comboBoxModelFunctions.sortElements();
@@ -3052,110 +3037,133 @@ public class DialogDocuments extends JDialog {
 	void jButtonCloseDialog_actionPerformed(ActionEvent e) {
 		this.setVisible(false);
 	}
-}
 
-class JsonNode implements Comparable<JsonNode> {
-	private String nodeType_;
-	private Object pojo_;
-
-	public JsonNode(String type, Object pojo) {
-		nodeType_ = type;
-		pojo_ = pojo;
-	}
-
-	public String toString() {
-		return getName();
-	}
-
-	public String getName() {
-		if (pojo_ instanceof Subsystem) {
-			Subsystem s = (Subsystem) pojo_;
-			return s.getSortKey() + " " + s.getName();
-		} else if (pojo_ instanceof Table) {
-			Table t = (Table) pojo_;
-			return t.getSortKey() + " " + t.getName();
-		} else if (pojo_ instanceof Function) {
-			Function f = (Function) pojo_;
-			return f.getSortKey() + " " + f.getName();
-		} else if (pojo_ instanceof IOPanel) {
-			return ((IOPanel)pojo_).getName();
-		} else if (pojo_ instanceof IOSpool) {
-			return ((IOSpool)pojo_).getName();
-		} else if (pojo_ instanceof IOWebPage) {
-			return ((IOWebPage)pojo_).getName();
-		} else if (pojo_ instanceof IOTable) {
-			return ((IOTable)pojo_).getName();
-		} else if (pojo_ instanceof TableField) {
-			TableField tf = (TableField) pojo_;
-			return tf.getSortKey() + " " + tf.getName();
-		} else if (pojo_ instanceof TableKeyField) {
-			TableKeyField tkf = (TableKeyField) pojo_;
-			return tkf.getSortKey() + " " + tkf.getFieldId();
-		} else if (pojo_ instanceof IOPanelField) {
-			return ((IOPanelField)pojo_).getName();
-		} else if (pojo_ instanceof IOSpoolField) {
-			return ((IOSpoolField)pojo_).getName();
-		} else if (pojo_ instanceof IOWebPageField) {
-			return ((IOWebPageField)pojo_).getName();
-		} else if (pojo_ instanceof IOTableField) {
-			return ((IOTableField)pojo_).getFieldId();
+	/**
+	 * Helper method to get display name for IO objects
+	 */
+	private String getIOObjectName(Object ioPojo) {
+		if (ioPojo instanceof IOPanel) {
+			return ((IOPanel)ioPojo).getName();
+		} else if (ioPojo instanceof IOSpool) {
+			return ((IOSpool)ioPojo).getName();
+		} else if (ioPojo instanceof IOWebPage) {
+			return ((IOWebPage)ioPojo).getName();
+		} else if (ioPojo instanceof IOTable) {
+			return ((IOTable)ioPojo).getName();
 		}
 		return "Unknown";
 	}
+}
 
-	public Object getPojo() {
-		return pojo_;
-	}
-
-	public String getType() {
-		return nodeType_;
-	}
-
-	public int compareTo(JsonNode other) {
+/**
+ * Comparator for sorting IO objects (IOPanel, IOSpool, IOWebPage, IOTable)
+ */
+class IOObjectComparator implements Comparator<Object> {
+	public int compare(Object o1, Object o2) {
 		try {
-			if (pojo_ instanceof Subsystem && other.pojo_ instanceof Subsystem) {
-				return ((Subsystem)pojo_).getSortKey().compareTo(((Subsystem)other.pojo_).getSortKey());
+			if (o1 instanceof IOPanel && o2 instanceof IOPanel) {
+				return ((IOPanel)o1).getSortKey().compareTo(((IOPanel)o2).getSortKey());
 			}
-			if (pojo_ instanceof Table && other.pojo_ instanceof Table) {
-				return ((Table)pojo_).getSortKey().compareTo(((Table)other.pojo_).getSortKey());
+			if (o1 instanceof IOSpool && o2 instanceof IOSpool) {
+				return ((IOSpool)o1).getSortKey().compareTo(((IOSpool)o2).getSortKey());
 			}
-			if (pojo_ instanceof Function && other.pojo_ instanceof Function) {
-				return ((Function)pojo_).getSortKey().compareTo(((Function)other.pojo_).getSortKey());
+			if (o1 instanceof IOWebPage && o2 instanceof IOWebPage) {
+				return ((IOWebPage)o1).getSortKey().compareTo(((IOWebPage)o2).getSortKey());
 			}
-			if (pojo_ instanceof TableField && other.pojo_ instanceof TableField) {
-				return ((TableField)pojo_).getSortKey().compareTo(((TableField)other.pojo_).getSortKey());
-			}
-			if (pojo_ instanceof TableKeyField && other.pojo_ instanceof TableKeyField) {
-				return ((TableKeyField)pojo_).getSortKey().compareTo(((TableKeyField)other.pojo_).getSortKey());
-			}
-			if (pojo_ instanceof IOPanelField && other.pojo_ instanceof IOPanelField) {
-				return ((IOPanelField)pojo_).getSortKey().compareTo(((IOPanelField)other.pojo_).getSortKey());
-			}
-			if (pojo_ instanceof IOSpoolField && other.pojo_ instanceof IOSpoolField) {
-				return ((IOSpoolField)pojo_).getSortKey().compareTo(((IOSpoolField)other.pojo_).getSortKey());
-			}
-			if (pojo_ instanceof IOWebPageField && other.pojo_ instanceof IOWebPageField) {
-				return ((IOWebPageField)pojo_).getSortKey().compareTo(((IOWebPageField)other.pojo_).getSortKey());
-			}
-			if (pojo_ instanceof IOTableField && other.pojo_ instanceof IOTableField) {
-				return ((IOTableField)pojo_).getSortKey().compareTo(((IOTableField)other.pojo_).getSortKey());
-			}
-			if (pojo_ instanceof IOPanel && other.pojo_ instanceof IOPanel) {
-				return ((IOPanel)pojo_).getSortKey().compareTo(((IOPanel)other.pojo_).getSortKey());
-			}
-			if (pojo_ instanceof IOSpool && other.pojo_ instanceof IOSpool) {
-				return ((IOSpool)pojo_).getSortKey().compareTo(((IOSpool)other.pojo_).getSortKey());
-			}
-			if (pojo_ instanceof IOWebPage && other.pojo_ instanceof IOWebPage) {
-				return ((IOWebPage)pojo_).getSortKey().compareTo(((IOWebPage)other.pojo_).getSortKey());
-			}
-			if (pojo_ instanceof IOTable && other.pojo_ instanceof IOTable) {
-				return ((IOTable)pojo_).getSortKey().compareTo(((IOTable)other.pojo_).getSortKey());
+			if (o1 instanceof IOTable && o2 instanceof IOTable) {
+				return ((IOTable)o1).getSortKey().compareTo(((IOTable)o2).getSortKey());
 			}
 		} catch(Exception e) {
 			// ignore
 		}
 		return 0;
+	}
+}
+
+/**
+ * Comparator for sorting IO fields (IOPanelField, IOSpoolField, IOWebPageField)
+ */
+class IOFieldComparator implements Comparator<Object> {
+	public int compare(Object o1, Object o2) {
+		try {
+			if (o1 instanceof IOPanelField && o2 instanceof IOPanelField) {
+				return ((IOPanelField)o1).getSortKey().compareTo(((IOPanelField)o2).getSortKey());
+			}
+			if (o1 instanceof IOSpoolField && o2 instanceof IOSpoolField) {
+				return ((IOSpoolField)o1).getSortKey().compareTo(((IOSpoolField)o2).getSortKey());
+			}
+			if (o1 instanceof IOWebPageField && o2 instanceof IOWebPageField) {
+				return ((IOWebPageField)o1).getSortKey().compareTo(((IOWebPageField)o2).getSortKey());
+			}
+		} catch(Exception e) {
+			// ignore
+		}
+		return 0;
+	}
+}
+
+/**
+ * Comparator for sorting TableField objects
+ */
+class TableFieldComparator implements Comparator<Object> {
+	public int compare(Object o1, Object o2) {
+		try {
+			return ((TableField)o1).getSortKey().compareTo(((TableField)o2).getSortKey());
+		} catch(Exception e) {
+			return 0;
+		}
+	}
+}
+
+/**
+ * Comparator for sorting TableKeyField objects
+ */
+class TableKeyFieldComparator implements Comparator<Object> {
+	public int compare(Object o1, Object o2) {
+		try {
+			return ((TableKeyField)o1).getSortKey().compareTo(((TableKeyField)o2).getSortKey());
+		} catch(Exception e) {
+			return 0;
+		}
+	}
+}
+
+/**
+ * Comparator for sorting Table objects
+ */
+class TableComparator implements Comparator<Object> {
+	public int compare(Object o1, Object o2) {
+		try {
+			return ((Table)o1).getSortKey().compareTo(((Table)o2).getSortKey());
+		} catch(Exception e) {
+			return 0;
+		}
+	}
+}
+
+/**
+ * Comparator for sorting Function objects
+ */
+class FunctionComparator implements Comparator<Object> {
+	public int compare(Object o1, Object o2) {
+		try {
+			return ((Function)o1).getSortKey().compareTo(((Function)o2).getSortKey());
+		} catch(Exception e) {
+			return 0;
+		}
+	}
+}
+
+/**
+ * Comparator for sorting Subsystem objects
+ */
+class SubsystemComparator implements Comparator<Object> {
+	public int compare(Object o1, Object o2) {
+		try {
+			return ((Subsystem)o1).getSortKey().compareTo(((Subsystem)o2).getSortKey());
+		} catch(Exception e) {
+			return 0;
+		}
 	}
 }
 
@@ -3169,8 +3177,25 @@ class SortableJsonNodeComboBoxModel extends DefaultComboBoxModel {
 		}
 		Arrays.sort(elements, 0, getSize(), new Comparator<Object>() {
 			public int compare(Object o1, Object o2) {
-				if (o1 instanceof JsonNode && o2 instanceof JsonNode) {
-					return ((JsonNode)o1).compareTo((JsonNode)o2);
+				try {
+					// Handle String items (like the "All" placeholder)
+					if (o1 instanceof String || o2 instanceof String) {
+						return 0;
+					}
+					// Sort Subsystems
+					if (o1 instanceof Subsystem && o2 instanceof Subsystem) {
+						return ((Subsystem)o1).getSortKey().compareTo(((Subsystem)o2).getSortKey());
+					}
+					// Sort Tables
+					if (o1 instanceof Table && o2 instanceof Table) {
+						return ((Table)o1).getSortKey().compareTo(((Table)o2).getSortKey());
+					}
+					// Sort Functions
+					if (o1 instanceof Function && o2 instanceof Function) {
+						return ((Function)o1).getSortKey().compareTo(((Function)o2).getSortKey());
+					}
+				} catch(Exception e) {
+					// ignore
 				}
 				return 0;
 			}

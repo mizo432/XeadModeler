@@ -236,7 +236,7 @@ public class DialogDataflowNode extends JDialog {
 			if (dataflowNode.getType().equals("Process")) {
 				this.setTitle(res.getString("DialogDataflowNode17"));
 				Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Task", dataflowNode.getTaskID(), null);
-				xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) node.getJsonNode();
+				xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) node.getPojo();
 				jTextFieldLabel.setText(task.getName());
 				jTextFieldLabel.setBackground(SystemColor.control);
 				jTextFieldLabel.setEditable(false);
@@ -268,7 +268,7 @@ public class DialogDataflowNode extends JDialog {
 					jTextAreaDescriptions.setEditable(true);
 				} else {
 					Modeler.XeadTreeNode node = frame_.getSpecificXeadTreeNode("Role", roleID, null);
-					xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) node.getJsonNode();
+					xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) node.getPojo();
 					jTextFieldLabel.setText(role.getName());
 					jTextFieldLabel.setBackground(SystemColor.control);
 					jTextFieldLabel.setEditable(false);
@@ -361,9 +361,9 @@ public class DialogDataflowNode extends JDialog {
 				int wrkInt;
 				boolean isToCheck = false;
 				for (int i = 0; i < nodeArray.size(); i++) {
-					xeadModeler.model.json.DataflowNode jsonNode = nodeArray.get(i).getPojo();
-					if (jsonNode != null) {
-						wrkInt = jsonNode.getSlideNumber();
+					xeadModeler.model.json.DataflowNode pojo = nodeArray.get(i).getPojo();
+					if (pojo != null) {
+						wrkInt = pojo.getSlideNumber();
 						if (wrkInt > oldSlideNumber) {
 							isToCheck = true;
 							break;
@@ -372,9 +372,9 @@ public class DialogDataflowNode extends JDialog {
 				}
 				if (!isToCheck) {
 					for (int i = 0; i < lineArray.size(); i++) {
-						xeadModeler.model.json.DataflowLine jsonLine = lineArray.get(i).getPojo();
-						if (jsonLine != null) {
-							wrkInt = jsonLine.getSlideNumber();
+						xeadModeler.model.json.DataflowLine pojoLine = lineArray.get(i).getPojo();
+						if (pojoLine != null) {
+							wrkInt = pojoLine.getSlideNumber();
 							if (wrkInt > oldSlideNumber) {
 								isToCheck = true;
 								break;
@@ -387,22 +387,22 @@ public class DialogDataflowNode extends JDialog {
 							res.getString("DialogDataflowLine35"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, JOptionPane.YES_OPTION);
 					if (rtn == JOptionPane.YES_OPTION) {
 						for (int i = 0; i < nodeArray.size(); i++) {
-							xeadModeler.model.json.DataflowNode jsonNode = nodeArray.get(i).getPojo();
-							if (jsonNode != null) {
-								wrkInt = jsonNode.getSlideNumber();
+							xeadModeler.model.json.DataflowNode pojo = nodeArray.get(i).getPojo();
+							if (pojo != null) {
+								wrkInt = pojo.getSlideNumber();
 								if (wrkInt > oldSlideNumber) {
 									wrkInt = wrkInt + diff;
-									jsonNode.setSlideNumber(wrkInt);
+									pojo.setSlideNumber(wrkInt);
 								}
 							}
 						}
 						for (int i = 0; i < lineArray.size(); i++) {
-							xeadModeler.model.json.DataflowLine jsonLine = lineArray.get(i).getPojo();
-							if (jsonLine != null) {
-								wrkInt = jsonLine.getSlideNumber();
+							xeadModeler.model.json.DataflowLine pojoLine = lineArray.get(i).getPojo();
+							if (pojoLine != null) {
+								wrkInt = pojoLine.getSlideNumber();
 								if (wrkInt > oldSlideNumber) {
 									wrkInt = wrkInt + diff;
-									jsonLine.setSlideNumber(wrkInt);
+									pojoLine.setSlideNumber(wrkInt);
 								}
 							}
 						}
@@ -413,7 +413,7 @@ public class DialogDataflowNode extends JDialog {
 			//
 			if (action.equals("Add")) {
 				// Add to the current subject area's dataflow nodes list
-				xeadModeler.model.json.SubjectArea subjectArea = (xeadModeler.model.json.SubjectArea) frame_.currentMainTreeNode.getJsonNode();
+				xeadModeler.model.json.SubjectArea subjectArea = (xeadModeler.model.json.SubjectArea) frame_.currentMainTreeNode.getPojo();
 				subjectArea.getDataflowNodes().add(dataflowNode);
 			}
 		}

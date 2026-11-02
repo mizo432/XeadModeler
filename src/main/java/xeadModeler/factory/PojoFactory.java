@@ -12,7 +12,7 @@ import java.util.Map;
  * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
  */
-public class JsonNodeFactory {
+public class PojoFactory {
 
     private static final Map<String, Class<?>> TYPE_MAP = new HashMap<>();
 
@@ -75,7 +75,7 @@ public class JsonNodeFactory {
         try {
             return clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to create JSON node for: " + elementName, e);
+            throw new RuntimeException("Failed to create POJO for: " + elementName, e);
         }
     }
 

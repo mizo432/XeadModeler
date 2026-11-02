@@ -382,14 +382,14 @@ public class DialogDataflowLine extends JDialog {
 		String nodeID2 = dataflowLine.getNodeID2();
 		for (int i = 0; i < nodeArray.size(); i++) {
 			Modeler.DataflowNode node = nodeArray.get(i);
-			xeadModeler.model.json.DataflowNode jsonNode = node.getPojo();
-			if (jsonNode != null) {
-				String nodeId = jsonNode.getId();
+			xeadModeler.model.json.DataflowNode pojo = node.getPojo();
+			if (pojo != null) {
+				String nodeId = pojo.getId();
 				if (nodeId != null && !nodeId.equals(nodeID2)) {
-					String type = jsonNode.getType();
+					String type = pojo.getType();
 					if (type != null && type.equals("Process")) {
-						Modeler.XeadTreeNode taskNode = frame_.getSpecificXeadTreeNode("Task", jsonNode.getTaskID(), null);
-						xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) taskNode.getJsonNode();
+						Modeler.XeadTreeNode taskNode = frame_.getSpecificXeadTreeNode("Task", pojo.getTaskID(), null);
+						xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) taskNode.getPojo();
 						jComboBoxNode1.addItem(task.getName());
 						numberOfStorageArray1 = numberOfStorageArray1 + 1;
 						storageArray1[numberOfStorageArray1] = nodeArray.get(i);
@@ -398,12 +398,12 @@ public class DialogDataflowLine extends JDialog {
 						}
 					} else {
 						if (type != null && type.equals("Subject")) {
-							String roleID = jsonNode.getRoleID();
+							String roleID = pojo.getRoleID();
 							if (roleID == null || roleID.equals("")) {
-								jComboBoxNode1.addItem(jsonNode.getName() + jsonNode.getNameExt());
+								jComboBoxNode1.addItem(pojo.getName() + pojo.getNameExt());
 							} else {
 								Modeler.XeadTreeNode roleNode = frame_.getSpecificXeadTreeNode("Role", roleID, null);
-								xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) roleNode.getJsonNode();
+								xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) roleNode.getPojo();
 								jComboBoxNode1.addItem(role.getName());
 							}
 							numberOfStorageArray1 = numberOfStorageArray1 + 1;
@@ -444,23 +444,23 @@ public class DialogDataflowLine extends JDialog {
 		String nodeID1 = dataflowLine.getNodeID1();
 		for (int i = 0; i < nodeArray.size(); i++) {
 			Modeler.DataflowNode node = nodeArray.get(i);
-			xeadModeler.model.json.DataflowNode jsonNode = node.getPojo();
-			if (jsonNode != null) {
-				String nodeId = jsonNode.getId();
+			xeadModeler.model.json.DataflowNode pojo = node.getPojo();
+			if (pojo != null) {
+				String nodeId = pojo.getId();
 				if (nodeId != null && !nodeId.equals(nodeID1)) {
-					String type = jsonNode.getType();
+					String type = pojo.getType();
 					if (type != null && type.equals("Process")) {
-						Modeler.XeadTreeNode taskNode = frame_.getSpecificXeadTreeNode("Task", jsonNode.getTaskID(), null);
-						xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) taskNode.getJsonNode();
+						Modeler.XeadTreeNode taskNode = frame_.getSpecificXeadTreeNode("Task", pojo.getTaskID(), null);
+						xeadModeler.model.json.Task task = (xeadModeler.model.json.Task) taskNode.getPojo();
 						jComboBoxNode2.addItem(task.getName());
 					} else {
-						String roleID = jsonNode.getRoleID();
+						String roleID = pojo.getRoleID();
 						if (type != null && type.equals("Subject") && roleID != null && !roleID.equals("")) {
 							Modeler.XeadTreeNode roleNode = frame_.getSpecificXeadTreeNode("Role", roleID, null);
-							xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) roleNode.getJsonNode();
+							xeadModeler.model.json.Role role = (xeadModeler.model.json.Role) roleNode.getPojo();
 							jComboBoxNode2.addItem(role.getName());
 						} else {
-							jComboBoxNode2.addItem(jsonNode.getName() + " "+ jsonNode.getNameExt());
+							jComboBoxNode2.addItem(pojo.getName() + " "+ pojo.getNameExt());
 						}
 					}
 					numberOfStorageArray2 = numberOfStorageArray2 + 1;
@@ -514,9 +514,9 @@ public class DialogDataflowLine extends JDialog {
 				int wrkInt;
 				boolean isToCheck = false;
 				for (int i = 0; i < nodeArray.size(); i++) {
-					xeadModeler.model.json.DataflowNode jsonNode = nodeArray.get(i).getPojo();
-					if (jsonNode != null) {
-						wrkInt = jsonNode.getSlideNumber();
+					xeadModeler.model.json.DataflowNode pojo = nodeArray.get(i).getPojo();
+					if (pojo != null) {
+						wrkInt = pojo.getSlideNumber();
 						if (wrkInt > oldSlideNumber) {
 							isToCheck = true;
 							break;
@@ -525,9 +525,9 @@ public class DialogDataflowLine extends JDialog {
 				}
 				if (!isToCheck) {
 					for (int i = 0; i < lineArray.size(); i++) {
-						xeadModeler.model.json.DataflowLine jsonLine = lineArray.get(i).getPojo();
-						if (jsonLine != null) {
-							wrkInt = jsonLine.getSlideNumber();
+						xeadModeler.model.json.DataflowLine pojoLine = lineArray.get(i).getPojo();
+						if (pojoLine != null) {
+							wrkInt = pojoLine.getSlideNumber();
 							if (wrkInt > oldSlideNumber) {
 								isToCheck = true;
 								break;
@@ -540,22 +540,22 @@ public class DialogDataflowLine extends JDialog {
 							res.getString("DialogDataflowLine35"), JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, JOptionPane.YES_OPTION);
 					if (rtn == JOptionPane.YES_OPTION) {
 						for (int i = 0; i < nodeArray.size(); i++) {
-							xeadModeler.model.json.DataflowNode jsonNode = nodeArray.get(i).getPojo();
-							if (jsonNode != null) {
-								wrkInt = jsonNode.getSlideNumber();
+							xeadModeler.model.json.DataflowNode pojo = nodeArray.get(i).getPojo();
+							if (pojo != null) {
+								wrkInt = pojo.getSlideNumber();
 								if (wrkInt > oldSlideNumber) {
 									wrkInt = wrkInt + diff;
-									jsonNode.setSlideNumber(wrkInt);
+									pojo.setSlideNumber(wrkInt);
 								}
 							}
 						}
 						for (int i = 0; i < lineArray.size(); i++) {
-							xeadModeler.model.json.DataflowLine jsonLine = lineArray.get(i).getPojo();
-							if (jsonLine != null) {
-								wrkInt = jsonLine.getSlideNumber();
+							xeadModeler.model.json.DataflowLine pojoLine = lineArray.get(i).getPojo();
+							if (pojoLine != null) {
+								wrkInt = pojoLine.getSlideNumber();
 								if (wrkInt > oldSlideNumber) {
 									wrkInt = wrkInt + diff;
-									jsonLine.setSlideNumber(wrkInt);
+									pojoLine.setSlideNumber(wrkInt);
 								}
 							}
 						}
@@ -675,7 +675,7 @@ public class DialogDataflowLine extends JDialog {
 			}
 			if (action.equals("Add")) {
 				// Add to the current subject area's dataflow lines list
-				xeadModeler.model.json.SubjectArea subjectArea = (xeadModeler.model.json.SubjectArea) frame_.currentMainTreeNode.getJsonNode();
+				xeadModeler.model.json.SubjectArea subjectArea = (xeadModeler.model.json.SubjectArea) frame_.currentMainTreeNode.getPojo();
 				subjectArea.getDataflowLines().add(dataflowLine);
 			}
 		}

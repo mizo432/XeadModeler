@@ -42,9 +42,6 @@ import java.util.ResourceBundle;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import org.apache.xerces.parsers.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
 
 import xeadModeler.Modeler;
 import xeadModeler.model.json.*;
@@ -80,8 +77,8 @@ public class DialogImportXEAD extends JDialog {
 
 	private String importResult = "";
 	private Modeler frame_;
-	private org.w3c.dom.Document domDocumentFrom;
-	private org.w3c.dom.Element blockElementFrom;
+	private XeadSystem xeadSystemFrom;
+	private Subsystem blockSubsystemFrom;
 	private Subsystem blockSubsystemInto;
 	private Role blockRoleInto;
 	private SubjectArea blockSubjectAreaInto;
@@ -228,30 +225,28 @@ public class DialogImportXEAD extends JDialog {
 	}
 
 	public String request(String fileName) {
-		NodeList elementList;
-		org.w3c.dom.Element element;
 		importResult = "";
 
-		domDocumentFrom = null;
+		xeadSystemFrom = null;
 		jRadioButtonFunctions.setSelected(true);
 
 		try {
-			DOMParser parser = new DOMParser();
-			parser.parse(new InputSource(new FileInputStream(fileName)));
-			domDocumentFrom = parser.getDocument();
-		} catch (IOException ex) {
-		} catch (SAXException ex) {
+			xeadSystemFrom = frame_.getXeadDocumentModel().getJsonService().loadSystem(fileName);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
-		elementList = domDocumentFrom.getElementsByTagName("System");
-		element = (org.w3c.dom.Element)elementList.item(0);
-		float importFileFormat = Float.parseFloat(element.getAttribute("FormatVersion"));
+		if (xeadSystemFrom == null) {
+			return importResult;
+		}
+
+		float importFileFormat = Float.parseFloat(xeadSystemFrom.getFormatVersion());
 		float appliFormat = Float.parseFloat(DialogAbout.FORMAT_VERSION);
 		if (importFileFormat > appliFormat) {
-			JOptionPane.showMessageDialog(this, res.getString("S1") + element.getAttribute("FormatVersion") + res.getString("S2") + DialogAbout.FORMAT_VERSION + res.getString("S3"));
+			JOptionPane.showMessageDialog(this, res.getString("S1") + xeadSystemFrom.getFormatVersion() + res.getString("S2") + DialogAbout.FORMAT_VERSION + res.getString("S3"));
 		} else {
 			jTextFieldImportFileName.setText(fileName);
-			jTextFieldImportSystemName.setText(element.getAttribute("Name"));
+			jTextFieldImportSystemName.setText(xeadSystemFrom.getName());
 			jRadioButton_itemStateChanged();
 			jProgressBar.setValue(0);
 			super.setVisible(true);
@@ -261,12 +256,9 @@ public class DialogImportXEAD extends JDialog {
 	}
 
 	void jRadioButton_itemStateChanged() {
-		XeadNode node;
-		NodeList elementList;
-
 		try {
 			setCursor(new Cursor(Cursor.WAIT_CURSOR));
-			if (domDocumentFrom != null) {
+			if (xeadSystemFrom != null) {
 
 				if (jRadioButtonTables.isSelected() || jRadioButtonFunctions.isSelected() || jRadioButtonTablesAndFunctions.isSelected()) {
 
@@ -286,31 +278,32 @@ public class DialogImportXEAD extends JDialog {
 					//Setup ComboBox1//
 					///////////////////
 					comboBoxModelBlockFrom.removeAllElements();
-					elementList = domDocumentFrom.getElementsByTagName("Subsystem");
-					for (int i = 0; i < elementList.getLength(); i++) {
-						node = new XeadNode("Subsystem",(org.w3c.dom.Element)elementList.item(i));
-						comboBoxModelBlockFrom.addElement((Object)node);
+					List<Subsystem> subsystemsFrom = xeadSystemFrom.getSubsystems();
+					if (subsystemsFrom != null) {
+						for (Subsystem subsystem : subsystemsFrom) {
+							comboBoxModelBlockFrom.addElement(new XeadNodeFromSubsystem(subsystem));
+						}
 					}
 					comboBoxModelBlockFrom.sortElements();
 					comboBoxModelBlockFrom.insertElementAt(res.getString("DialogImportXEAD12"), 0);
 					comboBoxModelBlockFrom.setSelectedItem(comboBoxModelBlockFrom.getElementAt(0));
 
- 				///////////////////
- 				//Setup ComboBox2//
- 				///////////////////
- 				comboBoxModelBlockInto.removeAllElements();
- 				XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
- 				List<Subsystem> subsystems = xeadSystem.getSubsystems();
- 				if (subsystems != null) {
- 					for (Subsystem subsystem : subsystems) {
- 						comboBoxModelBlockInto.addElement(new XeadNodeFromSubsystem(subsystem));
- 					}
- 				}
- 				comboBoxModelBlockInto.sortElements();
- 				//comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
- 				comboBoxModelBlockInto.insertElementAt("*New", 0);
- 				comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
- 			}
+				///////////////////
+				//Setup ComboBox2//
+				///////////////////
+				comboBoxModelBlockInto.removeAllElements();
+				XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
+				List<Subsystem> subsystems = xeadSystem.getSubsystems();
+				if (subsystems != null) {
+					for (Subsystem subsystem : subsystems) {
+						comboBoxModelBlockInto.addElement(new XeadNodeFromSubsystem(subsystem));
+					}
+				}
+				comboBoxModelBlockInto.sortElements();
+				//comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+				comboBoxModelBlockInto.insertElementAt("*New", 0);
+				comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
+			}
 
 				if (jRadioButtonTasks.isSelected()) {
 
@@ -322,31 +315,32 @@ public class DialogImportXEAD extends JDialog {
 					//Setup ComboBox1//
 					///////////////////
 					comboBoxModelBlockFrom.removeAllElements();
-					elementList = domDocumentFrom.getElementsByTagName("Role");
-					for (int i = 0; i < elementList.getLength(); i++) {
-						node = new XeadNode("Role",(org.w3c.dom.Element)elementList.item(i));
-						comboBoxModelBlockFrom.addElement((Object)node);
+					List<Role> rolesFrom = xeadSystemFrom.getRoles();
+					if (rolesFrom != null) {
+						for (Role role : rolesFrom) {
+							comboBoxModelBlockFrom.addElement(new XeadNodeFromRole(role));
+						}
 					}
 					comboBoxModelBlockFrom.sortElements();
 					comboBoxModelBlockFrom.insertElementAt(res.getString("DialogImportXEAD12"), 0);
 					comboBoxModelBlockFrom.setSelectedItem(comboBoxModelBlockFrom.getElementAt(0));
 
- 				///////////////////
- 				//Setup ComboBox2//
- 				///////////////////
- 				comboBoxModelBlockInto.removeAllElements();
- 				XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
- 				List<Role> roles = xeadSystem.getRoles();
- 				if (roles != null) {
- 					for (Role role : roles) {
- 						comboBoxModelBlockInto.addElement(new XeadNodeFromRole(role));
- 					}
- 				}
- 				comboBoxModelBlockInto.sortElements();
- 				//comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
- 				comboBoxModelBlockInto.insertElementAt("*New", 0);
- 				comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
- 			}
+				///////////////////
+				//Setup ComboBox2//
+				///////////////////
+				comboBoxModelBlockInto.removeAllElements();
+				XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
+				List<Role> roles = xeadSystem.getRoles();
+				if (roles != null) {
+					for (Role role : roles) {
+						comboBoxModelBlockInto.addElement(new XeadNodeFromRole(role));
+					}
+				}
+				comboBoxModelBlockInto.sortElements();
+				//comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+				comboBoxModelBlockInto.insertElementAt("*New", 0);
+				comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
+			}
 
 				if (jRadioButtonDataflow.isSelected()) {
 
@@ -358,33 +352,34 @@ public class DialogImportXEAD extends JDialog {
 					//Setup ComboBox1//
 					///////////////////
 					comboBoxModelBlockFrom.removeAllElements();
-					elementList = domDocumentFrom.getElementsByTagName("SubjectArea");
-					for (int i = 0; i < elementList.getLength(); i++) {
-						node = new XeadNode("SubjectArea",(org.w3c.dom.Element)elementList.item(i));
-						comboBoxModelBlockFrom.addElement((Object)node);
+					List<SubjectArea> subjectAreasFrom = xeadSystemFrom.getSubjectAreas();
+					if (subjectAreasFrom != null) {
+						for (SubjectArea subjectArea : subjectAreasFrom) {
+							comboBoxModelBlockFrom.addElement(new XeadNodeFromSubjectArea(subjectArea));
+						}
 					}
 					comboBoxModelBlockFrom.sortElements();
 					comboBoxModelBlockFrom.insertElementAt(res.getString("DialogImportXEAD12"), 0);
 					comboBoxModelBlockFrom.setSelectedItem(comboBoxModelBlockFrom.getElementAt(0));
 
- 				///////////////////
- 				//Setup ComboBox2//
- 				///////////////////
- 				comboBoxModelBlockInto.removeAllElements();
- 				XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
- 				List<SubjectArea> subjectAreas = xeadSystem.getSubjectAreas();
- 				if (subjectAreas != null) {
- 					for (SubjectArea subjectArea : subjectAreas) {
- 						comboBoxModelBlockInto.addElement(new XeadNodeFromSubjectArea(subjectArea));
- 					}
- 				}
- 				comboBoxModelBlockInto.sortElements();
- 				//comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
- 				comboBoxModelBlockInto.insertElementAt("*New", 0);
- 				comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
- 			}
- 		}
- 	} finally {
+				///////////////////
+				//Setup ComboBox2//
+				///////////////////
+				comboBoxModelBlockInto.removeAllElements();
+				XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
+				List<SubjectArea> subjectAreas = xeadSystem.getSubjectAreas();
+				if (subjectAreas != null) {
+					for (SubjectArea subjectArea : subjectAreas) {
+						comboBoxModelBlockInto.addElement(new XeadNodeFromSubjectArea(subjectArea));
+					}
+				}
+				comboBoxModelBlockInto.sortElements();
+				//comboBoxModelBlockInto.insertElementAt(res.getString("DialogImportXEAD12"), 0);
+				comboBoxModelBlockInto.insertElementAt("*New", 0);
+				comboBoxModelBlockInto.setSelectedItem(comboBoxModelBlockInto.getElementAt(0));
+			}
+		}
+	} finally {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
 	}
@@ -413,7 +408,6 @@ public class DialogImportXEAD extends JDialog {
 //	}
 
 	void jButtonStart_actionPerformed(ActionEvent e) {
-		XeadNode workNode;
 		String logFileName = "";
 		int lastID = 0;
 		XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
@@ -466,10 +460,29 @@ public class DialogImportXEAD extends JDialog {
 			missingFunctionCounter = 0;
 			missingFunctionIOCounter = 0;
 
-			workNode = (XeadNode)comboBoxModelBlockFrom.getSelectedItem();
-			blockElementFrom = workNode.getElement();
-			blockIDFrom = blockElementFrom.getAttribute("ID");
-			bufferedWriter.write(jLabel1.getText() + ":" + blockElementFrom.getAttribute("Name") + "(" + blockElementFrom.getAttribute("SortKey") + ")" + "\n");
+			// Get source block from combo box (now using JSON wrappers)
+			Object selectedFrom = comboBoxModelBlockFrom.getSelectedItem();
+			String sourceName, sourceSortKey;
+			if (selectedFrom instanceof XeadNodeFromSubsystem) {
+				blockSubsystemFrom = ((XeadNodeFromSubsystem)selectedFrom).getSubsystem();
+				blockIDFrom = blockSubsystemFrom.getId();
+				sourceName = blockSubsystemFrom.getName();
+				sourceSortKey = blockSubsystemFrom.getSortKey();
+			} else if (selectedFrom instanceof XeadNodeFromRole) {
+				Role blockRoleFrom = ((XeadNodeFromRole)selectedFrom).getRole();
+				blockIDFrom = blockRoleFrom.getId();
+				sourceName = blockRoleFrom.getName();
+				sourceSortKey = blockRoleFrom.getSortKey();
+			} else if (selectedFrom instanceof XeadNodeFromSubjectArea) {
+				SubjectArea blockSubjectAreaFrom = ((XeadNodeFromSubjectArea)selectedFrom).getSubjectArea();
+				blockIDFrom = blockSubjectAreaFrom.getId();
+				sourceName = blockSubjectAreaFrom.getName();
+				sourceSortKey = blockSubjectAreaFrom.getSortKey();
+			} else {
+				sourceName = "";
+				sourceSortKey = "";
+			}
+			bufferedWriter.write(jLabel1.getText() + ":" + sourceName + "(" + sourceSortKey + ")" + "\n");
 
 			//////////////////////////////
 			// Setup the target element //

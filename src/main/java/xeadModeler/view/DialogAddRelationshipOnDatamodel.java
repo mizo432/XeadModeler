@@ -156,7 +156,7 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 		//
 		// Retrieve key fields information of source key //
 		// Get source table directly from JSON node
-		xeadModeler.model.json.Table sourceTable = (xeadModeler.model.json.Table) sourceTableNode_.getJsonNode();
+		xeadModeler.model.json.Table sourceTable = (xeadModeler.model.json.Table) sourceTableNode_.getPojo();
 		
 		if (sourceTable != null && sourceKey_.getTableKeyFields() != null) {
 			// Sort key fields by sortKey
@@ -211,7 +211,7 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
  	int statusOfTarget = 0;
 	
  	// Get target table directly from JSON node
- 	xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getJsonNode();
+ 	xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getPojo();
 	
  	if (targetTable != null) {
  		if (targetTable.getId().equals(sourceTable.getId())) {
@@ -325,7 +325,7 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 				// JSON-based implementation
 				boolean noError = true;
 				// Get target table directly from JSON node
-				xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getJsonNode();
+				xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getPojo();
 				
 				if (targetTable != null && targetTable.getTableFields() != null) {
 					for (TableField field : targetTable.getTableFields()) {
@@ -366,7 +366,7 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
  	frame_.getCurrentMainTreenode().updateFields();
 	
  	// Get target table directly from JSON node
- 	xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getJsonNode();
+ 	xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getPojo();
 	
  	if (targetTable == null) {
  		return;
@@ -487,7 +487,7 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 		frame_.getXeadUndoManager().saveNodeBeforeModified(newTableKeyNode);
 		xeadModeler.model.json.Relationship relationship = new xeadModeler.model.json.Relationship();
 		relationship.setId(Integer.toString(frame_.incrementLastIDOfRelationship()));
-		xeadModeler.model.json.Table sourceTable = (xeadModeler.model.json.Table) sourceTableNode_.getJsonNode();
+		xeadModeler.model.json.Table sourceTable = (xeadModeler.model.json.Table) sourceTableNode_.getPojo();
 		relationship.setTable1Id(sourceTable.getId());
 		relationship.setTableKey1Id(sourceKey_.getId());
 		relationship.setTable2Id(targetTable.getId());
@@ -519,7 +519,7 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
  	frame_.getCurrentMainTreenode().updateFields();
 	
  	// Get target table directly from JSON node
- 	xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getJsonNode();
+ 	xeadModeler.model.json.Table targetTable = (xeadModeler.model.json.Table) targetTableNode_.getPojo();
 	
  	if (targetTable == null) {
  		JOptionPane.showMessageDialog(this, res.getString("DialogAddRelationshipOnDatamodel9"));
@@ -680,11 +680,11 @@ public class DialogAddRelationshipOnDatamodel extends JDialog {
 				frame_.getXeadUndoManager().saveNodeBeforeModified(availableTableKeyNode);
 				xeadModeler.model.json.Relationship relationship = new xeadModeler.model.json.Relationship();
 				relationship.setId(Integer.toString(frame_.incrementLastIDOfRelationship()));
-				xeadModeler.model.json.Table sourceTable = (xeadModeler.model.json.Table) sourceTableNode_.getJsonNode();
+				xeadModeler.model.json.Table sourceTable = (xeadModeler.model.json.Table) sourceTableNode_.getPojo();
 				relationship.setTable1Id(sourceTable.getId());
 				relationship.setTableKey1Id(sourceKey_.getId());
 				relationship.setTable2Id(targetTable.getId());
-				xeadModeler.model.json.TableKey availableKey = (xeadModeler.model.json.TableKey) availableTableKeyNode.getJsonNode();
+				xeadModeler.model.json.TableKey availableKey = (xeadModeler.model.json.TableKey) availableTableKeyNode.getPojo();
 				relationship.setTableKey2Id(availableKey.getId());
 				relationship.setType(relationshipType);
 				relationship.setExistWhen1("");

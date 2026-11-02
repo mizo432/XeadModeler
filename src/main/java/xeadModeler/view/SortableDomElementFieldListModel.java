@@ -1,14 +1,13 @@
 package xeadModeler.view;
 
 import xeadModeler.model.XeadFieldElement;
-import tools.jackson.databind.JsonNode;
 
 import javax.swing.*;
 import java.util.*;
 
 /**
  * Aliasでソート可能なフィールド要素のListModel
- * JSONノードとJSON POJOをサポートします。
+ * JSON POJOのみをサポートします。
  *
  * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
@@ -16,11 +15,6 @@ import java.util.*;
 public class SortableDomElementFieldListModel extends DefaultListModel<XeadFieldElement> {
 
     private static final long serialVersionUID = 1L;
-
-    public void addElementFromJson(JsonNode node) {
-        XeadFieldElement xeadFieldElement = new XeadFieldElement(node);
-        super.addElement(xeadFieldElement);
-    }
 
     public void addElementFromPojo(Object pojo) {
         XeadFieldElement xeadFieldElement = new XeadFieldElement(pojo);

@@ -52,6 +52,10 @@ public class XeadDocumentModel {
         this.jsonService = jsonService;
     }
     
+    public JsonService getJsonService() {
+        return jsonService;
+    }
+    
     // Getters and Setters
     
     public XeadSystem getXeadSystem() {

@@ -20,6 +20,7 @@ public class Function {
     private String parameters;
     private String return_;
     private String summary;
+    private String docFile;
     
     private List<FunctionUsedByThis> functionUsedByThisList = new ArrayList<>();
     private List<IOPanel> ioPanels = new ArrayList<>();
@@ -156,5 +157,13 @@ public class Function {
     
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+    
+    public String getDocFile() {
+        return docFile;
+    }
+    
+    public void setDocFile(String docFile) {
+        this.docFile = docFile;
     }
 }
