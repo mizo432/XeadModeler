@@ -2,6 +2,8 @@ package xeadModeler.view;
 
 import xeadModeler.Modeler;
 import xeadModeler.KanjiTextField;
+import xeadModeler.model.json.DataType;
+import xeadModeler.model.json.FunctionType;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -119,7 +121,7 @@ public class SystemView {
     private final JTextField jTextFieldSystemSQLExpression = new JTextField();
     private final TableModelReadOnlyList tableModelSystemDataTypeWhereUsedList = new TableModelReadOnlyList();
     private final JTable jTableSystemDataTypeWhereUsedList = new JTable(tableModelSystemDataTypeWhereUsedList);
-    private final HashMap<String, org.w3c.dom.Element> dataTypeElementMap = new HashMap<String, org.w3c.dom.Element>();
+    private final HashMap<String, DataType> dataTypeElementMap = new HashMap<String, DataType>();
     
     // SystemFunctionTypeList
     private int selectedRow_jTableSystemFunctionTypeList;
@@ -139,7 +141,7 @@ public class SystemView {
     private final JTextArea jTextAreaSystemFunctionTypeDescriptions = new JTextArea();
     private final TableModelReadOnlyList tableModelSystemFunctionTypeWhereUsedList = new TableModelReadOnlyList();
     private final JTable jTableSystemFunctionTypeWhereUsedList = new JTable(tableModelSystemFunctionTypeWhereUsedList);
-    private final HashMap<String, org.w3c.dom.Element> functionTypeElementMap = new HashMap<String, org.w3c.dom.Element>();
+    private final HashMap<String, FunctionType> functionTypeElementMap = new HashMap<String, FunctionType>();
     
     // SystemTermsList
     private int selectedRow_jTableSystemTermsList;
@@ -904,6 +906,6 @@ public class SystemView {
     public TableModelReadOnlyList getTableModelSystemTermsList() { return tableModelSystemTermsList; }
     public JTable getJTableSystemMaintenanceLog() { return jTableSystemMaintenanceLog; }
     public TableModelReadOnlyList getTableModelSystemMaintenanceLog() { return tableModelSystemMaintenanceLog; }
-    public HashMap<String, org.w3c.dom.Element> getDataTypeElementMap() { return dataTypeElementMap; }
-    public HashMap<String, org.w3c.dom.Element> getFunctionTypeElementMap() { return functionTypeElementMap; }
+    public HashMap<String, DataType> getDataTypeElementMap() { return dataTypeElementMap; }
+    public HashMap<String, FunctionType> getFunctionTypeElementMap() { return functionTypeElementMap; }
 }

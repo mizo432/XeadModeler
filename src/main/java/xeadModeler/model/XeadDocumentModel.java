@@ -237,16 +237,6 @@ public class XeadDocumentModel {
     }
     
     /**
-     * 後方互換性のために残したメソッド（非推奨）
-     * @return XeadSystem
-     * @deprecated Use getXeadSystem() instead
-     */
-    @Deprecated
-    public XeadSystem getDomDocument() {
-        return xeadSystem;
-    }
-    
-    /**
      * DDL設定をXeadSystemから読み込みます
      */
     public void loadDdlConfig() {

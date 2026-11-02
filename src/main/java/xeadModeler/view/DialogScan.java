@@ -505,13 +505,13 @@ public class DialogScan extends JDialog {
 			//
 			//Get ID of Role and Subsystem if they are specified to be scanned;
 			if (jComboBoxSubsystems.getSelectedIndex() != 0) {
-				workNode = (XeadNode)comboBoxModelSubsystems.getSelectedItem();
-				workElement = workNode.getElement();
+ 			workNode = (XeadNode)comboBoxModelSubsystems.getSelectedItem();
+				workElement = workNode.getPojo();
 				subsystemID = getAttribute(workElement, "ID");
 			}
 			if (jComboBoxRoles.getSelectedIndex() != 0) {
-				workNode = (XeadNode)comboBoxModelRoles.getSelectedItem();
-				workElement = workNode.getElement();
+ 			workNode = (XeadNode)comboBoxModelRoles.getSelectedItem();
+				workElement = workNode.getPojo();
 				roleID = getAttribute(workElement, "ID");
 			}
 			//
@@ -1639,9 +1639,9 @@ public class DialogScan extends JDialog {
 				countOfHits = Integer.parseInt((String)tableModelScanResult.getValueAt(i, 6));
 				if (countOfHits > 0) {
 					//
-					TableRowNumber tableRowNumber = (TableRowNumber)tableModelScanResult.getValueAt(i, 0);
+ 				TableRowNumber tableRowNumber = (TableRowNumber)tableModelScanResult.getValueAt(i, 0);
 					//
-					Object element = tableRowNumber.getElement();
+					Object element = tableRowNumber.getPojo();
 					attributeType = tableRowNumber.getAttributeType();
 					//
 					if (attributeType.equals("Descriptions") || attributeType.equals("Operations") || attributeType.equals("ImageText")) {
@@ -1681,7 +1681,7 @@ public class DialogScan extends JDialog {
 	void setSelectedRowValueToTextPane() {
 		if (jTableScanResult.getSelectedRow() > -1) {
 			TableRowNumber tableRowNumber = (TableRowNumber)tableModelScanResult.getValueAt(jTableScanResult.getSelectedRow(), 0);
-			Object element = tableRowNumber.getElement();
+				Object element = tableRowNumber.getPojo();
 			//
 			String attrType = tableRowNumber.getAttributeType();
 			String imageText = "";
@@ -2130,7 +2130,7 @@ public class DialogScan extends JDialog {
 		public String toString() {
 			return Integer.toString(number_);
 		}
-		public Object getElement() {
+		public Object getPojo() {
 			return pojoElement_;
 		}
 		public String getAttributeType() {
@@ -2167,24 +2167,6 @@ public class DialogScan extends JDialog {
 		}
 	}
 
-//	class NodeComparator implements java.util.Comparator<XeadNode> {
-//		public int compare(XeadNode node1, XeadNode node2) {
-//			String value1, value2;
-//			value1 = node1.getElement().getAttribute("SortKey");
-//			value2 = node2.getElement().getAttribute("SortKey");
-//			int compareResult = value1.compareTo(value2);
-//			if (compareResult == 0) {
-//				value1 = node1.getElement().getAttribute("ID");
-//				value2 = node2.getElement().getAttribute("ID");
-//				compareResult = value1.compareTo(value2);
-//				if (compareResult == 0) {
-//					compareResult = 1;
-//				}
-//			}
-//			return(compareResult);
-//		}
-//	}
-
 	class XeadNode implements Comparable {
 		private String nodeType_;
 		private Object pojoNode_;
@@ -2210,13 +2192,13 @@ public class DialogScan extends JDialog {
 			}
 			return str;
 		}
-		public Object getElement() {
+		public Object getPojo() {
 			return pojoNode_;
 		}
         public int compareTo(Object other) {
             XeadNode otherNode = (XeadNode)other;
             String thisSortKey = getSortKey(pojoNode_);
-            String otherSortKey = getSortKey(otherNode.getElement());
+            String otherSortKey = getSortKey(otherNode.getPojo());
             return thisSortKey.compareTo(otherSortKey);
         }
 	}

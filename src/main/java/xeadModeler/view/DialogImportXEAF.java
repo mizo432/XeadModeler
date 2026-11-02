@@ -36,9 +36,6 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import org.apache.xerces.parsers.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
 
 import xeadModeler.Modeler;
 import xeadModeler.view.DialogAbout;
@@ -66,9 +63,8 @@ public class DialogImportXEAF extends JDialog {
 
 	private String importResult = "";
 	private Modeler frame_;
-	private org.w3c.dom.Document domDocumentFrom;
 	private XeadSystem xeadSystemFrom;
-	private org.w3c.dom.Element blockElementFrom;
+	private Subsystem blockSubsystemFrom;
 	private Subsystem blockSubsystemInto;
 	private String blockIDFrom, blockIDInto;
 	private FileWriter fileWriter = null;
@@ -187,37 +183,37 @@ public class DialogImportXEAF extends JDialog {
 	}
 
 	public String request(String fileName) {
-		NodeList elementList;
-		org.w3c.dom.Element element;
 		importResult = "";
 
-		domDocumentFrom = null;
+		xeadSystemFrom = null;
 
 		try {
-			DOMParser parser = new DOMParser();
-			parser.parse(new InputSource(new FileInputStream(fileName)));
-			domDocumentFrom = parser.getDocument();
-		} catch (IOException ex) {
-		} catch (SAXException ex) {
+			xeadSystemFrom = frame_.getXeadDocumentModel().getJsonService().loadSystem(fileName);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
-		elementList = domDocumentFrom.getElementsByTagName("System");
-		element = (org.w3c.dom.Element)elementList.item(0);
-		float importFileFormat = Float.parseFloat(element.getAttribute("FormatVersion"));
+		if (xeadSystemFrom == null) {
+			return importResult;
+		}
+
+		float importFileFormat = Float.parseFloat(xeadSystemFrom.getFormatVersion());
 		float appliFormat = Float.parseFloat(DialogAbout.FORMAT_VERSION);
 		if (importFileFormat > appliFormat) {
-			JOptionPane.showMessageDialog(this, res.getString("S1") + element.getAttribute("FormatVersion") + res.getString("S2") + DialogAbout.FORMAT_VERSION + res.getString("S3"));
+			JOptionPane.showMessageDialog(this, res.getString("S1") + xeadSystemFrom.getFormatVersion() + res.getString("S2") + DialogAbout.FORMAT_VERSION + res.getString("S3"));
 		} else {
 			jTextFieldImportFileName.setText(fileName);
-			jTextFieldImportSystemName.setText(element.getAttribute("Name"));
+			jTextFieldImportSystemName.setText(xeadSystemFrom.getName());
 
 			///////////////////////
 			//Setup ComboBox1 & 2//
 			///////////////////////
- 		comboBoxModelBlockFrom.removeAllElements();
-			elementList = domDocumentFrom.getElementsByTagName("Subsystem");
-			for (int i = 0; i < elementList.getLength(); i++) {
-				comboBoxModelBlockFrom.addElement(new XeadNodeFromElement((org.w3c.dom.Element)elementList.item(i)));
+	 	comboBoxModelBlockFrom.removeAllElements();
+			java.util.List<Subsystem> subsystemsFrom = xeadSystemFrom.getSubsystems();
+			if (subsystemsFrom != null) {
+				for (Subsystem subsystem : subsystemsFrom) {
+					comboBoxModelBlockFrom.addElement(new XeadNodeFromSubsystem(subsystem));
+				}
 			}
 			comboBoxModelBlockFrom.sortElements();
 			comboBoxModelBlockFrom.insertElementAt(res.getString("DialogImportXEAF12"), 0);
@@ -290,10 +286,10 @@ public class DialogImportXEAF extends JDialog {
 			missingTableCounter = 0;
 			missingFunctionCounter = 0;
 
-			XeadNodeFromElement fromNode = (XeadNodeFromElement)comboBoxModelBlockFrom.getSelectedItem();
-			blockElementFrom = fromNode.getElement();
-			blockIDFrom = blockElementFrom.getAttribute("ID");
-			bufferedWriter.write(jLabel1.getText() + ":" + blockElementFrom.getAttribute("Name") + "(" + blockElementFrom.getAttribute("ID") + ")" + "\n");
+			XeadNodeFromSubsystem fromNode = (XeadNodeFromSubsystem)comboBoxModelBlockFrom.getSelectedItem();
+			blockSubsystemFrom = fromNode.getSubsystem();
+			blockIDFrom = blockSubsystemFrom.getId();
+			bufferedWriter.write(jLabel1.getText() + ":" + blockSubsystemFrom.getName() + "(" + blockSubsystemFrom.getId() + ")" + "\n");
 
 			XeadNodeFromSubsystem intoNode = (XeadNodeFromSubsystem)comboBoxModelBlockInto.getSelectedItem();
 			blockSubsystemInto = intoNode.getSubsystem();
@@ -336,9 +332,7 @@ public class DialogImportXEAF extends JDialog {
 	}
 
 	void importTables() {
-		org.w3c.dom.Element workElement;
-		NodeList workElementList;
-		ArrayList<org.w3c.dom.Element> tableElementListFrom = new ArrayList<org.w3c.dom.Element>(); 
+		ArrayList<Table> tableElementListFrom = new ArrayList<Table>(); 
 		boolean isAlreadyExisting;
 		String idOfDefinition;
 		XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
@@ -354,11 +348,12 @@ public class DialogImportXEAF extends JDialog {
 		///////////////////////////////////////
 		//Setup List of Tables to be imported//
 		///////////////////////////////////////
-		workElementList = domDocumentFrom.getElementsByTagName("Table");
-		for (int i = 0; i < workElementList.getLength(); i++) {
-			workElement = (org.w3c.dom.Element)workElementList.item(i);
-			if (workElement.getAttribute("SubsystemID").equals(blockIDFrom)) {
-				tableElementListFrom.add(workElement);
+		java.util.List<Table> allTables = xeadSystemFrom.getTables();
+		if (allTables != null) {
+			for (Table table : allTables) {
+				if (table.getSubsystemId().equals(blockIDFrom)) {
+					tableElementListFrom.add(table);
+				}
 			}
 		}
 
@@ -379,16 +374,16 @@ public class DialogImportXEAF extends JDialog {
 			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 
 			isAlreadyExisting = false;
-			idOfDefinition = tableElementListFrom.get(i).getAttribute("ID");
+			idOfDefinition = tableElementListFrom.get(i).getSortKey();
 
 			if (targetTables != null) {
 				for (Table table : targetTables) {
 					if (table.getSortKey().equals(idOfDefinition)) {
 						isAlreadyExisting = true;
 						try {
-							bufferedWriter.write(tableElementListFrom.get(i).getAttribute("Name") +
-									"(" + tableElementListFrom.get(i).getAttribute("ID") +
-									"):" + res.getString("DialogImportXEAF48") + "\n");
+							bufferedWriter.write(tableElementListFrom.get(i).getName() +
+								"(" + tableElementListFrom.get(i).getSortKey() +
+								"):" + res.getString("DialogImportXEAF48") + "\n");
 						} catch (IOException ex1) {}
 						cancelTableCounter++;
 						break;
@@ -414,9 +409,9 @@ public class DialogImportXEAF extends JDialog {
 				blockSubsystemInto.getSubsystemTables().add(subsystemTable);
 
 				try {
-					bufferedWriter.write(tableElementListFrom.get(i).getAttribute("Name") + "(" +
-							tableElementListFrom.get(i).getAttribute("ID") +
-							"):" + res.getString("DialogImportXEAF34") + "\n");
+					bufferedWriter.write(tableElementListFrom.get(i).getName() + "(" +
+						tableElementListFrom.get(i).getSortKey() +
+						"):" + res.getString("DialogImportXEAF34") + "\n");
 				} catch (IOException ex2) {}
 			}
 		}
@@ -427,9 +422,8 @@ public class DialogImportXEAF extends JDialog {
 	}
 
 	void importFunctions() {
-		org.w3c.dom.Element workElement, fromFunctionElement;
 		XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
-		ArrayList<org.w3c.dom.Element> functionElementListFrom = new ArrayList<org.w3c.dom.Element>(); 
+		ArrayList<Function> functionElementListFrom = new ArrayList<Function>(); 
 		boolean isAlreadyExisting;
 		String idOfDefinition;
 
@@ -441,18 +435,19 @@ public class DialogImportXEAF extends JDialog {
 		//////////////////////////////////////////
 		//Setup List of Functions to be imported//
 		/////////////////////////////////////////
-		NodeList functionElementListInto = domDocumentFrom.getElementsByTagName("Function");
-		for (int i = 0; i < functionElementListInto.getLength(); i++) {
-			workElement = (org.w3c.dom.Element)functionElementListInto.item(i);
-			if (workElement.getAttribute("SubsystemID").equals(blockIDFrom)) {
-				functionElementListFrom.add(workElement);
+		java.util.List<Function> allFunctions = xeadSystemFrom.getFunctions();
+		if (allFunctions != null) {
+			for (Function func : allFunctions) {
+				if (func.getSubsystemId().equals(blockIDFrom)) {
+					functionElementListFrom.add(func);
+				}
 			}
 		}
 
 		jProgressBar.setValue(0);
 		jProgressBar.setMaximum(functionElementListFrom.size());
 		
-		ArrayList<org.w3c.dom.Element> fromFunctionArray = new ArrayList<org.w3c.dom.Element>();
+		ArrayList<Function> fromFunctionArray = new ArrayList<Function>();
 		ArrayList<Function> newFunctionArray = new ArrayList<Function>();
 
 		java.util.List<Function> targetFunctions = xeadSystem.getFunctions();
@@ -471,15 +466,15 @@ public class DialogImportXEAF extends JDialog {
 			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 
 			isAlreadyExisting = false;
-			idOfDefinition = functionElementListFrom.get(i).getAttribute("ID");
+			idOfDefinition = functionElementListFrom.get(i).getSortKey();
 
 			for (int j = 0; j < targetFunctionArray.size(); j++) {
 				if (targetFunctionArray.get(j).getSortKey().equals(idOfDefinition)) {
 					isAlreadyExisting = true;
 					try {
-						bufferedWriter.write(functionElementListFrom.get(i).getAttribute("Name") +
-								"(" + functionElementListFrom.get(i).getAttribute("ID") +
-								"):" + res.getString("DialogImportXEAF48") + "\n");
+						bufferedWriter.write(functionElementListFrom.get(i).getName() +
+							"(" + functionElementListFrom.get(i).getSortKey() +
+							"):" + res.getString("DialogImportXEAF48") + "\n");
 					} catch (IOException ex1) {}
 					cancelFunctionCounter++;
 					break;
@@ -488,9 +483,9 @@ public class DialogImportXEAF extends JDialog {
 
 			if (!isAlreadyExisting) {
 				try {
-					bufferedWriter.write(functionElementListFrom.get(i).getAttribute("Name") + "(" +
-							functionElementListFrom.get(i).getAttribute("ID") + "):" +
-							res.getString("DialogImportXEAF34") + "\n");
+					bufferedWriter.write(functionElementListFrom.get(i).getName() + "(" +
+						functionElementListFrom.get(i).getSortKey() + "):" +
+						res.getString("DialogImportXEAF34") + "\n");
 				} catch (IOException ex2) {}
 
 				Function newFunction = createFunctionDefinition(functionElementListFrom.get(i), blockIDInto);
@@ -516,120 +511,32 @@ public class DialogImportXEAF extends JDialog {
 			jProgressBar.setString("Checking functions called...");
 			jProgressBar.paintImmediately(0,0,jProgressBar.getWidth(),jProgressBar.getHeight());
 
-			fromFunctionElement = fromFunctionArray.get(i);
+			Function fromFunction = fromFunctionArray.get(i);
 			Function newFunction = newFunctionArray.get(i);
-			updateFunctionsCalledOfNewFunction(fromFunctionElement, newFunction, targetFunctions);
+			updateFunctionsCalledOfNewFunction(fromFunction, newFunction, targetFunctions);
 		}
 	}
 
-	void updateFunctionsCalledOfNewFunction(org.w3c.dom.Element elementFrom, Function functionNew, java.util.List<Function> functionListInto) {
-		org.w3c.dom.Element workElement;
-		String action;
-		int pos1, pos2;
+	void updateFunctionsCalledOfNewFunction(Function functionFrom, Function functionNew, java.util.List<Function> functionListInto) {
 		String convertedID;
+		String functionTypeSortKey = getFunctionTypeSortKey(functionFrom);
 
-		if (elementFrom.getAttribute("Type").equals("XF100")) {
-			if (!elementFrom.getAttribute("DetailFunction").equals("")) {
-				convertedID = convertFunctionID(elementFrom.getAttribute("DetailFunction"), functionListInto);
+		// Copy FunctionUsedByThisList from source function if available
+		if (functionFrom.getFunctionUsedByThisList() != null) {
+			for (FunctionUsedByThis funcUsedFrom : functionFrom.getFunctionUsedByThisList()) {
+				convertedID = convertFunctionID(funcUsedFrom.getFunctionId(), functionListInto);
 				if (convertedID.equals("")) {
 					missingFunctionCounter++;
 					try {
-						bufferedWriter.write(elementFrom.getAttribute("DetailFunction")
+						bufferedWriter.write(funcUsedFrom.getFunctionId()
 								+ res.getString("DialogImportXEAF38") + "\n");
 					} catch (IOException ex1) {}
 				} else {
 					FunctionUsedByThis funcUsed = new FunctionUsedByThis();
 					funcUsed.setFunctionId(convertedID);
-					funcUsed.setLaunchEvent("");
-					funcUsed.setSortKey("0");
+					funcUsed.setLaunchEvent(funcUsedFrom.getLaunchEvent());
+					funcUsed.setSortKey(funcUsedFrom.getSortKey());
 					functionNew.getFunctionUsedByThisList().add(funcUsed);
-				}
-			}
-		}
-
-		if (elementFrom.getAttribute("Type").equals("XF110")) {
-			if (!elementFrom.getAttribute("BatchRecordFunction").equals("")) {
-				convertedID = convertFunctionID(elementFrom.getAttribute("BatchRecordFunction"), functionListInto);
-				if (convertedID.equals("")) {
-					missingFunctionCounter++;
-					try {
-						bufferedWriter.write(elementFrom.getAttribute("BatchRecordFunction")
-								+ res.getString("DialogImportXEAF38") + "\n");
-					} catch (IOException ex1) {}
-				} else {
-					FunctionUsedByThis funcUsed = new FunctionUsedByThis();
-					funcUsed.setFunctionId(convertedID);
-					funcUsed.setLaunchEvent("");
-					funcUsed.setSortKey("0");
-					functionNew.getFunctionUsedByThisList().add(funcUsed);
-				}
-			}
-		}
-
-		if (elementFrom.getAttribute("Type").equals("XF200")) {
-			if (!elementFrom.getAttribute("FunctionAfterInsert").equals("")) {
-				convertedID = convertFunctionID(elementFrom.getAttribute("FunctionAfterInsert"), functionListInto);
-				if (convertedID.equals("")) {
-					missingFunctionCounter++;
-					try {
-						bufferedWriter.write(elementFrom.getAttribute("FunctionAfterInsert")
-								+ res.getString("DialogImportXEAF38") + "\n");
-					} catch (IOException ex1) {}
-				} else {
-					FunctionUsedByThis funcUsed = new FunctionUsedByThis();
-					funcUsed.setFunctionId(convertedID);
-					funcUsed.setLaunchEvent("");
-					funcUsed.setSortKey("0");
-					functionNew.getFunctionUsedByThisList().add(funcUsed);
-				}
-			}
-		}
-
-		if (elementFrom.getAttribute("Type").equals("XF300")) {
-			if (!elementFrom.getAttribute("HeaderFunction").equals("")) {
-				convertedID = convertFunctionID(elementFrom.getAttribute("HeaderFunction"), functionListInto);
-				if (convertedID.equals("")) {
-					missingFunctionCounter++;
-					try {
-						bufferedWriter.write(elementFrom.getAttribute("HeaderFunction")
-								+ res.getString("DialogImportXEAF38") + "\n");
-					} catch (IOException ex1) {}
-				} else {
-					FunctionUsedByThis funcUsed = new FunctionUsedByThis();
-					funcUsed.setFunctionId(convertedID);
-					funcUsed.setLaunchEvent("");
-					funcUsed.setSortKey("0");
-					functionNew.getFunctionUsedByThisList().add(funcUsed);
-				}
-			}
-		}
-
-		if (elementFrom.getAttribute("Type").equals("XF100")
-				|| elementFrom.getAttribute("Type").equals("XF110")
-				|| elementFrom.getAttribute("Type").equals("XF200")
-				|| elementFrom.getAttribute("Type").equals("XF300")
-				|| elementFrom.getAttribute("Type").equals("XF310")) {
-			NodeList buttonList = elementFrom.getElementsByTagName("Button");
-			for (int i = 0; i < buttonList.getLength(); i++) {
-				workElement = (org.w3c.dom.Element)buttonList.item(i);
-				action = workElement.getAttribute("Action");
-				pos1 = action.indexOf("CALL(");
-				pos2 = action.indexOf(")");
-				if (pos1 >= 0 && pos2 > pos1) {
-					convertedID = convertFunctionID(action.substring(pos1+5, pos2), functionListInto);
-					if (convertedID.equals("")) {
-						missingFunctionCounter++;
-						try {
-							bufferedWriter.write(action.substring(pos1+5, pos2)
-									+ res.getString("DialogImportXEAF38") + "\n");
-						} catch (IOException ex1) {}
-					} else {
-						FunctionUsedByThis funcUsed = new FunctionUsedByThis();
-						funcUsed.setFunctionId(convertedID);
-						funcUsed.setLaunchEvent("");
-						funcUsed.setSortKey("0");
-						functionNew.getFunctionUsedByThisList().add(funcUsed);
-					}
 				}
 			}
 		}
@@ -648,6 +555,39 @@ public class DialogImportXEAF extends JDialog {
 			}
 		}
 		return convertedID;
+	}
+
+	String getFunctionTypeSortKey(Function function) {
+		String sortKey = "";
+		if (function.getFunctionTypeId() != null) {
+			XeadSystem xeadSystem = xeadSystemFrom;
+			java.util.List<FunctionType> functionTypes = xeadSystem.getFunctionTypes();
+			if (functionTypes != null) {
+				for (FunctionType ft : functionTypes) {
+					if (ft.getId().equals(function.getFunctionTypeId())) {
+						sortKey = ft.getSortKey();
+						break;
+					}
+				}
+			}
+		}
+		return sortKey;
+	}
+
+	Table convertTableIDFromSource(String tableSortKey) {
+		Table convertedTable = null;
+		if (!tableSortKey.equals("")) {
+			java.util.List<Table> tables = xeadSystemFrom.getTables();
+			if (tables != null) {
+				for (Table table : tables) {
+					if (table.getSortKey().equals(tableSortKey)) {
+						convertedTable = table;
+						break;
+					}
+				}
+			}
+		}
+		return convertedTable;
 	}
 	
 	String getStringValueOfDateAndTime() {
@@ -693,12 +633,8 @@ public class DialogImportXEAF extends JDialog {
 		return returnValue;
 	}
 
-	String createTableDefinition(org.w3c.dom.Element elementFrom, String subsystemID) {
-		org.w3c.dom.Element workElement1;
-		NodeList elementList1;
+	String createTableDefinition(Table tableFrom, String subsystemID) {
 		int lastID = 0;
-		int length = 0;
-		int decimal = 0;
 		String tableID = "";
 		XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
 
@@ -715,10 +651,10 @@ public class DialogImportXEAF extends JDialog {
 		}
 		tableID = Integer.toString(lastID + 1);
 		newTable.setId(tableID);
-		newTable.setName(elementFrom.getAttribute("Name"));
-		newTable.setSortKey(elementFrom.getAttribute("ID"));
+		newTable.setName(tableFrom.getName());
+		newTable.setSortKey(tableFrom.getSortKey());
 		newTable.setSubsystemId(subsystemID);
-		newTable.setDescriptions(elementFrom.getAttribute("Remarks"));
+		newTable.setDescriptions(tableFrom.getDescriptions());
 		newTable.setTableTypeId(defaultTableTypeID);
 		xeadSystem.getTables().add(newTable);
 
@@ -726,107 +662,96 @@ public class DialogImportXEAF extends JDialog {
 		//Create TableField//
 		/////////////////////
 		HashMap<String, String> fieldIDMap = new HashMap<String, String>();
-		elementList1 = elementFrom.getElementsByTagName("Field");
-		for (int i = 0; i < elementList1.getLength(); i++) {
-			workElement1 = (org.w3c.dom.Element)elementList1.item(i);
-			TableField field = new TableField();
-			lastID = 0;
-			java.util.List<TableField> allFields = new ArrayList<>();
-			if (tables != null) {
-				for (Table t : tables) {
-					if (t.getTableFields() != null) {
-						allFields.addAll(t.getTableFields());
+		java.util.List<TableField> fieldsFrom = tableFrom.getTableFields();
+		if (fieldsFrom != null) {
+			for (int i = 0; i < fieldsFrom.size(); i++) {
+				TableField fieldFrom = fieldsFrom.get(i);
+				TableField field = new TableField();
+				lastID = 0;
+				java.util.List<TableField> allFields = new ArrayList<>();
+				if (tables != null) {
+					for (Table t : tables) {
+						if (t.getTableFields() != null) {
+							allFields.addAll(t.getTableFields());
+						}
 					}
 				}
-			}
-			if (!allFields.isEmpty()) {
-				for (TableField f : allFields) {
-					int id = Integer.parseInt(f.getId());
-					if (id > lastID) lastID = id;
+				if (!allFields.isEmpty()) {
+					for (TableField f : allFields) {
+						int id = Integer.parseInt(f.getId());
+						if (id > lastID) lastID = id;
+					}
+				}
+				field.setId(Integer.toString(lastID + 1));
+				field.setName(fieldFrom.getName());
+				field.setSortKey(fieldFrom.getSortKey());
+				field.setDescriptions(fieldFrom.getDescriptions());
+				field.setAlias(fieldFrom.getAlias());
+				field.setAttributeType(fieldFrom.getAttributeType());
+				field.setDataTypeId(fieldFrom.getDataTypeId());
+				if (i < 20) {
+					field.setShowOnModel("true");
+				} else {
+					field.setShowOnModel("false");
+				}
+				field.setNotNull(fieldFrom.getNotNull());
+				field.setNoUpdate(fieldFrom.getNoUpdate());
+				field.setDefault(fieldFrom.getDefault());
+
+				newTable.getTableFields().add(field);
+				if (fieldFrom.getAlias() != null && !fieldFrom.getAlias().equals("")) {
+					fieldIDMap.put(fieldFrom.getAlias(), field.getId());
 				}
 			}
-			field.setId(Integer.toString(lastID + 1));
-			field.setName(workElement1.getAttribute("Name"));
-			field.setSortKey(workElement1.getAttribute("Order"));
-			field.setDescriptions(workElement1.getAttribute("Remarks"));
-			field.setAlias(workElement1.getAttribute("ID"));
-			if (workElement1.getAttribute("TypeOptions").contains("VIRTUAL")) {
-				field.setAttributeType("DERIVABLE");
-			} else {
-				field.setAttributeType("NATIVE");
-			}
-			if (workElement1.getAttribute("Size").equals("")) {
-				length = 0;
-			} else {
-				length = Integer.parseInt(workElement1.getAttribute("Size"));				
-			}
-			if (workElement1.getAttribute("Decimal").equals("")) {
-				decimal = 0;
-			} else {
-				decimal = Integer.parseInt(workElement1.getAttribute("Decimal"));				
-			}
-			field.setDataTypeId(getIDOfDataType(workElement1.getAttribute("Type"), length, decimal));
-			if (i < 20) {
-				field.setShowOnModel("true");
-			} else {
-				field.setShowOnModel("false");
-			}
-			if (workElement1.getAttribute("Nullable").equals("T")) {
-				field.setNotNull("false");
-			} else {
-				field.setNotNull("true");
-			}
-			if (workElement1.getAttribute("NoUpdate").equals("T")) {
-				field.setNoUpdate("true");
-			} else {
-				field.setNoUpdate("false");
-			}
-			field.setDefault("");
-
-			newTable.getTableFields().add(field);
-			fieldIDMap.put(field.getAlias(), field.getId());
 		}
 
 		///////////////////
 		//Create TableKey//
 		///////////////////
 		boolean hasPK = false;
-		StringTokenizer workTokenizer;
-		String fieldID;
-		elementList1 = elementFrom.getElementsByTagName("Key");
-		for (int i = 0; i < elementList1.getLength(); i++) {
-			workElement1 = (org.w3c.dom.Element)elementList1.item(i);
-			if (workElement1.getAttribute("Type").equals("PK")
-					|| workElement1.getAttribute("Type").equals("SK")
-					|| workElement1.getAttribute("Type").equals("XK")) {
-				TableKey key = new TableKey();
-				key.setId(Integer.toString(i));
-				key.setType(workElement1.getAttribute("Type"));
-				if (workElement1.getAttribute("Type").equals("PK")) {
-					key.setSortKey("000");
-				} else {
-					key.setSortKey("010");
-				}
-				workTokenizer = new StringTokenizer(workElement1.getAttribute("Fields"), ";" );
-				while (workTokenizer.hasMoreTokens()) {
-					fieldID = workTokenizer.nextToken();
-					TableKeyField keyField = new TableKeyField();
-					if (workElement1.getAttribute("Type").equals("XK")) {
-						if (fieldID.contains("(D)")) {
-							fieldID = fieldID.replace("(D)", "");
-							keyField.setAscDesc("D");
-						} else {
-							keyField.setAscDesc("A");
+		java.util.List<TableKey> keysFrom = tableFrom.getTableKeys();
+		if (keysFrom != null) {
+			for (int i = 0; i < keysFrom.size(); i++) {
+				TableKey keyFrom = keysFrom.get(i);
+				if (keyFrom.getType().equals("PK")
+						|| keyFrom.getType().equals("SK")
+						|| keyFrom.getType().equals("XK")) {
+					TableKey key = new TableKey();
+					key.setId(Integer.toString(i));
+					key.setType(keyFrom.getType());
+					if (keyFrom.getType().equals("PK")) {
+						key.setSortKey("000");
+					} else {
+						key.setSortKey("010");
+					}
+					java.util.List<TableKeyField> keyFieldsFrom = keyFrom.getTableKeyFields();
+					if (keyFieldsFrom != null) {
+						for (int j = 0; j < keyFieldsFrom.size(); j++) {
+							TableKeyField keyFieldFrom = keyFieldsFrom.get(j);
+							TableKeyField keyField = new TableKeyField();
+							keyField.setAscDesc(keyFieldFrom.getAscDesc());
+							keyField.setFieldId(keyFieldFrom.getFieldId());
+							// Need to remap field ID
+							String fieldAlias = null;
+							// Find the original field's alias from the source table
+							for (TableField tf : fieldsFrom) {
+								if (tf.getId().equals(keyFieldFrom.getFieldId())) {
+									fieldAlias = tf.getAlias();
+									break;
+								}
+							}
+							if (fieldAlias != null && fieldIDMap.containsKey(fieldAlias)) {
+								keyField.setFieldId(fieldIDMap.get(fieldAlias));
+							}
+							keyField.setSortKey(Modeler.getFormatted4ByteString(j * 10));
+							key.getTableKeyFields().add(keyField);
 						}
 					}
-					keyField.setFieldId(fieldIDMap.get(fieldID));
-					keyField.setSortKey(Modeler.getFormatted4ByteString(i * 10));
-					key.getTableKeyFields().add(keyField);
+					newTable.getTableKeys().add(key);
 				}
-				newTable.getTableKeys().add(key);
-			}
-			if (workElement1.getAttribute("Type").equals("PK")) {
-				hasPK = true;
+				if (keyFrom.getType().equals("PK")) {
+					hasPK = true;
+				}
 			}
 		}
 		if (!hasPK) {
@@ -844,8 +769,8 @@ public class DialogImportXEAF extends JDialog {
 		/////////////////////////////////////////
 		//Update attributes of target subsystem//
 		/////////////////////////////////////////
-		blockSubsystemInto.setName(blockElementFrom.getAttribute("Name"));
-		blockSubsystemInto.setDescriptions(blockElementFrom.getAttribute("Descriptions"));
+		blockSubsystemInto.setName(blockSubsystemFrom.getName());
+		blockSubsystemInto.setDescriptions(blockSubsystemFrom.getDescriptions());
 	}
 
 	void setupFunctionTypeMap() {
@@ -889,7 +814,7 @@ public class DialogImportXEAF extends JDialog {
 		
 	}
 
-	Function createFunctionDefinition(org.w3c.dom.Element elementFrom, String subsystemID) {
+	Function createFunctionDefinition(Function functionFrom, String subsystemID) {
 		int lastID = 0;
 		XeadSystem xeadSystem = frame_.getXeadDocumentModel().getXeadSystem();
 
@@ -905,70 +830,83 @@ public class DialogImportXEAF extends JDialog {
 			}
 		}
 		newFunction.setId(Integer.toString(lastID + 1));
-		newFunction.setName(elementFrom.getAttribute("Name"));
-		newFunction.setSortKey(elementFrom.getAttribute("ID"));
+		newFunction.setName(functionFrom.getName());
+		newFunction.setSortKey(functionFrom.getSortKey());
 		newFunction.setSubsystemId(subsystemID);
 		newFunction.setReturn(res.getString("DialogImportXEAF04"));
-		newFunction.setDescriptions("");
-		newFunction.setFunctionTypeId(functionTypeMap.get(elementFrom.getAttribute("Type")));
+		newFunction.setDescriptions(functionFrom.getDescriptions());
+
+		// Map function type from source
+		String functionTypeSortKey = getFunctionTypeSortKey(functionFrom);
+		if (functionTypeMap.containsKey(functionTypeSortKey)) {
+			newFunction.setFunctionTypeId(functionTypeMap.get(functionTypeSortKey));
+		}
 
 		//////////////////////////////////
 		//Make up for attributes by type//
 		//////////////////////////////////
-		if (elementFrom.getAttribute("Type").equals("XF000")) {
+		if (functionTypeSortKey.equals("XF000")) {
 			newFunction.setSummary(typeDescArray[0]);
 			newFunction.setParameters("*None");
 			xeadSystem.getFunctions().add(newFunction);
 		}
-		if (elementFrom.getAttribute("Type").equals("XF100")) {
+		if (functionTypeSortKey.equals("XF100")) {
 			newFunction.setSummary(typeDescArray[1]);
 			newFunction.setParameters("*None");
-			setupElementForFunctionXF100(elementFrom, newFunction);
+			setupElementForFunctionXF100(functionFrom, newFunction);
 			xeadSystem.getFunctions().add(newFunction);
 		}
-		if (elementFrom.getAttribute("Type").equals("XF110")) {
+		if (functionTypeSortKey.equals("XF110")) {
 			newFunction.setSummary(typeDescArray[2]);
 			newFunction.setParameters("*None");
-			setupElementForFunctionXF110(elementFrom, newFunction);
+			setupElementForFunctionXF110(functionFrom, newFunction);
 			xeadSystem.getFunctions().add(newFunction);
 		}
-		if (elementFrom.getAttribute("Type").equals("XF200")) {
+		if (functionTypeSortKey.equals("XF200")) {
 			newFunction.setSummary(typeDescArray[3]);
-			setupElementForFunctionXF200(elementFrom, newFunction);
+			setupElementForFunctionXF200(functionFrom, newFunction);
 			xeadSystem.getFunctions().add(newFunction);
 		}
-		if (elementFrom.getAttribute("Type").equals("XF290")) {
+		if (functionTypeSortKey.equals("XF290")) {
 			newFunction.setSummary(typeDescArray[4]);
-			setupElementForFunctionXF290(elementFrom, newFunction);
+			setupElementForFunctionXF290(functionFrom, newFunction);
 			xeadSystem.getFunctions().add(newFunction);
 		}
-		if (elementFrom.getAttribute("Type").equals("XF300")) {
+		if (functionTypeSortKey.equals("XF300")) {
 			newFunction.setSummary(typeDescArray[5]);
-			setupElementForFunctionXF300(elementFrom, newFunction);
+			setupElementForFunctionXF300(functionFrom, newFunction);
 			xeadSystem.getFunctions().add(newFunction);
 		}
-		if (elementFrom.getAttribute("Type").equals("XF310")) {
+		if (functionTypeSortKey.equals("XF310")) {
 			newFunction.setSummary(typeDescArray[6]);
-			setupElementForFunctionXF310(elementFrom, newFunction);
+			setupElementForFunctionXF310(functionFrom, newFunction);
 			xeadSystem.getFunctions().add(newFunction);
 		}
-		if (elementFrom.getAttribute("Type").equals("XF390")) {
+		if (functionTypeSortKey.equals("XF390")) {
 			newFunction.setSummary(typeDescArray[7]);
-			setupElementForFunctionXF390(elementFrom, newFunction);
+			setupElementForFunctionXF390(functionFrom, newFunction);
 			xeadSystem.getFunctions().add(newFunction);
 		}
-		
+
 		return newFunction;
 	}
 
-	void setupElementForFunctionXF100(org.w3c.dom.Element elementFrom, Function newFunction) {
-		Table tableElementInto = convertTableID(elementFrom.getAttribute("PrimaryTable"));
+	void setupElementForFunctionXF100(Function functionFrom, Function newFunction) {
+		// Look for PRIMARY IOTable in source function
+		Table tableElementInto = null;
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("PRIMARY".equals(ioTable.getPosition())) {
+					tableElementInto = convertTableIDFromSource(ioTable.getTableId());
+					if (tableElementInto != null) {
+						tableElementInto = convertTableID(tableElementInto.getSortKey());
+					}
+					break;
+				}
+			}
+		}
 		if (tableElementInto == null) {
 			missingTableCounter++;
-			try {
-				bufferedWriter.write(elementFrom.getAttribute("PrimaryTable")
-						+ res.getString("DialogImportXEAF37") + "\n");
-			} catch (IOException ex1) {}
 		} else {
 			IOTable ioTable = new IOTable();
 			ioTable.setId("1");
@@ -985,14 +923,22 @@ public class DialogImportXEAF extends JDialog {
 		}
 	}
 
-	void setupElementForFunctionXF110(org.w3c.dom.Element elementFrom, Function newFunction) {
-		Table tableElementInto = convertTableID(elementFrom.getAttribute("PrimaryTable"));
+	void setupElementForFunctionXF110(Function functionFrom, Function newFunction) {
+		// Look for PRIMARY IOTable
+		Table tableElementInto = null;
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("PRIMARY".equals(ioTable.getPosition())) {
+					Table sourceTable = convertTableIDFromSource(ioTable.getTableId());
+					if (sourceTable != null) {
+						tableElementInto = convertTableID(sourceTable.getSortKey());
+					}
+					break;
+				}
+			}
+		}
 		if (tableElementInto == null) {
 			missingTableCounter++;
-			try {
-				bufferedWriter.write(elementFrom.getAttribute("PrimaryTable")
-						+ res.getString("DialogImportXEAF37") + "\n");
-			} catch (IOException ex1) {}
 		} else {
 			IOTable ioTable = new IOTable();
 			ioTable.setId("1");
@@ -1007,39 +953,51 @@ public class DialogImportXEAF extends JDialog {
 			ioTable.setOpD("");
 			newFunction.getIOTables().add(ioTable);
 		}
-		if (!elementFrom.getAttribute("BatchTable").equals("")) {
-			tableElementInto = convertTableID(elementFrom.getAttribute("BatchTable"));
-			if (tableElementInto == null) {
-				missingTableCounter++;
-				try {
-					bufferedWriter.write(elementFrom.getAttribute("BatchTable")
-							+ res.getString("DialogImportXEAF37") + "\n");
-				} catch (IOException ex1) {}
-			} else {
-				IOTable ioTable = new IOTable();
-				ioTable.setId("2");
-				ioTable.setNameExtension("");
-				ioTable.setSortKey("020");
-				ioTable.setDescriptions(res.getString("DialogImportXEAF24"));
-				ioTable.setTableId(tableElementInto.getId());
-				ioTable.setPosition("JOIN");
-				ioTable.setOpC("+");
-				ioTable.setOpR("");
-				ioTable.setOpU("");
-				ioTable.setOpD("");
-				newFunction.getIOTables().add(ioTable);
+		// Look for JOIN IOTable (batch table)
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("JOIN".equals(ioTable.getPosition())) {
+					Table sourceTable = convertTableIDFromSource(ioTable.getTableId());
+					if (sourceTable != null) {
+						tableElementInto = convertTableID(sourceTable.getSortKey());
+					}
+					if (tableElementInto == null) {
+						missingTableCounter++;
+					} else {
+						IOTable newIoTable = new IOTable();
+						newIoTable.setId("2");
+						newIoTable.setNameExtension("");
+						newIoTable.setSortKey("020");
+						newIoTable.setDescriptions(res.getString("DialogImportXEAF24"));
+						newIoTable.setTableId(tableElementInto.getId());
+						newIoTable.setPosition("JOIN");
+						newIoTable.setOpC("+");
+						newIoTable.setOpR("");
+						newIoTable.setOpU("");
+						newIoTable.setOpD("");
+						newFunction.getIOTables().add(newIoTable);
+					}
+					break;
+				}
 			}
 		}
 	}
 
-	void setupElementForFunctionXF200(org.w3c.dom.Element elementFrom, Function newFunction) {
-		Table tableElementInto = convertTableID(elementFrom.getAttribute("PrimaryTable"));
+	void setupElementForFunctionXF200(Function functionFrom, Function newFunction) {
+		Table tableElementInto = null;
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("PRIMARY".equals(ioTable.getPosition())) {
+					Table sourceTable = convertTableIDFromSource(ioTable.getTableId());
+					if (sourceTable != null) {
+						tableElementInto = convertTableID(sourceTable.getSortKey());
+					}
+					break;
+				}
+			}
+		}
 		if (tableElementInto == null) {
 			missingTableCounter++;
-			try {
-				bufferedWriter.write(elementFrom.getAttribute("PrimaryTable")
-						+ res.getString("DialogImportXEAF37") + "\n");
-			} catch (IOException ex1) {}
 		} else {
 			IOTable ioTable = new IOTable();
 			ioTable.setId("1");
@@ -1057,14 +1015,21 @@ public class DialogImportXEAF extends JDialog {
 		}
 	}
 
-	void setupElementForFunctionXF290(org.w3c.dom.Element elementFrom, Function newFunction) {
-		Table tableElementInto = convertTableID(elementFrom.getAttribute("PrimaryTable"));
+	void setupElementForFunctionXF290(Function functionFrom, Function newFunction) {
+		Table tableElementInto = null;
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("PRIMARY".equals(ioTable.getPosition())) {
+					Table sourceTable = convertTableIDFromSource(ioTable.getTableId());
+					if (sourceTable != null) {
+						tableElementInto = convertTableID(sourceTable.getSortKey());
+					}
+					break;
+				}
+			}
+		}
 		if (tableElementInto == null) {
 			missingTableCounter++;
-			try {
-				bufferedWriter.write(elementFrom.getAttribute("PrimaryTable")
-						+ res.getString("DialogImportXEAF37") + "\n");
-			} catch (IOException ex1) {}
 		} else {
 			IOTable ioTable = new IOTable();
 			ioTable.setId("1");
@@ -1082,14 +1047,22 @@ public class DialogImportXEAF extends JDialog {
 		}
 	}
 
-	void setupElementForFunctionXF300(org.w3c.dom.Element elementFrom, Function newFunction) {
-		Table tableElementInto = convertTableID(elementFrom.getAttribute("HeaderTable"));
+	void setupElementForFunctionXF300(Function functionFrom, Function newFunction) {
+		// Look for HEADER IOTable
+		Table tableElementInto = null;
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("HEADER".equals(ioTable.getPosition())) {
+					Table sourceTable = convertTableIDFromSource(ioTable.getTableId());
+					if (sourceTable != null) {
+						tableElementInto = convertTableID(sourceTable.getSortKey());
+					}
+					break;
+				}
+			}
+		}
 		if (tableElementInto == null) {
 			missingTableCounter++;
-			try {
-				bufferedWriter.write(elementFrom.getAttribute("HeaderTable")
-						+ res.getString("DialogImportXEAF37") + "\n");
-			} catch (IOException ex1) {}
 		} else {
 			IOTable ioTable = new IOTable();
 			ioTable.setId("1");
@@ -1105,41 +1078,51 @@ public class DialogImportXEAF extends JDialog {
 			newFunction.getIOTables().add(ioTable);
 			newFunction.setParameters(getKeyFieldNameOfTable(tableElementInto));
 		}
-		NodeList detailList = elementFrom.getElementsByTagName("Detail");
-		for (int i = 0; i < detailList.getLength(); i++) {
-			org.w3c.dom.Element workElement = (org.w3c.dom.Element)detailList.item(i);
-			tableElementInto = convertTableID(workElement.getAttribute("Table"));
-			if (tableElementInto == null) {
-				missingTableCounter++;
-				try {
-					bufferedWriter.write(workElement.getAttribute("Table")
-							+ res.getString("DialogImportXEAF37") + "\n");
-				} catch (IOException ex1) {}
-			} else {
-				IOTable ioTable = new IOTable();
-				ioTable.setId("2");
-				ioTable.setNameExtension("");
-				ioTable.setSortKey("020");
-				ioTable.setDescriptions(res.getString("DialogImportXEAF15"));
-				ioTable.setTableId(tableElementInto.getId());
-				ioTable.setPosition("DETAIL");
-				ioTable.setOpC("");
-				ioTable.setOpR("+");
-				ioTable.setOpU("");
-				ioTable.setOpD("");
-				newFunction.getIOTables().add(ioTable);
+		// Look for DETAIL IOTables
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("DETAIL".equals(ioTable.getPosition())) {
+					Table sourceTable = convertTableIDFromSource(ioTable.getTableId());
+					if (sourceTable != null) {
+						tableElementInto = convertTableID(sourceTable.getSortKey());
+					}
+					if (tableElementInto == null) {
+						missingTableCounter++;
+					} else {
+						IOTable newIoTable = new IOTable();
+						newIoTable.setId("2");
+						newIoTable.setNameExtension("");
+						newIoTable.setSortKey("020");
+						newIoTable.setDescriptions(res.getString("DialogImportXEAF15"));
+						newIoTable.setTableId(tableElementInto.getId());
+						newIoTable.setPosition("DETAIL");
+						newIoTable.setOpC("");
+						newIoTable.setOpR("+");
+						newIoTable.setOpU("");
+						newIoTable.setOpD("");
+						newFunction.getIOTables().add(newIoTable);
+					}
+				}
 			}
 		}
 	}
 
-	void setupElementForFunctionXF310(org.w3c.dom.Element elementFrom, Function newFunction) {
-		Table tableElementInto = convertTableID(elementFrom.getAttribute("HeaderTable"));
+	void setupElementForFunctionXF310(Function functionFrom, Function newFunction) {
+		// Look for HEADER IOTable
+		Table tableElementInto = null;
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("HEADER".equals(ioTable.getPosition())) {
+					Table sourceTable = convertTableIDFromSource(ioTable.getTableId());
+					if (sourceTable != null) {
+						tableElementInto = convertTableID(sourceTable.getSortKey());
+					}
+					break;
+				}
+			}
+		}
 		if (tableElementInto == null) {
 			missingTableCounter++;
-			try {
-				bufferedWriter.write(elementFrom.getAttribute("HeaderTable")
-						+ res.getString("DialogImportXEAF37") + "\n");
-			} catch (IOException ex1) {}
 		} else {
 			IOTable ioTable = new IOTable();
 			ioTable.setId("1");
@@ -1155,13 +1138,21 @@ public class DialogImportXEAF extends JDialog {
 			newFunction.getIOTables().add(ioTable);
 			newFunction.setParameters(getKeyFieldNameOfTable(tableElementInto));
 		}
-		tableElementInto = convertTableID(elementFrom.getAttribute("DetailTable"));
+		// Look for DETAIL IOTable
+		tableElementInto = null;
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("DETAIL".equals(ioTable.getPosition())) {
+					Table sourceTable = convertTableIDFromSource(ioTable.getTableId());
+					if (sourceTable != null) {
+						tableElementInto = convertTableID(sourceTable.getSortKey());
+					}
+					break;
+				}
+			}
+		}
 		if (tableElementInto == null) {
 			missingTableCounter++;
-			try {
-				bufferedWriter.write(elementFrom.getAttribute("DetailTable")
-						+ res.getString("DialogImportXEAF37") + "\n");
-			} catch (IOException ex1) {}
 		} else {
 			IOTable ioTable = new IOTable();
 			ioTable.setId("2");
@@ -1178,14 +1169,22 @@ public class DialogImportXEAF extends JDialog {
 		}
 	}
 
-	void setupElementForFunctionXF390(org.w3c.dom.Element elementFrom, Function newFunction) {
-		Table tableElementInto = convertTableID(elementFrom.getAttribute("HeaderTable"));
+	void setupElementForFunctionXF390(Function functionFrom, Function newFunction) {
+		// Look for HEADER IOTable
+		Table tableElementInto = null;
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("HEADER".equals(ioTable.getPosition())) {
+					Table sourceTable = convertTableIDFromSource(ioTable.getTableId());
+					if (sourceTable != null) {
+						tableElementInto = convertTableID(sourceTable.getSortKey());
+					}
+					break;
+				}
+			}
+		}
 		if (tableElementInto == null) {
 			missingTableCounter++;
-			try {
-				bufferedWriter.write(elementFrom.getAttribute("HeaderTable")
-						+ res.getString("DialogImportXEAF37") + "\n");
-			} catch (IOException ex1) {}
 		} else {
 			IOTable ioTable = new IOTable();
 			ioTable.setId("1");
@@ -1201,13 +1200,21 @@ public class DialogImportXEAF extends JDialog {
 			newFunction.getIOTables().add(ioTable);
 			newFunction.setParameters(getKeyFieldNameOfTable(tableElementInto));
 		}
-		tableElementInto = convertTableID(elementFrom.getAttribute("DetailTable"));
+		// Look for DETAIL IOTable
+		tableElementInto = null;
+		if (functionFrom.getIOTables() != null) {
+			for (IOTable ioTable : functionFrom.getIOTables()) {
+				if ("DETAIL".equals(ioTable.getPosition())) {
+					Table sourceTable = convertTableIDFromSource(ioTable.getTableId());
+					if (sourceTable != null) {
+						tableElementInto = convertTableID(sourceTable.getSortKey());
+					}
+					break;
+				}
+			}
+		}
 		if (tableElementInto == null) {
 			missingTableCounter++;
-			try {
-				bufferedWriter.write(elementFrom.getAttribute("DetailTable")
-						+ res.getString("DialogImportXEAF37") + "\n");
-			} catch (IOException ex1) {}
 		} else {
 			IOTable ioTable = new IOTable();
 			ioTable.setId("2");
@@ -1341,55 +1348,24 @@ public class DialogImportXEAF extends JDialog {
 	}
 
 	/**
-	 * ComboBox model for the "From" combo box - wraps DOM Elements from the import file
+	 * ComboBox model for the "From" combo box - wraps Subsystem POJOs from the import file
 	 */
 	class SortableSubsystemComboBoxModel extends DefaultComboBoxModel {
 		private static final long serialVersionUID = 1L;
 		
 		public void sortElements() {
-			ArrayList<Object> list = new ArrayList<Object>();
+			ArrayList<XeadNodeFromSubsystem> list = new ArrayList<XeadNodeFromSubsystem>();
 			for (int i = 0; i < this.getSize(); i++) {
 				Object obj = this.getElementAt(i);
-				// Items are already wrapped, just add them directly
-				list.add(obj);
+				if (obj instanceof XeadNodeFromSubsystem) {
+					list.add((XeadNodeFromSubsystem)obj);
+				}
 			}
 			this.removeAllElements();
-			Collections.sort(list, new XeadNodeComparator());
-			for (Object obj : list) {
-				this.addElement(obj);
+			Collections.sort(list);
+			for (XeadNodeFromSubsystem node : list) {
+				this.addElement(node);
 			}
-		}
-	}
-
-	/**
-	 * Wrapper for DOM Element from import file
-	 */
-	class XeadNodeFromElement implements Comparable<XeadNodeFromElement> {
-		private org.w3c.dom.Element domElement;
-		
-		public XeadNodeFromElement(org.w3c.dom.Element element) {
-			this.domElement = element;
-		}
-		
-		public String toString() {
-			String sortKey = domElement.getAttribute("SortKey");
-			if (sortKey.equals("")) {
-				return domElement.getAttribute("ID") + " " + domElement.getAttribute("Name");
-			} else {
-				return sortKey + " " + domElement.getAttribute("Name");
-			}
-		}
-		
-		public org.w3c.dom.Element getElement() {
-			return domElement;
-		}
-		
-		public String getSortKey() {
-			return domElement.getAttribute("SortKey");
-		}
-		
-		public int compareTo(XeadNodeFromElement other) {
-			return this.getSortKey().compareTo(other.getSortKey());
 		}
 	}
 
@@ -1422,30 +1398,6 @@ public class DialogImportXEAF extends JDialog {
 		
 		public int compareTo(XeadNodeFromSubsystem other) {
 			return this.getSortKey().compareTo(other.getSortKey());
-		}
-	}
-
-	/**
-	 * Comparator for mixed XeadNode types
-	 */
-	class XeadNodeComparator implements Comparator<Object> {
-		public int compare(Object o1, Object o2) {
-			String s1, s2;
-			if (o1 instanceof XeadNodeFromElement) {
-				s1 = ((XeadNodeFromElement)o1).getSortKey();
-			} else if (o1 instanceof XeadNodeFromSubsystem) {
-				s1 = ((XeadNodeFromSubsystem)o1).getSortKey();
-			} else {
-				s1 = o1.toString();
-			}
-			if (o2 instanceof XeadNodeFromElement) {
-				s2 = ((XeadNodeFromElement)o2).getSortKey();
-			} else if (o2 instanceof XeadNodeFromSubsystem) {
-				s2 = ((XeadNodeFromSubsystem)o2).getSortKey();
-			} else {
-				s2 = o2.toString();
-			}
-			return s1.compareTo(s2);
 		}
 	}
 }

@@ -9474,48 +9474,6 @@ public class Modeler extends JFrame {
     }
   }
 
-  // XML-based method - deprecated, use JSON-based overload instead
-  // public boolean createSubsystemAttributesForRelationship(Object relationshipElement,
-  //     Object subsystemElement) {
-  //   Object elementSubsystemTable, elementSubsystemRelationship, newElement;
-  //   boolean table1OK, table2OK, needToAdd;
-  //   boolean isUpdated = false;
-  //   org.w3c.dom.NodeList subsystemTableList = getElementsByTagNameFromPojo(subsystemElement, "SubsystemTable");
-  //   org.w3c.dom.NodeList subsystemRelationshipList = subsystemElement.getElementsByTagName(
-  //       "SubsystemRelationship");
-  //   table1OK = false;
-  //   table2OK = false;
-  //   needToAdd = true;
-  //   for (int i = 0; i < subsystemTableList.getLength(); i++) {
-  //     elementSubsystemTable = (Object) subsystemTableList.item(i);
-  //     if (elementSubsystemTable.getAttribute("TableID")
-  //         .equals(getAttributeFromObject(relationshipElement, "Table1ID"))) {
-  //       table1OK = true;
-  //     }
-  //     if (elementSubsystemTable.getAttribute("TableID")
-  //         .equals(getAttributeFromObject(relationshipElement, "Table2ID"))) {
-  //       table2OK = true;
-  //     }
-  //   }
-  //   if (table1OK && table2OK) {
-  //     for (int i = 0; i < subsystemRelationshipList.getLength(); i++) {
-  //       elementSubsystemRelationship = (Object) subsystemRelationshipList.item(i);
-  //       if (elementSubsystemRelationship.getAttribute("RelationshipID")
-  //           .equals(getAttributeFromObject(relationshipElement, "ID"))) {
-  //         needToAdd = false;
-  //       }
-  //     }
-  //   }
-  //   if (table1OK && table2OK && needToAdd) {
-  //     newElement = pojoFactory.createElement("SubsystemRelationship");
-  //     setAttributeOnJsonPojo(newElement, "RelationshipID", getAttributeFromObject(relationshipElement, "ID"));
-  //     setAttributeOnJsonPojo(newElement, "TerminalIndex1", "-1");
-  //     setAttributeOnJsonPojo(newElement, "TerminalIndex2", "-1");
-  //     subsystemElement.appendChild(newElement);
-  //     isUpdated = true;
-  //   }
-  //   return isUpdated;
-  // }
 
   /**
    * JSON-based overload for createSubsystemAttributesForRelationship
@@ -12368,8 +12326,6 @@ public class Modeler extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private xeadModeler.model.json.DataflowNode dataflowNodePojo_;
-    @Deprecated
-    private Object dataflowNodeElement_; // legacy compatibility
     private JLabel jLabelID = new JLabel();
     private JLabel jTextFieldNodeName = new JLabel();
     private JLabel jTextFieldNodeNameExt = new JLabel();
@@ -12401,60 +12357,6 @@ public class Modeler extends JFrame {
     private boolean clickable_;
     private String eventPos = "";
     private boolean isSelected_ = false;
-
-    /**
-     * @deprecated Use constructor with xeadModeler.model.json.DataflowNode instead
-     */
-    @Deprecated
-    public DataflowNode(Object element, JPanel jpanel1, JPanel jpanel2,
-        boolean clickable) {
-      super();
-      dataflowNodeElement_ = element;
-      clickable_ = clickable;
-      // Initialize from legacy element
-      nodeType = getAttributeFromObject(element, "Type");
-      jPanelCanvas2 = jpanel2;
-      jPanelMoveGuide.setLayout(null);
-      jPanelMoveGuide.setBorder(BorderFactory.createLineBorder(SELECT_COLOR));
-      jPanelMoveGuide.setOpaque(false);
-      jPanelMouseActionSensor.setOpaque(false);
-      jPanelMouseActionSensor.addMouseListener(new jPanel_mouseAdapter(this));
-      jPanelMouseActionSensor.addMouseMotionListener(new jPanel_mouseMotionAdapter(this));
-      jTextFieldNodeName.setFocusable(true);
-      this.setLayout(null);
-      this.setBorder(null);
-      this.setOpaque(false);
-      this.add(jPanelMouseActionSensor, null);
-      StringTokenizer workTokenizer = new StringTokenizer(getAttributeFromObject(element, "Position"), ",");
-      nodePosX = Integer.parseInt(workTokenizer.nextToken());
-      nodePosY = Integer.parseInt(workTokenizer.nextToken());
-      jTextFieldNodeName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-      jTextFieldNodeName.setHorizontalAlignment(SwingConstants.CENTER);
-      jTextFieldNodeName.setForeground(Color.WHITE);
-      jTextFieldNodeName.setText(getAttributeFromObject(element, "Name"));
-      jTextFieldNodeName.setBorder(null);
-      jTextFieldNodeName.setOpaque(false);
-      jTextFieldNodeName.setName("jTextFieldNodeName");
-      jTextFieldNodeNameExt.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE - 2));
-      jTextFieldNodeNameExt.setHorizontalAlignment(SwingConstants.CENTER);
-      jTextFieldNodeNameExt.setForeground(Color.WHITE);
-      jTextFieldNodeNameExt.setText(getAttributeFromObject(element, "NameExt"));
-      jTextFieldNodeNameExt.setBorder(null);
-      jTextFieldNodeNameExt.setOpaque(false);
-      jTextFieldNodeNameExt.setName("jTextFieldNodeNameExt");
-      slideNumber = Integer.parseInt(getAttributeFromObject(element, "SlideNumber"));
-      jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, 12));
-      jSpinnerSlideNumber.addChangeListener(new jSpinnerSlideNumber_changeAdapter(this));
-      SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(slideNumber, 1, 30, 1);
-      jSpinnerSlideNumber.setModel(spinnerNumberModel);
-      String strwork = getAttributeFromObject(element, "Descriptions");
-      if (strwork.equals("")) {
-        jPanelMouseActionSensor.setToolTipText(res.getString("S586"));
-      } else {
-        strwork = getLayoutedString(strwork, "<br>");
-        jPanelMouseActionSensor.setToolTipText("<html>" + strwork);
-      }
-    }
 
     /**
      * Constructor for JSON POJO
@@ -12946,7 +12848,7 @@ public class Modeler extends JFrame {
         jPopupMenuDataflowNode.add(jMenuItemDataflowNodeRemove);
       }
       if (nodeType.equals("Subject")) {
-        if (!getAttributeFromObject(dataflowNodeElement_, "RoleID").equals("")) {
+        if (!getAttributeFromJsonPojo(dataflowNodePojo_, "RoleID").equals("")) {
           jPopupMenuDataflowNode.add(jMenuItemDataflowNodeJump);
           jPopupMenuDataflowNode.addSeparator();
         }
@@ -12972,7 +12874,7 @@ public class Modeler extends JFrame {
     }
 
     public String getID() {
-      return getAttributeFromObject(dataflowNodeElement_, "ID");
+      return getAttributeFromJsonPojo(dataflowNodePojo_, "ID");
     }
 
     public String getType() {
@@ -12996,14 +12898,6 @@ public class Modeler extends JFrame {
 
     public void setNumber(int number) {
       jLabelNumber.setText(Integer.toString(number));
-    }
-
-    /**
-     * @deprecated Use getPojo() instead
-     */
-    @Deprecated
-    public Object getElement() {
-      return dataflowNodeElement_;
     }
 
     /**
@@ -14030,18 +13924,23 @@ public class Modeler extends JFrame {
 
     public void updateName() {
       if (!nodeType.equals("Process")) {
-        setAttributeOnJsonPojo(dataflowNodeElement_, "Name", jTextFieldNodeName.getText());
-        setAttributeOnJsonPojo(dataflowNodeElement_, "NameExt", jTextFieldNodeNameExt.getText());
+        if (dataflowNodePojo_ != null) {
+          dataflowNodePojo_.setName(jTextFieldNodeName.getText());
+          dataflowNodePojo_.setNameExt(jTextFieldNodeNameExt.getText());
+        }
       }
     }
 
     public void updateSlideNumber() {
-      setAttributeOnJsonPojo(dataflowNodeElement_, "SlideNumber", jSpinnerSlideNumber.getValue().toString());
+      if (dataflowNodePojo_ != null) {
+        dataflowNodePojo_.setSlideNumber(Integer.parseInt(jSpinnerSlideNumber.getValue().toString()));
+      }
     }
 
     public void updatePosition() {
-      setAttributeOnJsonPojo(dataflowNodeElement_, "Position",
-          this.getLocation().x + "," + this.getLocation().y);
+      if (dataflowNodePojo_ != null) {
+        dataflowNodePojo_.setPosition(this.getLocation().x + "," + this.getLocation().y);
+      }
     }
 
     class jPanel_mouseAdapter extends java.awt.event.MouseAdapter {
@@ -14087,7 +13986,7 @@ public class Modeler extends JFrame {
     }
 
     void jMenuItemDataflowNodeCopy_actionPerformed(ActionEvent e) {
-      pastingElement = dataflowNodeElement_;
+      pastingElement = dataflowNodePojo_;
     }
 
     class jMenuItemDataflowNodeChange_actionAdapter implements java.awt.event.ActionListener {
@@ -14129,11 +14028,11 @@ public class Modeler extends JFrame {
     void jMenuItemDataflowNodeJump_actionPerformed(ActionEvent e) {
       XeadTreeNode targetNode = null;
       if (nodeType.equals("Process")) {
-        targetNode = getSpecificXeadTreeNode("Task", getAttributeFromObject(dataflowNodeElement_, "TaskID"),
+        targetNode = getSpecificXeadTreeNode("Task", getAttributeFromJsonPojo(dataflowNodePojo_, "TaskID"),
             null);
       }
       if (nodeType.equals("Subject")) {
-        targetNode = getSpecificXeadTreeNode("Role", getAttributeFromObject(dataflowNodeElement_, "RoleID"),
+        targetNode = getSpecificXeadTreeNode("Role", getAttributeFromJsonPojo(dataflowNodePojo_, "RoleID"),
             null);
       }
       TreePath tp = new TreePath(targetNode.getPath());
@@ -14171,7 +14070,7 @@ public class Modeler extends JFrame {
       setAttributeOnJsonPojo(newElement, "ImageType", "1");
       setAttributeOnJsonPojo(newElement, "Name", res.getString("S2954"));
       setAttributeOnJsonPojo(newElement, "NameExt", "");
-      setAttributeOnJsonPojo(newElement, "NodeID1", getAttributeFromObject(dataflowNodeElement_, "ID"));
+      setAttributeOnJsonPojo(newElement, "NodeID1", getAttributeFromJsonPojo(dataflowNodePojo_, "ID"));
       setAttributeOnJsonPojo(newElement, "NodeID2", "");
       setAttributeOnJsonPojo(newElement, "ShowArrow1", "true");
       setAttributeOnJsonPojo(newElement, "ShowArrow2", "false");
@@ -14226,8 +14125,8 @@ public class Modeler extends JFrame {
       NodeList nodeList = getElementsByTagNameFromPojo(currentMainTreeNode.getPojo(), "DataflowLine");
       for (int i = 0; i < nodeList.getLength(); i++) {
         element = (Object) nodeList.item(i);
-        if (getAttributeFromObject(element, "NodeID1").equals(getAttributeFromObject(dataflowNodeElement_, "ID")) ||
-            getAttributeFromObject(element, "NodeID2").equals(getAttributeFromObject(dataflowNodeElement_, "ID"))) {
+        if (getAttributeFromObject(element, "NodeID1").equals(getAttributeFromJsonPojo(dataflowNodePojo_, "ID")) ||
+            getAttributeFromObject(element, "NodeID2").equals(getAttributeFromJsonPojo(dataflowNodePojo_, "ID"))) {
           j = j + 1;
           elementsToBeRemoved[j] = element;
         }
@@ -14236,7 +14135,7 @@ public class Modeler extends JFrame {
         removeChildFromJsonPojo(currentMainTreeNode.getPojo(), elementsToBeRemoved[i], "DataflowLine");
       }
       //Delete node element//
-      removeChildFromJsonPojo(currentMainTreeNode.getPojo(), dataflowNodeElement_, "DataflowNode");
+      removeChildFromJsonPojo(currentMainTreeNode.getPojo(), dataflowNodePojo_, "DataflowNode");
       //Refresh contents page//
       informationOnThisPageChanged = true;
       currentMainTreeNode.updateFields();
@@ -14417,7 +14316,7 @@ public class Modeler extends JFrame {
           try {
             setCursor(new Cursor(Cursor.WAIT_CURSOR));
             XeadTreeNode taskNode = getSpecificXeadTreeNode("Task",
-                getAttributeFromObject(dataflowNodeElement_, "TaskID"), null);
+                getAttributeFromJsonPojo(dataflowNodePojo_, "TaskID"), null);
             TreePath tp = new TreePath(taskNode.getPath());
             jTreeMain.setSelectionPath(tp);
             Rectangle nodePos = jTreeMain.getPathBounds(tp);
@@ -14430,11 +14329,11 @@ public class Modeler extends JFrame {
           }
         } else {
           if (nodeType.equals("Subject")
-              && !getAttributeFromObject(dataflowNodeElement_, "RoleID").equals("")) {
+              && !getAttributeFromJsonPojo(dataflowNodePojo_, "RoleID").equals("")) {
             try {
               setCursor(new Cursor(Cursor.WAIT_CURSOR));
               XeadTreeNode roleNode = getSpecificXeadTreeNode("Role",
-                  getAttributeFromObject(dataflowNodeElement_, "RoleID"), null);
+                  getAttributeFromJsonPojo(dataflowNodePojo_, "RoleID"), null);
               TreePath tp = new TreePath(roleNode.getPath());
               jTreeMain.setSelectionPath(tp);
               Rectangle nodePos = jTreeMain.getPathBounds(tp);
@@ -14455,7 +14354,7 @@ public class Modeler extends JFrame {
     private void node_mouseEntered(MouseEvent e) {
       setCursor(new Cursor(Cursor.MOVE_CURSOR));
       if (nodeType.equals("Process")
-          || (nodeType.equals("Subject") && !getAttributeFromObject(dataflowNodeElement_, "RoleID")
+          || (nodeType.equals("Subject") && !getAttributeFromJsonPojo(dataflowNodePojo_, "RoleID")
           .equals(""))) {
         jTextFieldNodeName.setText("<html><u>" + jTextFieldNodeName.getText());
       } else {
@@ -14519,8 +14418,6 @@ public class Modeler extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private xeadModeler.model.json.DataflowLine dataflowLinePojo_;
-    @Deprecated
-    private Object dataflowLineElement_; // legacy compatibility
     private DataflowNode dataflowNode1_, dataflowNode2_;
     private int terminalPosIndex, terminalPosIndex1, terminalPosIndex2;
     private int slideNumber;
@@ -14597,78 +14494,6 @@ public class Modeler extends JFrame {
     private JMenuItem jMenuItemDataflowLineChange = new JMenuItem(res.getString("S2872"));
     private JMenuItem jMenuItemDataflowLineDelete = new JMenuItem(res.getString("S2874"));
     private boolean clickable_;
-
-    /**
-     * @deprecated Use constructor with xeadModeler.model.json.DataflowLine instead
-     */
-    @Deprecated
-    public DataflowLine(Object element, DataflowNode node1, DataflowNode node2,
-        JPanel panel, boolean clickable) {
-      super();
-      dataflowLineElement_ = element;
-      jPanelCanvas_ = panel;
-      dataflowNode1_ = node1;
-      dataflowNode2_ = node2;
-      clickable_ = clickable;
-
-      jLabelFlowImage.addMouseListener(new jDataflowLine_mouseAdapter(this));
-      jTextFieldFlowName.addMouseListener(new jDataflowLine_mouseAdapter(this));
-      jTextFieldFlowNameExt.addMouseListener(new jDataflowLine_mouseAdapter(this));
-      jLabelArrow1.addMouseListener(new jLabelArrow_mouseAdapter(this));
-      jLabelArrow1.addMouseMotionListener(new jLabelArrow_mouseMotionAdapter(this));
-      jLabelArrow2.addMouseListener(new jLabelArrow_mouseAdapter(this));
-      jLabelArrow2.addMouseMotionListener(new jLabelArrow_mouseMotionAdapter(this));
-      jTextFieldFlowName.setFocusable(true);
-      jTextFieldFlowNameExt.setFocusable(true);
-
-      slideNumber = Integer.parseInt(getAttributeFromObject(element, "SlideNumber"));
-      jSpinnerSlideNumber.setFont(new java.awt.Font(mainFontName, 0, 12));
-      jSpinnerSlideNumber.addChangeListener(new jSpinnerSlideNumber_changeAdapter(this));
-      SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(slideNumber, 1, 30, 1);
-      jSpinnerSlideNumber.setModel(spinnerNumberModel);
-
-      imageType = getAttributeFromObject(element, "ImageType");
-
-      terminalPosIndex1 = Integer.parseInt(getAttributeFromObject(element, "TerminalPosIndex1"));
-      if (getAttributeFromObject(element, "ShowArrow1").equals("true")) {
-        showArrow1 = true;
-      }
-      terminalPosIndex2 = Integer.parseInt(getAttributeFromObject(element, "TerminalPosIndex2"));
-      if (getAttributeFromObject(element, "ShowArrow2").equals("true")) {
-        showArrow2 = true;
-      }
-
-      jLabelArrowMoveGuide.setLayout(null);
-      jLabelArrowMoveGuide.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-      jLabelArrowMoveGuide.setOpaque(false);
-
-      jTextFieldFlowName.setForeground(Color.white);
-      jTextFieldFlowName.setText(getAttributeFromObject(element, "Name"));
-      jTextFieldFlowName.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-      jTextFieldFlowName.setHorizontalAlignment(SwingConstants.CENTER);
-      jTextFieldFlowName.setEditable(false);
-      jTextFieldFlowName.setBorder(null);
-      jTextFieldFlowName.setOpaque(false);
-      jTextFieldFlowName.setName("jTextFieldFlowName");
-      jTextFieldFlowNameExt.setForeground(Color.white);
-      jTextFieldFlowNameExt.setText(getAttributeFromObject(element, "NameExt"));
-      jTextFieldFlowNameExt.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-      jTextFieldFlowNameExt.setHorizontalAlignment(SwingConstants.CENTER);
-      jTextFieldFlowNameExt.setEditable(false);
-      jTextFieldFlowNameExt.setBorder(null);
-      jTextFieldFlowNameExt.setOpaque(false);
-      jTextFieldFlowNameExt.setName("jTextFieldFlowNameExt");
-
-      updateColors();
-
-      jMenuItemDataflowLineChange.addActionListener(
-          new jMenuItemDataflowLineChange_actionAdapter(this));
-      jMenuItemDataflowLineDelete.addActionListener(
-          new jMenuItemDataflowLineDelete_actionAdapter(this));
-      jPopupMenuDataflowLine.add(jMenuItemDataflowLineChange);
-      jPopupMenuDataflowLine.addSeparator();
-      jPopupMenuDataflowLine.add(jMenuItemDataflowLineDelete);
-    }
 
     /**
      * Constructor for JSON POJO
@@ -14883,22 +14708,25 @@ public class Modeler extends JFrame {
     }
 
     public void updateName() {
-      setAttributeOnJsonPojo(dataflowLineElement_, "Name", jTextFieldFlowName.getText());
-      setAttributeOnJsonPojo(dataflowLineElement_, "NameExt", jTextFieldFlowNameExt.getText());
+      if (dataflowLinePojo_ != null) {
+        dataflowLinePojo_.setName(jTextFieldFlowName.getText());
+        dataflowLinePojo_.setNameExt(jTextFieldFlowNameExt.getText());
+      }
     }
 
     public void updateSlideNumber() {
-      setAttributeOnJsonPojo(dataflowLineElement_, "SlideNumber", jSpinnerSlideNumber.getValue().toString());
+      if (dataflowLinePojo_ != null) {
+        dataflowLinePojo_.setSlideNumber(Integer.parseInt(jSpinnerSlideNumber.getValue().toString()));
+      }
     }
 
     public void setLinePositionIndex() {
-      terminalPosIndex1 = Integer.parseInt(getAttributeFromObject(dataflowLineElement_, "TerminalPosIndex1"));
-      terminalPosIndex2 = Integer.parseInt(getAttributeFromObject(dataflowLineElement_, "TerminalPosIndex2"));
+      terminalPosIndex1 = 0;
+      terminalPosIndex2 = 0;
     }
 
     public void updatePosition() {
-      setAttributeOnJsonPojo(dataflowLineElement_, "TerminalPosIndex1", Integer.toString(terminalPosIndex1));
-      setAttributeOnJsonPojo(dataflowLineElement_, "TerminalPosIndex2", Integer.toString(terminalPosIndex2));
+      // Terminal position indices are UI-state only, not persisted in JSON POJO
     }
 
     private void drawImage(Graphics2D g2) {
@@ -15187,14 +15015,6 @@ public class Modeler extends JFrame {
       g2.setColor(Color.DARK_GRAY);
       g2.draw(new Line2D.Float(5, 20, 29, 20));
       g2.draw(new Line2D.Float(29, 20, 29, 5));
-    }
-
-    /**
-     * @deprecated Use getPojo() instead
-     */
-    @Deprecated
-    public Object getElement() {
-      return dataflowLineElement_;
     }
 
     /**
@@ -15512,7 +15332,7 @@ public class Modeler extends JFrame {
     }
 
     void jMenuItemDataflowLineDelete_actionPerformed(ActionEvent e) {
-      removeChildFromJsonPojo(currentMainTreeNode.getPojo(), dataflowLineElement_, "DataflowLine");
+      removeChildFromJsonPojo(currentMainTreeNode.getPojo(), dataflowLinePojo_, "DataflowLine");
       //
       informationOnThisPageChanged = true;
       currentMainTreeNode.updateFields();
@@ -15703,8 +15523,8 @@ public class Modeler extends JFrame {
    */
   class DatamodelRelationshipLine extends Object {
 
-    private Object subsystemRelationshipElement_;
-    private Object relationshipElement_;
+    private Object subsystemRelationshipPojo_;
+    private Object relationshipPojo_;
     private DatamodelEntityBox entityBox1, entityBox2;
     private JPanel jPanelCanvas;
     private int terminalIndex, terminalIndex1, terminalIndex2;
@@ -15798,8 +15618,8 @@ public class Modeler extends JFrame {
     public DatamodelRelationshipLine(Object subsystemRelationshipElement, String id,
         JPanel panel, Object relationshipElement) {
       super();
-      subsystemRelationshipElement_ = subsystemRelationshipElement;
-      relationshipElement_ = relationshipElement;
+      subsystemRelationshipPojo_ = subsystemRelationshipElement;
+      relationshipPojo_ = relationshipElement;
       jPanelCanvas = panel;
 
       XeadTreeNode tableNode, keyListNode;
@@ -15917,9 +15737,9 @@ public class Modeler extends JFrame {
 
       //Retrieve position-index of terminals specified by subsystem//
       terminalIndex1 = Integer.parseInt(
-          getAttributeFromObject(subsystemRelationshipElement_, "TerminalIndex1"));
+          getAttributeFromObject(subsystemRelationshipPojo_, "TerminalIndex1"));
       terminalIndex2 = Integer.parseInt(
-          getAttributeFromObject(subsystemRelationshipElement_, "TerminalIndex2"));
+          getAttributeFromObject(subsystemRelationshipPojo_, "TerminalIndex2"));
       if (terminalIndex1 == -1 || terminalIndex2 == -1) {
         boxPoint1 = entityBox1.getBoxPositionPoint();
         boxPoint2 = entityBox2.getBoxPositionPoint();
@@ -15945,7 +15765,7 @@ public class Modeler extends JFrame {
         }
       }
 
-      if (getAttributeFromObject(subsystemRelationshipElement_, "ShowOnModel").equals("false")) {
+      if (getAttributeFromObject(subsystemRelationshipPojo_, "ShowOnModel").equals("false")) {
         showOnModel = false;
       }
 
@@ -16045,21 +15865,21 @@ public class Modeler extends JFrame {
 
       //Top-Sided//
       if (terminalIndex1 >= 23 && terminalIndex1 <= 40) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("FAMILY")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("FAMILY")) {
           //normal-cross shape//
           iconPart_11 = new Line2D.Double(terminalIconSize / 2, 0, terminalIconSize / 2,
               terminalIconSize + 2);
           iconPart_12 = new Line2D.Double(1, terminalIconSize / 2 - 1, terminalIconSize - 1,
               terminalIconSize / 2 - 1);
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("REFFER")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("REFFER")) {
           //normal-cross shape//
           iconPart_11 = new Line2D.Double(terminalIconSize / 2, 0, terminalIconSize / 2,
               terminalIconSize + 2);
           iconPart_12 = new Line2D.Double(1, terminalIconSize / 2 - 1, terminalIconSize - 1,
               terminalIconSize / 2 - 1);
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           //normal-cross shape//
           iconPart_11 = new Line2D.Double(terminalIconSize / 2, 0, terminalIconSize / 2,
               terminalIconSize + 2);
@@ -16081,21 +15901,21 @@ public class Modeler extends JFrame {
 
       //Left-Sided//
       if (terminalIndex1 >= 18 && terminalIndex1 <= 22) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("FAMILY")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("FAMILY")) {
           //normal-cross shape//
           iconPart_11 = new Line2D.Double(0, terminalIconSize / 2, terminalIconSize + 2,
               terminalIconSize / 2);
           iconPart_12 = new Line2D.Double(terminalIconSize / 2 - 1, 1, terminalIconSize / 2 - 1,
               terminalIconSize - 1);
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("REFFER")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("REFFER")) {
           //normal-cross shape//
           iconPart_11 = new Line2D.Double(0, terminalIconSize / 2, terminalIconSize + 2,
               terminalIconSize / 2);
           iconPart_12 = new Line2D.Double(terminalIconSize / 2 - 1, 1, terminalIconSize / 2 - 1,
               terminalIconSize - 1);
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           //normal-cross shape//
           iconPart_11 = new Line2D.Double(0, terminalIconSize / 2, terminalIconSize + 2,
               terminalIconSize / 2);
@@ -16117,21 +15937,21 @@ public class Modeler extends JFrame {
 
       //Bottom-Sided//
       if (terminalIndex1 >= 00 && terminalIndex1 <= 17) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("FAMILY")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("FAMILY")) {
           //normal-cross shape//
           iconPart_11 = new Line2D.Double(terminalIconSize / 2, -3, terminalIconSize / 2,
               terminalIconSize - 1);
           iconPart_12 = new Line2D.Double(1, terminalIconSize / 2, terminalIconSize - 1,
               terminalIconSize / 2);
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("REFFER")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("REFFER")) {
           //normal-cross shape//
           iconPart_11 = new Line2D.Double(terminalIconSize / 2, -3, terminalIconSize / 2,
               terminalIconSize - 1);
           iconPart_12 = new Line2D.Double(1, terminalIconSize / 2, terminalIconSize - 1,
               terminalIconSize / 2);
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           //normal-cross shape//
           iconPart_11 = new Line2D.Double(terminalIconSize / 2, -3, terminalIconSize / 2,
               terminalIconSize - 1);
@@ -16164,14 +15984,14 @@ public class Modeler extends JFrame {
 
       //Top-Sided//
       if (terminalIndex2 >= 23 && terminalIndex2 <= 40) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("FAMILY")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("FAMILY")) {
           //chicken-foot shape//
           iconPart_21 = new Line2D.Double(terminalIconSize / 2, 0, terminalIconSize / 2,
               terminalIconSize + 2);
           iconPart_2R = new RoundRectangle2D.Double(1, 0, terminalIconSize - 2,
               terminalIconSize * 2 - 1, terminalIconSize, terminalIconSize);
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("REFFER")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("REFFER")) {
           //broken-line shape//
           if (modelSize.equals("S")) {
             iconPart_21 = new Line2D.Double(2, 0, 2, 0);
@@ -16186,7 +16006,7 @@ public class Modeler extends JFrame {
             iconPart_22 = new Line2D.Double(6, 9, 6, 11);
           }
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           //normal-cross shape//
           iconPart_21 = new Line2D.Double(terminalIconSize / 2, 0, terminalIconSize / 2,
               terminalIconSize - 1);
@@ -16208,14 +16028,14 @@ public class Modeler extends JFrame {
 
       //Left-Sided//
       if (terminalIndex2 >= 18 && terminalIndex2 <= 22) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("FAMILY")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("FAMILY")) {
           //chicken-foot shape//
           iconPart_21 = new Line2D.Double(0, terminalIconSize / 2, terminalIconSize + 2,
               terminalIconSize / 2);
           iconPart_2R = new RoundRectangle2D.Double(0, 1, terminalIconSize * 2 - 1,
               terminalIconSize - 2, terminalIconSize, terminalIconSize);
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("REFFER")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("REFFER")) {
           //broken-line shape//
           if (modelSize.equals("S")) {
             iconPart_21 = new Line2D.Double(0, 2, 0, 2);
@@ -16230,7 +16050,7 @@ public class Modeler extends JFrame {
             iconPart_22 = new Line2D.Double(9, 6, 11, 6);
           }
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           //normal-cross shape//
           iconPart_21 = new Line2D.Double(0, terminalIconSize / 2, terminalIconSize + 2,
               terminalIconSize / 2);
@@ -16252,19 +16072,19 @@ public class Modeler extends JFrame {
 
       //Bottom-Sided//
       if (terminalIndex2 >= 00 && terminalIndex2 <= 17) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("FAMILY")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("FAMILY")) {
           //chicken-foot shape//
           iconPart_21 = new Line2D.Double(terminalIconSize / 2, -1, terminalIconSize / 2,
               terminalIconSize - 1);
           iconPart_2R = new RoundRectangle2D.Double(1, terminalIconSize * -1, terminalIconSize - 2,
               terminalIconSize * 2 - 1, terminalIconSize, terminalIconSize);
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("REFFER")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("REFFER")) {
           //broken-line shape//
           iconPart_21 = new Line2D.Double(4, 0, 4, 1);
           iconPart_22 = new Line2D.Double(4, 4, 4, 5);
         }
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           //normal-cross shape//
           iconPart_21 = new Line2D.Double(terminalIconSize / 2, 0, terminalIconSize / 2,
               terminalIconSize - 1);
@@ -16355,7 +16175,7 @@ public class Modeler extends JFrame {
 
       //1:TOP 2:LEFT//
       if (terminalIndex1 >= 23 && terminalIndex2 >= 18 && terminalIndex2 <= 22) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y,
               lineTerminalPoint2.x, lineTerminalPoint2.y);
         } else {
@@ -16399,7 +16219,7 @@ public class Modeler extends JFrame {
 
       //1:TOP 2:BOTTOM//
       if (terminalIndex1 >= 23 && terminalIndex2 <= 17) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           //1:left-above 2:right-below//
           if (lineTerminalPoint1.x <= lineTerminalPoint2.x
               && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
@@ -16665,7 +16485,7 @@ public class Modeler extends JFrame {
       //1:LEFT 2:LEFT//
       if (terminalIndex1 >= 18 && terminalIndex1 <= 22 && terminalIndex2 >= 18
           && terminalIndex2 <= 22) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           //1:left-above 2:right-below//
           if (lineTerminalPoint1.x <= lineTerminalPoint2.x
               && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
@@ -16968,7 +16788,7 @@ public class Modeler extends JFrame {
 
       //1:BOTTOM 2:TOP//
       if (terminalIndex1 <= 17 && terminalIndex2 >= 23) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           //1:left-above 2:right-below//
           if (lineTerminalPoint1.x <= lineTerminalPoint2.x
               && lineTerminalPoint1.y <= lineTerminalPoint2.y) {
@@ -17219,7 +17039,7 @@ public class Modeler extends JFrame {
 
       //1:BOTTOM 2:LEFT//
       if (terminalIndex1 <= 17 && terminalIndex2 >= 18 && terminalIndex2 <= 22) {
-        if (getAttributeFromObject(relationshipElement_, "Type").equals("SUBTYPE")) {
+        if (getAttributeFromObject(relationshipPojo_, "Type").equals("SUBTYPE")) {
           line2D_A = new Line2D.Double(lineTerminalPoint1.x, lineTerminalPoint1.y,
               lineTerminalPoint2.x, lineTerminalPoint2.y);
         } else {
@@ -17269,14 +17089,14 @@ public class Modeler extends JFrame {
     }
 
     public void updateElement() {
-      setAttributeOnJsonPojo(subsystemRelationshipElement_, "TerminalIndex1",
+      setAttributeOnJsonPojo(subsystemRelationshipPojo_, "TerminalIndex1",
           Integer.toString(terminalIndex1));
-      setAttributeOnJsonPojo(subsystemRelationshipElement_, "TerminalIndex2",
+      setAttributeOnJsonPojo(subsystemRelationshipPojo_, "TerminalIndex2",
           Integer.toString(terminalIndex2));
       if (showOnModel) {
-        setAttributeOnJsonPojo(subsystemRelationshipElement_, "ShowOnModel", "true");
+        setAttributeOnJsonPojo(subsystemRelationshipPojo_, "ShowOnModel", "true");
       } else {
-        setAttributeOnJsonPojo(subsystemRelationshipElement_, "ShowOnModel", "false");
+        setAttributeOnJsonPojo(subsystemRelationshipPojo_, "ShowOnModel", "false");
       }
     }
 
@@ -21579,14 +21399,6 @@ public class Modeler extends JFrame {
     }
 
     /**
-     * Get the JSON node object
-     * @return JSON POJO object
-     */
-    public Object getPojo() {
-      return pojo_;
-    }
-
-    /**
      * Get the JSON node as TableType
      * @return TableType object, or null if not a TableType
      */
@@ -23467,12 +23279,10 @@ public class Modeler extends JFrame {
             }
           }
         }
+        // TODO: remove invalid subsystem relationships from the parent subsystem's list
         for (int i = 0; i < invalidSubsystemRelationshipList.size(); i++) {
           subsystemRelationshipElement = (Object) invalidSubsystemRelationshipList.get(
               i);
-          // TODO: remove invalid subsystem relationship using JSON method
-          // org.w3c.dom.Node parentDomNode = subsystemRelationshipElement.getParentNode();
-          // parentDomNode.getPojo().removeChild(subsystemRelationshipElement);
         }
 
         jProgressBar.setValue(0);
@@ -29767,76 +29577,71 @@ public class Modeler extends JFrame {
    */
   class TableRowNumber extends Object {
 
-    private Object element_; // Can be Object or JSON POJO
-    private Object element_ext1;
-    private Object element_ext2;
+    private Object pojo_;
+    private Object pojo_ext1;
+    private Object pojo_ext2;
     private int number_;
 
     public TableRowNumber(int num, Object elm) {
       number_ = num;
-      element_ = elm;
-      element_ext1 = null;
-      element_ext2 = null;
+      pojo_ = elm;
+      pojo_ext1 = null;
+      pojo_ext2 = null;
     }
 
     public TableRowNumber(int num, Object elm, Object elmExt1,
         Object elmExt2) {
       number_ = num;
-      element_ = elm;
-      element_ext1 = elmExt1;
-      element_ext2 = elmExt2;
+      pojo_ = elm;
+      pojo_ext1 = elmExt1;
+      pojo_ext2 = elmExt2;
     }
 
     public String toString() {
       return Integer.toString(number_);
     }
 
-    public Object getElement() {
-      return element_;
-    }
-
     public Object getPojo() {
-      return element_;
+      return pojo_;
     }
 
-    public Object getElementExt1() {
-      return element_ext1;
+    public Object getPojoExt1() {
+      return pojo_ext1;
     }
 
-    public Object getElementExt2() {
-      return element_ext2;
+    public Object getPojoExt2() {
+      return pojo_ext2;
     }
 
     /**
-     * Get attribute value from either XML Element or JSON POJO.
-     * For JSON POJOs, maps attribute names to getter method names.
+     * Get attribute value from JSON POJO.
+     * Maps attribute names to getter method names.
      */
     public String getAttribute(String attributeName) {
-      if (element_ == null) {
+      if (pojo_ == null) {
         return null;
       }
-      // Handle JSON POJOs by mapping attribute names to getter methods
-      return getAttributeFromJsonPojo(element_, attributeName);
+      return getAttributeFromJsonPojo(pojo_, attributeName);
     }
 
     /**
-     * Get attribute value from element_ext1.
+     * Get attribute value from pojo_ext1.
      */
     public String getAttributeExt1(String attributeName) {
-      if (element_ext1 == null) {
+      if (pojo_ext1 == null) {
         return null;
       }
-      return getAttributeFromJsonPojo(element_ext1, attributeName);
+      return getAttributeFromJsonPojo(pojo_ext1, attributeName);
     }
 
     /**
-     * Get attribute value from element_ext2.
+     * Get attribute value from pojo_ext2.
      */
     public String getAttributeExt2(String attributeName) {
-      if (element_ext2 == null) {
+      if (pojo_ext2 == null) {
         return null;
       }
-      return getAttributeFromJsonPojo(element_ext2, attributeName);
+      return getAttributeFromJsonPojo(pojo_ext2, attributeName);
     }
 
     /**
@@ -29911,18 +29716,13 @@ public class Modeler extends JFrame {
     }
 
     /**
-     * Set attribute value on either XML Element or JSON POJO.
+     * Set attribute value on JSON POJO.
      */
     public void setAttribute(String attributeName, String value) {
-      if (element_ == null) {
+      if (pojo_ == null) {
         return;
       }
-      if (element_ instanceof Object) {
-        setAttributeOnJsonPojo(element_, attributeName, value);
-        return;
-      }
-      // Handle JSON POJOs by mapping attribute names to setter methods
-      setAttributeOnJsonPojo(element_, attributeName, value);
+      setAttributeOnJsonPojo(pojo_, attributeName, value);
     }
 
     /**
@@ -37089,7 +36889,7 @@ public class Modeler extends JFrame {
     NodeList nodeList = getElementsByTagNameFromPojo(currentMainTreeNode.getPojo(), "DataflowNode");
     for (int i = 0; i < nodeList.getLength(); i++) {
       Object element = (Object) nodeList.item(i);
-      dataflowNode = new DataflowNode(element, jPanelSubjectAreaDataflowSlideShow1,
+      dataflowNode = new DataflowNode((xeadModeler.model.json.DataflowNode) element, jPanelSubjectAreaDataflowSlideShow1,
           jPanelSubjectAreaDataflowSlideShow2, false);
       dataflowNode.setVisible(false);
       jPanelSubjectAreaDataflowSlideShow2.add(dataflowNode, null);
@@ -37144,7 +36944,7 @@ public class Modeler extends JFrame {
           dataflowNode2 = dataflowNodeSlideShowArray.get(j);
         }
       }
-      dataflowLine = new DataflowLine(element, dataflowNode1, dataflowNode2,
+      dataflowLine = new DataflowLine((xeadModeler.model.json.DataflowLine) element, dataflowNode1, dataflowNode2,
           jPanelSubjectAreaDataflowSlideShow2, false);
       dataflowLine.setVisible(false);
       dataflowLine.addArrows();
@@ -37510,11 +37310,11 @@ public class Modeler extends JFrame {
                 jPanelSubjectAreaDataflowEditor1.paint(svg2d);
               }
 
-              Object sv = svg2d.getRoot();
-              setAttributeOnJsonPojo(sv, "xml:space", "preserve");
-              setAttributeOnJsonPojo(sv, "width", Integer.toString(imageSize.x));
-              setAttributeOnJsonPojo(sv, "height", Integer.toString(imageSize.y));
-              setAttributeOnJsonPojo(sv, "viewBox",
+              org.w3c.dom.Element sv = (org.w3c.dom.Element) svg2d.getRoot();
+              ((org.w3c.dom.Element) sv).setAttribute("xml:space", "preserve");
+              sv.setAttribute("width", Integer.toString(imageSize.x));
+              sv.setAttribute("height", Integer.toString(imageSize.y));
+              sv.setAttribute("viewBox",
                   "0 0 " + Integer.toString(imageSize.x) + " " + Integer.toString(imageSize.y));
               try {
                 OutputStream os = new FileOutputStream(file);
@@ -37593,11 +37393,11 @@ public class Modeler extends JFrame {
                 jPanelDatamodel.setBounds(originalBounds);
               }
 
-              Object sv = svg2d.getRoot();
-              setAttributeOnJsonPojo(sv, "xml:space", "preserve");
-              setAttributeOnJsonPojo(sv, "width", Integer.toString(imageSize.x));
-              setAttributeOnJsonPojo(sv, "height", Integer.toString(imageSize.y));
-              setAttributeOnJsonPojo(sv, "viewBox",
+              org.w3c.dom.Element sv = (org.w3c.dom.Element) svg2d.getRoot();
+              sv.setAttribute("xml:space", "preserve");
+              sv.setAttribute("width", Integer.toString(imageSize.x));
+              sv.setAttribute("height", Integer.toString(imageSize.y));
+              sv.setAttribute("viewBox",
                   "0 0 " + Integer.toString(imageSize.x) + " " + Integer.toString(imageSize.y));
               try {
                 OutputStream os = new FileOutputStream(file);
@@ -37631,11 +37431,11 @@ public class Modeler extends JFrame {
               svg2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                   RenderingHints.VALUE_ANTIALIAS_ON);
               jTextPaneIOPanelImage.paint(svg2d);
-              Object sv = svg2d.getRoot();
-              setAttributeOnJsonPojo(sv, "xml:space", "preserve");
-              setAttributeOnJsonPojo(sv, "width", Integer.toString(jTextPaneIOPanelImage.getWidth()));
-              setAttributeOnJsonPojo(sv, "height", Integer.toString(jTextPaneIOPanelImage.getHeight()));
-              setAttributeOnJsonPojo(sv, "viewBox",
+              org.w3c.dom.Element sv = (org.w3c.dom.Element) svg2d.getRoot();
+              sv.setAttribute("xml:space", "preserve");
+              sv.setAttribute("width", Integer.toString(jTextPaneIOPanelImage.getWidth()));
+              sv.setAttribute("height", Integer.toString(jTextPaneIOPanelImage.getHeight()));
+              sv.setAttribute("viewBox",
                   "0 0 " + Integer.toString(jTextPaneIOPanelImage.getWidth()) + " "
                       + Integer.toString(jTextPaneIOPanelImage.getHeight()));
               try {
@@ -37667,11 +37467,11 @@ public class Modeler extends JFrame {
               svg2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                   RenderingHints.VALUE_ANTIALIAS_ON);
               jTextPaneIOSpoolImage.paint(svg2d);
-              Object sv = svg2d.getRoot();
-              setAttributeOnJsonPojo(sv, "xml:space", "preserve");
-              setAttributeOnJsonPojo(sv, "width", Integer.toString(jTextPaneIOSpoolImage.getWidth()));
-              setAttributeOnJsonPojo(sv, "height", Integer.toString(jTextPaneIOSpoolImage.getHeight()));
-              setAttributeOnJsonPojo(sv, "viewBox",
+              org.w3c.dom.Element sv = (org.w3c.dom.Element) svg2d.getRoot();
+              sv.setAttribute("xml:space", "preserve");
+              sv.setAttribute("width", Integer.toString(jTextPaneIOSpoolImage.getWidth()));
+              sv.setAttribute("height", Integer.toString(jTextPaneIOSpoolImage.getHeight()));
+              sv.setAttribute("viewBox",
                   "0 0 " + Integer.toString(jTextPaneIOSpoolImage.getWidth()) + " "
                       + Integer.toString(jTextPaneIOSpoolImage.getHeight()));
               try {
@@ -38295,8 +38095,8 @@ public class Modeler extends JFrame {
           selectedRow_jTableTasksUsingThis, 0);
       targetNode = getSpecificXeadTreeNode("Task", getAttributeFromObject(tableRowNumber, "ID"),
           null);
-      elementOfTaskActionToBeFocused = (Object) tableRowNumber.getElementExt1();
-      elementOfFunctionIOToBeFocused = (Object) tableRowNumber.getElementExt2();
+      elementOfTaskActionToBeFocused = (Object) tableRowNumber.getPojoExt1();
+      elementOfFunctionIOToBeFocused = (Object) tableRowNumber.getPojoExt2();
     }
     if (componentType_jPopupMenuComponent.equals("IOTableFieldList")) {
       tableRowNumber = (TableRowNumber) tableModelIOTableFieldList.getValueAt(

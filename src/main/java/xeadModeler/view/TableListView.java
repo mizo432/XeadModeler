@@ -2,6 +2,8 @@ package xeadModeler.view;
 
 import xeadModeler.Modeler;
 import xeadModeler.KanjiTextField;
+import xeadModeler.model.json.Relationship;
+import xeadModeler.model.json.TableKey;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -157,14 +159,14 @@ public class TableListView {
     private JTable jTableForeignTableList;
     
     // Data model arrays (accessed via Modeler)
-    private final ArrayList<org.w3c.dom.Element> relationshipElementArray = new ArrayList<>();
+    private final ArrayList<Relationship> relationshipElementArray = new ArrayList<>();
     
     // State
     private int previousSelectedIndex_jTabbedPaneTableList = 0;
     private int selectedRow_jTableNativeTableList;
     private int selectedRow_jTableForeignTableList;
     private boolean sizeOfTableOnModelChanged = false;
-    private org.w3c.dom.Element draggingKeyElement = null;
+    private TableKey draggingKeyElement = null;
     private int datamodelSlideNumber = 0;
     private int datamodelSlideTotalNumber = 0;
     private boolean isShowingInstance = false;

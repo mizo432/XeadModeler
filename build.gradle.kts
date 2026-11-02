@@ -45,8 +45,6 @@ dependencies {
     // jackson-annotations is still under com.fasterxml.jackson.core for Jackson 3
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.21")
     
-    // Xerces XML (for backward compatibility during migration)
-    implementation("xerces:xercesImpl:2.12.2")
 
     // Apache POI (Excel support) - Updated to 5.2.5 for Java 11+ compatibility and security fixes
     implementation("org.apache.poi:poi:5.2.5")

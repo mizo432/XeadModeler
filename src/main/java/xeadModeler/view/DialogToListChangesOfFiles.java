@@ -41,9 +41,6 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import org.apache.xerces.parsers.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
 
 import xeadModeler.Modeler;
 import xeadModeler.model.json.*;
@@ -63,14 +60,13 @@ public class DialogToListChangesOfFiles extends JDialog {
 	private JLabel jLabel2 = new JLabel();
 	private JTextField jTextFieldImportSystemName = new JTextField();
 	private Modeler frame_;
-	private org.w3c.dom.Document domDocumentOld;
-	private org.w3c.dom.Element systemElementOld;
+	private XeadSystem xeadSystemOld;
 	private XeadSystem xeadSystemNew;
 	private int countOfChanges = 0;
 	private boolean containsValueToBeCorrected = false;
 	private StringBuffer buffer;
 	private HashMap<String, DataType> newDataTypeMap = new HashMap<String, DataType>();
-	private HashMap<String, org.w3c.dom.Element> oldDataTypeElementMap = new HashMap<String, org.w3c.dom.Element>();
+	private HashMap<String, DataType> oldDataTypeMap = new HashMap<String, DataType>();
 	
 	public DialogToListChangesOfFiles(Modeler frame, String title, boolean modal) {
 		super(frame, title, modal);
@@ -159,21 +155,19 @@ public class DialogToListChangesOfFiles extends JDialog {
 
 	public void request(String fileName) {
 		try {
-			DOMParser parser = new DOMParser();
-			parser.parse(new InputSource(new FileInputStream(fileName)));
-			domDocumentOld = parser.getDocument();
-
-			NodeList elementList = domDocumentOld.getElementsByTagName("System");
-			systemElementOld = (org.w3c.dom.Element)elementList.item(0);
+			xeadSystemOld = frame_.getXeadDocumentModel().getJsonService().loadSystem(fileName);
+			if (xeadSystemOld == null) {
+				throw new Exception("Failed to load system");
+			}
 			xeadSystemNew = frame_.getXeadDocumentModel().getXeadSystem();
 
-			float importFileFormat = Float.parseFloat(systemElementOld.getAttribute("FormatVersion"));
+			float importFileFormat = Float.parseFloat(xeadSystemOld.getFormatVersion());
 			float appliFormat = Float.parseFloat(DialogAbout.FORMAT_VERSION);
 			if (importFileFormat > appliFormat) {
-				JOptionPane.showMessageDialog(this, res.getString("S1") + systemElementOld.getAttribute("FormatVersion") + res.getString("S2") + DialogAbout.FORMAT_VERSION + res.getString("S3"));
+				JOptionPane.showMessageDialog(this, res.getString("S1") + xeadSystemOld.getFormatVersion() + res.getString("S2") + DialogAbout.FORMAT_VERSION + res.getString("S3"));
 			} else {
 				jTextFieldImportFileName.setText(fileName);
-				jTextFieldImportSystemName.setText(systemElementOld.getAttribute("Name") + " V" + systemElementOld.getAttribute("Version"));
+				jTextFieldImportSystemName.setText(xeadSystemOld.getName() + " V" + xeadSystemOld.getVersion());
 				jTextArea.setText(res.getString("DialogToListChangesOfFiles2"));
 				jProgressBar.setValue(0);
 				jProgressBar.setString(res.getString("DialogToListChangesOfFiles37"));
@@ -209,11 +203,12 @@ public class DialogToListChangesOfFiles extends JDialog {
 			////////////////////////////////////
 			if (jCheckBoxListDiffDDL.isSelected()) {
 				FileWriter fileWriter = null;
-				NodeList oldTableElementList = systemElementOld.getElementsByTagName("Table");
+				List<Table> oldTableList = xeadSystemOld.getTables();
+				if (oldTableList == null) oldTableList = new ArrayList<>();
 				List<Table> newTableList = xeadSystemNew.getTables();
 				BufferedWriter bufferedWriter = null;
 				try {
-					String diffDDL = getDiffDDL(newTableList, oldTableElementList);
+					String diffDDL = getDiffDDL(newTableList, oldTableList);
 					if (!diffDDL.equals("")) {
 						File textFile = File.createTempFile("AlterTables" + frame_.getStringValueOfDateTime("withTime"), ".txt");
 						String textFileName = textFile.getPath();
@@ -250,57 +245,42 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	void setupProgressMaxValue() {
-		NodeList workElementList;
 		int countOfElementsProcessed = 0;
 
-		workElementList = systemElementOld.getElementsByTagName("Department");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getDepartments() != null ? xeadSystemOld.getDepartments().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getDepartments().size();
-		workElementList = systemElementOld.getElementsByTagName("TaskType");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getTaskTypes() != null ? xeadSystemOld.getTaskTypes().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getTaskTypes().size();
-		workElementList = systemElementOld.getElementsByTagName("TableType");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getTableTypes() != null ? xeadSystemOld.getTableTypes().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getTableTypes().size();
-		workElementList = systemElementOld.getElementsByTagName("DataType");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getDataTypes() != null ? xeadSystemOld.getDataTypes().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getDataTypes().size();
-		workElementList = systemElementOld.getElementsByTagName("FunctionType");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getFunctionTypes() != null ? xeadSystemOld.getFunctionTypes().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getFunctionTypes().size();
-		workElementList = systemElementOld.getElementsByTagName("Terms");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getTerms() != null ? xeadSystemOld.getTerms().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getTerms().size();
-		workElementList = systemElementOld.getElementsByTagName("MaintenanceLog");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getMaintenanceLogs() != null ? xeadSystemOld.getMaintenanceLogs().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getMaintenanceLogs().size();
 
-		workElementList = systemElementOld.getElementsByTagName("SubjectArea");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getSubjectAreas() != null ? xeadSystemOld.getSubjectAreas().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getSubjectAreas().size();
 
-		workElementList = systemElementOld.getElementsByTagName("Role");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getRoles() != null ? xeadSystemOld.getRoles().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getRoles().size();
-		workElementList = systemElementOld.getElementsByTagName("Task");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getTasks() != null ? xeadSystemOld.getTasks().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getTasks().size();
 
-		workElementList = systemElementOld.getElementsByTagName("Subsystem");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getSubsystems() != null ? xeadSystemOld.getSubsystems().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getSubsystems().size();
-		workElementList = systemElementOld.getElementsByTagName("Table");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getTables() != null ? xeadSystemOld.getTables().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getTables().size();
-		workElementList = systemElementOld.getElementsByTagName("Function");
-		countOfElementsProcessed = countOfElementsProcessed + workElementList.getLength();
+		countOfElementsProcessed = countOfElementsProcessed + (xeadSystemOld.getFunctions() != null ? xeadSystemOld.getFunctions().size() : 0);
 		countOfElementsProcessed = countOfElementsProcessed + xeadSystemNew.getFunctions().size();
 
 		jProgressBar.setMaximum(countOfElementsProcessed + 1); // System Info counts 1//
 	}
 
 	void listChangesOfBasicInfo() {
-		NodeList oldElementList;
 		String tagName;
 		ArrayList<String> attrList = new ArrayList<String>();
 		int workCount = countOfChanges;
@@ -309,9 +289,9 @@ public class DialogToListChangesOfFiles extends JDialog {
 		/////////////////////////
 		// System Descriptions //
 		/////////////////////////
-		compareNewAndOldSystem(xeadSystemNew, systemElementOld, "Name", res.getString("DialogToListChangesOfFiles9"));
-		compareNewAndOldSystem(xeadSystemNew, systemElementOld, "Version", res.getString("DialogToListChangesOfFiles9"));
-		compareNewAndOldSystem(xeadSystemNew, systemElementOld, "Descriptions", res.getString("DialogToListChangesOfFiles9"));
+		compareNewAndOldSystem(xeadSystemNew, xeadSystemOld, "Name", res.getString("DialogToListChangesOfFiles9"));
+		compareNewAndOldSystem(xeadSystemNew, xeadSystemOld, "Version", res.getString("DialogToListChangesOfFiles9"));
+		compareNewAndOldSystem(xeadSystemNew, xeadSystemOld, "Descriptions", res.getString("DialogToListChangesOfFiles9"));
 
 		/////////////////
 		// Departments //
@@ -320,9 +300,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.clear();
 		attrList.add("Name");
 		attrList.add("Descriptions");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getDepartments(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getDepartments(), oldElementList, tagName, "Name");
+		List<Department> oldDepartments = xeadSystemOld.getDepartments();
+		if (oldDepartments == null) oldDepartments = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getDepartments(), oldDepartments, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getDepartments(), oldDepartments, tagName, "Name");
 
 		////////////////
 		// Task Types //
@@ -331,9 +312,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.clear();
 		attrList.add("Name");
 		attrList.add("Descriptions");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getTaskTypes(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getTaskTypes(), oldElementList, tagName, "Name");
+		List<TaskType> oldTaskTypes = xeadSystemOld.getTaskTypes();
+		if (oldTaskTypes == null) oldTaskTypes = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getTaskTypes(), oldTaskTypes, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getTaskTypes(), oldTaskTypes, tagName, "Name");
 
 		/////////////////
 		// Table Types //
@@ -342,9 +324,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.clear();
 		attrList.add("Name");
 		attrList.add("Descriptions");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getTableTypes(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getTableTypes(), oldElementList, tagName, "Name");
+		List<TableType> oldTableTypes = xeadSystemOld.getTableTypes();
+		if (oldTableTypes == null) oldTableTypes = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getTableTypes(), oldTableTypes, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getTableTypes(), oldTableTypes, tagName, "Name");
 
 		////////////////
 		// Data Types //
@@ -356,9 +339,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("Length");
 		attrList.add("Decimal");
 		attrList.add("SQLExpression");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getDataTypes(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getDataTypes(), oldElementList, tagName, "Name");
+		List<DataType> oldDataTypes = xeadSystemOld.getDataTypes();
+		if (oldDataTypes == null) oldDataTypes = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getDataTypes(), oldDataTypes, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getDataTypes(), oldDataTypes, tagName, "Name");
 
 		////////////////////
 		// Function Types //
@@ -367,9 +351,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.clear();
 		attrList.add("Name");
 		attrList.add("Descriptions");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getFunctionTypes(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getFunctionTypes(), oldElementList, tagName, "Name");
+		List<FunctionType> oldFunctionTypes = xeadSystemOld.getFunctionTypes();
+		if (oldFunctionTypes == null) oldFunctionTypes = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getFunctionTypes(), oldFunctionTypes, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getFunctionTypes(), oldFunctionTypes, tagName, "Name");
 
 		///////////
 		// Terms //
@@ -379,9 +364,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("Header");
 		attrList.add("HtmlFileName");
 		attrList.add("Descriptions");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getTerms(), oldElementList, attrList, tagName, "Header");
-		checkIfNewElementDeleted(xeadSystemNew.getTerms(), oldElementList, tagName, "Header");
+		List<Terms> oldTerms = xeadSystemOld.getTerms();
+		if (oldTerms == null) oldTerms = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getTerms(), oldTerms, attrList, tagName, "Header");
+		checkIfNewElementDeleted(xeadSystemNew.getTerms(), oldTerms, tagName, "Header");
 
 		/////////////////////
 		// Maintenance Log //
@@ -390,9 +376,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.clear();
 		attrList.add("Headder");
 		attrList.add("Descriptions");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getMaintenanceLogs(), oldElementList, attrList, tagName, "Header");
-		checkIfNewElementDeleted(xeadSystemNew.getMaintenanceLogs(), oldElementList, tagName, "Header");
+		List<MaintenanceLog> oldMaintenanceLogs = xeadSystemOld.getMaintenanceLogs();
+		if (oldMaintenanceLogs == null) oldMaintenanceLogs = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getMaintenanceLogs(), oldMaintenanceLogs, attrList, tagName, "Header");
+		checkIfNewElementDeleted(xeadSystemNew.getMaintenanceLogs(), oldMaintenanceLogs, tagName, "Header");
 
 		////////////////////////////////////////
 		// Set message if with no differences //
@@ -403,7 +390,6 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	void listChangesOfDataflow() {
-		NodeList oldElementList;
 		String tagName;
 		ArrayList<String> attrList = new ArrayList<String>();
 		int workCount = countOfChanges;
@@ -416,9 +402,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.clear();
 		attrList.add("Name");
 		attrList.add("Descriptions");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getSubjectAreas(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getSubjectAreas(), oldElementList, tagName, "Name");
+		List<SubjectArea> oldSubjectAreas = xeadSystemOld.getSubjectAreas();
+		if (oldSubjectAreas == null) oldSubjectAreas = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getSubjectAreas(), oldSubjectAreas, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getSubjectAreas(), oldSubjectAreas, tagName, "Name");
 
 		////////////////////////////////////////
 		// Set message if with no differences //
@@ -429,7 +416,6 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	void listChangesOfRoleAndTask() {
-		NodeList oldElementList;
 		String tagName;
 		ArrayList<String> attrList = new ArrayList<String>();
 		int workCount = countOfChanges;
@@ -443,9 +429,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("Name");
 		attrList.add("DepartmentID");
 		attrList.add("Descriptions");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getRoles(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getRoles(), oldElementList, tagName, "Name");
+		List<Role> oldRoles = xeadSystemOld.getRoles();
+		if (oldRoles == null) oldRoles = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getRoles(), oldRoles, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getRoles(), oldRoles, tagName, "Name");
 
 		//////////
 		// Task //
@@ -457,9 +444,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("Event");
 		attrList.add("TaskTypeID");
 		attrList.add("RoleID");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getTasks(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getTasks(), oldElementList, tagName, "Name");
+		List<Task> oldTasks = xeadSystemOld.getTasks();
+		if (oldTasks == null) oldTasks = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getTasks(), oldTasks, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getTasks(), oldTasks, tagName, "Name");
 
 		////////////////////////////////////////
 		// Set message if with no differences //
@@ -470,7 +458,6 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	void listChangesOfSubsystem() {
-		NodeList oldElementList;
 		String tagName;
 		ArrayList<String> attrList = new ArrayList<String>();
 		int workCount = countOfChanges;
@@ -484,9 +471,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("Name");
 		attrList.add("Descriptions");
 		attrList.add("DatamodelDescriptions");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getSubsystems(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getSubsystems(), oldElementList, tagName, "Name");
+		List<Subsystem> oldSubsystems = xeadSystemOld.getSubsystems();
+		if (oldSubsystems == null) oldSubsystems = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getSubsystems(), oldSubsystems, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getSubsystems(), oldSubsystems, tagName, "Name");
 
 		////////////////////////////////////////
 		// Set message if with no differences //
@@ -497,7 +485,6 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	void listChangesOfTable() {
-		NodeList oldElementList;
 		String tagName;
 		ArrayList<String> attrList = new ArrayList<String>();
 		int workCount = countOfChanges;
@@ -515,9 +502,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("SynchFile");
 		attrList.add("TableTypeID");
 		attrList.add("SubsystemID");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getTables(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getTables(), oldElementList, tagName, "Name");
+		List<Table> oldTables = xeadSystemOld.getTables();
+		if (oldTables == null) oldTables = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getTables(), oldTables, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getTables(), oldTables, tagName, "Name");
 
 		////////////////////////////////////////
 		// Set message if with no differences //
@@ -528,7 +516,6 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	void listChangesOfFunction() {
-		NodeList oldElementList;
 		String tagName;
 		ArrayList<String> attrList = new ArrayList<String>();
 		int workCount = countOfChanges;
@@ -546,9 +533,10 @@ public class DialogToListChangesOfFiles extends JDialog {
 		attrList.add("Return");
 		attrList.add("FunctionTypeID");
 		attrList.add("SubsystemID");
-		oldElementList = systemElementOld.getElementsByTagName(tagName);
-		checkIfNewElementChangedOrAdded(xeadSystemNew.getFunctions(), oldElementList, attrList, tagName, "Name");
-		checkIfNewElementDeleted(xeadSystemNew.getFunctions(), oldElementList, tagName, "Name");
+		List<Function> oldFunctions = xeadSystemOld.getFunctions();
+		if (oldFunctions == null) oldFunctions = new ArrayList<>();
+		checkIfNewElementChangedOrAdded(xeadSystemNew.getFunctions(), oldFunctions, attrList, tagName, "Name");
+		checkIfNewElementDeleted(xeadSystemNew.getFunctions(), oldFunctions, tagName, "Name");
 
 		////////////////////////////////////////
 		// Set message if with no differences //
@@ -607,15 +595,15 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	private boolean isLackingForeignKeyConstraintOfJson(Relationship rel, Table table, XeadSystem xeadSystem,
-			org.w3c.dom.Element oldTableElement, org.w3c.dom.Element systemElementOld) {
+			Table oldTable, XeadSystem xeadSystemOld) {
 		// Check if this foreign key constraint exists in the old document
-		NodeList oldRelationshipList = systemElementOld.getElementsByTagName("Relationship");
-		for (int i = 0; i < oldRelationshipList.getLength(); i++) {
-			org.w3c.dom.Element oldRel = (org.w3c.dom.Element)oldRelationshipList.item(i);
-			if (oldRel.getAttribute("Table1ID").equals(rel.getTable1Id())
-					&& oldRel.getAttribute("TableKey1ID").equals(rel.getTableKey1Id())
-					&& oldRel.getAttribute("Table2ID").equals(rel.getTable2Id())
-					&& oldRel.getAttribute("TableKey2ID").equals(rel.getTableKey2Id())) {
+		List<Relationship> oldRelationshipList = xeadSystemOld.getRelationships();
+		if (oldRelationshipList == null) return true;
+		for (Relationship oldRel : oldRelationshipList) {
+			if (oldRel.getTable1Id().equals(rel.getTable1Id())
+					&& oldRel.getTableKey1Id().equals(rel.getTableKey1Id())
+					&& oldRel.getTable2Id().equals(rel.getTable2Id())
+					&& oldRel.getTableKey2Id().equals(rel.getTableKey2Id())) {
 				return false;
 			}
 		}
@@ -653,18 +641,21 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	// JSON-overloaded compareNewAndOldSystem
-	void compareNewAndOldSystem(XeadSystem xeadSystem, org.w3c.dom.Element elementOld, String attribute, String elementLabel) {
+	void compareNewAndOldSystem(XeadSystem xeadSystem, XeadSystem xeadSystemOld, String attribute, String elementLabel) {
 		String valueOld, valueNew;
 		if (attribute.equals("Name")) {
 			valueNew = xeadSystem.getName() == null ? "" : xeadSystem.getName();
+			valueOld = xeadSystemOld.getName() == null ? "" : xeadSystemOld.getName();
 		} else if (attribute.equals("Version")) {
 			valueNew = xeadSystem.getVersion() == null ? "" : xeadSystem.getVersion();
+			valueOld = xeadSystemOld.getVersion() == null ? "" : xeadSystemOld.getVersion();
 		} else if (attribute.equals("Descriptions")) {
 			valueNew = xeadSystem.getDescriptions() == null ? "" : xeadSystem.getDescriptions();
+			valueOld = xeadSystemOld.getDescriptions() == null ? "" : xeadSystemOld.getDescriptions();
 		} else {
 			valueNew = "";
+			valueOld = "";
 		}
-		valueOld = elementOld.getAttribute(attribute);
 		if (!valueNew.equals(valueOld)) {
 			countOfChanges++;
 			buffer.append("\n" + elementLabel + " " + attribute + ": " + valueOld + " -> " + valueNew);
@@ -672,7 +663,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	// JSON-overloaded checkIfNewElementChangedOrAdded
-	void checkIfNewElementChangedOrAdded(List<?> newList, NodeList oldElementList, ArrayList<String> attrList, String tagName, String nameAttr) {
+	void checkIfNewElementChangedOrAdded(List<?> newList, List<?> oldElementList, ArrayList<String> attrList, String tagName, String nameAttr) {
 		boolean isNotFound;
 		String name, attrValueOld, attrValueNew;
 		Object newElement;
@@ -681,15 +672,15 @@ public class DialogToListChangesOfFiles extends JDialog {
 			newElement = newList.get(i);
 			name = getJsonAttribute(newElement, nameAttr);
 			isNotFound = true;
-			for (int j = 0; j < oldElementList.getLength(); j++) {
-				org.w3c.dom.Element oldElement = (org.w3c.dom.Element)oldElementList.item(j);
-				if (oldElement.getAttribute(nameAttr).equals(name)) {
+			for (int j = 0; j < oldElementList.size(); j++) {
+				Object oldElement = oldElementList.get(j);
+				if (getJsonAttribute(oldElement, nameAttr).equals(name)) {
 					isNotFound = false;
 					for (int k = 0; k < attrList.size(); k++) {
 						String attr = attrList.get(k);
 						if (!attr.equals(nameAttr)) {
 							attrValueNew = getJsonAttribute(newElement, attr);
-							attrValueOld = oldElement.getAttribute(attr);
+							attrValueOld = getJsonAttribute(oldElement, attr);
 							if (!attrValueNew.equals(attrValueOld)) {
 								countOfChanges++;
 								buffer.append("\n" + getElementNameAccordingToTagName(tagName) + " " + name + " " + attr + ": " + attrValueOld + " -> " + attrValueNew);
@@ -707,14 +698,14 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	// JSON-overloaded checkIfNewElementDeleted
-	void checkIfNewElementDeleted(List<?> newList, NodeList oldElementList, String tagName, String nameAttr) {
+	void checkIfNewElementDeleted(List<?> newList, List<?> oldElementList, String tagName, String nameAttr) {
 		String name;
 		boolean isNotFound;
 		Object newElement;
 
-		for (int i = 0; i < oldElementList.getLength(); i++) {
-			org.w3c.dom.Element oldElement = (org.w3c.dom.Element)oldElementList.item(i);
-			name = oldElement.getAttribute(nameAttr);
+		for (int i = 0; i < oldElementList.size(); i++) {
+			Object oldElement = oldElementList.get(i);
+			name = getJsonAttribute(oldElement, nameAttr);
 			isNotFound = true;
 			for (int j = 0; j < newList.size(); j++) {
 				newElement = newList.get(j);
@@ -827,20 +818,18 @@ public class DialogToListChangesOfFiles extends JDialog {
 
 	// DDL generation methods
 
-	String getDiffDDL(List<Table> newTableList, NodeList oldTableElementList) {
+	String getDiffDDL(List<Table> newTableList, List<Table> oldTableList) {
 		StringBuffer bf = new StringBuffer();
 		String wrkStr, tableId = "";
 		Table newTable;
-		org.w3c.dom.Element oldTableElement, workElement;
-		NodeList dataTypeList;
-		NodeList oldSubsystemList = systemElementOld.getElementsByTagName("Subsystem");
+		Table oldTable;
 
 		// Build relationship list from JSON model
 		List<Relationship> jsonRelationshipList = xeadSystemNew.getRelationships();
 
 		jProgressBar.setValue(0);
 		jProgressBar.setString(res.getString("DialogToListChangesOfFiles38"));
-		jProgressBar.setMaximum(newTableList.size() + oldTableElementList.getLength());
+		jProgressBar.setMaximum(newTableList.size() + (oldTableList != null ? oldTableList.size() : 0));
 
 		////////////////////////
 		// Setup DataType-Map //
@@ -849,11 +838,12 @@ public class DialogToListChangesOfFiles extends JDialog {
 		for (DataType dt : xeadSystemNew.getDataTypes()) {
 			newDataTypeMap.put(dt.getId(), dt);
 		}
-		oldDataTypeElementMap.clear();
-		dataTypeList = systemElementOld.getElementsByTagName("DataType");
-		for (int i = 0; i < dataTypeList.getLength(); i++) {
-			workElement = (org.w3c.dom.Element)dataTypeList.item(i);
-			oldDataTypeElementMap.put(workElement.getAttribute("ID"), workElement);
+		oldDataTypeMap.clear();
+		List<DataType> oldDataTypes = xeadSystemOld.getDataTypes();
+		if (oldDataTypes != null) {
+			for (DataType dt : oldDataTypes) {
+				oldDataTypeMap.put(dt.getId(), dt);
+			}
 		}
 
 		///////////////////////////////////
@@ -865,11 +855,11 @@ public class DialogToListChangesOfFiles extends JDialog {
 			jProgressBar.setValue(jProgressBar.getValue() + 1);
 			jProgressBar.paintImmediately(0, 0, jProgressBar.getWidth(), jProgressBar.getHeight());
 
-			oldTableElement = findOldTableElement(newTable, oldTableElementList);
-			if (oldTableElement == null) {
+			oldTable = findOldTableElement(newTable, oldTableList);
+			if (oldTable == null) {
 				bf.append(getCreateStatementByTableJson(newTable, jsonRelationshipList));
 			} else {
-				wrkStr = getAlterStatementsByTableJson(newTable, oldTableElement, jsonRelationshipList);
+				wrkStr = getAlterStatementsByTableJson(newTable, oldTable, jsonRelationshipList);
 				if (!wrkStr.equals("")) {
 					bf.append(wrkStr + "\n");
 				}
@@ -879,64 +869,71 @@ public class DialogToListChangesOfFiles extends JDialog {
 		///////////////////////////
 		// Setup Drop statements //
 		///////////////////////////
-		for (int i = 0; i < oldTableElementList.getLength(); i++) {
+		if (oldTableList != null) {
+			for (int i = 0; i < oldTableList.size(); i++) {
 
-			jProgressBar.setValue(jProgressBar.getValue() + 1);
-			jProgressBar.paintImmediately(0, 0, jProgressBar.getWidth(), jProgressBar.getHeight());
+				jProgressBar.setValue(jProgressBar.getValue() + 1);
+				jProgressBar.paintImmediately(0, 0, jProgressBar.getWidth(), jProgressBar.getHeight());
 
-			oldTableElement = (org.w3c.dom.Element)oldTableElementList.item(i);
-			newTable = null;
-			for (int j = 0; j < newTableList.size(); j++) {
-				workElement = (org.w3c.dom.Element)oldTableElementList.item(j);
-				if (frame_.useTableNameAsTableNameInCreateTableStatement) {
-					tableId = oldTableElement.getAttribute("Name");
-					if (newTableList.get(j).getName().equals(tableId)) {
-						newTable = newTableList.get(j);
-						break;
-					}
-				} else {
-					String oldAlias = oldTableElement.getAttribute("Alias");
-					String oldSortKey = oldTableElement.getAttribute("SortKey");
-					String newAlias = newTableList.get(j).getAlias() == null ? "" : newTableList.get(j).getAlias();
-					String newSortKey = newTableList.get(j).getSortKey() == null ? "" : newTableList.get(j).getSortKey();
-					if (oldAlias.equals("")) {
-						if (newAlias.equals("")) {
-							if (oldSortKey.equals(newSortKey)) {
-								newTable = newTableList.get(j);
-								break;
-							}
-						} else {
-							if (oldSortKey.equals(newAlias)) {
-								newTable = newTableList.get(j);
-								break;
-							}
+				oldTable = oldTableList.get(i);
+				newTable = null;
+				for (int j = 0; j < newTableList.size(); j++) {
+					if (frame_.useTableNameAsTableNameInCreateTableStatement) {
+						tableId = oldTable.getName();
+						if (newTableList.get(j).getName().equals(tableId)) {
+							newTable = newTableList.get(j);
+							break;
 						}
 					} else {
-						if (newAlias.equals("")) {
-							if (oldAlias.equals(newSortKey)) {
-								newTable = newTableList.get(j);
-								break;
+						String oldAlias = oldTable.getAlias() == null ? "" : oldTable.getAlias();
+						String oldSortKey = oldTable.getSortKey() == null ? "" : oldTable.getSortKey();
+						String newAlias = newTableList.get(j).getAlias() == null ? "" : newTableList.get(j).getAlias();
+						String newSortKey = newTableList.get(j).getSortKey() == null ? "" : newTableList.get(j).getSortKey();
+						if (oldAlias.equals("")) {
+							if (newAlias.equals("")) {
+								if (oldSortKey.equals(newSortKey)) {
+									newTable = newTableList.get(j);
+									break;
+								}
+							} else {
+								if (oldSortKey.equals(newAlias)) {
+									newTable = newTableList.get(j);
+									break;
+								}
 							}
 						} else {
-							if (oldAlias.equals(newAlias)) {
-								newTable = newTableList.get(j);
-								break;
+							if (newAlias.equals("")) {
+								if (oldAlias.equals(newSortKey)) {
+									newTable = newTableList.get(j);
+									break;
+								}
+							} else {
+								if (oldAlias.equals(newAlias)) {
+									newTable = newTableList.get(j);
+									break;
+								}
 							}
 						}
 					}
 				}
-			}
-			if (newTable == null) {
-				for (int j = 0; j < oldSubsystemList.getLength(); j++) {
-					workElement = (org.w3c.dom.Element)oldSubsystemList.item(j);
-					if (oldTableElement.getAttribute("SubsystemID").equals(workElement.getAttribute("ID"))) {
-						String tableName = getTableNameForDDL(oldTableElement);
-						bf.append(frame_.ddlCommentMark + workElement.getAttribute("Name")
-								+ "(" + workElement.getAttribute("SortKey") + ")"
-								+ " - " + oldTableElement.getAttribute("Name")
-								+ (oldTableElement.getAttribute("Alias").equals("") ? "" : "(" + oldTableElement.getAttribute("Alias") + ")")
+				if (newTable == null) {
+					Subsystem oldSubsystem = null;
+					List<Subsystem> oldSubsystems = xeadSystemOld.getSubsystems();
+					if (oldSubsystems != null) {
+						for (Subsystem s : oldSubsystems) {
+							if (oldTable.getSubsystemId().equals(s.getId())) {
+								oldSubsystem = s;
+								break;
+							}
+						}
+					}
+					if (oldSubsystem != null) {
+						String tableName = getTableNameForDDL(oldTable);
+						bf.append(frame_.ddlCommentMark + oldSubsystem.getName()
+								+ "(" + (oldSubsystem.getSortKey() == null ? "" : oldSubsystem.getSortKey()) + ")"
+								+ " - " + oldTable.getName()
+								+ (oldTable.getAlias() == null || oldTable.getAlias().equals("") ? "" : "(" + oldTable.getAlias() + ")")
 								+ "\nDROP TABLE " + tableName + frame_.ddlSectionMark + "\n\n");
-						break;
 					}
 				}
 			}
@@ -945,59 +942,42 @@ public class DialogToListChangesOfFiles extends JDialog {
 	}
 
 	// Find the corresponding old table element for a new JSON table
-	private org.w3c.dom.Element findOldTableElement(Table newTable, NodeList oldTableElementList) {
-		for (int k = 0; k < oldTableElementList.getLength(); k++) {
-			org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldTableElementList.item(k);
+	private Table findOldTableElement(Table newTable, List<Table> oldTableList) {
+		if (oldTableList == null) return null;
+		for (Table oldTable : oldTableList) {
 			if (frame_.useTableNameAsTableNameInCreateTableStatement) {
-				if (workElement.getAttribute("Name").equals(newTable.getName())) {
-					return workElement;
+				if (oldTable.getName().equals(newTable.getName())) {
+					return oldTable;
 				}
 			} else {
-				String oldAlias = workElement.getAttribute("Alias");
-				String oldSortKey = workElement.getAttribute("SortKey");
+				String oldAlias = oldTable.getAlias() == null ? "" : oldTable.getAlias();
+				String oldSortKey = oldTable.getSortKey() == null ? "" : oldTable.getSortKey();
 				String newAlias = newTable.getAlias() == null ? "" : newTable.getAlias();
 				String newSortKey = newTable.getSortKey() == null ? "" : newTable.getSortKey();
 				if (oldAlias.equals("")) {
 					if (newAlias.equals("")) {
 						if (oldSortKey.equals(newSortKey)) {
-							return workElement;
+							return oldTable;
 						}
 					} else {
 						if (oldSortKey.equals(newAlias)) {
-							return workElement;
+							return oldTable;
 						}
 					}
 				} else {
 					if (newAlias.equals("")) {
 						if (oldAlias.equals(newSortKey)) {
-							return workElement;
+							return oldTable;
 						}
 					} else {
 						if (oldAlias.equals(newAlias)) {
-							return workElement;
+							return oldTable;
 						}
 					}
 				}
 			}
 		}
 		return null;
-	}
-
-	// Get table name for DDL statements
-	private String getTableNameForDDL(org.w3c.dom.Element tableElement) {
-		if (frame_.useTableNameAsTableNameInCreateTableStatement) {
-			return tableElement.getAttribute("Name");
-		} else {
-			if (tableElement.getAttribute("Alias").equals("")) {
-				if (tableElement.getAttribute("SortKey").equals("")) {
-					return tableElement.getAttribute("Name");
-				} else {
-					return tableElement.getAttribute("SortKey");
-				}
-			} else {
-				return tableElement.getAttribute("Alias");
-			}
-		}
 	}
 
 	// Get table name for DDL from JSON Table
@@ -1157,8 +1137,8 @@ public class DialogToListChangesOfFiles extends JDialog {
 		return statement.toString();
 	}
 
-	// Generate ALTER TABLE statements from JSON Table vs old XML element
-	private String getAlterStatementsByTableJson(Table newTable, org.w3c.dom.Element oldTableElement,
+	// Generate ALTER TABLE statements from JSON Table vs old JSON Table
+	private String getAlterStatementsByTableJson(Table newTable, Table oldTable,
 			List<Relationship> relationshipList) {
 		StringBuffer statement = new StringBuffer();
 		String tableName = getTableNameForDDL(newTable);
@@ -1205,9 +1185,12 @@ public class DialogToListChangesOfFiles extends JDialog {
 		ArrayList<String> dropForeignKeyRefferencesList = new ArrayList<String>();
 
 		// Old elements
-		NodeList oldFieldList = oldTableElement.getElementsByTagName("TableField");
-		NodeList oldKeyList = oldTableElement.getElementsByTagName("TableKey");
-		NodeList oldRelationshipList = systemElementOld.getElementsByTagName("Relationship");
+		List<TableField> oldFieldList = oldTable.getTableFields();
+		if (oldFieldList == null) oldFieldList = new ArrayList<>();
+		List<TableKey> oldKeyList = oldTable.getTableKeys();
+		if (oldKeyList == null) oldKeyList = new ArrayList<>();
+		List<Relationship> oldRelationshipList = xeadSystemOld.getRelationships();
+		if (oldRelationshipList == null) oldRelationshipList = new ArrayList<>();
 
 		/////////////////////////////////////////
 		// Scan fields to be added or modified //
@@ -1230,19 +1213,18 @@ public class DialogToListChangesOfFiles extends JDialog {
 				String defaultValue = newField.getDefault() == null ? "" : newField.getDefault();
 				boolean isNotNull = "true".equals(newField.getNotNull());
 
-				// Find corresponding old field
-				org.w3c.dom.Element correspondingFieldElement = null;
-				for (int j = 0; j < oldFieldList.getLength(); j++) {
-					org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldFieldList.item(j);
-					String oldFieldName = workElement.getAttribute("Alias").equals("") 
-							? workElement.getAttribute("Name") : workElement.getAttribute("Alias");
+ 			// Find corresponding old field
+				TableField correspondingField = null;
+				for (TableField oldField : oldFieldList) {
+					String oldFieldName = (oldField.getAlias() == null || oldField.getAlias().equals(""))
+							? oldField.getName() : oldField.getAlias();
 					if (oldFieldName.equals(fieldName)) {
-						correspondingFieldElement = workElement;
+						correspondingField = oldField;
 						break;
 					}
 				}
 
-				if (correspondingFieldElement == null) {
+				if (correspondingField == null) {
 					// Field to be added
 					addFieldIDList.add(fieldName);
 					addFieldTypeList.add(dataType);
@@ -1252,12 +1234,12 @@ public class DialogToListChangesOfFiles extends JDialog {
 				} else {
 					// Check if field is modified
 					String dataTypeOld = "Invalid-data-type";
-					org.w3c.dom.Element oldDt = oldDataTypeElementMap.get(correspondingFieldElement.getAttribute("DataTypeID"));
-					if (oldDt != null && oldDt.getAttribute("SQLExpression") != null && !oldDt.getAttribute("SQLExpression").equals("")) {
-						dataTypeOld = oldDt.getAttribute("SQLExpression");
+					DataType oldDt = oldDataTypeMap.get(correspondingField.getDataTypeId());
+					if (oldDt != null && oldDt.getSqlExpression() != null && !oldDt.getSqlExpression().equals("")) {
+						dataTypeOld = oldDt.getSqlExpression();
 					}
-					String defaultValueOld = correspondingFieldElement.getAttribute("Default");
-					boolean isNotNullOld = "true".equals(correspondingFieldElement.getAttribute("NotNull"));
+					String defaultValueOld = correspondingField.getDefault() == null ? "" : correspondingField.getDefault();
+					boolean isNotNullOld = "true".equals(correspondingField.getNotNull());
 
 					if (!dataType.equals(dataTypeOld) || !defaultValue.equals(defaultValueOld) || isNotNull != isNotNullOld) {
 						modifyFieldIDList.add(fieldName);
@@ -1272,14 +1254,13 @@ public class DialogToListChangesOfFiles extends JDialog {
 		///////////////////////////////
 		// Scan fields to be dropped //
 		///////////////////////////////
-		for (int i = 0; i < oldFieldList.getLength(); i++) {
-			org.w3c.dom.Element fieldElement = (org.w3c.dom.Element)oldFieldList.item(i);
-			String fieldName = fieldElement.getAttribute("Alias").equals("") 
-					? fieldElement.getAttribute("Name") : fieldElement.getAttribute("Alias");
+		for (TableField oldField : oldFieldList) {
+			String fieldName = (oldField.getAlias() == null || oldField.getAlias().equals(""))
+					? oldField.getName() : oldField.getAlias();
 			boolean found = false;
 			if (newFieldList != null) {
 				for (TableField newField : newFieldList) {
-					String newFieldName = newField.getAlias() == null || newField.getAlias().equals("") 
+					String newFieldName = newField.getAlias() == null || newField.getAlias().equals("")
 							? newField.getName() : newField.getAlias();
 					if (newFieldName.equals(fieldName)) {
 						found = true;
@@ -1305,10 +1286,9 @@ public class DialogToListChangesOfFiles extends JDialog {
 				if ("PK".equals(newKey.getType()) || "SK".equals(newKey.getType()) || "XK".equals(newKey.getType())) {
 					String keyFields = getKeyFieldIDsOfJson(newTable, newKey);
 					boolean isNotFound = true;
-					for (int j = 0; j < oldKeyList.getLength(); j++) {
-						org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldKeyList.item(j);
-						if (workElement.getAttribute("Type").equals(newKey.getType())) {
-							String keyFieldsOld = getKeyFieldIDsOfOldTable(oldTableElement, workElement);
+					for (TableKey oldKey : oldKeyList) {
+						if (oldKey.getType().equals(newKey.getType())) {
+							String keyFieldsOld = getKeyFieldIDsOfJson(oldTable, oldKey);
 							if (keyFieldsOld.equals(keyFields)) {
 								isNotFound = false;
 								break;
@@ -1318,9 +1298,8 @@ public class DialogToListChangesOfFiles extends JDialog {
 					if (isNotFound) {
 						if ("PK".equals(newKey.getType())) {
 							// Check if old has primary key
-							for (int j = 0; j < oldKeyList.getLength(); j++) {
-								org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldKeyList.item(j);
-								if ("PK".equals(workElement.getAttribute("Type"))) {
+							for (TableKey oldKey : oldKeyList) {
+								if ("PK".equals(oldKey.getType())) {
 									isToDropOldPrimaryKey = true;
 									break;
 								}
@@ -1340,15 +1319,14 @@ public class DialogToListChangesOfFiles extends JDialog {
 		/////////////////////////////
 		// Scan keys to be dropped //
 		/////////////////////////////
-		for (int i = 0; i < oldKeyList.getLength(); i++) {
-			org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldKeyList.item(i);
-			if ("PK".equals(workElement.getAttribute("Type")) || "SK".equals(workElement.getAttribute("Type"))
-					|| "XK".equals(workElement.getAttribute("Type"))) {
-				String keyFieldsOld = getKeyFieldIDsOfOldTable(oldTableElement, workElement);
+		for (TableKey oldKey : oldKeyList) {
+			if ("PK".equals(oldKey.getType()) || "SK".equals(oldKey.getType())
+					|| "XK".equals(oldKey.getType())) {
+				String keyFieldsOld = getKeyFieldIDsOfJson(oldTable, oldKey);
 				boolean isNotFound = true;
 				if (newKeyList != null) {
 					for (TableKey newKey : newKeyList) {
-						if (workElement.getAttribute("Type").equals(newKey.getType())) {
+						if (oldKey.getType().equals(newKey.getType())) {
 							String keyFields = getKeyFieldIDsOfJson(newTable, newKey);
 							if (keyFields.equals(keyFieldsOld)) {
 								isNotFound = false;
@@ -1358,11 +1336,11 @@ public class DialogToListChangesOfFiles extends JDialog {
 					}
 				}
 				if (isNotFound && !keyFieldsOld.equals("")) {
-					if ("PK".equals(workElement.getAttribute("Type")) || "SK".equals(workElement.getAttribute("Type"))) {
+					if ("PK".equals(oldKey.getType()) || "SK".equals(oldKey.getType())) {
 						dropUniqueKeyList.add(keyFieldsOld);
 						containsValueToBeCorrected = true;
 					}
-					if ("XK".equals(workElement.getAttribute("Type"))) {
+					if ("XK".equals(oldKey.getType())) {
 						dropIndexKeyList.add(keyFieldsOld);
 					}
 				}
@@ -1381,7 +1359,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 						if (rel.getTable2Id() != null && rel.getTable2Id().equals(newTable.getId())
 								&& rel.getTableKey2Id() != null && rel.getTableKey2Id().equals(newKey.getId())
 								&& (rel.getExistWhen1() == null || rel.getExistWhen1().equals(""))) {
-							if (isLackingForeignKeyConstraintOfJson(rel, newTable, xeadSystemNew, oldTableElement, systemElementOld)) {
+							if (isLackingForeignKeyConstraintOfJson(rel, newTable, xeadSystemNew, oldTable, xeadSystemOld)) {
 								addForeignKeyConstraintIDList.add(Integer.toString(indexOfFK));
 								addForeignKeyFieldIDsList.add(getKeyFieldIDsOfJson(newTable, newKey));
 								addForeignKeyRefferencesList.add(getRefferencesOfJson(rel, xeadSystemNew));
@@ -1397,31 +1375,29 @@ public class DialogToListChangesOfFiles extends JDialog {
 		// Scan foreign-key constraints to be dropped //
 		////////////////////////////////////////////////
 		if (!frame_.ignoreForeignKeyConstraints) {
-			for (int i = 0; i < oldKeyList.getLength(); i++) {
-				org.w3c.dom.Element keyElement = (org.w3c.dom.Element)oldKeyList.item(i);
-				if ("PK".equals(keyElement.getAttribute("Type")) || "SK".equals(keyElement.getAttribute("Type"))
-						|| "FK".equals(keyElement.getAttribute("Type"))) {
-					for (int j = 0; j < oldRelationshipList.getLength(); j++) {
-						org.w3c.dom.Element workElement = (org.w3c.dom.Element)oldRelationshipList.item(j);
-						if (workElement.getAttribute("Table2ID").equals(oldTableElement.getAttribute("ID"))
-								&& workElement.getAttribute("TableKey2ID").equals(keyElement.getAttribute("ID"))
-								&& workElement.getAttribute("ExistWhen1").equals("")) {
+			for (TableKey oldKey : oldKeyList) {
+				if ("PK".equals(oldKey.getType()) || "SK".equals(oldKey.getType())
+						|| "FK".equals(oldKey.getType())) {
+					for (Relationship oldRel : oldRelationshipList) {
+						if (oldRel.getTable2Id().equals(oldTable.getId())
+								&& oldRel.getTableKey2Id().equals(oldKey.getId())
+								&& (oldRel.getExistWhen1() == null || oldRel.getExistWhen1().equals(""))) {
 							// Check if this relationship exists in the new model
 							boolean foundInNew = false;
 							if (relationshipList != null) {
 								for (Relationship rel : relationshipList) {
-									if (rel.getTable1Id() != null && rel.getTable1Id().equals(workElement.getAttribute("Table1ID"))
-											&& rel.getTableKey1Id() != null && rel.getTableKey1Id().equals(workElement.getAttribute("TableKey1ID"))
-											&& rel.getTable2Id() != null && rel.getTable2Id().equals(workElement.getAttribute("Table2ID"))
-											&& rel.getTableKey2Id() != null && rel.getTableKey2Id().equals(workElement.getAttribute("TableKey2ID"))) {
+									if (rel.getTable1Id() != null && rel.getTable1Id().equals(oldRel.getTable1Id())
+											&& rel.getTableKey1Id() != null && rel.getTableKey1Id().equals(oldRel.getTableKey1Id())
+											&& rel.getTable2Id() != null && rel.getTable2Id().equals(oldRel.getTable2Id())
+											&& rel.getTableKey2Id() != null && rel.getTableKey2Id().equals(oldRel.getTableKey2Id())) {
 										foundInNew = true;
 										break;
 									}
 								}
 							}
 							if (!foundInNew) {
-								dropForeignKeyFieldIDsList.add(getKeyFieldIDsOfOldTable(oldTableElement, keyElement));
-								dropForeignKeyRefferencesList.add(getRefferencesOfOldRelationship(workElement, systemElementOld));
+								dropForeignKeyFieldIDsList.add(getKeyFieldIDsOfJson(oldTable, oldKey));
+								dropForeignKeyRefferencesList.add(getRefferencesOfOldRelationship(oldRel, xeadSystemOld));
 								containsValueToBeCorrected = true;
 							}
 							break;
@@ -1582,72 +1558,35 @@ public class DialogToListChangesOfFiles extends JDialog {
 		return statement.toString();
 	}
 
-	// Get key field IDs from old XML table element
-	private String getKeyFieldIDsOfOldTable(org.w3c.dom.Element tableElement, org.w3c.dom.Element keyElement) {
-		String keyFieldIDs = "";
-		NodeList keyFieldList = keyElement.getElementsByTagName("TableKeyField");
-		frame_.sortableDomElementListModel.removeAllElements();
-		for (int m = 0; m < keyFieldList.getLength(); m++) {
-			frame_.sortableDomElementListModel.addElementFromPojo(keyFieldList.item(m));
-		}
-		if (frame_.sortableDomElementListModel.getSize() > 0) {
-			frame_.sortableDomElementListModel.sortElements();
-			for (int m = 0; m < frame_.sortableDomElementListModel.getSize(); m++) {
-				xeadModeler.model.XeadElement xeadElement = frame_.sortableDomElementListModel.getElementAt(m);
-				org.w3c.dom.Element keyFieldElement = (org.w3c.dom.Element)xeadElement.getPojo();
-				org.w3c.dom.Element fieldElement = getFieldElementAccordingToID(tableElement, keyFieldElement.getAttribute("FieldID"));
-				if (m > 0) {
-					keyFieldIDs = keyFieldIDs + ", ";
-				}
-				if (fieldElement.getAttribute("Alias").equals("")) {
-					keyFieldIDs = keyFieldIDs + fieldElement.getAttribute("Name");
-				} else {
-					keyFieldIDs = keyFieldIDs + fieldElement.getAttribute("Alias");
-				}
-			}
-		}
-		return keyFieldIDs;
-	}
+	// Get references from old relationship (JSON)
+	private String getRefferencesOfOldRelationship(Relationship relationship, XeadSystem xeadSystemOld) {
+		String tableId = relationship.getTable1Id();
+		String tableKeyId = relationship.getTableKey1Id();
+		Table table = null;
+		TableKey tableKey = null;
 
-	// Find field element by ID in old XML table element
-	private org.w3c.dom.Element getFieldElementAccordingToID(org.w3c.dom.Element tableElement, String fieldId) {
-		NodeList fieldList = tableElement.getElementsByTagName("TableField");
-		for (int i = 0; i < fieldList.getLength(); i++) {
-			org.w3c.dom.Element fieldElement = (org.w3c.dom.Element)fieldList.item(i);
-			if (fieldElement.getAttribute("ID").equals(fieldId)) {
-				return fieldElement;
-			}
-		}
-		return null;
-	}
-
-	// Get references from old XML relationship element
-	private String getRefferencesOfOldRelationship(org.w3c.dom.Element relationshipElement, org.w3c.dom.Element systemElement) {
-		String tableId = relationshipElement.getAttribute("Table1ID");
-		String tableKeyId = relationshipElement.getAttribute("TableKey1ID");
-		org.w3c.dom.Element tableElement = null;
-		org.w3c.dom.Element tableKeyElement = null;
-
-		NodeList tableElementList = systemElement.getElementsByTagName("Table");
-		for (int i = 0; i < tableElementList.getLength(); i++) {
-			org.w3c.dom.Element workElement = (org.w3c.dom.Element)tableElementList.item(i);
-			if (workElement.getAttribute("ID").equals(tableId)) {
-				tableElement = workElement;
-				break;
-			}
-		}
-		if (tableElement != null) {
-			String tableName = getTableNameForDDL(tableElement);
-			NodeList tableKeyElementList = tableElement.getElementsByTagName("TableKey");
-			for (int i = 0; i < tableKeyElementList.getLength(); i++) {
-				org.w3c.dom.Element workElement = (org.w3c.dom.Element)tableKeyElementList.item(i);
-				if (workElement.getAttribute("ID").equals(tableKeyId)) {
-					tableKeyElement = workElement;
+		List<Table> tableList = xeadSystemOld.getTables();
+		if (tableList != null) {
+			for (Table t : tableList) {
+				if (t.getId().equals(tableId)) {
+					table = t;
 					break;
 				}
 			}
-			if (tableKeyElement != null) {
-				String fieldNames = getKeyFieldIDsOfOldTable(tableElement, tableKeyElement);
+		}
+		if (table != null) {
+			String tableName = getTableNameForDDL(table);
+			List<TableKey> tableKeyList = table.getTableKeys();
+			if (tableKeyList != null) {
+				for (TableKey tk : tableKeyList) {
+					if (tk.getId().equals(tableKeyId)) {
+						tableKey = tk;
+						break;
+					}
+				}
+			}
+			if (tableKey != null) {
+				String fieldNames = getKeyFieldIDsOfJson(table, tableKey);
 				return tableName + "(" + fieldNames + ")";
 			}
 		}

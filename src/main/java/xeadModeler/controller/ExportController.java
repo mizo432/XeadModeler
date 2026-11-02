@@ -74,13 +74,6 @@ public class ExportController {
     }
     
     /**
-     * XML形式でエクスポート
-     */
-    public void exportToXml() {
-        // TODO: XMLエクスポート処理を実装
-    }
-    
-    /**
      * CSV形式でエクスポート
      */
     public void exportToCsv() {

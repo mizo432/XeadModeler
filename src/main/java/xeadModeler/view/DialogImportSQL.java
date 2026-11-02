@@ -1361,26 +1361,6 @@ public class DialogImportSQL extends JDialog {
 		}
 	}
 
-//	/**
-//	 * Class of Node Comparator
-//	 */
-//	class NodeComparator implements java.util.Comparator<XeadNode> {
-//		public int compare(XeadNode node1, XeadNode node2) {
-//			String value1, value2;
-//			value1 = node1.getElement().getAttribute("SortKey");
-//			value2 = node2.getElement().getAttribute("SortKey");
-//			int compareResult = value1.compareTo(value2);
-//			if (compareResult == 0) {
-//				value1 = node1.getElement().getAttribute("ID");
-//				value2 = node2.getElement().getAttribute("ID");
-//				compareResult = value1.compareTo(value2);
-//				if (compareResult == 0) {
-//					compareResult = 1;
-//				}
-//			}
-//			return(compareResult);
-//		}
-//	}
 }
 
 class DialogImportSQL_jCheckBoxShowControl_changeAdapter implements ChangeListener {

@@ -73,13 +73,6 @@ public class ImportController {
     }
     
     /**
-     * XML形式からインポート
-     */
-    public void importFromXml() {
-        // TODO: XMLインポート処理を実装
-    }
-    
-    /**
      * CSV形式からインポート
      */
     public void importFromCsv() {
