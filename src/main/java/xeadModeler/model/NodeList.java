@@ -4,7 +4,6 @@ import java.util.List;
 
 /**
  * JSON POJOリストのラッパークラス
- * XMLのNodeListに代わるインターフェースを提供します。
  *
  * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.

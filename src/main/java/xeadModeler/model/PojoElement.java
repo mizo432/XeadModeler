@@ -5,8 +5,8 @@ import java.util.List;
 import java.lang.reflect.Method;
 
 /**
- * JSON POJOをorg.w3c.dom.Elementのように扱えるラッパークラス
- * XMLからJSONへの移行期間中の互換性のために提供されます。
+ * JSON POJOをElementのように扱えるラッパークラス
+ * 属性の取得・設定をリフレクションで行います。
  */
 public class PojoElement {
     private final Object pojo;

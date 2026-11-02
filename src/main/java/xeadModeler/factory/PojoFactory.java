@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * JSON POJOのファクトリクラス
- * XMLのDocument.createElement()に代わってJSONモデルオブジェクトを生成します。
+ * JSONモデルオブジェクトを生成します。
  *
  * Copyright (c) 2015 WATANABE kozo <qyf05466@nifty.com>,
  * All rights reserved.
@@ -63,7 +63,7 @@ public class PojoFactory {
      * 要素名に対応するJSON POJOを生成します。
      * 対応する型が見つからない場合はnullを返します。
      *
-     * @param elementName 要素名（XMLタグ名と同等）
+     * @param elementName 要素名
      * @return 生成されたJSON POJOインスタンス、またはnull
      */
     public Object createElement(String elementName) {

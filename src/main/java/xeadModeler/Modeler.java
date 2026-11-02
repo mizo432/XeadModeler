@@ -221,7 +221,7 @@ public class Modeler extends JFrame {
   private JMenuItem jMenuItemHelpHelp = new JMenuItem();
   private JMenuItem jMenuItemHelpAbout = new JMenuItem();
   /**
-   * JSONファクトリ - XMLのpojoFactory.createElement()に代わってJSON POJOを生成
+   * JSONファクトリ - JSON POJOを生成
    */
   private PojoFactory pojoFactory;
   
@@ -6371,14 +6371,14 @@ public class Modeler extends JFrame {
    * Maps attribute names to setter methods (e.g., "FunctionID" -> "setFunctionId").
    *
    * @param pojo the JSON POJO object
-   * @param attributeName the attribute name (XML-style, e.g., "FunctionID")
+   * @param attributeName the attribute name (e.g., "FunctionID")
    * @param value the value to set
    */
   private void setAttributeOnJsonPojo(Object pojo, String attributeName, String value) {
     if (pojo == null) {
       return;
     }
-    // Map XML-style attribute names to Java setter method names
+    // Map attribute names to Java setter method names
     // e.g., "FunctionID" -> "setFunctionId", "SortKey" -> "setSortKey"
     String setterName = "set" + attributeName.substring(0, 1).toLowerCase() + attributeName.substring(1);
     // Handle common camelCase conversions for ID suffix
