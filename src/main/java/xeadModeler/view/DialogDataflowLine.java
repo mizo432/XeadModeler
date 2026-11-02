@@ -42,6 +42,7 @@ import xeadModeler.Modeler.*;
 import xeadModeler.KanjiTextField;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DialogDataflowLine extends JDialog {
@@ -278,7 +279,7 @@ public class DialogDataflowLine extends JDialog {
 		getContentPane().add(panelMain);
 	}
 
-	public boolean request(String action, xeadModeler.model.json.DataflowLine dataflowLine, ArrayList<DataflowNode> nodeArray, ArrayList<DataflowLine> lineArray) {
+	public boolean request(String action, xeadModeler.model.json.DataflowLine dataflowLine, List<DataflowNode> nodeArray, List<DataflowLine> lineArray) {
 		buttonOKIsPressed = false;
 
 		panelMain.removeAll();

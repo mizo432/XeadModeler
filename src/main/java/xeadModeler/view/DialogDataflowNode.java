@@ -42,6 +42,7 @@ import xeadModeler.KanjiTextField;
 
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -152,7 +153,7 @@ public class DialogDataflowNode extends JDialog {
 		getContentPane().add(panelMain);
 	}
 
-	public boolean request(String action, xeadModeler.model.json.DataflowNode dataflowNode, ArrayList<DataflowNode> nodeArray, ArrayList<DataflowLine> lineArray) {
+	public boolean request(String action, xeadModeler.model.json.DataflowNode dataflowNode, List<DataflowNode> nodeArray, List<DataflowLine> lineArray) {
 		buttonOKIsPressed = false;
 		//
 		jComboBoxEventPos.setEnabled(false);
