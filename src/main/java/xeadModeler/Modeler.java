@@ -7009,7 +7009,7 @@ public class Modeler extends JFrame {
         }
       });
       JOptionPane.showMessageDialog(this,
-          "Failed to parse xml format of the file '" + currentFileName + "'.\n\n" + e.getMessage());
+          "Failed to parse JSON format of the file '" + currentFileName + "'.\n\n" + e.getMessage());
       System.exit(0);
     } finally {
       setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -27443,7 +27443,7 @@ public class Modeler extends JFrame {
       //[0]:any fields value changed, [1]:value of "SortKey" changed//
       boolean[] updateStatusFlag = new boolean[2];
 
-      //Update related area of xmlDocument according to nodeType//
+      //Update related area of JSON document according to nodeType//
       if (nodeType_.equals("System")) {
         updateStatusFlag = updateFieldsForSystem();
       }

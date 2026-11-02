@@ -177,7 +177,7 @@ public class DialogToListChangesOfFiles extends JDialog {
 				super.setVisible(true);
 			}
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "XML format of the file is invalid. Process is canceled.");
+			JOptionPane.showMessageDialog(null, "JSON format of the file is invalid. Process is canceled.");
 		}
 	}
 
