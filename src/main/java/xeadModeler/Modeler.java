@@ -118,6 +118,31 @@ import xeadModeler.view.DialogReorganizeDataTypes;
 import xeadModeler.view.DialogScan;
 import xeadModeler.view.DialogTableSynchronize;
 import xeadModeler.view.DialogToListChangesOfFiles;
+import xeadModeler.view.SortableXeadTreeNodeComboBoxModel;
+import xeadModeler.view.SortableXeadTreeNodeListModel;
+import xeadModeler.view.CreateStatement;
+import xeadModeler.view.ChangeState;
+import xeadModeler.view.CheckBoxHeaderListener;
+import xeadModeler.view.CheckBoxRenderer;
+import xeadModeler.view.CustomTreeRenderer;
+import xeadModeler.view.CustomUndoableEditListener;
+import xeadModeler.view.TabbedPaneChangeListener;
+import xeadModeler.view.TableRowNumber;
+import xeadModeler.view.TextPaneUndoAction;
+import xeadModeler.view.TextPaneRedoAction;
+import xeadModeler.view.XeadPagePainter;
+import xeadModeler.view.NodeJumpButton;
+import xeadModeler.view.DataTypePopupMenu;
+import xeadModeler.view.TableModelEditableList;
+import xeadModeler.view.TableModelForeignTableList;
+import xeadModeler.view.TableModelFunctionsUsedByThis;
+import xeadModeler.view.TableModelIOTableFieldList;
+import xeadModeler.view.TableModelNativeTableList;
+import xeadModeler.view.TableModelReadOnlyList;
+import xeadModeler.view.TableModelRelationshipList;
+import xeadModeler.view.TableModelTableFieldList;
+import xeadModeler.view.CheckBoxHeaderRenderer;
+import xeadModeler.view.TaskActionTextFieldListener;
 
 public class Modeler extends JFrame {
 
@@ -263,7 +288,7 @@ public class Modeler extends JFrame {
   /**
    * sorter for general use
    */
-  private SortableXeadTreeNodeListModel sortableXeadTreeNodeListModel = new SortableXeadTreeNodeListModel();
+  private xeadModeler.view.SortableXeadTreeNodeListModel sortableXeadTreeNodeListModel = new xeadModeler.view.SortableXeadTreeNodeListModel();
   public SortableDomElementListModel sortableDomElementListModel = new SortableDomElementListModel();
   private SortableDomElementFieldListModel sortableDomElementFieldListModel = new SortableDomElementFieldListModel();
   /**
@@ -291,7 +316,7 @@ public class Modeler extends JFrame {
    * change status controller for general use
    */
   public boolean informationOnThisPageChanged;
-  private ChangeState changeState = new ChangeState();
+  private ChangeState changeState = new ChangeState(this);
   /**
    * Dialog box and fileChooser for general use
    */
@@ -332,7 +357,7 @@ public class Modeler extends JFrame {
   /**
    * Print Controller
    */
-  private XeadPagePainter painter = new XeadPagePainter();
+  private xeadModeler.view.XeadPagePainter painter = new xeadModeler.view.XeadPagePainter(this);
   private PrinterJob printerJob;
   private PageFormat pageFormat;
   private boolean printFormatSpecified = false;
@@ -385,9 +410,9 @@ public class Modeler extends JFrame {
   /**
    * Main TreeView
    */
-  private JScrollPane jScrollPaneTreeView = new JScrollPane();
-  private CustomTreeRenderer customTreeRenderer = new CustomTreeRenderer();
-  private JTree jTreeMain = new JTree();
+  public JScrollPane jScrollPaneTreeView = new JScrollPane();
+  private CustomTreeRenderer customTreeRenderer = new CustomTreeRenderer(this);
+  public JTree jTreeMain = new JTree();
   private DefaultTreeModel treeModel;
   public XeadTreeNode currentMainTreeNode;
   private XeadTreeNode previousMainTreeNode, dragSourceMainTreeNode;
@@ -1162,7 +1187,7 @@ public class Modeler extends JFrame {
   private JScrollPane jScrollPaneTable1 = new JScrollPane();
   private JPanel jPanelTable = new JPanel();
   private JSplitPane jSplitPaneTable = new JSplitPane();
-  public SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTableType = new SortableXeadTreeNodeComboBoxModel();
+  public xeadModeler.view.SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTableType = new xeadModeler.view.SortableXeadTreeNodeComboBoxModel();
   public TableModelReadOnlyList tableModelTableUsageList = new TableModelReadOnlyList();
   public TableModelReadOnlyList tableModelTableForeignUsageList = new TableModelReadOnlyList();
   public TableModelReadOnlyList tableModelTableReferringFileList = new TableModelReadOnlyList();
@@ -1286,7 +1311,7 @@ public class Modeler extends JFrame {
   private JLabel jLabelRelationshipList = new JLabel();
   private JScrollPane jScrollPaneRelationshipList = new JScrollPane();
   private JViewport jViewportRelationshipList = new JViewport();
-  public TableModelRelationshipList tableModelRelationshipList = new TableModelRelationshipList();
+  public TableModelRelationshipList tableModelRelationshipList = new TableModelRelationshipList(this);
   public JTable jTableRelationshipList = new JTable(tableModelRelationshipList);
   private int selectedRow_jTableRelationshipList;
   private JPanel jPanelTableKey3 = new JPanel();
@@ -1350,7 +1375,7 @@ public class Modeler extends JFrame {
   private ArrayList<String> functionDocFileList = new ArrayList<String>();
   private ArrayList<String> functionDocFileDefaultList = new ArrayList<String>();
   private JButton jButtonFunctionDocFile = new JButton();
-  public SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType = new SortableXeadTreeNodeComboBoxModel();
+  public xeadModeler.view.SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType = new xeadModeler.view.SortableXeadTreeNodeComboBoxModel();
   private JComboBox jComboBoxFunctionType = new JComboBox(sortableComboBoxModelFunctionType);
   private KanjiTextField jTextFieldFunctionName = new KanjiTextField();
   private KanjiTextField jTextFieldFunctionSummary = new KanjiTextField();
@@ -1601,10 +1626,10 @@ public class Modeler extends JFrame {
   /**
    * undo handler for JTextPane
    */
-  private UndoableEditListener textPaneUndoableEditListener = new CustomUndoableEditListener();
+  private UndoableEditListener textPaneUndoableEditListener;
   private UndoManager textPaneUndoManager = new UndoManager();
-  private TextPaneUndoAction undoAction = new TextPaneUndoAction();
-  private TextPaneRedoAction redoAction = new TextPaneRedoAction();
+  private TextPaneUndoAction undoAction;
+  private TextPaneRedoAction redoAction;
   /**
    * HTML Editor Kit
    */
@@ -1699,6 +1724,11 @@ public class Modeler extends JFrame {
   void jbInitComponentsAndVariants() {
     // Initialize JSON services first
     initializeJsonServices();
+
+    // Initialize undo/redo actions
+    undoAction = new TextPaneUndoAction(textPaneUndoManager, null);
+    redoAction = new TextPaneRedoAction(textPaneUndoManager, undoAction);
+    textPaneUndoableEditListener = new CustomUndoableEditListener(textPaneUndoManager, undoAction, redoAction);
 
     /**
      * Read xteamdl.properties
@@ -2375,7 +2405,7 @@ public class Modeler extends JFrame {
    */
   void jbInitComponentsForSystem() {
     jTabbedPaneSystem.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTabbedPaneSystem.addChangeListener(new TabbedPaneChangeListener());
+    jTabbedPaneSystem.addChangeListener(new TabbedPaneChangeListener(this));
     jPanelSystem.setLayout(new BorderLayout());
     jPanelSystem6.setBorder(BorderFactory.createEtchedBorder());
     //jPanelSystem6.setPreferredSize(new Dimension(10, 43));
@@ -3741,10 +3771,10 @@ public class Modeler extends JFrame {
     jTextFieldTaskActionExecuteIf.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
     jTextFieldTaskActionExecuteIf.setBounds(new Rectangle(140, 6, 600, 25));
     jTextFieldTaskActionExecuteIf.setToolTipText(res.getString("S392"));
-    jTextFieldTaskActionExecuteIf.addFocusListener(new TaskActionTextFieldListener());
+    jTextFieldTaskActionExecuteIf.addFocusListener(new TaskActionTextFieldListener(this));
     jTextFieldTaskActionLabel.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
     jTextFieldTaskActionLabel.setBounds(new Rectangle(140, 37, 600, 25));
-    jTextFieldTaskActionLabel.addFocusListener(new TaskActionTextFieldListener());
+    jTextFieldTaskActionLabel.addFocusListener(new TaskActionTextFieldListener(this));
     jPanelTask20.setPreferredSize(new Dimension(10, 20));
     jPanelTask20.setLayout(null);
     jPanelTask19.setBorder(BorderFactory.createEtchedBorder());
@@ -4299,7 +4329,7 @@ public class Modeler extends JFrame {
         jScrollPaneForeignTableList);
     jTabbedPaneTableList.addTab(res.getString("S466"), imageIconModel, jSplitPaneDatamodel);
     jTabbedPaneTableList.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    jTabbedPaneTableList.addChangeListener(new TabbedPaneChangeListener());
+    jTabbedPaneTableList.addChangeListener(new TabbedPaneChangeListener(this));
     jViewportNativeTableList.add(jTableNativeTableList, null);
     jScrollPaneNativeTableList.setViewport(jViewportNativeTableList);
     jScrollPaneNativeTableList.addMouseListener(
@@ -4368,7 +4398,7 @@ public class Modeler extends JFrame {
     column0.setCellRenderer(rendererAlignmentCenter);
     column1.setCellRenderer(rendererAlignmentLeft);
     column2.setCellRenderer(rendererAlignmentLeft);
-    CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer();
+    CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer(this);
     column3.setCellRenderer(checkBoxRenderer);
     DefaultCellEditor editorWithCheckBox = new DefaultCellEditor(
         new JCheckBox(res.getString("S483")));
@@ -4804,9 +4834,9 @@ public class Modeler extends JFrame {
     column1.setCellRenderer(rendererAlignmentLeft);
     column2.setCellRenderer(rendererAlignmentLeft);
     CheckBoxHeaderRenderer checkBoxHeaderRenderer = new CheckBoxHeaderRenderer(
-        new CheckBoxHeaderListener());
+        this, new CheckBoxHeaderListener(this));
     column3.setHeaderRenderer(checkBoxHeaderRenderer);
-    CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer();
+    CheckBoxRenderer checkBoxRenderer = new CheckBoxRenderer(this);
     column3.setCellRenderer(checkBoxRenderer);
     DefaultCellEditor editorWithCheckBox = new DefaultCellEditor(
         new JCheckBox(res.getString("S483")));
@@ -7103,7 +7133,7 @@ public class Modeler extends JFrame {
    * @param node :selected node
    * @param refreshRequired :specify whether refresh required even if the same node selected again
    */
-  void setupContentsPaneForTreeNodeSelected(XeadTreeNode node, boolean refreshRequired) {
+  public void setupContentsPaneForTreeNodeSelected(XeadTreeNode node, boolean refreshRequired) {
     try {
       setCursor(new Cursor(Cursor.WAIT_CURSOR));
       previousMainTreeNode = currentMainTreeNode;
@@ -7159,11 +7189,11 @@ public class Modeler extends JFrame {
       int j = 0;
       if (currentMainTreeNode != previousMainTreeNode) {
         if (previousMainTreeNode.equals(systemNode)) {
-          workNodeJumpButton[0] = new NodeJumpButton(previousMainTreeNode);
+          workNodeJumpButton[0] = new NodeJumpButton(this, res, previousMainTreeNode);
           j = 1;
         } else {
           if (previousMainTreeNode.getParent() != null) {
-            workNodeJumpButton[0] = new NodeJumpButton(previousMainTreeNode);
+            workNodeJumpButton[0] = new NodeJumpButton(this, res, previousMainTreeNode);
             j = 1;
           }
         }
@@ -8754,7 +8784,7 @@ public class Modeler extends JFrame {
       for (TableType tt : system.getTableTypes()) {
         // Create a simple node for display purposes
         XeadTreeNode node = new XeadTreeNode("TableType", tt);
-        sortableComboBoxModelTableType.addElement((Object) node);
+        sortableComboBoxModelTableType.addElement(node);
       }
     }
     sortableComboBoxModelTableType.sortElements();
@@ -10640,27 +10670,6 @@ public class Modeler extends JFrame {
     }
   }
 
-  /**
-   * Class of Table Row Number
-   */
-  class CreateStatement extends Object {
-
-    private String statement_;
-    private boolean warningOccured_;
-
-    public CreateStatement(String str, boolean warn) {
-      statement_ = str;
-      warningOccured_ = warn;
-    }
-
-    public String toString() {
-      return statement_;
-    }
-
-    public boolean isWarned() {
-      return warningOccured_;
-    }
-  }
 
   String convertCamelNotation(String originalText) {
     StringBuilder bf = new StringBuilder();
@@ -12174,176 +12183,6 @@ public class Modeler extends JFrame {
     }
   }
 
-  /**
-   * Class of node-list-model to sort elements by its "SortKey"
-   */
-  class SortableXeadTreeNodeListModel extends DefaultListModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public void sortElements() {
-//			TreeSet<XeadTreeNode> treeSet = new TreeSet<XeadTreeNode>(new NodeComparator());
-//			int elementCount = this.getSize();
-//			XeadTreeNode node;
-//			for (int i = 0; i < elementCount; i++) {
-//				node = (XeadTreeNode)this.getElementAt(i);
-//				treeSet.add(node);
-//			}
-//			this.removeAllElements();
-//			Iterator<XeadTreeNode> it = treeSet.iterator();
-//			while( it.hasNext() ){
-//				node = (XeadTreeNode)it.next();
-//				this.addElement(node);
-//			}
-      ArrayList<XeadTreeNode> list = new ArrayList<XeadTreeNode>();
-      for (int i = 0; i < this.getSize(); i++) {
-        list.add((XeadTreeNode) this.getElementAt(i));
-      }
-      this.removeAllElements();
-      Collections.sort(list);
-      Iterator<XeadTreeNode> it = list.iterator();
-      while (it.hasNext()) {
-        this.addElement(it.next());
-      }
-    }
-  }
-
-  /**
-   * Class of NodeJumpButton
-   */
-  public class NodeJumpButton extends JButton {
-
-    private static final long serialVersionUID = 1L;
-    private XeadTreeNode node_;
-
-    //
-    //Constructor//
-    public NodeJumpButton(XeadTreeNode nd) {
-      super();
-      node_ = nd;
-      this.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE - 2));
-      String nodeType = ((XeadTreeNode) node_).getType();
-      this.addActionListener(new NodeJumpButton_actionAdapter(this));
-      if (nodeType == "System") {
-        this.setIcon(imageIconSystem);
-        this.setText(node_.getName());
-      }
-      if (nodeType == "SubjectAreaList") {
-        this.setIcon(imageIconSubjectAreaList);
-        this.setText(node_.getName());
-      }
-      if (nodeType == "SubjectArea") {
-        this.setIcon(imageIconSubjectArea);
-        this.setText(node_.getName());
-      }
-      if (nodeType == "RoleList") {
-        this.setIcon(imageIconRoleList);
-        this.setText(node_.getName());
-      }
-      if (nodeType == "Role") {
-        this.setIcon(imageIconRole);
-        this.setText(node_.getName());
-      }
-      if (nodeType == "Task") {
-        this.setIcon(imageIconTask);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent();
-        this.setText(node_.getName() + "(" + parentNode.getName() + ")");
-      }
-      if (nodeType == "SubsystemList") {
-        this.setIcon(imageIconSubsystemList);
-        this.setText(node_.getName());
-      }
-      if (nodeType == "Subsystem") {
-        this.setIcon(imageIconSubsystem);
-        this.setText(node_.getName());
-      }
-      if (nodeType == "TableList") {
-        this.setIcon(imageIconTableList);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent();
-        this.setText(parentNode.getName() + " " + res.getString("S3407"));
-      }
-      if (nodeType == "Table") {
-        this.setIcon(imageIconTable);
-        this.setText(node_.getName());
-      }
-      if (nodeType == "TableFieldList") {
-        this.setIcon(imageIconFieldList);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent();
-        this.setText(parentNode.getName() + " " + res.getString("S613"));
-      }
-      if (nodeType == "TableField") {
-        this.setIcon(imageIconField);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent().getParent();
-        this.setText(node_.getName() + "(" + parentNode.getName() + ")");
-      }
-      if (nodeType == "TableKeyList") {
-        this.setIcon(imageIconKeyList);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent();
-        this.setText(parentNode.getName() + " " + res.getString("S3427"));
-      }
-      if (nodeType == "TableKey") {
-        this.setIcon(imageIconKey);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent().getParent();
-        this.setText(node_.getName() + "(" + parentNode.getName() + ")");
-      }
-      if (nodeType == "FunctionList") {
-        this.setIcon(imageIconFunctionList);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent();
-        this.setText(parentNode.getName() + " " + res.getString("S3433"));
-      }
-      if (nodeType == "Function") {
-        this.setIcon(imageIconFunction);
-        this.setText(node_.getName());
-      }
-      if (nodeType == "IOPanel") {
-        this.setIcon(imageIconIOPanel);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent();
-        this.setText(node_.getName() + "(" + parentNode.getName() + ")");
-      }
-      if (nodeType == "IOTable") {
-        this.setIcon(imageIconIOTable);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent();
-        this.setText(node_.getName() + "(" + parentNode.getName() + ")");
-      }
-      if (nodeType == "IOSpool") {
-        this.setIcon(imageIconIOSpool);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent();
-        this.setText(node_.getName() + "(" + parentNode.getName() + ")");
-      }
-      if (nodeType == "IOWebPage") {
-        this.setIcon(imageIconIOWebPage);
-        XeadTreeNode parentNode = (XeadTreeNode) node_.getParent();
-        this.setText(node_.getName() + "(" + parentNode.getName() + ")");
-      }
-      this.setToolTipText(res.getString("S2864") + this.getText() + res.getString("S2865"));
-    }
-
-    //
-    public XeadTreeNode getNode() {
-      return node_;
-    }
-
-    //
-    class NodeJumpButton_actionAdapter implements java.awt.event.ActionListener {
-
-      NodeJumpButton adaptee;
-
-      NodeJumpButton_actionAdapter(NodeJumpButton adaptee) {
-        this.adaptee = adaptee;
-      }
-
-      public void actionPerformed(ActionEvent e) {
-        adaptee.setBorder(BorderFactory.createLoweredBevelBorder());
-        TreePath tp = new TreePath(node_.getPath());
-        jTreeMain.setSelectionPath(tp);
-        Rectangle nodePos = jTreeMain.getPathBounds(tp);
-        if (nodePos != null) {
-          jScrollPaneTreeView.getViewport().setViewPosition(new Point(0, nodePos.y));
-        }
-        setupContentsPaneForTreeNodeSelected(node_, false);
-      }
-    }
-  } //End of Class NodeJumpButton//
 
   /**
    * Class of DataFlow Node
@@ -18978,138 +18817,6 @@ public class Modeler extends JFrame {
     }
   } //End of Class DatamodelEntityBox//
 
-  /**
-   * Class of XEAD Page Painter
-   */
-  class XeadPagePainter implements Printable {
-
-    public int print(Graphics g, PageFormat fmt, int pageindex) {
-      Graphics2D g2 = (Graphics2D) g;
-      int returnValue = Printable.NO_SUCH_PAGE;
-
-      //Print first page for each node//
-      if (pageindex == 0) {
-
-        if (currentMainTreeNode.getType().equals("SubjectArea")) {
-          printPanel(g2, fmt, jPanelSubjectAreaDataflowEditor1, "");
-          returnValue = Printable.PAGE_EXISTS;
-        }
-
-        if (currentMainTreeNode.getType().equals("TableList")) {
-          if (jTabbedPaneTableList.getSelectedIndex() == 2) {
-            if (jDialogDatamodelSlideShow.isVisible()) {
-              printPanel(g2, fmt, jPanelDatamodelSlideShow2, res.getString("S466"));
-            } else {
-              printPanel(g2, fmt, jPanelDatamodel, res.getString("S466"));
-            }
-          }
-          returnValue = Printable.PAGE_EXISTS;
-        }
-
-        if (currentMainTreeNode.getType().equals("IOPanel")) {
-          if (imageFunctionIO != null) {
-            printPanel(g2, fmt, jLabelIOImageIcon, res.getString("S3305"));
-          } else {
-            if (jTextPaneIOPanelImage.getBackground().equals(Color.BLACK)) {
-              currentMainTreeNode.updateFields();
-              jTextPaneIOPanelImage.setBackground(Color.WHITE);
-              jTextPaneIOPanelImage.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-              jTextPaneIOPanelImage.updateUI();
-              StyledDocument styledDocument = jTextPaneIOPanelImage.getStyledDocument();
-              Style style = styledDocument.addStyle("style1", null);
-              StyleConstants.setForeground(style, Color.BLACK);
-              styledDocument.setCharacterAttributes(0, 9999, style, false);
-              printPanel(g2, fmt, jTextPaneIOPanelImage, res.getString("S3305"));
-              jTextPaneIOPanelImage.setBorder(BorderFactory.createRaisedBevelBorder());
-              currentMainTreeNode.activateContentsPane();
-            } else {
-              printPanel(g2, fmt, jTextPaneIOPanelImage, res.getString("S3305"));
-            }
-          }
-          returnValue = Printable.PAGE_EXISTS;
-        }
-
-        if (currentMainTreeNode.getType().equals("IOSpool")) {
-          printPanel(g2, fmt, jTextPaneIOSpoolImage, res.getString("S3305"));
-          returnValue = Printable.PAGE_EXISTS;
-        }
-
-        if (currentMainTreeNode.getType().equals("IOWebPage")) {
-          printPanel(g2, fmt, jEditorPaneIOWebPageImage, res.getString("S3305"));
-          returnValue = Printable.PAGE_EXISTS;
-        }
-      }
-
-      return returnValue;
-    }
-
-    private void printPanel(Graphics2D g2, PageFormat fmt, JComponent jPanel, String name) {
-      double panelWidth;
-      double panelHeight;
-      double scaleRateWidth;
-      double scaleRateHeight;
-      Border borderSaved;
-      Color colorSaved;
-      Font fontSaved;
-
-      g2.translate(fmt.getImageableX(), fmt.getImageableY());
-      borderSaved = jLabelSubtitle.getBorder();
-      colorSaved = jLabelSubtitle.getBackground();
-      fontSaved = jLabelSubtitle.getFont();
-      jLabelSubtitle.setBorder(null);
-      jLabelSubtitle.setBackground(Color.white);
-      jLabelSubtitle.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-      jLabelSubtitle.print(g2);
-      jLabelSubtitle.setBorder(borderSaved);
-      jLabelSubtitle.setBackground(colorSaved);
-      jLabelSubtitle.setFont(fontSaved);
-
-      g2.translate(0, jLabelSubtitle.getHeight() + 3);
-
-      panelWidth = jPanel.getWidth();
-      scaleRateWidth = fmt.getImageableWidth() / panelWidth;
-      panelHeight = jPanel.getHeight() + (jLabelSubtitle.getHeight() + 5);
-      scaleRateHeight = (fmt.getImageableHeight() - 18) / panelHeight;
-      if (scaleRateWidth < scaleRateHeight && scaleRateWidth < 1.0) {
-        AffineTransform at = new AffineTransform();
-        at.setToScale(scaleRateWidth, scaleRateWidth);
-        g2.transform(at);
-      }
-      if (scaleRateWidth > scaleRateHeight && scaleRateHeight < 1.0) {
-        AffineTransform at = new AffineTransform();
-        at.setToScale(scaleRateHeight, scaleRateHeight);
-        g2.transform(at);
-      }
-
-      if (jPanel.equals(jPanelSubjectAreaDataflowEditor1)) {
-        borderSaved = jPanel.getBorder();
-        jPanel.setBorder(null);
-        jPanel.print(g2);
-        jPanel.setBorder(borderSaved);
-      }
-
-      if (jPanel.equals(jPanelDatamodel)) {
-        borderSaved = jPanel.getBorder();
-        jPanel.setBorder(null);
-        jPanel.print(g2);
-        jPanel.setBorder(borderSaved);
-      }
-
-      if (jPanel.equals(jPanelDatamodelSlideShow2)) {
-        borderSaved = jPanel.getBorder();
-        jPanel.setBorder(null);
-        jPanel.print(g2);
-        jPanel.setBorder(borderSaved);
-      }
-
-      if (!jPanel.equals(jPanelDatamodel) && !jPanel.equals(jPanelSubjectAreaDataflowEditor1)) {
-        borderSaved = jPanel.getBorder();
-        jPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        jPanel.print(g2);
-        jPanel.setBorder(borderSaved);
-      }
-    }
-  } //End of Class XeadPagePrinter//
 
   /**
    * Class of XEAD Tree Node
@@ -20006,7 +19713,7 @@ public class Modeler extends JFrame {
           sortableComboBoxModelFunctionType.removeAllElements();
           for (FunctionType funcType : xeadSystem.getFunctionTypes()) {
             node = new XeadTreeNode("FunctionType", funcType);
-            sortableComboBoxModelFunctionType.addElement((Object) node);
+            sortableComboBoxModelFunctionType.addElement(node);
           }
           sortableComboBoxModelFunctionType.sortElements();
           node = (XeadTreeNode) sortableComboBoxModelFunctionType.getElementAt(0);
@@ -22436,7 +22143,7 @@ public class Modeler extends JFrame {
         if (taskActionPojo == elementOfTaskActionToBeFocused) {
           actionNodeToBeFocused = node;
         }
-        sortableXeadTreeNodeListModel.addElement((Object) node);
+        sortableXeadTreeNodeListModel.addElement(node);
       }
       sortableXeadTreeNodeListModel.sortElements();
       //
@@ -23363,7 +23070,7 @@ public class Modeler extends JFrame {
       for (int i = 0; i < tableTypeList.getLength(); i++) {
         XeadTreeNode node = new XeadTreeNode("TableType",
             (Object) tableTypeList.item(i));
-        sortableComboBoxModelTableType.addElement((Object) node);
+        sortableComboBoxModelTableType.addElement(node);
       }
       sortableComboBoxModelTableType.sortElements();
       for (int i = 0; i < sortableComboBoxModelTableType.getSize(); i++) {
@@ -24017,7 +23724,7 @@ public class Modeler extends JFrame {
       //
       //Setup RelationshipList//
       tableKeyNode = this; //Refer to Class TableModelRelationshipList//
-      tableModelRelationshipList = new TableModelRelationshipList();
+      tableModelRelationshipList = new TableModelRelationshipList(Modeler.this);
       jTableRelationshipList.setModel(tableModelRelationshipList);
       tableModelRelationshipList.addColumn("No.");
       tableModelRelationshipList.addColumn(res.getString("S5032"));
@@ -24381,7 +24088,7 @@ public class Modeler extends JFrame {
       NodeList functionTypeList = getElementsByTagNameFromPojo(currentMainTreeNode.getPojo(), "FunctionType");
       for (int i = 0; i < functionTypeList.getLength(); i++) {
         node = new XeadTreeNode("FunctionType", (Object) functionTypeList.item(i));
-        sortableComboBoxModelFunctionType.addElement((Object) node);
+        sortableComboBoxModelFunctionType.addElement(node);
       }
       sortableComboBoxModelFunctionType.sortElements();
       for (int i = 0; i < sortableComboBoxModelFunctionType.getSize(); i++) {
@@ -29600,664 +29307,7 @@ public class Modeler extends JFrame {
     }
   } //End of Class Definition of XeadTreeNode//
 
-  /**
-   * Class of Table Row Number
-   */
-  class TableRowNumber extends Object {
 
-    private Object pojo_;
-    private Object pojo_ext1;
-    private Object pojo_ext2;
-    private int number_;
-
-    public TableRowNumber(int num, Object elm) {
-      number_ = num;
-      pojo_ = elm;
-      pojo_ext1 = null;
-      pojo_ext2 = null;
-    }
-
-    public TableRowNumber(int num, Object elm, Object elmExt1,
-        Object elmExt2) {
-      number_ = num;
-      pojo_ = elm;
-      pojo_ext1 = elmExt1;
-      pojo_ext2 = elmExt2;
-    }
-
-    public String toString() {
-      return Integer.toString(number_);
-    }
-
-    public Object getPojo() {
-      return pojo_;
-    }
-
-    public Object getPojoExt1() {
-      return pojo_ext1;
-    }
-
-    public Object getPojoExt2() {
-      return pojo_ext2;
-    }
-
-    /**
-     * Get attribute value from JSON POJO.
-     * Maps attribute names to getter method names.
-     */
-    public String getAttribute(String attributeName) {
-      if (pojo_ == null) {
-        return null;
-      }
-      return getAttributeFromJsonPojo(pojo_, attributeName);
-    }
-
-    /**
-     * Get attribute value from pojo_ext1.
-     */
-    public String getAttributeExt1(String attributeName) {
-      if (pojo_ext1 == null) {
-        return null;
-      }
-      return getAttributeFromJsonPojo(pojo_ext1, attributeName);
-    }
-
-    /**
-     * Get attribute value from pojo_ext2.
-     */
-    public String getAttributeExt2(String attributeName) {
-      if (pojo_ext2 == null) {
-        return null;
-      }
-      return getAttributeFromJsonPojo(pojo_ext2, attributeName);
-    }
-
-    /**
-     * Get attribute value from JSON POJO by mapping attribute names to getter methods.
-     */
-    private String getAttributeFromJsonPojo(Object obj, String attributeName) {
-      if (obj == null) {
-        return null;
-      }
-      // Map common attribute names to getter method names
-      String getterName;
-      switch (attributeName) {
-        case "ID":
-          getterName = "getId";
-          break;
-        case "Name":
-          getterName = "getName";
-          break;
-        case "Descriptions":
-          getterName = "getDescriptions";
-          break;
-        case "SortKey":
-          getterName = "getSortKey";
-          break;
-        case "BasicType":
-          getterName = "getBasicType";
-          break;
-        case "Length":
-          getterName = "getLength";
-          break;
-        case "Decimal":
-          getterName = "getDecimal";
-          break;
-        case "SQLExpression":
-          getterName = "getSqlExpression";
-          break;
-        case "Header":
-        case "Headder":
-          getterName = "getHeader";
-          break;
-        case "Type":
-          getterName = "getType";
-          break;
-        case "Table1ID":
-          getterName = "getTable1ID";
-          break;
-        case "TableKey1ID":
-          getterName = "getTableKey1ID";
-          break;
-        case "Table2ID":
-          getterName = "getTable2ID";
-          break;
-        case "TableKey2ID":
-          getterName = "getTableKey2ID";
-          break;
-        case "Version":
-          getterName = "getVersion";
-          break;
-        default:
-          // Try to construct getter name from attribute name
-          getterName = "get" + attributeName.substring(0, 1).toUpperCase() + attributeName.substring(1);
-          break;
-      }
-      try {
-        java.lang.reflect.Method method = obj.getClass().getMethod(getterName);
-        Object result = method.invoke(obj);
-        return result != null ? result.toString() : null;
-      } catch (Exception e) {
-        // If getter doesn't exist or fails, return null
-        return null;
-      }
-    }
-
-    /**
-     * Set attribute value on JSON POJO.
-     */
-    public void setAttribute(String attributeName, String value) {
-      if (pojo_ == null) {
-        return;
-      }
-      setAttributeOnJsonPojo(pojo_, attributeName, value);
-    }
-
-    /**
-     * Set attribute value on JSON POJO by mapping attribute names to setter methods.
-     */
-    private void setAttributeOnJsonPojo(Object obj, String attributeName, String value) {
-      if (obj == null) {
-        return;
-      }
-      String setterName;
-      switch (attributeName) {
-        case "ID":
-          setterName = "setId";
-          break;
-        case "Name":
-          setterName = "setName";
-          break;
-        case "Descriptions":
-          setterName = "setDescriptions";
-          break;
-        case "SortKey":
-          setterName = "setSortKey";
-          break;
-        case "BasicType":
-          setterName = "setBasicType";
-          break;
-        case "Length":
-          setterName = "setLength";
-          break;
-        case "Decimal":
-          setterName = "setDecimal";
-          break;
-        case "SQLExpression":
-          setterName = "setSqlExpression";
-          break;
-        case "Header":
-        case "Headder":
-          setterName = "setHeader";
-          break;
-        case "Type":
-          setterName = "setType";
-          break;
-        case "Table1ID":
-          setterName = "setTable1ID";
-          break;
-        case "TableKey1ID":
-          setterName = "setTableKey1ID";
-          break;
-        case "Table2ID":
-          setterName = "setTable2ID";
-          break;
-        case "TableKey2ID":
-          setterName = "setTableKey2ID";
-          break;
-        case "Version":
-          setterName = "setVersion";
-          break;
-        case "AscDesc":
-          setterName = "setAscDesc";
-          break;
-        default:
-          setterName = "set" + attributeName.substring(0, 1).toUpperCase() + attributeName.substring(1);
-          break;
-      }
-      try {
-        java.lang.reflect.Method method = obj.getClass().getMethod(setterName, String.class);
-        method.invoke(obj, value);
-      } catch (Exception e) {
-        // If setter doesn't exist or fails, ignore
-      }
-    }
-  }
-
-  /**
-   * Class of Table Model(Read Only)
-   */
-  public class TableModelReadOnlyList extends DefaultTableModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public boolean isCellEditable(int row, int col) {
-      return false;
-    }
-  }
-
-  /**
-   * Class of Table Model(EditableModel)
-   */
-  class TableModelEditableList extends DefaultTableModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public boolean isCellEditable(int row, int col) {
-      if (col == 0) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }
-
-  /**
-   * Class of Table Model for RelationshipList
-   */
-  class TableModelRelationshipList extends DefaultTableModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public boolean isCellEditable(int row, int col) {
-      boolean editable = false;
-      if (col == 6) {
-        XeadTreeNode tableNode = (XeadTreeNode) tableKeyNode.getParent().getParent();
-        String tableID = tableNode.getAttribute("ID");
-        String tableKeyID = tableKeyNode.getAttribute("ID");
-        TableRowNumber tableRowNumber = (TableRowNumber) tableModelRelationshipList.getValueAt(row,
-            0);
-        if (getAttributeFromObject(tableRowNumber, "Type").equals("SUBTYPE")) {
-          editable = true;
-          informationOnThisPageChanged = true;
-        }
-        if (getAttributeFromObject(tableRowNumber, "Type").equals("REFFER")) {
-          if (getAttributeFromObject(tableRowNumber, "Table1ID").equals(tableID)
-              && getAttributeFromObject(tableRowNumber, "TableKey1ID").equals(tableKeyID)) {
-            editable = false;
-          }
-          if (getAttributeFromObject(tableRowNumber, "Table2ID").equals(tableID)
-              && getAttributeFromObject(tableRowNumber, "TableKey2ID").equals(tableKeyID)) {
-            editable = true;
-            informationOnThisPageChanged = true;
-          }
-        }
-        if (getAttributeFromObject(tableRowNumber, "Type").equals("FAMILY")) {
-          editable = false;
-        }
-      }
-      return editable;
-    }
-  }
-
-  /**
-   * Class of Table Model for FunctionsUsedByThis
-   */
-  class TableModelFunctionsUsedByThis extends DefaultTableModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public boolean isCellEditable(int row, int col) {
-      if (col != 5) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }
-
-  /**
-   * Class of Table Model for IOTableFieldList
-   */
-  class TableModelIOTableFieldList extends DefaultTableModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public boolean isCellEditable(int row, int col) {
-      if (col <= 3) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }
-
-  /**
-   * Class of Table Model for NativeTableList
-   */
-  class TableModelNativeTableList extends DefaultTableModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public boolean isCellEditable(int row, int col) {
-      if (col != 3) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }
-
-  /**
-   * Class of Table Model for ForeignTableList
-   */
-  class TableModelForeignTableList extends DefaultTableModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public boolean isCellEditable(int row, int col) {
-      if (col != 4) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }
-
-  /**
-   * Class of Table Model for TableFieldList
-   */
-  class TableModelTableFieldList extends DefaultTableModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public boolean isCellEditable(int row, int col) {
-      if (col != 3) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }
-
-  /**
-   * Class of Listener for TabbedPane
-   */
-  class TabbedPaneChangeListener implements javax.swing.event.ChangeListener {
-
-    public void stateChanged(javax.swing.event.ChangeEvent event) {
-      try {
-        setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        if (currentMainTreeNode != null) {
-          currentMainTreeNode.updateFields();
-          currentMainTreeNode.activateContentsPane();
-        }
-      } finally {
-        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-      }
-    }
-  }
-
-  /**
-   * Class for Header Renderer for CheckBox
-   */
-  class CheckBoxHeaderListener implements ItemListener {
-
-    private CheckBoxHeaderRenderer rendererComponent_ = null;
-
-    public void setRenderer(CheckBoxHeaderRenderer rendererComponent) {
-      rendererComponent_ = rendererComponent;
-    }
-
-    public void itemStateChanged(ItemEvent e) {
-      if (rendererComponent_ != null) {
-        for (int i = 0; i < jTableTableFieldList.getRowCount(); i++) {
-          if (rendererComponent_.isSelected()) {
-            jTableTableFieldList.setValueAt(Boolean.TRUE, i, 3);
-          } else {
-            jTableTableFieldList.setValueAt(Boolean.FALSE, i, 3);
-          }
-        }
-      }
-    }
-  }
-
-  public class CheckBoxHeaderRenderer extends JCheckBox implements TableCellRenderer, MouseListener {
-
-    private static final long serialVersionUID = 1L;
-    protected CheckBoxHeaderRenderer rendererComponent;
-    protected int column;
-    protected boolean mousePressed = false;
-
-    public CheckBoxHeaderRenderer(CheckBoxHeaderListener itemListener) {
-      rendererComponent = this;
-      rendererComponent.addItemListener(itemListener);
-      itemListener.setRenderer(this);
-    }
-
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-        boolean hasFocus, int row, int column) {
-      if (table != null) {
-        JTableHeader header = table.getTableHeader();
-        if (header != null) {
-          header.addMouseListener(rendererComponent);
-        }
-      }
-      setColumn(column);
-      rendererComponent.setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-      rendererComponent.setText(res.getString("S472"));
-      setBorder(UIManager.getBorder("TableHeader.cellBorder"));
-      return rendererComponent;
-    }
-
-    protected void setColumn(int column) {
-      this.column = column;
-    }
-
-    public int getColumn() {
-      return column;
-    }
-
-    protected void handleClickEvent(MouseEvent e) {
-      if (mousePressed) {
-        mousePressed = false;
-        JTableHeader header = (JTableHeader) (e.getSource());
-        JTable tableView = header.getTable();
-        TableColumnModel columnModel = tableView.getColumnModel();
-        int viewColumn = columnModel.getColumnIndexAtX(e.getX());
-        int column = tableView.convertColumnIndexToModel(viewColumn);
-        if (viewColumn == this.column && e.getClickCount() == 1 && column != -1) {
-          doClick();
-        }
-      }
-    }
-
-    public void mouseClicked(MouseEvent e) {
-      handleClickEvent(e);
-      ((JTableHeader) e.getSource()).repaint();
-    }
-
-    public void mousePressed(MouseEvent e) {
-      mousePressed = true;
-    }
-
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    public void mouseExited(MouseEvent e) {
-    }
-  }
-
-  /**
-   * Class of Renderer for CheckBox
-   */
-  class CheckBoxRenderer extends JCheckBox implements TableCellRenderer {
-
-    private static final long serialVersionUID = 1L;
-
-    CheckBoxRenderer() {
-      setText(res.getString("S483"));
-      setHorizontalAlignment(JLabel.LEFT);
-      setFont(new java.awt.Font(mainFontName, 0, MAIN_FONT_SIZE));
-    }
-
-    public Component getTableCellRendererComponent(JTable table,
-        Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-      if (isSelected) {
-        setForeground(table.getSelectionForeground());
-        setBackground(table.getSelectionBackground());
-      } else {
-        setForeground(table.getForeground());
-        setBackground(table.getBackground());
-      }
-      setSelected((value != null && ((Boolean) value).booleanValue()));
-      return this;
-    }
-  }
-
-  /**
-   * Class of Change State
-   */
-  class ChangeState {
-
-    boolean changed;
-
-    ChangeState() {
-      changed = false;
-      jLabelChangeState.setText("");
-    }
-
-    void setChanged(boolean state) {
-      changed = state;
-      if (changed) {
-        jLabelChangeState.setText(res.getString("S6450"));
-      } else {
-        jLabelChangeState.setText("");
-      }
-    }
-
-    boolean isChanged() {
-      return changed;
-    }
-  }
-
-  /**
-   * Class of Custom Tree Renderer
-   */
-  class CustomTreeRenderer extends DefaultTreeCellRenderer {
-
-    private static final long serialVersionUID = 1L;
-
-    public Component getTreeCellRendererComponent(JTree tree, Object treeNode, boolean selected,
-        boolean expanded, boolean leaf, int row, boolean hasFocus) {
-      //
-      Component renderer = super.getTreeCellRendererComponent(tree, treeNode, selected, expanded,
-          leaf, row, hasFocus);
-      //
-      if (hasFocus) {
-        this.setBackgroundSelectionColor(ACTIVE_COLOR);
-      } else {
-        this.setBackgroundSelectionColor(INACTIVE_COLOR);
-        this.setForeground(Color.black);
-      }
-      //
-      //Set text expression of node//
-      this.setText(((XeadTreeNode) treeNode).toString());
-      //
-      //Set graphic expression of node//
-      String nodeType = ((XeadTreeNode) treeNode).getType();
-      boolean isError = ((XeadTreeNode) treeNode).isError();
-      boolean isExtRefered = ((XeadTreeNode) treeNode).isExtRefered();
-      if (nodeType == "System") {
-        this.setIcon(imageIconSystem);
-      }
-      if (nodeType == "SubjectAreaList") {
-        this.setIcon(imageIconSubjectAreaList);
-      }
-      if (nodeType == "SubjectArea") {
-        this.setIcon(imageIconSubjectArea);
-      }
-      if (nodeType == "RoleList") {
-        this.setIcon(imageIconRoleList);
-      }
-      if (nodeType == "Role") {
-        this.setIcon(imageIconRole);
-      }
-      if (nodeType == "Task") {
-        this.setIcon(imageIconTask);
-      }
-      if (nodeType == "SubsystemList") {
-        if (isError) {
-          this.setIcon(imageIconSubsystemListErr);
-        } else {
-          this.setIcon(imageIconSubsystemList);
-        }
-      }
-      if (nodeType == "Subsystem") {
-        if (isError) {
-          this.setIcon(imageIconSubsystemErr);
-        } else {
-          this.setIcon(imageIconSubsystem);
-        }
-      }
-      if (nodeType == "TableList") {
-        if (isError) {
-          this.setIcon(imageIconTableListErr);
-        } else {
-          this.setIcon(imageIconTableList);
-        }
-      }
-      if (nodeType == "Table") {
-        if (isError) {
-          this.setIcon(imageIconTableErr);
-        } else {
-          if (isExtRefered) {
-            this.setIcon(imageIconTableSyn);
-          } else {
-            this.setIcon(imageIconTable);
-          }
-        }
-      }
-      if (nodeType == "TableFieldList") {
-        this.setIcon(imageIconFieldList);
-      }
-      if (nodeType == "TableField") {
-        this.setIcon(imageIconField);
-      }
-      if (nodeType == "TableKeyList") {
-        this.setIcon(imageIconKeyList);
-      }
-      if (nodeType == "TableKey") {
-        this.setIcon(imageIconKey);
-      }
-      if (nodeType == "FunctionList") {
-        this.setIcon(imageIconFunctionList);
-      }
-      if (nodeType == "Function") {
-        this.setIcon(imageIconFunction);
-      }
-      if (nodeType == "ReccursiveFunction") {
-        this.setIcon(imageIconFunction);
-      }
-      if (nodeType == "IOPanel") {
-        this.setIcon(imageIconIOPanel);
-      }
-      if (nodeType == "IOTable") {
-        this.setIcon(imageIconIOTable);
-      }
-      if (nodeType == "IOSpool") {
-        this.setIcon(imageIconIOSpool);
-      }
-      if (nodeType == "IOWebPage") {
-        this.setIcon(imageIconIOWebPage);
-      }
-      if (nodeType == "TaskActionFirst") {
-        this.setIcon(imageIconActionFirst);
-      }
-      if (nodeType == "TaskAction") {
-        if (((XeadTreeNode) treeNode).getAttribute("ExecuteIf").equals("")) {
-          this.setIcon(imageIconAction);
-        } else {
-          this.setIcon(imageIconActionOptional);
-        }
-      }
-      //
-      return renderer;
-    }
-  }
 
   /**
    * Method to adjust font size in text-field
@@ -32968,81 +32018,7 @@ public class Modeler extends JFrame {
     }
   }
 
-  /**
-   * Classes of UnDo/ReDo handler for TextPane
-   */
-  class CustomUndoableEditListener implements UndoableEditListener {
-
-    public void undoableEditHappened(UndoableEditEvent e) {
-      textPaneUndoManager.addEdit(e.getEdit());
-      undoAction.update();
-      redoAction.update();
-    }
-  }
-
-  /**
-   * Classes of undo action for TextPane
-   */
-  class TextPaneUndoAction extends AbstractAction {
-
-    private static final long serialVersionUID = 1L;
-
-    public TextPaneUndoAction() {
-      super("Undo");
-      setEnabled(false);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-      try {
-        textPaneUndoManager.undo();
-      } catch (CannotUndoException ex) {
-      }
-      update();
-      redoAction.update();
-    }
-
-    protected void update() {
-      if (textPaneUndoManager.canUndo()) {
-        setEnabled(true);
-        putValue(Action.NAME, textPaneUndoManager.getUndoPresentationName());
-      } else {
-        setEnabled(false);
-        putValue(Action.NAME, "Undo");
-      }
-    }
-  }
-
-  /**
-   * Classes of ReDo action for TextPane
-   */
-  class TextPaneRedoAction extends AbstractAction {
-
-    private static final long serialVersionUID = 1L;
-
-    public TextPaneRedoAction() {
-      super("Redo");
-      setEnabled(false);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-      try {
-        textPaneUndoManager.redo();
-      } catch (CannotRedoException ex) {
-      }
-      update();
-      undoAction.update();
-    }
-
-    protected void update() {
-      if (textPaneUndoManager.canRedo()) {
-        setEnabled(true);
-        putValue(Action.NAME, textPaneUndoManager.getRedoPresentationName());
-      } else {
-        setEnabled(false);
-        putValue(Action.NAME, "Redo");
-      }
-    }
-  }
+  // CustomUndoableEditListener, TextPaneUndoActionとTextPaneRedoActionクラスはviewパッケージに移動しました
 
   /**
    * Event Handler for jMenuItemIOImageUndo executed
@@ -35133,6 +34109,10 @@ public class Modeler extends JFrame {
    *
    * @param e :Action Event
    */
+  public JMenuItem getJMenuItemAddDataType() {
+    return jMenuItemAddDataType;
+  }
+
   void jMenuItemAddDataType_actionPerformed(ActionEvent e) {
     Object lastElement;
     DataType dataType;
@@ -35941,7 +34921,7 @@ public class Modeler extends JFrame {
         for (int i = 0; i < actionList.getLength(); i++) {
           element = (Object) actionList.item(i);
           workNode = new XeadTreeNode("TaskAction", (Object) actionList.item(i));
-          sortableXeadTreeNodeListModel.addElement((Object) workNode);
+          sortableXeadTreeNodeListModel.addElement(workNode);
         }
         sortableXeadTreeNodeListModel.sortElements();
         for (int i = 0; i < sortableXeadTreeNodeListModel.getSize(); i++) {
@@ -40279,16 +39259,4 @@ public class Modeler extends JFrame {
     }
   }
 
-  /**
-   * Class of TaskActionTextFieldListener
-   */
-  class TaskActionTextFieldListener implements FocusListener {
-
-    public void focusLost(FocusEvent event) {
-      currentTaskActionTreeNode.updateFieldsForTaskAction(currentMainTreeNode);
-    }
-
-    public void focusGained(FocusEvent event) {
-    }
-  }
 } //End of Class Modeler//

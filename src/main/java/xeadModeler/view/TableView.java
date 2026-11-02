@@ -47,7 +47,7 @@ public class TableView {
     private final JButton jButtonTableSynchronize = new JButton();
     
     // Table type combo
-    private Modeler.SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTableType;
+    private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelTableType;
     private final JComboBox jComboBoxTableType = new JComboBox();
     
     // Descriptions

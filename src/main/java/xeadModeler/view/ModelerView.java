@@ -28,7 +28,7 @@ public class ModelerView {
     private JPanel jPanelMain;
     private JPanel jPanelJumpButtons = new JPanel();
     private GridLayout gridLayoutJumpButtons = new GridLayout();
-    private Modeler.NodeJumpButton[] nodeJumpButton = new Modeler.NodeJumpButton[8];
+    private NodeJumpButton[] nodeJumpButton = new NodeJumpButton[8];
 
     // メインスプリットペイン
     private JSplitPane jSplitPaneMain = new JSplitPane();
@@ -167,7 +167,7 @@ public class ModelerView {
     /**
      * ノードジャンプボタンを取得します。
      */
-    public Modeler.NodeJumpButton[] getNodeJumpButton() {
+    public NodeJumpButton[] getNodeJumpButton() {
         return nodeJumpButton;
     }
 

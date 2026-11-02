@@ -32,7 +32,7 @@ public class TextPaneUndoAction extends AbstractAction {
         redoAction.update();
     }
 
-    protected void update() {
+    public void update() {
         if (textPaneUndoManager.canUndo()) {
             setEnabled(true);
             putValue(Action.NAME, textPaneUndoManager.getUndoPresentationName());

@@ -1,7 +1,5 @@
 package xeadModeler.view;
 
-import xeadModeler.Modeler;
-
 import javax.swing.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -17,11 +15,9 @@ import java.util.Locale;
 public class KanjiTextArea extends JTextArea {
 
     private static final long serialVersionUID = 1L;
-    private Modeler modeler;
 
-    public KanjiTextArea(Modeler modeler) {
+    public KanjiTextArea() {
         super();
-        this.modeler = modeler;
         addFocusListener(new KanjiTextAreaListener());
     }
 

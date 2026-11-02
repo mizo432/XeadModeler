@@ -27,4 +27,14 @@ public class SortableXeadTreeNodeComboBoxModel extends DefaultComboBoxModel<Xead
             this.addElement(it.next());
         }
     }
+
+    @Override
+    public int getIndexOf(Object anObject) {
+        for (int i = 0; i < getSize(); i++) {
+            if (getElementAt(i).equals(anObject)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

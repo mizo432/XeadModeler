@@ -628,20 +628,4 @@ public class TaskView {
         }
     }
 
-    /**
-     * ComboBoxモデルをソートキーでソートする
-     */
-    public static class SortableXeadTreeNodeComboBoxModel extends DefaultComboBoxModel {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public int getIndexOf(Object anObject) {
-            for (int i = 0; i < getSize(); i++) {
-                if (getElementAt(i).equals(anObject)) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-    }
 }

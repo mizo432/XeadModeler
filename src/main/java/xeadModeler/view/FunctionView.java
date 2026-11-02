@@ -46,7 +46,7 @@ public class FunctionView {
     private final JButton jButtonFunctionDocFile = new JButton();
     
     // Combo boxes
-    private Modeler.SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType;
+    private SortableXeadTreeNodeComboBoxModel sortableComboBoxModelFunctionType;
     private final JComboBox jComboBoxFunctionType = new JComboBox();
     private final JComboBox jComboBoxFunctionDocFile = new JComboBox();
     

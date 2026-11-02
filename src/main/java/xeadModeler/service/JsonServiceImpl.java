@@ -250,4 +250,190 @@ public class JsonServiceImpl implements JsonService {
         String json = objectMapper.writeValueAsString(obj);
         return objectMapper.readValue(json, obj.getClass());
     }
+    
+    @Override
+    public String getAttributeFromObject(Object obj, String attributeName) {
+        if (obj == null) {
+            return "";
+        }
+        String getter = "get" + attributeName.substring(0, 1).toUpperCase() + attributeName.substring(1);
+        try {
+            java.lang.reflect.Method method = obj.getClass().getMethod(getter);
+            Object result = method.invoke(obj);
+            return result != null ? result.toString() : "";
+        } catch (Exception e) {
+            return "";
+        }
+    }
+    
+    @Override
+    public void setAttributeOnJsonPojo(Object pojo, String attributeName, String value) {
+        if (pojo == null) {
+            return;
+        }
+        String setterName = "set" + attributeName.substring(0, 1).toLowerCase() + attributeName.substring(1);
+        if (attributeName.endsWith("ID")) {
+            setterName = "set" + attributeName.substring(0, attributeName.length() - 2) + "Id";
+        }
+        try {
+            java.lang.reflect.Method method = pojo.getClass().getMethod(setterName, String.class);
+            method.invoke(pojo, value);
+        } catch (Exception e) {
+            try {
+                java.lang.reflect.Method method = pojo.getClass().getMethod("set" + attributeName, String.class);
+                method.invoke(pojo, value);
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+    
+    @Override
+    public void appendChildToJsonPojo(Object parentPojo, Object childPojo, String childType) {
+        if (parentPojo == null || childPojo == null) {
+            return;
+        }
+        String listFieldName = getListFieldNameForType(childType);
+        if (listFieldName == null) {
+            return;
+        }
+        String getterName = "get" + listFieldName.substring(0, 1).toUpperCase() + listFieldName.substring(1);
+        try {
+            java.lang.reflect.Method getter = parentPojo.getClass().getMethod(getterName);
+            java.util.List<?> list = (java.util.List<?>) getter.invoke(parentPojo);
+            if (list != null) {
+                java.lang.reflect.Method addMethod = list.getClass().getMethod("add", Object.class);
+                addMethod.invoke(list, childPojo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public void removeChildFromJsonPojo(Object parentPojo, Object childPojo, String childType) {
+        if (parentPojo == null || childPojo == null) {
+            return;
+        }
+        String listFieldName = getListFieldNameForType(childType);
+        if (listFieldName == null) {
+            return;
+        }
+        String getterName = "get" + listFieldName.substring(0, 1).toUpperCase() + listFieldName.substring(1);
+        try {
+            java.lang.reflect.Method getter = parentPojo.getClass().getMethod(getterName);
+            java.util.List<?> list = (java.util.List<?>) getter.invoke(parentPojo);
+            if (list != null) {
+                list.remove(childPojo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public void insertBeforeInPojo(Object parentPojo, Object childPojo, Object siblingPojo) {
+        if (parentPojo == null || childPojo == null || siblingPojo == null) {
+            return;
+        }
+        String childType = childPojo.getClass().getSimpleName();
+        String listFieldName = getListFieldNameForType(childType);
+        if (listFieldName == null) {
+            return;
+        }
+        String getterName = "get" + listFieldName.substring(0, 1).toUpperCase() + listFieldName.substring(1);
+        try {
+            java.lang.reflect.Method getter = parentPojo.getClass().getMethod(getterName);
+            java.util.List<?> list = (java.util.List<?>) getter.invoke(parentPojo);
+            if (list != null) {
+                int index = -1;
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i) == siblingPojo) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index >= 0) {
+                    java.lang.reflect.Method addMethod = list.getClass().getMethod("add", int.class, Object.class);
+                    addMethod.invoke(list, index, childPojo);
+                } else {
+                    java.lang.reflect.Method addMethod = list.getClass().getMethod("add", Object.class);
+                    addMethod.invoke(list, childPojo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public void addChildToPojo(Object parent, String listPropertyName, Object child) {
+        if (parent == null || child == null) {
+            return;
+        }
+        try {
+            String getterName = "get" + listPropertyName.substring(0, 1).toUpperCase() + listPropertyName.substring(1);
+            java.lang.reflect.Method getter = parent.getClass().getMethod(getterName);
+            java.util.List<?> list = (java.util.List<?>) getter.invoke(parent);
+            if (list == null) {
+                String setterName = "set" + listPropertyName.substring(0, 1).toUpperCase() + listPropertyName.substring(1);
+                java.lang.reflect.Method setter = parent.getClass().getMethod(setterName, java.util.List.class);
+                java.util.List<Object> newList = new java.util.ArrayList<>();
+                newList.add(child);
+                setter.invoke(parent, newList);
+            } else {
+                ((java.util.List<Object>) list).add(child);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public String getListFieldNameForType(String childType) {
+        switch (childType) {
+            case "FunctionUsedByThis":
+                return "functionUsedByThisList";
+            case "IOTable":
+                return "ioTables";
+            case "IOPanel":
+                return "ioPanels";
+            case "IOSpool":
+                return "ioSpools";
+            case "IOWebPage":
+                return "ioWebPages";
+            case "IOTableField":
+                return "ioTableFields";
+            case "IOPanelField":
+                return "ioPanelFields";
+            case "IOPanelStyle":
+                return "ioPanelStyles";
+            case "IOSpoolField":
+                return "ioSpoolFields";
+            case "IOSpoolStyle":
+                return "ioSpoolStyles";
+            case "IOWebPageField":
+                return "ioWebPageFields";
+            case "TableField":
+                return "tableFields";
+            case "TableKey":
+                return "tableKeys";
+            case "TableKeyField":
+                return "tableKeyFields";
+            case "TaskAction":
+                return "taskActions";
+            case "TaskFunctionIO":
+                return "taskFunctionIOs";
+            case "SubsystemTable":
+                return "subsystemTables";
+            case "SubsystemRelationship":
+                return "subsystemRelationships";
+            case "DataflowLine":
+                return "dataflowLines";
+            case "DataflowNode":
+                return "dataflowNodes";
+            default:
+                return null;
+        }
+    }
 }
